@@ -1,4 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import * as fs from "fs";
@@ -104,8 +112,6 @@ export const commonDev = merge(common, {
       favicon: "./src/[sandbox]/favicon.ico"
     }),
     new CopyWebpackPlugin([
-      { from: `${pModules}/@agentx/agentx-services/dist/i18n`, to: "i18n" },
-      //
       { from: `${pModules}/@momentum-ui/core/fonts`, to: "fonts" },
       { from: `${pModules}/@momentum-ui/core/images`, to: "images" },
       { from: `${pModules}/@momentum-ui/core/css/momentum-ui.min.css`, to: "css" },
