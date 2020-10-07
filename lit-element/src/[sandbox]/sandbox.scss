@@ -1,0 +1,36 @@
+.container {
+    box-sizing: border-box;
+    padding: 20px;
+    min-height: calc(100vh - 27px);
+    background-color: var(--md-secondary-bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .default-maximize-area {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+  }
+  .grid {
+    display: grid;
+    grid-template-areas: "iframes css" "async async";
+
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50% 50%;
+    height: 80vh;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    grid-gap: 1px;
+  }
+  .toggle {
+    display: flex;
+    height: 27px;
+  }
+  .widget-container {
+    width: 500px;
+    height: 80vh;
+    border: 1px solid #000;
+  }

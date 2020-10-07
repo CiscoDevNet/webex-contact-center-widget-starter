@@ -1,0 +1,11 @@
+{
+    "name": "webex-contact-center-widget-starter",
+    "version": "1.0.0",
+    "author": {
+        "name": "Yana Harris",
+        "email": "yanaha@cisco.com"
+    },
+    "license": "MIT",
+    "repository": "git@github.com:CiscoDevNet/webex-contact-center-widget-starter.git"
+  }
+  

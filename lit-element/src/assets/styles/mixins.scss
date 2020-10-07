@@ -1,0 +1,4 @@
+@mixin test-mixin($path) {
+  background-image: url($path);
+  font-weight: bold;
+}
