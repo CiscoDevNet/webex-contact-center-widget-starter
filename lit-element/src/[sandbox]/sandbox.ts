@@ -1,4 +1,3 @@
-import { Service } from "@agentx/agentx-services";
 /**
  * Copyright (c) Cisco Systems, Inc. and its affiliates.
  *
@@ -6,7 +5,7 @@ import { Service } from "@agentx/agentx-services";
  * LICENSE file in the root directory of this source tree.
  *
  */
-
+import { Service } from "@agentx/agentx-services";
 import "@momentum-ui-private/momentum-ui-web-components";
 import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
