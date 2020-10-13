@@ -17,15 +17,13 @@ import * as webpack from "webpack";
 import merge from "webpack-merge";
 import nodeExternals from "webpack-node-externals";
 
-const isWorkspace = fs.existsSync(path.resolve("../node_modules"));
-
 const pSrc = path.resolve("src");
 const pDist = path.resolve("dist");
 export const pBuild = path.resolve("build");
 const pAssets = path.resolve("src/assets");
 const pCss = path.resolve("src/assets/styles");
 const pImg = path.resolve("src/assets/images");
-const pModules = path.resolve(isWorkspace ? "../node_modules" : "node_modules");
+const pModules = path.resolve("node_modules");
 
 const common: webpack.Configuration = {
   output: {

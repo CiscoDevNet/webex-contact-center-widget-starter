@@ -1,3 +1,4 @@
+import { Service } from "@agentx/agentx-services";
 /**
  * Copyright (c) Cisco Systems, Inc. and its affiliates.
  *
@@ -7,13 +8,9 @@
  */
 
 import "@momentum-ui-private/momentum-ui-web-components";
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-} from "lit-element";
+import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
+import { agentContactData } from "./sandbox.mock";
 import styles from "./sandbox.scss";
 
 @customElement("wcc-widget-starter-lit")
@@ -22,7 +19,11 @@ export class Sandbox extends LitElement {
   @internalProperty() containerWidth = "500px";
 
   async connectedCallback() {
-    super.connectedCallback();
+    //send contact
+  }
+
+  static get styles() {
+    return styles;
   }
 
   themeToggle() {
@@ -51,9 +52,14 @@ export class Sandbox extends LitElement {
             value=${this.containerWidth}
           />
         </label>
+        <label class="switch" text="Responsive">
+          | Send Contact
+          <button @click=${() => this.toggleSetting}>Send Chat Contact</button>
+        </label>
       </div>
     `;
   }
+
   toggleSetting(e: MouseEvent) {
     const composedPath = e.composedPath();
     const target = (composedPath[0] as unknown) as HTMLInputElement;
@@ -65,8 +71,17 @@ export class Sandbox extends LitElement {
     } else return console.error("Invalid data-aspect input");
   }
 
-  static get styles() {
-    return styles;
+  sendContact() {
+    let contactEvent: Service.Aqm.Contact.AgentContact = {
+      type: "",
+      orgId: "",
+      trackingId: "",
+      data: agentContactData,
+    };
+    const event = new CustomEvent("eAgentContact", {
+      detail: contactEvent,
+    });
+    document.dispatchEvent(event);
   }
 
   render() {

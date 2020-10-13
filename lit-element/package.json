@@ -22,7 +22,7 @@
         "test": "jest"
     },
     "dependencies": {
-        "@agentx/agentx-js-api": "*"
+        "@agentx/agentx-js-api": "^1.0.9-beta"
     },
     "resolutions": {
         "jest": "^26.4.2",
@@ -39,6 +39,7 @@
         "lit-html": "^1.2.1"
     },
     "devDependencies": {
+        "@agentx/agentx-services": "^2.1.4",
         "@babel/core": "^7.9.0",
         "@babel/preset-env": "^7.9.0",
         "@momentum-ui-private/momentum-ui-web-components": "1.8.5",
@@ -76,6 +77,7 @@
         "lit-element-i18n": "^0.1.1",
         "lit-html": "^1.2.1",
         "lit-scss-loader": "^1.0.0",
+        "mobx": "^6.0.1",
         "node-sass": "^4.13.1",
         "prettier": "^1.19.1",
         "remove-files-webpack-plugin": "^1.4.0",
