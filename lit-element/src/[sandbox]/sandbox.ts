@@ -16,10 +16,7 @@ import styles from "./sandbox.scss";
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
   @internalProperty() containerWidth = "500px";
-
-  async connectedCallback() {
-    //send contact
-  }
+  @internalProperty() containerHeight = "80vh";
 
   static get styles() {
     return styles;
@@ -28,33 +25,48 @@ export class Sandbox extends LitElement {
   themeToggle() {
     return html`
       <div class="toggle-container">
-        <label class="switch" text="Dark Mode">
-          <input
-            type="checkbox"
-            id="theme-switch"
-            class="theme-switch"
-            data-aspect="darkTheme"
-            @click=${(e: MouseEvent) => this.toggleSetting(e)}
-            ?checked=${this.darkTheme}
-          />
-          Dark Mode
-        </label>
-        <label class="switch" text="Responsive">
-          | Widget Boundary
-          <input
+        <md-checkbox
+          type="checkbox"
+          id="theme-switch"
+          class="theme-switch"
+          data-aspect="darkTheme"
+          label="Dark Mode"
+          @checkbox-change=${(e: MouseEvent) => this.toggleSetting(e)}
+          ?checked=${this.darkTheme}
+          >Dark Mode</md-checkbox
+        >
+        <div class="switch-container">
+          <md-label class="switch" text="Responsive">
+            Widget Boundary
+          </md-label>
+          <md-input
             type="text"
             id="width-switch"
             class="theme-switch"
-            data-aspect="responsive"
+            data-aspect="responsive-width"
             @click=${(e: MouseEvent) => this.toggleSetting(e)}
-            @change=${(e: MouseEvent) => this.toggleSetting(e)}
+            @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
             value=${this.containerWidth}
-          />
-        </label>
-        <label class="switch" text="Responsive">
-          | Send Contact
-          <button @click=${() => this.toggleSetting}>Send Chat Contact</button>
-        </label>
+          ></md-input>
+          <md-label>x</md-label>
+          <md-input
+            type="text"
+            id="height-switch"
+            class="theme-switch"
+            data-aspect="responsive-height"
+            @click=${(e: MouseEvent) => this.toggleSetting(e)}
+            @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
+            value=${this.containerHeight}
+          ></md-input>
+        </div>
+        <div class="switch-container">
+          <md-label class="switch" text="New Contact">
+            Send Contact
+          </md-label>
+          <md-button @button-click=${() => this.toggleSetting}
+            >Send Chat Contact</md-button
+          >
+        </div>
       </div>
     `;
   }
@@ -63,8 +75,10 @@ export class Sandbox extends LitElement {
     const composedPath = e.composedPath();
     const target = (composedPath[0] as unknown) as HTMLInputElement;
     const aspect: string = target.dataset.aspect!;
-    if (aspect === "responsive") {
+    if (aspect === "responsive-width") {
       this.containerWidth = target.value;
+    } else if (aspect === "responsive-height") {
+      this.containerHeight = target.value;
     } else if (aspect === "darkTheme") {
       this.darkTheme = !this.darkTheme;
     } else return console.error("Invalid data-aspect input");
@@ -90,7 +104,7 @@ export class Sandbox extends LitElement {
       </div>
       <md-theme lumos ?darkTheme=${this.darkTheme}>
         <div class="container">
-          <div style=${`width: ${this.containerWidth};`} class="widget-container">
+          <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
           <my-custom-widget></my-custom-widget>
           </div>
           </div>
