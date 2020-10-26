@@ -35,10 +35,30 @@
   }
   .toggle {
     display: flex;
-    height: 27px;
+    height: 50px;
+    &-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 100%;
+    }
   }
+
+  .switch-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    md-label {
+      margin: 0 1em;
+    }
+  }
+
+  md-input.theme-switch::part(input) {
+    margin-bottom: -1rem;
+  }
+
   .widget-container {
     width: 500px;
     height: 80vh;
-    border: 1px solid #000;
+    border: 1px solid var(--md-primary-seperator-color, #000);
   }
