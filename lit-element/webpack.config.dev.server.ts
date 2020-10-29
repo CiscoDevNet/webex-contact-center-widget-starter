@@ -15,6 +15,6 @@ export default merge(commonDev, {
     historyApiFallback: true,
     open: true,
     hot: true,
-    port: 8000
+    port: 8888
   }
 });
