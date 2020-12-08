@@ -8,6 +8,8 @@
 
 import merge from "webpack-merge";
 import { commonDev, pBuild } from "./webpack.config";
+import * as webpack from "webpack";
+import * as webpackDevServer from "webpack-dev-server";
 
 export default merge(commonDev, {
   devServer: {

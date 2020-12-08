@@ -6,73 +6,62 @@
  *
  */
 
-import { html, LitElement, customElement } from "lit-element";
+import {
+  html,
+  LitElement,
+  customElement,
+  internalProperty,
+  query,
+  PropertyValues,
+  property
+} from "lit-element";
 import styles from "./App.scss";
+import { Loader } from "@googlemaps/js-api-loader";
+// import {} from "googlemaps";
+
+// let map: google.maps.Map;
+// const center: google.maps.LatLngLiteral = { lat: 30, lng: -110 };
+
+const loader = new Loader({
+  apiKey: "AIzaSyDlVE8flzwPFbSzuGdaaatrGrG3WIULw5I",
+  version: "weekly"
+});
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
+  @property({ type: Number }) latitude = 47.6062;
+  @property({ type: Number }) longitude = -122.3321;
+  @internalProperty()
+  map?: google.maps.Map;
+  @query("#map") mapDiv?: HTMLElement;
+
+  initMap = (): void => {
+    loader.load().then(() => {
+      if (this.mapDiv) {
+        this.map = new google.maps.Map(this.mapDiv, {
+          center: { lat: 47.6062, lng: -122.3321 },
+          zoom: 8
+        });
+      }
+      console.log(this.mapDiv);
+      console.log(this.map);
+    });
+  };
+
+  firstUpdated(changedProperties: PropertyValues) {
+    console.log(this.mapDiv);
+    super.firstUpdated(changedProperties);
+    this.initMap();
+  }
+
   static get styles() {
     return styles;
   }
   render() {
     return html`
       <div class="container">
-        <h1>Custom Component Contents</h1>
-        <md-tabs>
-          <md-tab slot="tab">One</md-tab>
-          <md-tab-panel slot="panel">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-              ultricies lorem sem, id placerat massa rutrum eu. Sed dui neque,
-              tincidunt quis sapien in, aliquam dignissim nulla. Vestibulum
-              mollis at orci ac facilisis. Sed ut aliquam nunc. Suspendisse eu
-              interdum odio. Sed libero dui, malesuada ac vulputate id,
-              vulputate vel nisi. Proin id egestas mi. Fusce ut sem nibh.
-              Vivamus aliquet accumsan feugiat. Etiam accumsan tortor quis
-              ultrices tempus. Aenean porta feugiat ex. Praesent dictum mauris
-              et dui posuere aliquet et non arcu. Sed eget aliquam elit. Nullam
-              ornare ipsum quis feugiat tincidunt. Nullam a libero sed enim
-              dictum convallis. Suspendisse egestas elit risus, at ultrices
-              massa blandit eget. Vivamus dapibus bibendum nisl, eget cursus
-              risus ultrices et. Quisque felis tortor, accumsan vel tempus quis,
-              rutrum sed urna. Nulla quis magna et eros facilisis blandit. Nunc
-              mattis urna eget diam accumsan, non vehicula est aliquet. Etiam
-              vestibulum dui neque, faucibus sollicitudin nibh vestibulum vel.
-              Nullam semper porta ipsum non varius. Vestibulum sollicitudin
-              ipsum mauris. Praesent quis nisi sagittis, malesuada lacus semper,
-              iaculis elit. Maecenas hendrerit quam ut felis pretium volutpat.
-              Nulla molestie et tellus ac tincidunt. Sed sodales ultrices
-              condimentum. Fusce quis rutrum dui, ut consectetur ante. Morbi
-              quis sem in ipsum tempor mollis. Curabitur ac risus sed quam
-              consequat faucibus quis nec neque. Nullam porttitor felis ut felis
-              cursus dignissim. Curabitur tincidunt tortor et pharetra
-              malesuada. Phasellus tempor ullamcorper scelerisque. Lorem ipsum
-              dolor sit amet, consectetur adipiscing elit. Nulla porttitor ex
-              vel egestas tristique. Aenean molestie cursus tortor at cursus.
-              Sed interdum volutpat leo, sit amet placerat velit congue eu.
-              Vestibulum vitae consequat ex. Ut nec venenatis augue, in porta
-              massa. Curabitur quis porta felis, vel eleifend nisl. Nulla
-              facilisi. Integer sagittis felis nec lacinia rutrum. Etiam a
-              mauris eu nulla pulvinar auctor nec sit amet ex. Quisque turpis
-              ipsum, lacinia in ex ut, tempor tempus est. Vivamus a rutrum
-              velit. Donec eleifend fermentum sollicitudin. Quisque condimentum
-              mauris convallis viverra tempus. Ut enim quam, pulvinar et metus
-              interdum, sagittis ultricies dui. Aenean consectetur at risus eget
-              ornare. Mauris pretium consequat metus a vestibulum. Nulla sit
-              amet nisl eleifend, faucibus turpis at, mattis tellus. Aliquam
-              vehicula orci ac nisi elementum, vitae sollicitudin odio ultrices.
-              Proin in laoreet mi, vitae condimentum nibh. Nunc quis dictum
-              urna, at imperdiet augue. Donec congue tempus elit quis rhoncus.
-              Etiam orci quam, vestibulum egestas rutrum non, dapibus a justo.
-            </p>
-          </md-tab-panel>
-
-          <md-tab slot="tab">Two</md-tab>
-          <md-tab-panel slot="panel">Two</md-tab-panel>
-
-          <md-tab slot="tab">Three</md-tab>
-          <md-tab-panel slot="panel">Three</md-tab-panel>
-        </md-tabs>
+        <h1>Map Widget</h1>
+        <div id="map"></div>
         <slot></slot>
       </div>
     `;

@@ -22,7 +22,8 @@
         "test": "jest"
     },
     "dependencies": {
-        "@agentx/agentx-js-api": "^1.0.9-beta"
+        "@agentx/agentx-js-api": "^1.0.9-beta",
+        "@googlemaps/js-api-loader": "^1.11.1"
     },
     "resolutions": {
         "jest": "^26.4.2",
@@ -48,11 +49,12 @@
         "@momentum-ui/utils": "6.2.7",
         "@open-wc/testing-helpers": "1.8.9",
         "@types/copy-webpack-plugin": "^5.0.0",
+        "@types/googlemaps": "^3.40.3",
         "@types/html-webpack-plugin": "^3.2.2",
         "@types/jest": "26.0.10",
         "@types/node": "^13.7.7",
         "@types/webpack": "^4.41.7",
-        "@types/webpack-dev-server": "^3.10.0",
+        "@types/webpack-dev-server": "^3.11.1",
         "@types/webpack-merge": "^4.1.5",
         "@types/webpack-node-externals": "^1.7.1",
         "@typescript-eslint/eslint-plugin": "^2.22.0",
