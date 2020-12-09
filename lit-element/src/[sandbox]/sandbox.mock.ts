@@ -6,9 +6,7 @@
  *
  */
 
-import { Service } from "@agentx/agentx-services";
-
-export const agentContactData: Service.Aqm.Contact.AgentContact["data"] = {
+export const agentContactData: any /** Service.Aqm.Contact.AgentContact["data"] **/ = {
   mediaResourceId:
     "Y2lzY29zcGFyazovL3VzL1JPT00vZjU2ZGZkYjAtNDBjNi0xMWVhLWFkZmEtMjUxMTJkZWVhNmEz",
   eventType: "RoutingMessage",
@@ -106,26 +104,26 @@ export const agentContactData: Service.Aqm.Contact.AgentContact["data"] = {
   type: ""
 };
 
-export const buddyAgentPayload: Service.Aqm.Contact.BuddyAgents = {
+export const buddyAgentPayload: any /** Service.Aqm.Contact.BuddyAgents **/ = {
   agentProfileId: "AXCLfZhH9S1oTdqE1OFw",
   channelName: "chat",
   state: "Available",
 };
 
-export const vTeamListpayload: Service.Aqm.Contact.VTeam = {
+export const vTeamListpayload: any /** Service.Aqm.Contact.VTeam **/ = {
   agentProfileId: "AXCLfZhH9S1oTdqE1OFw",
   agentSessionId: "5a84d32c-691b-4500-b163-d6cdba2a3163",
   channelType: "chat",
   type: "inboundqueue",
 };
 
-export const consultQueue: Service.Aqm.Contact.ConsultQueue = {
+export const consultQueue: any /** Service.Aqm.Contact.ConsultQueue **/ = {
   agentId: "df276f7a-5113-4d30-831b-ba2d51010203",
   queueId: "3268",
   trackingId: "3d0ab7d7-e92a-4b24-a238-92f940e64489",
 };
 
-export const consultAgent: Service.Aqm.Contact.ConsultAgent = {
+export const consultAgent: any /** Service.Aqm.Contact.ConsultAgent **/ = {
   agentId: "df276f7a-5113-4d30-831b-ba2d51010203",
   destAgentDN: "9997770095",
   destAgentId: "299b728a-d6f8-4934-8fad-577525c0b7fc",
@@ -135,7 +133,7 @@ export const consultAgent: Service.Aqm.Contact.ConsultAgent = {
   trackingId: "3d0ab7d7-e92a-4b24-a198-92f940e64489",
 };
 
-export const consultDN: Service.Aqm.Contact.ConsultDN = {
+export const consultDN: any /** Service.Aqm.Contact.ConsultDN **/ = {
   destAgentId: "9997770095",
   destinationType: "DN",
   mediaType: "telephony",
