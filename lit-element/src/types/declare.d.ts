@@ -15,11 +15,3 @@ declare module "*.svg" {
   const svg: any;
   export default svg;
 }
-
-declare module "lit-element-i18n" {
-  const i18nMixin: any;
-  const translate: (id: string) => string;
-  export { i18nMixin, translate };
-}
-
-//
