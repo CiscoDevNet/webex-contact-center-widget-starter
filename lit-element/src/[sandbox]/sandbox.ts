@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import { Service } from "@agentx/agentx-services";
 import "@momentum-ui/web-components";
 import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
@@ -85,7 +84,7 @@ export class Sandbox extends LitElement {
   }
 
   sendContact() {
-    let contactEvent: Service.Aqm.Contact.AgentContact = {
+    let contactEvent: any /** Service.Aqm.Contact.AgentContact **/ = {
       type: "",
       orgId: "",
       trackingId: "",
