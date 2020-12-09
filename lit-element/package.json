@@ -34,7 +34,6 @@
         "@momentum-ui/utils": "6.2.7",
         "@momentum-ui/web-components": "^2.0.13",
         "lit-element": "^2.3.1",
-        "lit-element-i18n": "^0.1.1",
         "lit-html": "^1.2.1"
     },
     "devDependencies": {
@@ -72,7 +71,6 @@
         "jest": "26.4.2",
         "jest-config": "26.4.2",
         "lit-element": "^2.3.1",
-        "lit-element-i18n": "^0.1.1",
         "lit-html": "^1.2.1",
         "lit-scss-loader": "^1.0.0",
         "mobx": "^6.0.1",
