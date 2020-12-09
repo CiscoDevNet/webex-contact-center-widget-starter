@@ -6,7 +6,7 @@
  *
  */
 import { Service } from "@agentx/agentx-services";
-import "@momentum-ui-private/momentum-ui-web-components";
+import "@momentum-ui/web-components";
 import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
 import { agentContactData } from "./sandbox.mock";
