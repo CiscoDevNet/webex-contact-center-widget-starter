@@ -62,7 +62,7 @@ export class Sandbox extends LitElement {
           <md-label class="switch" text="New Contact">
             Send Contact
           </md-label>
-          <md-button @button-click=${() => this.toggleSetting}
+          <md-button @button-click=${() => this.sendContact()}
             >Send Chat Contact</md-button
           >
         </div>
@@ -92,6 +92,8 @@ export class Sandbox extends LitElement {
     };
     const event = new CustomEvent("eAgentContact", {
       detail: contactEvent,
+      composed: true,
+      bubbles: true
     });
     document.dispatchEvent(event);
   }
