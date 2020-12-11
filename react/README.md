@@ -1,10 +1,10 @@
+# WCC Widget Starter: React
+
 This component was bootstrapped with [Direflow](https://direflow.io).
+## Development
 
-# React Component
-> Widget Starter for React project
+Setting up your development environment:
 
-```html
-<react-component></react-component>
-```
-
-Use this README to describe your Direflow Component
+1. Clone this repo
+2. Run `yarn` from the root of the repo.
+3. Run `yarn start` to start the playground app.
