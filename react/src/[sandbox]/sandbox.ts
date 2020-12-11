@@ -6,19 +6,83 @@
  *
  */
 import "@momentum-ui/web-components";
-import { customElement, html, internalProperty, LitElement } from "lit-element";
+import {
+  css,
+  customElement,
+  html,
+  internalProperty,
+  LitElement,
+} from "lit-element";
 import "../index";
-import { agentContactData } from "./sandbox.mock";
-import styles from "./sandbox.scss";
 
-@customElement("wcc-widget-starter-lit")
+@customElement("wcc-widget-starter-react")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
   @internalProperty() containerWidth = "500px";
   @internalProperty() containerHeight = "80vh";
 
   static get styles() {
-    return styles;
+    return css`
+      .container {
+        box-sizing: border-box;
+        padding: 20px;
+        min-height: calc(100vh - 27px);
+        background-color: var(--md-secondary-bg-color);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        width: 100vw;
+      }
+      .default-maximize-area {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        position: absolute;
+      }
+      .grid {
+        display: grid;
+        grid-template-areas: "iframes css" "async async";
+
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 50% 50%;
+        height: 80vh;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        grid-gap: 1px;
+      }
+      .toggle {
+        display: flex;
+        height: 50px;
+      }
+
+      .toggle-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+      }
+
+      .switch-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .switch-container md-label {
+        margin: 0 1em;
+      }
+
+      md-input.theme-switch::part(input) {
+        margin-bottom: -1rem;
+      }
+
+      .widget-container {
+        width: 500px;
+        height: 80vh;
+        border: 1px solid var(--md-primary-seperator-color, #000);
+      }
+    `;
   }
 
   themeToggle() {
@@ -30,9 +94,11 @@ export class Sandbox extends LitElement {
           class="theme-switch"
           data-aspect="darkTheme"
           label="Dark Mode"
-          @checkbox-change=${(e: MouseEvent) => this.toggleSetting(e)}
+          @checkbox-change=${(e: MouseEvent) => this.toggleSetting(e, 'darkTheme')}
           ?checked=${this.darkTheme}
-          >Dark Mode</md-checkbox
+          >
+          <md-label>Dark Mode</md-label>
+          </md-checkbox
         >
         <div class="switch-container">
           <md-label class="switch" text="Responsive">
@@ -43,8 +109,8 @@ export class Sandbox extends LitElement {
             id="width-switch"
             class="theme-switch"
             data-aspect="responsive-width"
-            @click=${(e: MouseEvent) => this.toggleSetting(e)}
-            @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
+            @click=${(e: MouseEvent) => this.toggleSetting(e, 'responsive-width')}
+            @input-change=${(e: MouseEvent) => this.toggleSetting(e, 'responsive-width')}
             value=${this.containerWidth}
           ></md-input>
           <md-label>x</md-label>
@@ -53,27 +119,18 @@ export class Sandbox extends LitElement {
             id="height-switch"
             class="theme-switch"
             data-aspect="responsive-height"
-            @click=${(e: MouseEvent) => this.toggleSetting(e)}
-            @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
+            @click=${(e: MouseEvent) => this.toggleSetting(e, 'responsive-height')}
+            @input-change=${(e: MouseEvent) => this.toggleSetting(e, 'responsive-height')}
             value=${this.containerHeight}
           ></md-input>
-        </div>
-        <div class="switch-container">
-          <md-label class="switch" text="New Contact">
-            Send Contact
-          </md-label>
-          <md-button @button-click=${() => this.sendContact()}
-            >Send Chat Contact</md-button
-          >
         </div>
       </div>
     `;
   }
 
-  toggleSetting(e: MouseEvent) {
+  toggleSetting(e: Event, aspect: string) {
     const composedPath = e.composedPath();
     const target = (composedPath[0] as unknown) as HTMLInputElement;
-    const aspect: string = target.dataset.aspect!;
     if (aspect === "responsive-width") {
       this.containerWidth = target.value;
     } else if (aspect === "responsive-height") {
@@ -81,21 +138,6 @@ export class Sandbox extends LitElement {
     } else if (aspect === "darkTheme") {
       this.darkTheme = !this.darkTheme;
     } else return console.error("Invalid data-aspect input");
-  }
-
-  sendContact() {
-    let contactEvent: any /** Service.Aqm.Contact.AgentContact **/ = {
-      type: "",
-      orgId: "",
-      trackingId: "",
-      data: agentContactData,
-    };
-    const event = new CustomEvent("eAgentContact", {
-      detail: contactEvent,
-      composed: true,
-      bubbles: true
-    });
-    document.dispatchEvent(event);
   }
 
   render() {
@@ -106,7 +148,7 @@ export class Sandbox extends LitElement {
       <md-theme lumos ?darkTheme=${this.darkTheme}>
         <div class="container">
           <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <my-custom-widget></my-custom-widget>
+          <my-react-widget></my-react-widget>
           </div>
           </div>
         </md-theme>

@@ -6,6 +6,7 @@
  *
  */
 
+import { agentxJsApi } from "@agentx/agentx-js-api";
 import { html, LitElement, customElement } from "lit-element";
 import styles from "./App.scss";
 
@@ -14,6 +15,11 @@ export default class MyCustomComponent extends LitElement {
   static get styles() {
     return styles;
   }
+  connectedCallback() {
+    super.connectedCallback();
+    agentxJsApi.agentContact.addEventListener("eAgentContact", (msg: any) => console.log(msg));
+    document.addEventListener("eAgentContact", (msg: any) => console.log('my event listener', msg));
+  }
   render() {
     return html`
       <div class="container">
@@ -21,7 +27,12 @@ export default class MyCustomComponent extends LitElement {
         <md-tabs>
           <md-tab slot="tab">One</md-tab>
           <md-tab-panel slot="panel">
-            <p>
+            <span></span>
+          </md-tab-panel>
+
+          <md-tab slot="tab">Two</md-tab>
+          <md-tab-panel slot="panel">
+          <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
               ultricies lorem sem, id placerat massa rutrum eu. Sed dui neque,
               tincidunt quis sapien in, aliquam dignissim nulla. Vestibulum
@@ -66,9 +77,6 @@ export default class MyCustomComponent extends LitElement {
               Etiam orci quam, vestibulum egestas rutrum non, dapibus a justo.
             </p>
           </md-tab-panel>
-
-          <md-tab slot="tab">Two</md-tab>
-          <md-tab-panel slot="panel">Two</md-tab-panel>
 
           <md-tab slot="tab">Three</md-tab>
           <md-tab-panel slot="panel">Three</md-tab-panel>
