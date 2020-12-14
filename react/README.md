@@ -1,5 +1,6 @@
 # WCC Widget Starter: React
 
+This component was bootstrapped with [Direflow](https://direflow.io).
 ## Development
 
 Setting up your development environment:
