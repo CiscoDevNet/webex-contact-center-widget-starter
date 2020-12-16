@@ -23,59 +23,18 @@ import { map } from "./lightMap";
 export default class MyCustomComponent extends LitElement {
   @property({ type: Number, reflect: true }) latitude = 47.6062;
   @property({ type: Number, reflect: true }) longitude = -122.3321;
-  @property({ type: String, reflect: true }) address =
-    "3211 Belvidere Ave SW, Seattle WA 98126";
+  @property({ type: String, reflect: true }) search = "Dick's Drive-in";
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
   @property({ type: Number, reflect: true }) zoom = 8;
 
   @internalProperty() map?: google.maps.Map;
+  @internalProperty() markers?: google.maps.places.PlaceResult[];
   @query("#map") mapDiv?: HTMLElement;
 
-  initMap = (): void => {
-    const loader = new Loader({
-      apiKey: this.apiKey,
-      version: "weekly",
-      libraries: ["places"]
-    });
-
-    loader.load().then(() => {
-      if (this.mapDiv) {
-        this.map = new google.maps.Map(this.mapDiv, {
-          center: { lat: this.latitude, lng: this.longitude },
-          zoom: this.zoom,
-          styles: map
-        });
-      }
-      console.log(this.mapDiv);
-      console.log(this.map);
-    });
-  };
-
   firstUpdated(changedProperties: PropertyValues) {
-    console.log(this.mapDiv);
     super.firstUpdated(changedProperties);
     this.initMap();
-    setTimeout(() => {
-      this.getAddressMap();
-    }, 800);
   }
-
-  getAddressMap = () => {
-    if (this.map) {
-      const places = new google.maps.places.PlacesService(this.map);
-      const query = this.address.split(" ").join("%");
-      console.log(query);
-
-      places.textSearch(
-        {
-          query: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&key=${this.apiKey}`
-        },
-        data => {
-          console.log(data);
-        }
-      );
-    }
-  };
 
   update(changedProperties: PropertyValues) {
     super.update(changedProperties);
@@ -87,11 +46,78 @@ export default class MyCustomComponent extends LitElement {
     ) {
       this.initMap();
     }
+    console.log(this.markers);
   }
+
+  initMap = () => {
+    const loader = new Loader({
+      apiKey: this.apiKey,
+      version: "weekly",
+      libraries: ["places"]
+    });
+
+    if (!this.map) {
+      loader
+        .load()
+        .then(() => this.getAddressMap())
+        .then(() => {
+          console.log("FART TWO");
+          if (this.mapDiv) {
+            this.map = new google.maps.Map(this.mapDiv, {
+              center: { lat: this.latitude, lng: this.longitude },
+              zoom: this.zoom,
+              styles: map
+            });
+
+            new google.maps.Marker({
+              position: { lat: this.latitude, lng: this.longitude },
+              map: this.map,
+              title: "Hello World!"
+            });
+          }
+        });
+    } else {
+      this.getAddressMap()
+        .then(() =>
+          this.map?.panTo({ lat: this.latitude, lng: this.longitude })
+        )
+        .then(() => {
+          new google.maps.Marker({
+            position: { lat: this.latitude, lng: this.longitude },
+            map: this.map,
+            title: "Hello World!"
+          });
+        });
+    }
+  };
+
+  getAddressMap = async () => {
+    console.log("FART ONE");
+    if (this.map) {
+      const places = new google.maps.places.PlacesService(this.map);
+      const query = this.search.split(" ").join("%");
+
+      places.textSearch(
+        {
+          query: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&key=${this.apiKey}`
+        },
+        data => {
+          console.log(query, data);
+          if (data.length > 1) {
+            debugger;
+          }
+          this.markers = data;
+          this.latitude = data[0].geometry?.location.lat()!;
+          this.longitude = data[0].geometry?.location.lng()!;
+        }
+      );
+    }
+  };
 
   static get styles() {
     return styles;
   }
+
   render() {
     return html`
       <div class="container">
