@@ -22,7 +22,9 @@
         "test": "jest"
     },
     "dependencies": {
-        "@agentx/agentx-js-api": "^1.1.3"
+        "@agentx/agentx-js-api": "^1.1.3",
+        "@types/chart.js": "^2.9.29",
+        "chart.js": "^2.9.4"
     },
     "resolutions": {
         "jest": "^26.4.2",
