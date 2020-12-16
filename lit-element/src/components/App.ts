@@ -23,12 +23,26 @@ export default class MyCustomComponent extends LitElement {
     );
   }
 
-  async changeState () {
+  async changeState (s: "Available" | "Idle") {
     const agentState = await agentxJsApi.agentStateInfo.stateChange({
-      state: "Idle",
+      state: s,
       auxCodeIdArray: "0",
     });
     logger.info("State Changed", agentState);
+  }
+
+  async getAgentAddressBooks() {
+    const books = await agentxJsApi.agentStateInfo.fetchAddressBooks();
+    logger.info("Address books: ", books);
+  }
+
+  async getAgentInfo() {
+    const latestData = agentxJsApi.agentStateInfo.latestData;
+    logger.info("AgentStateInfo latestData: ", latestData);
+  }
+
+  getClientLocale() {
+    logger.info("Client locale: ", agentxJsApi.config.clientLocale);
   }
 
   render() {
@@ -39,9 +53,26 @@ export default class MyCustomComponent extends LitElement {
           <md-tab slot="tab">One</md-tab>
           <md-tab-panel slot="panel">
             <div class="action-container">
+              <h2>Monitor data output in console log</h2>
               <md-button
-                @button-click=${() => this.changeState()}
-                >Change State</md-button
+                @button-click=${() => this.getAgentInfo()}
+                >Get latest Agent info</md-button
+              >
+              <md-button
+                @button-click=${() => this.getClientLocale()}
+                >Get current Locale</md-button
+              >
+              <md-button
+                @button-click=${() => this.changeState("Idle")}
+                >Change State to Idle</md-button
+              >
+              <md-button
+                @button-click=${() => this.changeState("Available")}
+                >Change State to Available</md-button
+              >
+              <md-button
+                @button-click=${() => this.getAgentAddressBooks()}
+                >Fetch Address Books</md-button
               >
             </div>
           </md-tab-panel>
