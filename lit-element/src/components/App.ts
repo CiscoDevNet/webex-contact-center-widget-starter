@@ -9,6 +9,7 @@
 import { agentxJsApi } from "@agentx/agentx-js-api";
 import { html, LitElement, customElement } from "lit-element";
 import styles from "./App.scss";
+import { logger } from "./sdk";
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
@@ -17,9 +18,19 @@ export default class MyCustomComponent extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback();
-    agentxJsApi.agentContact.addEventListener("eAgentContact", (msg: any) => console.log(msg));
-    document.addEventListener("eAgentContact", (msg: any) => console.log('my event listener', msg));
+    agentxJsApi.agentContact.addEventListener("eAgentContact", (msg: any) =>
+      logger.info(msg)
+    );
   }
+
+  async changeState () {
+    const agentState = await agentxJsApi.agentStateInfo.stateChange({
+      state: "Idle",
+      auxCodeIdArray: "0",
+    });
+    logger.info("State Changed", agentState);
+  }
+
   render() {
     return html`
       <div class="container">
@@ -27,12 +38,17 @@ export default class MyCustomComponent extends LitElement {
         <md-tabs>
           <md-tab slot="tab">One</md-tab>
           <md-tab-panel slot="panel">
-            <span></span>
+            <div class="action-container">
+              <md-button
+                @button-click=${() => this.changeState()}
+                >Change State</md-button
+              >
+            </div>
           </md-tab-panel>
 
           <md-tab slot="tab">Two</md-tab>
           <md-tab-panel slot="panel">
-          <p>
+            <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
               ultricies lorem sem, id placerat massa rutrum eu. Sed dui neque,
               tincidunt quis sapien in, aliquam dignissim nulla. Vestibulum

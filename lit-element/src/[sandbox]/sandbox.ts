@@ -24,47 +24,32 @@ export class Sandbox extends LitElement {
   themeToggle() {
     return html`
       <div class="toggle-container">
-        <md-checkbox
-          type="checkbox"
-          id="theme-switch"
-          class="theme-switch"
-          data-aspect="darkTheme"
-          label="Dark Mode"
-          @checkbox-change=${(e: MouseEvent) => this.toggleSetting(e)}
+        <md-checkbox type="checkbox" id="theme-switch" class="theme-switch" data-aspect="darkTheme" label="Dark Mode"
+          @checkbox-change=${(e: MouseEvent)=> this.toggleSetting(e)}
           ?checked=${this.darkTheme}
-          >Dark Mode</md-checkbox
-        >
+          >Dark Mode</md-checkbox>
         <div class="switch-container">
           <md-label class="switch" text="Responsive">
             Widget Boundary
           </md-label>
-          <md-input
-            type="text"
-            id="width-switch"
-            class="theme-switch"
-            data-aspect="responsive-width"
-            @click=${(e: MouseEvent) => this.toggleSetting(e)}
+          <md-input type="text" id="width-switch" class="theme-switch" data-aspect="responsive-width" @click=${(e:
+            MouseEvent)=> this.toggleSetting(e)}
             @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
             value=${this.containerWidth}
-          ></md-input>
+            ></md-input>
           <md-label>x</md-label>
-          <md-input
-            type="text"
-            id="height-switch"
-            class="theme-switch"
-            data-aspect="responsive-height"
-            @click=${(e: MouseEvent) => this.toggleSetting(e)}
+          <md-input type="text" id="height-switch" class="theme-switch" data-aspect="responsive-height" @click=${(e:
+            MouseEvent)=> this.toggleSetting(e)}
             @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
             value=${this.containerHeight}
-          ></md-input>
+            ></md-input>
         </div>
         <div class="switch-container">
           <md-label class="switch" text="New Contact">
             Send Contact
           </md-label>
-          <md-button @button-click=${() => this.sendContact()}
-            >Send Chat Contact</md-button
-          >
+          <md-button @button-click=${()=> this.sendContact()}
+            >Send Chat Contact</md-button>
         </div>
       </div>
     `;
@@ -93,7 +78,7 @@ export class Sandbox extends LitElement {
     const event = new CustomEvent("eAgentContact", {
       detail: contactEvent,
       composed: true,
-      bubbles: true
+      bubbles: true,
     });
     document.dispatchEvent(event);
   }
@@ -101,17 +86,17 @@ export class Sandbox extends LitElement {
   render() {
     return html`
     <div class="toggle">
-        ${this.themeToggle()}
-      </div>
-      <md-theme lumos ?darkTheme=${this.darkTheme}>
-        <div class="container">
-          <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
+      ${this.themeToggle()}
+    </div>
+    <md-theme lumos ?darkTheme=${this.darkTheme}>
+      <div class="container">
+        <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
           <my-custom-widget></my-custom-widget>
-          </div>
-          </div>
-        </md-theme>
         </div>
-      </md-theme>
+      </div>
+    </md-theme>
+    </div>
+    </md-theme>
     `;
   }
 }
