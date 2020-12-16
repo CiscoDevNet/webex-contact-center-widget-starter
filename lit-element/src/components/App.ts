@@ -23,9 +23,9 @@ import { map } from "./lightMap";
 export default class MyCustomComponent extends LitElement {
   @property({ type: Number, reflect: true }) latitude = 47.6062;
   @property({ type: Number, reflect: true }) longitude = -122.3321;
-  @property({ type: String, reflect: true }) search = "Dick's Drive-in";
+  @property({ type: String, reflect: true }) search = "";
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
-  @property({ type: Number, reflect: true }) zoom = 8;
+  @property({ type: Number, reflect: true }) zoom = 12;
 
   @internalProperty() map?: google.maps.Map;
   @internalProperty() markers?: google.maps.places.PlaceResult[];
@@ -39,14 +39,13 @@ export default class MyCustomComponent extends LitElement {
   update(changedProperties: PropertyValues) {
     super.update(changedProperties);
     if (
-      changedProperties.has("address") ||
+      changedProperties.has("search") ||
       changedProperties.has("latitude") ||
       changedProperties.has("longitude") ||
       changedProperties.has("zoom")
     ) {
       this.initMap();
     }
-    console.log(this.markers);
   }
 
   initMap = () => {
@@ -97,18 +96,20 @@ export default class MyCustomComponent extends LitElement {
       const places = new google.maps.places.PlacesService(this.map);
       const query = this.search.split(" ").join("%");
 
-      places.textSearch(
+      places.nearbySearch(
         {
-          query: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&key=${this.apiKey}`
+          keyword: query,
+          location: { lat: this.latitude, lng: this.longitude },
+          radius: 50000
         },
-        data => {
-          console.log(query, data);
-          if (data.length > 1) {
-            debugger;
-          }
-          this.markers = data;
-          this.latitude = data[0].geometry?.location.lat()!;
-          this.longitude = data[0].geometry?.location.lng()!;
+        (results, status) => {
+          console.log(query, results, status);
+          // if (data.length > 1) {
+          //   debugger;
+          // }
+          // this.markers = data;
+          // this.latitude = data[0].geometry?.location.lat()!;
+          // this.longitude = data[0].geometry?.location.lng()!;
         }
       );
     }
