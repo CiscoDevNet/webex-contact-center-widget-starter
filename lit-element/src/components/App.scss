@@ -18,4 +18,9 @@
 
 .action-container {
     padding: 10px 2px;
+    display: flex;
+    flex-direction: column;
+    md-button {
+        margin: 10px 0;
+    }
 }

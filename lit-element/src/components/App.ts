@@ -7,20 +7,57 @@
  */
 
 import { agentxJsApi } from "@agentx/agentx-js-api";
-import { html, LitElement, customElement } from "lit-element";
+import { html, LitElement, customElement, internalProperty } from "lit-element";
 import styles from "./App.scss";
 import { logger } from "./sdk";
+import { Notifications } from '@uuip/unified-ui-platform-sdk';
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
+  @internalProperty() notificationsAdded = 0;
+  @internalProperty() notificationsPending = 0;
+  @internalProperty() notificationsActivated = 0;
+  @internalProperty() notificationsDeactivated = 0;
+
   static get styles() {
     return styles;
   }
   connectedCallback() {
     super.connectedCallback();
-    agentxJsApi.agentContact.addEventListener("eAgentContact", (msg: any) =>
-      logger.info(msg)
-    );
+    this.init();
+    this.subscribeNotificationsEvents();
+  }
+
+  async init() {
+    await agentxJsApi.config.init();
+  }
+
+  subscribeNotificationsEvents() {
+    agentxJsApi.notifications.addEventListener("add", n => {
+      logger.info("Notifications Added: ", n);
+      this.notificationsAdded = agentxJsApi.notifications.added.length;
+    });
+    agentxJsApi.notifications.addEventListener("pending", n => {
+      logger.info("Notifications Pending: ", n);
+      this.notificationsAdded = agentxJsApi.notifications.added.length;
+      this.notificationsPending = agentxJsApi.notifications.pended.length;
+      this.notificationsActivated = agentxJsApi.notifications.activated.length;
+      this.notificationsDeactivated = agentxJsApi.notifications.deactivated.length;
+    });
+    agentxJsApi.notifications.addEventListener("activate", n => {
+      logger.info("Notifications Activated: ", n);
+      this.notificationsAdded = agentxJsApi.notifications.added.length;
+      this.notificationsPending = agentxJsApi.notifications.pended.length;
+      this.notificationsActivated = agentxJsApi.notifications.activated.length;
+      this.notificationsDeactivated = agentxJsApi.notifications.deactivated.length;
+    });
+    agentxJsApi.notifications.addEventListener("deactivate", n => {
+      logger.info("Notifications Deactivated: ", n);
+      this.notificationsAdded = agentxJsApi.notifications.added.length;
+      this.notificationsPending = agentxJsApi.notifications.pended.length;
+      this.notificationsActivated = agentxJsApi.notifications.activated.length;
+      this.notificationsDeactivated = agentxJsApi.notifications.deactivated.length;
+    });
   }
 
   async changeState (s: "Available" | "Idle") {
@@ -45,12 +82,25 @@ export default class MyCustomComponent extends LitElement {
     logger.info("Client locale: ", agentxJsApi.config.clientLocale);
   }
 
+  emitNotification() {
+    const raw = {
+        data: {
+            type: Notifications.ItemMeta.Type.Default,
+            mode: Notifications.ItemMeta.Mode.AutoDismiss,
+            title: "Info - AutoDismiss",
+            data: "Lorem Ipsum Dolor"
+        }
+    };
+ 
+    agentxJsApi.notifications.add(raw);
+  }
+
   render() {
     return html`
       <div class="container">
         <h1>Custom Component Contents</h1>
         <md-tabs>
-          <md-tab slot="tab">One</md-tab>
+          <md-tab slot="tab">Request Data</md-tab>
           <md-tab-panel slot="panel">
             <div class="action-container">
               <h2>Monitor data output in console log</h2>
@@ -75,6 +125,21 @@ export default class MyCustomComponent extends LitElement {
                 >Fetch Address Books</md-button
               >
             </div>
+          </md-tab-panel>
+
+          <md-tab slot="tab">Notifications</md-tab>
+          <md-tab-panel slot="panel">
+          <div class="action-container">
+              <h2>Notifications</h2>
+              <md-button
+                @button-click=${() => this.emitNotification()}
+                >Emit Notification</md-button
+              >
+              <md-label>Notifications Added: <span>${this.notificationsAdded}</span></md-label>
+              <md-label>Notifications Pending: <span>${this.notificationsPending}</span></md-label>
+              <md-label>Notifications Activated: <span>${this.notificationsActivated}</span></md-label>
+              <md-label>Notifications Deactivated: <span>${this.notificationsDeactivated}</span></md-label>
+              </div>
           </md-tab-panel>
 
           <md-tab slot="tab">Two</md-tab>
@@ -125,8 +190,7 @@ export default class MyCustomComponent extends LitElement {
             </p>
           </md-tab-panel>
 
-          <md-tab slot="tab">Three</md-tab>
-          <md-tab-panel slot="panel">Three</md-tab-panel>
+          
         </md-tabs>
         <slot></slot>
       </div>
