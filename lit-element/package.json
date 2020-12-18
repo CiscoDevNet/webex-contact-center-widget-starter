@@ -37,6 +37,8 @@
         "lit-html": "^1.2.1"
     },
     "devDependencies": {
+        "@agentx/agentx": "1.2.1",
+        "@agentx/agentx-services-types": "^2.5.5",
         "@babel/core": "^7.9.0",
         "@babel/preset-env": "^7.9.0",
         "@momentum-ui/core": "19.9.2",
