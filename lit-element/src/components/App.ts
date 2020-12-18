@@ -10,14 +10,18 @@ import { agentxJsApi } from "@agentx/agentx-js-api";
 import { html, LitElement, customElement, internalProperty } from "lit-element";
 import styles from "./App.scss";
 import { logger } from "./sdk";
-import { Notifications } from '@uuip/unified-ui-platform-sdk';
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
-  @internalProperty() notificationsAdded = 0;
-  @internalProperty() notificationsPending = 0;
-  @internalProperty() notificationsActivated = 0;
-  @internalProperty() notificationsDeactivated = 0;
+  /**
+   * Replace this with the logic to obtain interaction ID you need
+   * through agentxJsApi.actions sub-module or through external props
+   */
+  @internalProperty() sampleInteractionId =
+    "58f76ca3-409f-11eb-8606-f1b296a9b969";
+  @internalProperty() agentId = "7d12d9ea-e8e0-41ee-81bf-c11a685b64ed";
+  @internalProperty() buddyAgents: any = null;
+  @internalProperty() vTeam: any = null;
 
   static get styles() {
     return styles;
@@ -25,42 +29,22 @@ export default class MyCustomComponent extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.init();
-    this.subscribeNotificationsEvents();
+    this.getCurrentInteractionId();
   }
 
   async init() {
     await agentxJsApi.config.init();
   }
 
-  subscribeNotificationsEvents() {
-    agentxJsApi.notifications.addEventListener("add", n => {
-      logger.info("Notifications Added: ", n);
-      this.notificationsAdded = agentxJsApi.notifications.added.length;
-    });
-    agentxJsApi.notifications.addEventListener("pending", n => {
-      logger.info("Notifications Pending: ", n);
-      this.notificationsAdded = agentxJsApi.notifications.added.length;
-      this.notificationsPending = agentxJsApi.notifications.pended.length;
-      this.notificationsActivated = agentxJsApi.notifications.activated.length;
-      this.notificationsDeactivated = agentxJsApi.notifications.deactivated.length;
-    });
-    agentxJsApi.notifications.addEventListener("activate", n => {
-      logger.info("Notifications Activated: ", n);
-      this.notificationsAdded = agentxJsApi.notifications.added.length;
-      this.notificationsPending = agentxJsApi.notifications.pended.length;
-      this.notificationsActivated = agentxJsApi.notifications.activated.length;
-      this.notificationsDeactivated = agentxJsApi.notifications.deactivated.length;
-    });
-    agentxJsApi.notifications.addEventListener("deactivate", n => {
-      logger.info("Notifications Deactivated: ", n);
-      this.notificationsAdded = agentxJsApi.notifications.added.length;
-      this.notificationsPending = agentxJsApi.notifications.pended.length;
-      this.notificationsActivated = agentxJsApi.notifications.activated.length;
-      this.notificationsDeactivated = agentxJsApi.notifications.deactivated.length;
-    });
+  getCurrentInteractionId() {
+    let path = window.location.pathname;
+    if (path.indexOf("task") >=0 && path.replace("task/", "").length > 0) {
+      this.sampleInteractionId = path.replace("/task/", "");
+      logger.info("Current interactionID: ", this.sampleInteractionId);
+    }
   }
 
-  async changeState (s: "Available" | "Idle") {
+  async changeState(s: "Available" | "Idle") {
     const agentState = await agentxJsApi.agentStateInfo.stateChange({
       state: s,
       auxCodeIdArray: "0",
@@ -82,17 +66,111 @@ export default class MyCustomComponent extends LitElement {
     logger.info("Client locale: ", agentxJsApi.config.clientLocale);
   }
 
-  emitNotification() {
-    const raw = {
-        data: {
-            type: Notifications.ItemMeta.Type.Default,
-            mode: Notifications.ItemMeta.Mode.AutoDismiss,
-            title: "Info - AutoDismiss",
-            data: "Lorem Ipsum Dolor"
-        }
+  async getBuddyAgents() {
+    const buddyAgentPayload = {
+      agentProfileId: "AXCLfZhH9S1oTdqE1OFw",
+      channelName: "chat",
+      state: "Available"
     };
- 
-    agentxJsApi.notifications.add(raw);
+     
+    this.buddyAgents = await agentxJsApi.agentContact.buddyAgents({ data: buddyAgentPayload });
+    logger.info(this.buddyAgents);
+  }
+
+  async getVTeamList() {
+    const vTeamPayload = {
+      agentProfileId: "AXCLfZhH9S1oTdqE1OFw",
+      agentSessionId: "5a84d32c-691b-4500-b163-d6cdba2a3163",
+      channelType: "chat",
+      type: "inboundqueue"
+    };
+     
+    this.vTeam = await agentxJsApi.agentContact.vteamList({ data: vTeamPayload });
+    logger.info(this.vTeam);
+  }
+
+  async endInteraction() {
+    let endedInteraction = await agentxJsApi.agentContact.end({
+      interactionId: this.sampleInteractionId
+    });
+    logger.info(endedInteraction);
+  }
+
+  async wrapUpInteraction() {
+    let wrappedUpInteraction = await agentxJsApi.agentContact.wrapup({
+      interactionId: this.sampleInteractionId,
+      data: {
+        wrapUpReason: "Example reason here",
+        auxCodeId: "0",
+        isAutoWrapup: "false",
+        }
+    });
+    logger.info(wrappedUpInteraction);
+  }
+
+  async consultWithAgent() {
+    let consult = await agentxJsApi.agentContact.consult({
+      interactionId: this.sampleInteractionId,
+      data: {
+        agentId: this.agentId,
+        destAgentId: this.buddyAgents?.data.agentList[0].agentId,
+        mediaType: "chat"
+      },
+      url: "consult"
+    })
+    logger.info(consult);
+  }
+
+  async consultConferenceWithAgent() {
+    let consult = await agentxJsApi.agentContact.consultConference({
+      interactionId: this.sampleInteractionId,
+      data: {
+        agentId: this.agentId,
+        destAgentId: this.buddyAgents?.data.agentList[0].agentId,
+        mediaType: "chat"
+      }
+    })
+    logger.info(consult);
+  }
+
+  async endConferenceWithAgent() {
+    let consult = await agentxJsApi.agentContact.consultEnd({
+      interactionId: this.sampleInteractionId,
+      isConsult: false
+    })
+    logger.info(consult);
+  }
+
+  async endConsultConferenceWithAgent() {
+    let consult = await agentxJsApi.agentContact.consultEnd({
+      interactionId: this.sampleInteractionId,
+      isConsult: true
+    })
+    logger.info(consult);
+  }
+
+  async consultTransferToAgent() {
+    let consult = await agentxJsApi.agentContact.consultTransfer({
+      interactionId: this.sampleInteractionId,
+      data: {
+        agentId: this.agentId,
+        destAgentId: this.buddyAgents?.data.agentList[0].agentId,
+        mediaType: "chat",
+        mediaResourceId: "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8"
+      }
+    })
+    logger.info(consult);
+  }
+
+  async vTeamTransfer() {
+    let consult = await agentxJsApi.agentContact.vteamTransfer({
+      interactionId: this.sampleInteractionId,
+      data: {
+        vteamId: this.vTeam.data.data.vteamList[0].analyzerId,
+        vteamType: this.vTeam.data.data.vteamList[0].type
+      }
+    })
+    logger.info(consult);
   }
 
   render() {
@@ -104,42 +182,81 @@ export default class MyCustomComponent extends LitElement {
           <md-tab-panel slot="panel">
             <div class="action-container">
               <h2>Monitor data output in console log</h2>
-              <md-button
-                @button-click=${() => this.getAgentInfo()}
+              <md-button @button-click=${() => this.getAgentInfo()}
                 >Get latest Agent info</md-button
               >
-              <md-button
-                @button-click=${() => this.getClientLocale()}
+              <md-button @button-click=${() => this.getClientLocale()}
                 >Get current Locale</md-button
               >
-              <md-button
-                @button-click=${() => this.changeState("Idle")}
+              <md-button @button-click=${() => this.changeState("Idle")}
                 >Change State to Idle</md-button
               >
-              <md-button
-                @button-click=${() => this.changeState("Available")}
+              <md-button @button-click=${() => this.changeState("Available")}
                 >Change State to Available</md-button
               >
-              <md-button
-                @button-click=${() => this.getAgentAddressBooks()}
+              <md-button @button-click=${() => this.getAgentAddressBooks()}
                 >Fetch Address Books</md-button
               >
             </div>
           </md-tab-panel>
 
-          <md-tab slot="tab">Notifications</md-tab>
+          <md-tab slot="tab">agentxJsApi.agentContact</md-tab>
           <md-tab-panel slot="panel">
-          <div class="action-container">
-              <h2>Notifications</h2>
-              <md-button
-                @button-click=${() => this.emitNotification()}
-                >Emit Notification</md-button
+            <div class="action-container">
+              <h2>agentxJsApi.agentContact sub-module</h2>
+              <h3>Get Buddy Agents</h3>
+              <md-button @button-click=${() => this.getBuddyAgents()}
+                >Get Buddy Agents</md-button
               >
-              <md-label>Notifications Added: <span>${this.notificationsAdded}</span></md-label>
-              <md-label>Notifications Pending: <span>${this.notificationsPending}</span></md-label>
-              <md-label>Notifications Activated: <span>${this.notificationsActivated}</span></md-label>
-              <md-label>Notifications Deactivated: <span>${this.notificationsDeactivated}</span></md-label>
-              </div>
+
+              <h3>Get vTeam list</h3>
+              <md-button @button-click=${() => this.getVTeamList()}
+                >Get vTeam list</md-button
+              >
+
+              <h3>End interaction</h3>
+              <md-button @button-click=${() => this.endInteraction()}
+                >End interaction for ${this.sampleInteractionId}</md-button
+              >
+
+              <h3>Wrap Up interaction</h3>
+              <md-button @button-click=${() => this.wrapUpInteraction()}
+                >Wrap Up interaction for ${this.sampleInteractionId}</md-button
+              >
+
+              <h3>Consult</h3>
+              <md-label>Fetch buddy agents before initiating a consult</md-label>
+              <md-button @button-click=${() => this.consultWithAgent()}
+                >Consult with ${this.buddyAgents?.data.agentList[0].agentId}</md-button
+              >
+
+              <md-label>Make sure to have active conference before ending</md-label>
+              <md-button @button-click=${() => this.endConferenceWithAgent()}
+                >End Consult with ${this.buddyAgents?.data.agentList[0].agentId}</md-button
+              >
+
+              <h3>Consult Conference</h3>
+
+              <md-button @button-click=${() => this.consultConferenceWithAgent()}
+                >Consult Conference with ${this.buddyAgents?.data.agentList[0].agentId}</md-button
+              >
+              <md-label>Make sure to have active conference before ending</md-label>
+              <md-button @button-click=${() => this.endConsultConferenceWithAgent()}
+                >End Consult Conference with ${this.buddyAgents?.data.agentList[0].agentId}</md-button
+              >
+
+              <h3>Consult Transfer</h3>
+              <md-button @button-click=${() => this.consultTransferToAgent()}
+                >Consult Transfer to ${this.buddyAgents?.data.agentList[0].agentId}</md-button
+              >
+
+              <h3>vTeam Transfer</h3>
+              <md-label>Fetch vTeam before initiating a transfer</md-label>
+              <md-button @button-click=${() => this.vTeamTransfer()}
+                >Consult Transfer to ${this.vTeam.data.data.vteamList[0].analyzerId}</md-button
+              >
+
+            </div>
           </md-tab-panel>
 
           <md-tab slot="tab">Two</md-tab>
@@ -189,8 +306,6 @@ export default class MyCustomComponent extends LitElement {
               Etiam orci quam, vestibulum egestas rutrum non, dapibus a justo.
             </p>
           </md-tab-panel>
-
-          
         </md-tabs>
         <slot></slot>
       </div>
