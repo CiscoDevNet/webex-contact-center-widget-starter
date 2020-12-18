@@ -240,7 +240,9 @@ export default class MyCustomComponent extends LitElement {
 
   render() {
     return html`
-      <my-custom-component api-key=""></my-custom-component>
+      <my-custom-component
+        api-key="AIzaSyDlVE8flzwPFbSzuGdaaatrGrG3WIULw5I"
+      ></my-custom-component>
     `;
   }
 }
