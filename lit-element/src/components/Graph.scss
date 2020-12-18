@@ -1,3 +1,9 @@
+@import "./App.scss";
+
 .graph-section {
-    width: 294px;
+  width: 294px;
+
+  md-radio {
+    margin-right: 0.5rem;
+  }
 }

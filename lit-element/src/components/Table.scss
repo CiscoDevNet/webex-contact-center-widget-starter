@@ -1,0 +1,16 @@
+@import "./App.scss";
+
+.table-section {
+  width: 296px;
+  height: 100%;
+
+  .sub-body {
+    height: 261px;
+    overflow: scroll;
+  }
+}
+
+.sort-button-icon::part(button) {
+  top: 15px;
+  margin-right: 16px;
+}
