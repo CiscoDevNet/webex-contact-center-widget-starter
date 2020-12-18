@@ -1,0 +1,36 @@
+<div class="toggle">
+  <div class="toggle-container">
+    <input
+      id="dark-mode-checkbox"
+      type="checkbox"
+      class="theme-switch"
+      data-aspect="darkTheme"
+      label="Dark Mode"
+      />
+    <label for="dark-mode-checkbox">Dark Mode</label>
+    <div class="switch-container">
+      <label class="switch" text="Responsive">
+        Widget Boundary
+      </label>
+      <input
+        type="text"
+        id="width-switch"
+        class="theme-switch"
+        data-aspect="responsive-width"
+        />
+      <label>x</label>
+      <input
+        type="text"
+        id="height-switch"
+        class="theme-switch"
+        data-aspect="responsive-height"
+        />
+    </div>
+  </div>
+
+</div>
+<div class="container">
+  <div style="width: 500px; height: 80vh" class="widget-container">
+    <my-custom-component></my-custom-component>
+  </div>
+</div>

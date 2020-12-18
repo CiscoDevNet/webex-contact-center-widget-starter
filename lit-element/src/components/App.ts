@@ -21,9 +21,11 @@ import { Loader } from "@googlemaps/js-api-loader";
 // import {} from "googlemaps";
 import { map as lightMap } from "./lightMap";
 import { darkMap } from "./darkMap";
+
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
-  @property({ type: Number, reflect: true }) latitude = 47.6062;
+  @property({ type: Number, reflect: true })
+  latitude = 47.6062;
   @property({ type: Number, reflect: true }) longitude = -122.3321;
   @property({ type: String, reflect: true }) search = "";
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";

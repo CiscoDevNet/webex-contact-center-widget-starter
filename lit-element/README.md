@@ -1,5 +1,4 @@
 # WCC Widget Starter: Lit Element
-
 ## Development
 
 Setting up your development environment:
