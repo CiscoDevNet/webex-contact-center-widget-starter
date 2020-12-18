@@ -69,6 +69,7 @@ export default class MyCustomComponent extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.loader.apiKey = this.apiKey;
+    document.addEventListener("theme-changed", this.refreshTokenData);
   }
 
   firstUpdated(changedProperties: PropertyValues) {

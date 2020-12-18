@@ -22,7 +22,8 @@
         "test": "jest"
     },
     "dependencies": {
-        "@agentx/agentx-js-api": "^1.1.3"
+        "@agentx/agentx-js-api": "^1.1.3",
+        "@googlemaps/js-api-loader": "^1.11.1"
     },
     "resolutions": {
         "jest": "^26.4.2",
@@ -32,7 +33,7 @@
         "@momentum-ui/core": "19.9.2",
         "@momentum-ui/icons": "7.45.0",
         "@momentum-ui/utils": "6.2.7",
-        "@momentum-ui/web-components": "^2.0.13",
+        "@momentum-ui/web-components": "^2.0.14",
         "lit-element": "^2.3.1",
         "lit-html": "^1.2.1"
     },
