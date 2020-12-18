@@ -166,8 +166,8 @@ export default class MyCustomComponent extends LitElement {
     let consult = await agentxJsApi.agentContact.vteamTransfer({
       interactionId: this.sampleInteractionId,
       data: {
-        vteamId: this.vTeam.data.data.vteamList[0].analyzerId,
-        vteamType: this.vTeam.data.data.vteamList[0].type
+        vteamId: this.vTeam?.data.data.vteamList[0].analyzerId,
+        vteamType: this.vTeam?.data.data.vteamList[0].type
       }
     })
     logger.info(consult);
@@ -253,7 +253,7 @@ export default class MyCustomComponent extends LitElement {
               <h3>vTeam Transfer</h3>
               <md-label>Fetch vTeam before initiating a transfer</md-label>
               <md-button @button-click=${() => this.vTeamTransfer()}
-                >Consult Transfer to ${this.vTeam.data.data.vteamList[0].analyzerId}</md-button
+                >Consult Transfer to ${this.vTeam?.data.data.vteamList[0].analyzerId}</md-button
               >
 
             </div>
