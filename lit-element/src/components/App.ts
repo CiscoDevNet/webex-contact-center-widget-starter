@@ -11,6 +11,7 @@ import { html, LitElement, customElement, internalProperty } from "lit-element";
 import styles from "./App.scss";
 import { logger } from "./sdk";
 import { Service } from "@agentx/agentx-services-types";
+import { Notifications } from "@uuip/unified-ui-platform-sdk";
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
   /**
@@ -23,6 +24,7 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() buddyAgents: Service.Aqm.Contact.BuddyAgentsSuccess | null = null;
   @internalProperty() vTeam: Service.Aqm.Contact.VTeamSuccess | null = null;
   @internalProperty() contacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
+  @internalProperty() acceptedContacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
 
   static get styles() {
     return styles;
@@ -48,28 +50,39 @@ export default class MyCustomComponent extends LitElement {
   }
 
   subscribeScreenpopEvent() {
-    agentxJsApi.screenpop.addEventListener("eScreenPop", (msg: any) => logger.info(msg));
+    agentxJsApi.screenpop.addEventListener("eScreenPop", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
   }
 
   subscribeDialerEvents() {
-    agentxJsApi.dialer.addEventListener("eOutdialFailed", (msg: any) => logger.info(msg));
+    agentxJsApi.dialer.addEventListener("eOutdialFailed", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
   }
 
   subscribeAgentContactDataEvents() {
-    agentxJsApi.agentContact.addEventListener("eAgentContact", (msg: any) =>
+    agentxJsApi.agentContact.addEventListener("eAgentContact", (msg: Service.Aqm.Contact.AgentContact) =>
       logger.info("AgentContact eAgentContact: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentContactAssigned",
-      (msg: any) => logger.info("AgentContact eAgentContactAssigned: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentContactAssigned: ", msg);
+        this.acceptedContacts.push(msg.data.interactionId);
+        logger.info(this.acceptedContacts);
+      }
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentContactEnded",
-      (msg: any) => logger.info("AgentContact eAgentContactEnded: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentContactEnded: ", msg);
+        const idx = this.acceptedContacts.indexOf(msg.data.interactionId);
+        if (idx != -1) {
+          this.acceptedContacts = this.acceptedContacts.slice(idx, 1);
+          logger.info(this.acceptedContacts);
+        }
+      }
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentContactWrappedUp",
-      (msg: any) => logger.info("AgentContact eAgentContactWrappedUp: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactWrappedUp: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentOfferContact",
@@ -77,6 +90,7 @@ export default class MyCustomComponent extends LitElement {
         logger.info("AgentContact eAgentOfferContact: ", msg);
         // AUX Sandbox Contact
         this.contacts.push(msg.data.interactionId);
+        logger.info(this.contacts);
       }
     );
     agentxJsApi.agentContact.addEventListener(
@@ -86,65 +100,66 @@ export default class MyCustomComponent extends LitElement {
         // AUX Sandbox Contact
         const idx = this.contacts.indexOf(msg.data.interactionId);
         if (idx != -1) {
-          this.contacts.slice(idx, 1);
+          this.contacts = this.contacts.slice(idx, 1);
+          logger.info(this.contacts);
         }
       }
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentOfferConsult",
-      (msg: any) => logger.info("AgentContact eAgentOfferConsult: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentOfferConsult: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener("eAgentWrapup", (msg: any) =>
+    agentxJsApi.agentContact.addEventListener("eAgentWrapup", (msg: Service.Aqm.Contact.AgentContact) =>
       logger.info("AgentContact eAgentWrapup: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener("eAgentContactHeld", (msg: any) =>
+    agentxJsApi.agentContact.addEventListener("eAgentContactHeld", (msg: Service.Aqm.Contact.AgentContact) =>
       logger.info("AgentContact eAgentContactHeld: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentContactUnHeld",
-      (msg: any) => logger.info("AgentContact eAgentContactUnHeld: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactUnHeld: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eCallRecordingStarted",
-      (msg: any) => logger.info("AgentContact eCallRecordingStarted: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eCallRecordingStarted: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentConsultCreated",
-      (msg: any) => logger.info("AgentContact eAgentConsultCreated: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultCreated: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentConsultConferenced",
-      (msg: any) => logger.info("AgentContact eAgentConsultConferenced: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultConferenced: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentConsultEnded",
-      (msg: any) => logger.info("AgentContact eAgentConsultEnded: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEnded: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentCtqCancelled",
-      (msg: any) => logger.info("AgentContact eAgentCtqCancelled: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelled: ", msg)
     );
     agentxJsApi.agentContact.addEventListener("eAgentConsulting", (msg: any) =>
       logger.info("AgentContact eAgentConsulting: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentConsultFailed",
-      (msg: any) => logger.info("AgentContact eAgentConsultFailed: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultFailed: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentConsultEndFailed",
-      (msg: any) => logger.info("AgentContact eAgentConsultEndFailed: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEndFailed: ", msg)
     );
     agentxJsApi.agentContact.addEventListener("eAgentCtqFailed", (msg: any) =>
       logger.info("AgentContact eAgentCtqFailed: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentCtqCancelFailed",
-      (msg: any) => logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
     );
     agentxJsApi.agentContact.addEventListener(
       "eAgentConsultConferenceEndFailed",
-      (msg: any) =>
+      (msg: Service.Aqm.Contact.AgentContact) =>
         logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
   }
@@ -179,6 +194,34 @@ export default class MyCustomComponent extends LitElement {
     logger.info("Client locale: ", agentxJsApi.config.clientLocale);
   }
 
+  async getToken() {
+    const token = await agentxJsApi.actions.getToken();
+    logger.info(token);
+  }
+
+  async getIdleCodes() {
+    const idle = await agentxJsApi.actions.getIdleCodes();
+    logger.info(idle);
+  }
+
+  async getwrapupCodes() {
+    const wrapup = await agentxJsApi.actions.getWrapUpCodes();
+    logger.info(wrapup);
+  }
+
+  async fireNotification() {
+    const raw: Notifications.ItemMeta.Raw = {
+      data: {
+        type: Notifications.ItemMeta.Type.Info,
+        mode: Notifications.ItemMeta.Mode.AutoDismiss,
+        title: "Info - Acknowledge",
+        data: "Lorem Ipsum Dolor"
+      }
+    };
+    const [ status, reason, mode ]: [ Notifications.ItemMeta.Status, Notifications.ItemMeta.StatusChangeEventReason, Notifications.ItemMeta.Mode ] = await agentxJsApi.actions.fireGeneralAutoDismissNotification(raw as Notifications.ItemMeta.Raw & { data: { mode: Notifications.ItemMeta.Mode.AutoDismiss; }; })
+    logger.info(status, reason, mode);
+  }
+
   async getBuddyAgents() {
     const buddyAgentPayload = {
       agentProfileId: "AXCLfZhH9S1oTdqE1OFw",
@@ -204,6 +247,13 @@ export default class MyCustomComponent extends LitElement {
       data: vTeamPayload,
     });
     logger.info(this.vTeam, this.vTeam!.data.data.vteamList);
+  }
+
+  async acceptInteraction(interactionId: string) {
+    let acceptInteraction = await agentxJsApi.agentContact.accept({
+      interactionId: interactionId,
+    });
+    logger.info(acceptInteraction);
   }
 
   async endInteraction() {
@@ -332,6 +382,20 @@ export default class MyCustomComponent extends LitElement {
                 >Get vTeam list</md-button
               >
 
+              <h3>Accept interactions</h3>
+
+              ${
+                this.contacts.map(contact => {
+                  if (this.acceptedContacts.indexOf(contact) != -1) {
+                    return html`
+                      <md-button @button-click=${() => this.acceptInteraction(contact)}
+                        >Accept interaction for ${contact}</md-button
+                      >
+                    `
+                  }
+                })
+              }
+
               <h3>End interaction</h3>
               <md-button @button-click=${() => this.endInteraction()}
                 >End interaction for ${this.sampleInteractionId}</md-button
@@ -400,10 +464,10 @@ export default class MyCustomComponent extends LitElement {
             </div>
           </md-tab-panel>
 
-          <md-tab slot=“tab”>agentxJsApi.shortcutKey</md-tab>
-          <md-tab-panel slot=“panel”>
-            <h2>Monitor data output in console log</h2>
+          <md-tab slot="tab">agentxJsApi.shortcutKey</md-tab>
+          <md-tab-panel slot="panel">
             <div class=“action-container”>
+              <h2>Monitor data output in console log</h2>
               <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.DEFAULT_SHORTCUT_KEYS)}
                   >Get Default Shortcut Keys</md-button
                 >
@@ -419,6 +483,29 @@ export default class MyCustomComponent extends LitElement {
                 <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.getRegisteredKeys())}
                   >Get all registered Shortcut Keys</md-button
                 >
+            </div>
+          </md-tab-panel>
+
+          <md-tab slot="tab">agentxJsApi.actions</md-tab>
+          <md-tab-panel slot="panel">
+            <div class="action-container">
+              <h2>Monitor data output in console log</h2>
+              <md-button @button-click=${() => this.getToken()}
+                >Get Agent Desktop auth token</md-button
+              >
+
+              <md-button @button-click=${() => this.getToken()}
+                >Get idle codes</md-button
+              >
+
+              <md-button @button-click=${() => this.getToken()}
+                >Get wrap up codes</md-button
+              >
+
+              <md-button @button-click=${() => this.getToken()}
+                >Fire notification</md-button
+              >
+              
             </div>
           </md-tab-panel>
 
@@ -469,6 +556,7 @@ export default class MyCustomComponent extends LitElement {
               Etiam orci quam, vestibulum egestas rutrum non, dapibus a justo.
             </p>
           </md-tab-panel>
+
         </md-tabs>
         <slot></slot>
       </div>
