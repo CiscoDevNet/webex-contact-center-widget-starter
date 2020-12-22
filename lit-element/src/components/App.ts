@@ -21,11 +21,15 @@ import "./Hospitals";
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
-  @property({ type: String }) localeState = "";
+  @property({ type: String }) localeStatePostal = "";
+  @property() selectedCountyState = "";
 
-  @internalProperty() stateOptions: Array<string> = [];
-  @internalProperty() selectedState = "";
-  @internalProperty() stateCounties: Array<Object> | undefined = undefined;
+
+  @internalProperty() countyOptions: Array<string> = [];
+  @internalProperty() selectedCounty = "";
+  @internalProperty() selectedStatePostal = "";
+  @internalProperty() selectedCountyFIPS = "";
+  @internalProperty() stateCountyData: Array<Object> = [];
 
   static get styles() {
     return styles;
@@ -38,27 +42,11 @@ export default class MyCustomComponent extends LitElement {
       })
       .then(function(data) {
         console.log("[log] location data", data);
-        return data.region_code;
+        return data;
       });
   };
 
-  fetchAllStates = async () => {
-    await fetch(`https://api.covidtracking.com/v1/states/current.json`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((allStates) => {
-        Object.keys(allStates).forEach((key) => {
-          const dayData = allStates[key]?.state;
-          this.stateOptions.push(dayData);
-        });
-      });
-  };
-
-  fetchCovidDataByState = async (stateInitials: string) => {
-    console.log(`[log] fetchCovidDataByState state:${stateInitials}`);
-    if (!stateInitials) return;
-
+  fetchAllCounties = async () => {
     const key = "1318b408f01c4aa3b5f79dedc6c90848";
 
     return await fetch(
@@ -68,40 +56,64 @@ export default class MyCustomComponent extends LitElement {
         return response.json();
       })
       .then((data) => {
-        const allCountyData = Object.values(data) as Array<any>;
-
-        return allCountyData.filter((countyData) => {
-          return countyData.state === stateInitials.toUpperCase();
-        });
+        return data;
       });
   };
 
+  generateCollections = async (allUSACounties: Array<{ fips: string, county: string, state: string }>) => {
+    this.stateCountyData = [];
+    const generatedStateCountyData: Object[] = [];
+    this.countyOptions = [];
+    const generatedCountyOptions: string[] = [];
+
+    allUSACounties.forEach(countyData => {
+      generatedCountyOptions.push(`${countyData.county}, ${countyData.state}`);
+
+      if (this.selectedStatePostal && this.selectedStatePostal === countyData.state) {
+        generatedStateCountyData.push(countyData);
+
+        if (this.selectedCounty && this.selectedCounty === countyData.county) {
+          this.selectedCountyFIPS = countyData.fips;
+        }
+      }
+    });
+
+    this.stateCountyData = generatedStateCountyData;
+    this.countyOptions = generatedCountyOptions;
+  };
+
   handleStateSelection = (event: CustomEvent) => {
-    this.selectedState = event?.detail?.value;
-    console.log("[log] handleStateSelection", this.selectedState);
+    this.selectedCountyState = event?.detail?.value;
+    this.selectedCounty = this.selectedCountyState.split(', ')[0];
+    this.selectedStatePostal = this.selectedCountyState.split(', ')[1];
+    console.log("[log] handleStateSelection", this.selectedCounty, this.selectedStatePostal);
   };
 
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
 
-    await this.fetchAllStates();
-    await this.fetchUsersLocation().then(
-      (localState) => (this.localeState = localState)
-    );
-    console.log("[log] fetchUsersLocation", this.localeState);
+    if (!this.selectedStatePostal) {
+      await this.fetchUsersLocation().then(userLocationData => {
+        console.log("[log] fetchUsersLocation DATA", userLocationData);
+        // TODO figure out county user Location
 
-    this.selectedState = this.localeState;
-    await this.fetchCovidDataByState(this.selectedState).then((result) => {
-      this.stateCounties = result;
+        this.selectedStatePostal = userLocationData.region_code;
+      });
+    }
+
+    // console.log("[log] fetchUsersLocation set selectedStatePostal", this.selectedStatePostal);
+
+    await this.fetchAllCounties().then(result => {
+      this.generateCollections(result);
     });
   }
 
   async updated(changeProperties: PropertyValues) {
     super.updated(changeProperties);
 
-    if (changeProperties.has("selectedState")) {
-      await this.fetchCovidDataByState(this.selectedState).then((result) => {
-        this.stateCounties = result;
+    if (changeProperties.has('selectedCountyState')) {
+      await this.fetchAllCounties().then(result => {
+        this.generateCollections(result);
       });
     }
   }
@@ -120,9 +132,9 @@ export default class MyCustomComponent extends LitElement {
             <md-combobox
               shape="pill"
               class="city-combobox"
-              .options=${this.stateOptions}
+              .options=${this.countyOptions}
               placeholder="Placeholder"
-              .value=${[this.selectedState]}
+              .value=${[this.selectedCounty]}
               @change-selected="${(e: CustomEvent) =>
                 this.handleStateSelection(e)}"
             >
@@ -132,9 +144,9 @@ export default class MyCustomComponent extends LitElement {
         <div class="cases-by-location">
           <my-graph
             class="graph-widget"
-            selectedState=${this.selectedState}
+            selectedCountyFIPS=${this.selectedCountyFIPS}
           ></my-graph>
-          <my-table class="table-widget" .data=${this.stateCounties}></my-table>
+          <my-table class="table-widget" .stateCountyData=${this.stateCountyData}></my-table>
         </div>
         <my-hospital-stats class="hospital-stats-widget"></my-hospital-stats>
       </div>

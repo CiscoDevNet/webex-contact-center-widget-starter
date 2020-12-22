@@ -6,8 +6,7 @@
  *
  */
 
-import { html, LitElement, customElement, PropertyValues, property, internalProperty, query } from "lit-element";
-import Chart from 'chart.js';
+import { html, LitElement, customElement } from "lit-element";
 import styles from "./Hospitals.scss";
 
 @customElement("my-hospital-stats")
@@ -21,7 +20,7 @@ export default class Hospitals extends LitElement {
         return html`
         <div class="hosiptal-section">
             <div class="main-header">
-                <span class="header-text">COVID Cases by Location</span>
+                <span class="header-text">Hospital Bed Capacity</span>
                 <md-button circle hasRemoveStyle><md-icon slot="icon" name="maximize_16"></md-icon></md-button>
             </div>
             <div class="body">
