@@ -6,11 +6,16 @@
  *
  */
 
-import { html, LitElement, customElement } from "lit-element";
+import { html, LitElement, customElement, property } from "lit-element";
 import styles from "./Hospitals.scss";
 
 @customElement("my-hospital-stats")
 export default class Hospitals extends LitElement {
+    @property({ type: String }) selectedState = "CA";
+    @property({ type: String }) city = "Sunnyvale";
+    @property({ type: String }) bedCapacity = "80%";
+    @property({ type: String }) hospitalName = "Valley Health Center Sunnyvale";
+    @property({ type: String }) hospitalAddress = "660 S Fair Oaks Ave, Sunnyvale, CA 94086";
 
     static get styles() {
         return styles;
@@ -26,17 +31,17 @@ export default class Hospitals extends LitElement {
             <div class="body">
                 <md-badge class="hospital-badge" color="mint" split>
                     <span slot="split-left">
-                        New York, Chelsea
+                        ${`${this.city}, ${this.selectedState}`}
                     </span>
-                    <span slot="split-right">88%</span>
+                    <span slot="split-right">${this.bedCapacity}</span>
                 </md-badge>
                 <div class="hospital row">
                     <span class="title">Hospital</span>
-                    <span class="value">NYH Med Center - Chelsea</span>
+                    <span class="value">${this.hospitalName}</span>
                 </div>
                 <div class="address row">
                     <span class="title">Address</span>
-                    <span class="value">56-45 Main Street, Chelsea, NY</span>
+                    <span class="value">${this.hospitalAddress}</span>
                 </div>
             </div>
         </div>
