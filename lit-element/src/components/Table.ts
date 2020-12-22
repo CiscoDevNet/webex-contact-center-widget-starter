@@ -32,6 +32,9 @@ export default class MyCustomComponent extends LitElement {
   deathsHeader = "County, Total Deaths \n";
   @internalProperty() casesTableData = this.casesHeader;
   @internalProperty() deathsTableData = this.deathsHeader;
+  @internalProperty() stateTotalCases = 0;
+  @internalProperty() stateTotalNewCases = 0;
+  @internalProperty() stateTotalDeaths = 0;
 
   static get styles() {
     return styles;
@@ -49,25 +52,50 @@ export default class MyCustomComponent extends LitElement {
     if (this.stateCountyData && changeProperties.has("stateCountyData")) {
       this.resetData();
 
-      this.stateCountyData.forEach((countyData: any, index) => {
-        if (Number(index) > 30) return;
+      let totalStateCases = 0;
+      let totalStateNewCases = 0;
+      let totalStateDeaths = 0;
+      let generatedCasesTableData = "";
+      let generatedDeathTableData = "";
 
+      this.stateCountyData.forEach((countyData: any, index) => {
         const countyName = countyData.county;
         const cases = countyData.actuals.cases;
         const newCases = countyData.actuals.newCases;
         const deaths = countyData.actuals.deaths;
 
-        this.casesTableData =
-          this.casesTableData + `${countyName}, ${cases}, ${newCases}`;
+        totalStateCases = totalStateCases + cases;
+        totalStateNewCases = totalStateNewCases + newCases;
+        totalStateDeaths = totalStateDeaths + deaths;
 
-        this.deathsTableData =
-          this.deathsTableData + `${countyName}, ${deaths}`;
+        generatedCasesTableData =
+          generatedCasesTableData + `${countyName}, ${cases}, ${newCases}`;
+
+        generatedDeathTableData =
+          generatedDeathTableData + `${countyName}, ${deaths}`;
 
         if (this.stateCountyData && index < this.stateCountyData?.length - 1) {
-          this.casesTableData = this.casesTableData + ` \n`;
-          this.deathsTableData = this.deathsTableData +  '\n';
+          generatedCasesTableData = generatedCasesTableData + ` \n`;
+          generatedDeathTableData = generatedDeathTableData +  '\n';
         }
       });
+
+      this.stateTotalCases = totalStateCases;
+      this.stateTotalNewCases = totalStateNewCases;
+      this.stateTotalDeaths = totalStateDeaths;
+
+      this.casesTableData =
+        this.casesTableData + `Total State Cases, ${this.stateTotalCases}, ${this.stateTotalNewCases} \n`;
+
+      this.casesTableData =
+      this.casesTableData + generatedCasesTableData;
+
+      this.deathsTableData =
+        this.deathsTableData + `Total State Deaths, ${this.stateTotalDeaths} \n`;
+
+      this.deathsTableData =
+        this.deathsTableData + generatedDeathTableData;
+
       this.tableReady = true;
     }
   }
@@ -77,7 +105,7 @@ export default class MyCustomComponent extends LitElement {
   };
 
   renderTable = (type: string) => {
-    if (type === "cases") {
+    if (this.casesTableData.length > this.casesHeader.length && type === "cases") {
       return html`
         <md-table
           tabledata="${this.casesTableData}"
@@ -85,7 +113,7 @@ export default class MyCustomComponent extends LitElement {
           no-borders
         ></md-table>
       `;
-    } else if (type === "recovered") {
+    } else if (this.deathsTableData.length > this.deathsHeader.length &&  this.deathsTableData && type === "recovered") {
       return html`
         <md-table
           tabledata="${this.deathsTableData}"

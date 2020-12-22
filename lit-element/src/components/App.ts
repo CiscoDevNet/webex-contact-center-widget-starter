@@ -21,9 +21,7 @@ import "./Hospitals";
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
-  @property({ type: String }) localeStatePostal = "";
-  @property() selectedCountyState = "";
-
+  @property() selectedCountyState = "Santa Clara County, CA";
 
   @internalProperty() countyOptions: Array<string> = [];
   @internalProperty() selectedCounty = "";
@@ -84,10 +82,14 @@ export default class MyCustomComponent extends LitElement {
 
   handleStateSelection = (event: CustomEvent) => {
     this.selectedCountyState = event?.detail?.value;
-    this.selectedCounty = this.selectedCountyState.split(', ')[0];
-    this.selectedStatePostal = this.selectedCountyState.split(', ')[1];
+    this.parseCountyAndState();
     console.log("[log] handleStateSelection", this.selectedCounty, this.selectedStatePostal);
   };
+
+  parseCountyAndState = () => {
+    this.selectedCounty = this.selectedCountyState.split(', ')[0];
+    this.selectedStatePostal = this.selectedCountyState.split(', ')[1];
+  }
 
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
@@ -101,17 +103,19 @@ export default class MyCustomComponent extends LitElement {
       });
     }
 
-    // console.log("[log] fetchUsersLocation set selectedStatePostal", this.selectedStatePostal);
-
-    await this.fetchAllCounties().then(result => {
-      this.generateCollections(result);
-    });
+    if (this.selectedCountyState) {
+      this.parseCountyAndState();
+      await this.fetchAllCounties().then(result => {
+        this.generateCollections(result);
+      });
+    }
   }
 
   async updated(changeProperties: PropertyValues) {
     super.updated(changeProperties);
 
     if (changeProperties.has('selectedCountyState')) {
+      this.parseCountyAndState();
       await this.fetchAllCounties().then(result => {
         this.generateCollections(result);
       });
@@ -134,7 +138,7 @@ export default class MyCustomComponent extends LitElement {
               class="city-combobox"
               .options=${this.countyOptions}
               placeholder="Placeholder"
-              .value=${[this.selectedCounty]}
+              .value=${[this.selectedCountyState]}
               @change-selected="${(e: CustomEvent) =>
                 this.handleStateSelection(e)}"
             >

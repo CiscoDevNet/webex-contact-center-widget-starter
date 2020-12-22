@@ -15,20 +15,31 @@ import {
   internalProperty,
   query,
 } from "lit-element";
-// import { RadioGroup } from "@momentum-ui/web-components";
 import Chart from "chart.js";
 import styles from "./Graph.scss";
+
+const SPECIFICITY = {
+  DAILY: 'daily',
+  WEEKLY: "weekly",
+  MONTHY: 'monthly'
+};
+export const specificityType = ["daily", "weekly", "monthly"] as const;
+
+export namespace Graph {
+  export type specificity = typeof specificityType[number];
+}
 
 @customElement("my-graph")
 export default class MyCustomComponent extends LitElement {
   @property({ type: String }) locale = "en-US";
   @property({ type: String }) selectedCountyFIPS = "";
+  @property({ type: Number }) maxDataPoints = 30;
 
   @internalProperty() myChart: Chart | undefined = undefined;
   @internalProperty() label: Array<string> = [];
   @internalProperty() activeCases: Array<number> = [];
   @internalProperty() dailyNewCases: Array<number> = [];
-  @internalProperty() specificity = "Daily";
+  @internalProperty() specificity: Graph.specificity = "daily";
 
   @property({ type: Array, attribute: false }) data:
     | Array<{ county: string }>
@@ -80,7 +91,17 @@ export default class MyCustomComponent extends LitElement {
             boxWidth: 20
           },
         },
+        elements: {
+          point: {
+            radius: 0
+          }
+        },
         scales: {
+          xAxes: [{
+            gridLines: {
+              display: false
+            }
+          }],
           yAxes: [
             {
               ticks: {
@@ -139,10 +160,20 @@ export default class MyCustomComponent extends LitElement {
     this.clearData();
 
     return await this.fetchCountyTimeline(this.selectedCountyFIPS).then(countyData => {
-      const countyTimeline = countyData.actualsTimeseries;
+      let countyTimeline = countyData.actualsTimeseries;
 
-      countyTimeline.forEach((dateData: any) => {
-        // if (Number(index) > 10) return; // TODO: specificity
+      countyTimeline.forEach((dateData: any, index: string, thisArray: Array<Object>) => {
+        let divider = 1;
+        if (this.specificity === SPECIFICITY.WEEKLY) {
+          divider = 7;
+          if (Number(index) % divider !== 0) return;
+        }
+        if (this.specificity === SPECIFICITY.MONTHY) {
+          divider = 30;
+          if (Number(index) % divider !== 0) return;
+        }
+        if (this.label.length > this.maxDataPoints) return;
+        if (Number(index) < thisArray.length - (this.maxDataPoints * divider)) return;
 
         const date: string = dateData.date;
         const dateObject = new Date(date);
@@ -164,7 +195,7 @@ export default class MyCustomComponent extends LitElement {
     super.updated(changeProperties);
 
     if (changeProperties.has("specificity")) {
-      // TODO: fetch data or parse data by specificity. Only have daily at the moment.
+      await this.collectChartData();
     }
 
     if (changeProperties.has("selectedCountyFIPS")) {
@@ -181,10 +212,10 @@ export default class MyCustomComponent extends LitElement {
           <md-button class="button-right-align" circle hasRemoveStyle><md-icon slot="icon" name="more_20"></md-icon></md-button>
         </div>
         <div class="sub-body">
-          <md-radiogroup group-label="group_process" alignment="horizontal" value=>
-            <md-radio slot="radio" value="Daily">Daily</md-radio>
-            <md-radio slot="radio" value="Weekly">Weekly</md-radio>
-            <md-radio slot="radio" value="Monthly">Monthly</md-radio>
+          <md-radiogroup group-label="group_process" alignment="horizontal" checked="0">
+            <md-radio slot="radio" value="daily">Daily</md-radio>
+            <md-radio slot="radio" value="weekly">Weekly</md-radio>
+            <md-radio slot="radio" value="monthly">Monthly</md-radio>
           </md-radiogroup>
           <canvas id="myChart" width="262" height="200" aria-label="Covid Cases Graph" role="img"></canvas>
         </div>
