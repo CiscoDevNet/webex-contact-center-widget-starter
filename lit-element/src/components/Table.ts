@@ -83,6 +83,8 @@ export default class MyCustomComponent extends LitElement {
       this.stateTotalCases = totalStateCases;
       this.stateTotalNewCases = totalStateNewCases;
       this.stateTotalDeaths = totalStateDeaths;
+      console.log('[log] totals cases/new/deaths', this.stateTotalCases, this.stateTotalNewCases, this.stateTotalDeaths);
+      // TODO, total cases is running out of the cell.
 
       this.casesTableData =
         this.casesTableData + `Total State Cases, ${this.stateTotalCases}, ${this.stateTotalNewCases} \n`;
@@ -155,7 +157,7 @@ export default class MyCustomComponent extends LitElement {
                 ${this.tableReady ? this.renderTable("cases") : nothing}
               </md-tab-panel>
               <md-tab slot="tab">
-                <span>Recovered</span>
+                <span>Deaths</span>
               </md-tab>
               <md-tab-panel slot="panel">
                 ${this.tableReady ? this.renderTable("recovered") : nothing}
