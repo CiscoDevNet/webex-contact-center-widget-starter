@@ -15,7 +15,7 @@ import styles from "./sandbox.scss";
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
   @internalProperty() containerWidth = "600px";
-  @internalProperty() containerHeight = "80vh";
+  @internalProperty() containerHeight = "610px";
 
   static get styles() {
     return styles;

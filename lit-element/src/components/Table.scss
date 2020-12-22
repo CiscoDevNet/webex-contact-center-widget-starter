@@ -10,7 +10,12 @@
   }
 }
 
-.sort-button-icon::part(button) {
-  top: 15px;
-  margin-right: 16px;
+.sort-button-icon {
+  position: absolute;
+  right: 12px;
+
+  &::part(button) {
+    top: 15px;
+    margin-right: 16px;
+  }
 }

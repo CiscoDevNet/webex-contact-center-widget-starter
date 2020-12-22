@@ -22,13 +22,17 @@ import styles from "./Graph.scss";
 @customElement("my-graph")
 export default class MyCustomComponent extends LitElement {
   @property({ type: String }) locale = "en-US";
-  @property({ type: String }) selectedState = "";
+  @property({ type: String }) selectedCountyFIPS = "";
 
   @internalProperty() myChart: Chart | undefined = undefined;
   @internalProperty() label: Array<string> = [];
   @internalProperty() activeCases: Array<number> = [];
   @internalProperty() dailyNewCases: Array<number> = [];
-  @internalProperty() specificity = "Monthy";
+  @internalProperty() specificity = "Daily";
+
+  @property({ type: Array, attribute: false }) data:
+    | Array<{ county: string }>
+    | undefined = undefined;
 
   static get styles() {
     return styles;
@@ -69,11 +73,26 @@ export default class MyCustomComponent extends LitElement {
         ],
       },
       options: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            fontSize: 10,
+            boxWidth: 20
+          },
+        },
         scales: {
           yAxes: [
             {
               ticks: {
                 beginAtZero: true,
+                callback: function(value, index, values) {
+                  if(Number(value) >= 1000){
+                    const div = Number(value) / 1000;
+                    return `${div}K`
+                  } else {
+                    return value;
+                  }
+                }
               },
             },
           ],
@@ -82,69 +101,17 @@ export default class MyCustomComponent extends LitElement {
     });
   };
 
-  fetchCovidDataByCounty = async (countyCode: string) => {
-    console.log(`[log] fetchCovidDataByCounty countyCode:${countyCode}`);
+  fetchCountyTimeline = async (countyFIPS: string) => {
+    if (!countyFIPS) return;
 
-    if (!countyCode) return;
-
-    this.clearData();
-    const cCode = "06085";
     const key = "1318b408f01c4aa3b5f79dedc6c90848";
-    await fetch(
-      `https://api.covidactnow.org/v2/county/${cCode}.timeseries.json?apiKey=${key}`
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        const timeSeries = data.actualsTimeseries;
-        Object.keys(timeSeries).forEach((index) => {
-          if (Number(index) > 10) {
-            return;
-          }
-          const dayData = timeSeries[index];
-          const date: string = dayData.date;
-          const dateObject = new Date(date);
-          const localDate = dateObject.toLocaleDateString(this.locale, {
-            month: "numeric",
-            day: "numeric",
-          });
-
-          this.label.push(localDate);
-          this.activeCases.push(dayData.cases);
-          this.dailyNewCases.push(dayData.newCases);
-        });
-      });
-  };
-
-  fetchCovidDataByState = async (state: string) => {
-    if (!state) return;
-
-    this.clearData();
-
-    await fetch(`https://api.covidtracking.com/v1/states/${state}/daily.json`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((stateData) => {
-        Object.keys(stateData).forEach((key, index) => {
-          if (Number(key) > 6) return;
-
-          const dayData = stateData[key];
-          const date: string = dayData.dateChecked;
-          const dateObject = new Date(date);
-          const localDate = dateObject.toLocaleDateString(this.locale, {
-            month: "numeric",
-            day: "numeric",
-          });
-
-          this.label.push(localDate);
-          this.activeCases.push(dayData.positive);
-          this.dailyNewCases.push(dayData.positiveIncrease);
-          return;
-        });
-      });
-  };
+    return await fetch(`https://api.covidactnow.org/v2/county/${countyFIPS}.timeseries.json?apiKey=${key}`)
+    .then(response => {
+      return response.json();
+    }).then(data => {
+      return data;
+    })
+  }
 
   handleRadioChange = (event: CustomEvent) => {
     this.specificity = event?.detail?.selected;
@@ -158,6 +125,39 @@ export default class MyCustomComponent extends LitElement {
       "radio-change",
       this.handleRadioChange as EventListener
     );
+
+    if (this.selectedCountyFIPS) {
+      await this.collectChartData();
+    }
+
+    this.renderChart();
+  }
+
+  collectChartData = async () => {
+    if (!this.selectedCountyFIPS) return;
+
+    this.clearData();
+
+    return await this.fetchCountyTimeline(this.selectedCountyFIPS).then(countyData => {
+      const countyTimeline = countyData.actualsTimeseries;
+
+      countyTimeline.forEach((dateData: any) => {
+        // if (Number(index) > 10) return; // TODO: specificity
+
+        const date: string = dateData.date;
+        const dateObject = new Date(date);
+        const localDate = dateObject.toLocaleDateString(this.locale, {
+          month: "numeric",
+          day: "numeric",
+        });
+
+        this.label.push(localDate);
+        this.activeCases.push(dateData.cases || 0);
+        this.dailyNewCases.push(dateData.newCases || 0);
+      });
+    }).then(() => {
+      this.renderChart();
+    });
   }
 
   protected async updated(changeProperties: PropertyValues) {
@@ -167,9 +167,8 @@ export default class MyCustomComponent extends LitElement {
       // TODO: fetch data or parse data by specificity. Only have daily at the moment.
     }
 
-    if (this.selectedState && changeProperties.has("selectedState")) {
-      await this.fetchCovidDataByState(this.selectedState);
-      this.renderChart();
+    if (changeProperties.has("selectedCountyFIPS")) {
+      await this.collectChartData();
     }
   }
 
@@ -187,7 +186,7 @@ export default class MyCustomComponent extends LitElement {
             <md-radio slot="radio" value="Weekly">Weekly</md-radio>
             <md-radio slot="radio" value="Monthly">Monthly</md-radio>
           </md-radiogroup>
-          <canvas id="myChart" width="262" height="140"></canvas>
+          <canvas id="myChart" width="262" height="200" aria-label="Covid Cases Graph" role="img"></canvas>
         </div>
       </div>
     `;

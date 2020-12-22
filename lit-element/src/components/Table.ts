@@ -20,17 +20,18 @@ import styles from "./Table.scss";
 @customElement("my-table")
 export default class MyCustomComponent extends LitElement {
   @property({ type: Boolean }) sorted = false;
-  @property({ type: Array, attribute: false }) data:
-    | Array<Object>
-    | undefined = undefined;
+  @property({ type: Array, attribute: false }) stateCountyData:
+  | Array<Object>
+  | undefined = undefined;
 
   @internalProperty() tableReady = false;
   @internalProperty() countyCases: Array<string> = [];
   @internalProperty() countyNewCases: Array<string> = [];
 
-  header = "County, Total Cases, New Cases \n";
-  @internalProperty() casesTableData = this.header;
-  @internalProperty() recoveredTableData = this.header;
+  casesHeader = "County, Total Cases, New Cases \n";
+  deathsHeader = "County, Total Deaths \n";
+  @internalProperty() casesTableData = this.casesHeader;
+  @internalProperty() deathsTableData = this.deathsHeader;
 
   static get styles() {
     return styles;
@@ -38,25 +39,33 @@ export default class MyCustomComponent extends LitElement {
 
   resetData = () => {
     this.tableReady = false;
-    this.casesTableData = this.header;
+    this.casesTableData = this.casesHeader;
+    this.deathsTableData = this.deathsHeader;
   };
 
   updated(changeProperties: PropertyValues) {
     super.updated(changeProperties);
 
-    if (changeProperties.has("data")) {
-      this.casesTableData = this.header;
+    if (this.stateCountyData && changeProperties.has("stateCountyData")) {
       this.resetData();
 
-      this.data?.forEach((countyData: any, index) => {
+      this.stateCountyData.forEach((countyData: any, index) => {
+        if (Number(index) > 30) return;
+
         const countyName = countyData.county;
         const cases = countyData.actuals.cases;
         const newCases = countyData.actuals.newCases;
+        const deaths = countyData.actuals.deaths;
+
         this.casesTableData =
           this.casesTableData + `${countyName}, ${cases}, ${newCases}`;
 
-        if (this.data && index < this.data?.length - 1) {
+        this.deathsTableData =
+          this.deathsTableData + `${countyName}, ${deaths}`;
+
+        if (this.stateCountyData && index < this.stateCountyData?.length - 1) {
           this.casesTableData = this.casesTableData + ` \n`;
+          this.deathsTableData = this.deathsTableData +  '\n';
         }
       });
       this.tableReady = true;
@@ -79,7 +88,7 @@ export default class MyCustomComponent extends LitElement {
     } else if (type === "recovered") {
       return html`
         <md-table
-          tabledata="${this.recoveredTableData}"
+          tabledata="${this.deathsTableData}"
           ?sorting=${this.sorted}
           no-borders
         ></md-table>
@@ -100,9 +109,8 @@ export default class MyCustomComponent extends LitElement {
           ></md-button>
         </div>
         <div class="sub-body">
-          <div class="tab-header-row">
-            <md-button
-              class="sort-button-icon button-right-align"
+        <md-button
+              class="sort-button-icon"
               @button-click=${this.handleSort}
               circle
               hasRemoveStyle
@@ -110,6 +118,7 @@ export default class MyCustomComponent extends LitElement {
             >
               <md-icon slot="icon" name="sort-down_16"></md-icon>
             </md-button>
+          <div class="tab-header-row">
             <md-tabs>
               <md-tab slot="tab">
                 <span>Cases</span>
