@@ -18,14 +18,16 @@ import {
 } from "lit-element";
 import styles from "./App.scss";
 import { Loader } from "@googlemaps/js-api-loader";
-// import {} from "googlemaps";
 import { map as lightMap } from "./lightMap";
 import { darkMap } from "./darkMap";
+import { nothing } from "lit-html";
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
   @property({ type: Number, reflect: true }) latitude = 47.6062;
   @property({ type: Number, reflect: true }) longitude = -122.3321;
   @property({ type: String, reflect: true }) search = "";
+  @property({ type: Boolean, reflect: true, attribute: "search-enabled" })
+  searchEnabled = false;
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
   @property({ type: Number, reflect: true }) zoom = 12;
 
@@ -80,6 +82,7 @@ export default class MyCustomComponent extends LitElement {
       changedProperties.has("search") ||
       changedProperties.has("latitude") ||
       changedProperties.has("longitude") ||
+      changedProperties.has("searchEnabled") ||
       changedProperties.has("zoom")
     ) {
       this.initMap();
@@ -95,44 +98,48 @@ export default class MyCustomComponent extends LitElement {
     }
 
     // Clear out the old markers.
-    markers.forEach(marker => {
-      console.log(marker);
-      marker.setMap(null);
+    async function clearMarkers() {
+      markers.forEach(marker => {
+        console.log(marker);
+        marker.setMap(null);
+      });
+      markers = [];
+    }
+
+    clearMarkers().then(() => {
+      // For each place, get the icon, name and location.
+      const bounds = new google.maps.LatLngBounds();
+      places.forEach(place => {
+        if (!place.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+        const icon = {
+          url: place.icon as string,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        // Create a marker for each place.
+        markers.push(
+          new google.maps.Marker({
+            map: this.map,
+            icon,
+            title: place.name,
+            position: place.geometry.location
+          })
+        );
+
+        if (place.geometry.viewport) {
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      this.map!.fitBounds(bounds);
     });
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    const bounds = new google.maps.LatLngBounds();
-    places.forEach(place => {
-      if (!place.geometry) {
-        console.log("Returned place contains no geometry");
-        return;
-      }
-      const icon = {
-        url: place.icon as string,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
-
-      // Create a marker for each place.
-      markers.push(
-        new google.maps.Marker({
-          map: this.map,
-          icon,
-          title: place.name,
-          position: place.geometry.location
-        })
-      );
-
-      if (place.geometry.viewport) {
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
-    this.map!.fitBounds(bounds);
   };
 
   initMap = () => {
@@ -141,7 +148,6 @@ export default class MyCustomComponent extends LitElement {
       const mapTheme = this.darkTheme ? darkMap : lightMap;
       this.loader
         .load()
-        .then(() => this.updateAttributeSearch())
         .then(() => {
           if (this.mapDiv) {
             this.map = new google.maps.Map(this.mapDiv, {
@@ -151,45 +157,25 @@ export default class MyCustomComponent extends LitElement {
               mapTypeControl: false
             });
 
-            this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(
-              this.searchInput as Node
-            );
-
-            // Create the search box and link it to the UI element.
-            const searchBox = new google.maps.places.SearchBox(
-              this.searchInput!
-            );
-
-            // Bias the SearchBox results towards current map's viewport.
-            this.map.addListener("bounds_changed", () => {
-              searchBox.setBounds(
-                this.map?.getBounds() as google.maps.LatLngBounds
-              );
-            });
-
-            // Listen for the event fired when the user selects a prediction and retrieve
-            // more details for that place.
-            searchBox.addListener("places_changed", () => {
-              console.log("Google API event Listener");
-              this.updatePins(searchBox.getPlaces());
-            });
+            this.mountSearchInput();
           }
-        });
+        })
+        .then(() => this.updateAttributeSearch());
     } else {
+      console.log("MAP DETECTED");
       this.updateAttributeSearch().then(() => {
-        const mapTheme = this.darkTheme ? darkMap : lightMap;
-        console.log(mapTheme);
         this.map?.panTo({ lat: this.latitude, lng: this.longitude });
-        this.map?.setOptions({ styles: darkMap });
+        this.refreshTokenData();
+        this.mountSearchInput();
       });
     }
   };
 
   updateAttributeSearch = async () => {
-    if (this.map) {
+    if (this.map && this.search) {
       const places = new google.maps.places.PlacesService(this.map);
-      const attributeQuery = this.search.split(" ").join("%");
-
+      const attributeQuery = this.search.split(" ").join("%") || undefined;
+      console.log(attributeQuery);
       places.nearbySearch(
         {
           keyword: attributeQuery,
@@ -203,6 +189,40 @@ export default class MyCustomComponent extends LitElement {
     }
   };
 
+  mountSearchInput = () => {
+    if (this.searchEnabled) {
+      this.map!.controls[google.maps.ControlPosition.TOP_LEFT].push(
+        this.searchInput as Node
+      );
+
+      // Create the search box and link it to the UI element.
+      const searchBox = new google.maps.places.SearchBox(this.searchInput!);
+
+      // Bias the SearchBox results towards current map's viewport.
+      this.map!.addListener("bounds_changed", () => {
+        searchBox.setBounds(this.map?.getBounds() as google.maps.LatLngBounds);
+      });
+
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener("places_changed", () => {
+        console.log("Google API event Listener");
+        this.updatePins(searchBox.getPlaces());
+      });
+    }
+  };
+
+  generateSearchInput = () => {
+    return html`
+      <md-input
+        id="pac-input"
+        class="controls"
+        type="text"
+        placeholder="Search Box"
+      ></md-input>
+    `;
+  };
+
   static get styles() {
     return styles;
   }
@@ -210,12 +230,7 @@ export default class MyCustomComponent extends LitElement {
   render() {
     return html`
       <div class="container">
-        <md-input
-          id="pac-input"
-          class="controls"
-          type="text"
-          placeholder="Search Box"
-        ></md-input>
+        ${(this.searchEnabled && this.generateSearchInput()) || nothing}
         <div id="map"></div>
         <md-button @click=${this.refreshTokenData}>Update theme</md-button>
       </div>

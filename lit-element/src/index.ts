@@ -241,7 +241,9 @@ export default class MyCustomComponent extends LitElement {
   render() {
     return html`
       <my-custom-component
-        api-key="AIzaSyDlVE8flzwPFbSzuGdaaatrGrG3WIULw5I"
+        api-key=""
+        search="Harborview medical"
+        search-enabled
       ></my-custom-component>
     `;
   }
