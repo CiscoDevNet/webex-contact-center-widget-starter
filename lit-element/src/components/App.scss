@@ -21,3 +21,14 @@
   height: 2.3rem;
   width: 12rem;
 }
+    padding: 20px;
+}
+
+.action-container {
+    padding: 10px 2px;
+    display: flex;
+    flex-direction: column;
+    md-button {
+        margin: 10px 0;
+    }
+}
