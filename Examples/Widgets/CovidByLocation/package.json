@@ -22,7 +22,8 @@
         "test": "jest"
     },
     "dependencies": {
-        "@agentx/agentx-js-api": "^1.2.0"
+        "@types/chart.js": "^2.9.29",
+        "chart.js": "^2.9.4"
     },
     "resolutions": {
         "jest": "^26.4.2",
@@ -30,19 +31,17 @@
     },
     "peerDependencies": {
         "@momentum-ui/core": "19.9.2",
-        "@momentum-ui/icons": "7.45.0",
+        "@momentum-ui/icons": "7.54.0",
         "@momentum-ui/utils": "6.2.7",
         "@momentum-ui/web-components": "^2.0.13",
         "lit-element": "^2.3.1",
         "lit-html": "^1.2.1"
     },
     "devDependencies": {
-        "@agentx/agentx": "1.2.1",
-        "@agentx/agentx-services-types": "^2.5.5",
         "@babel/core": "^7.9.0",
         "@babel/preset-env": "^7.9.0",
         "@momentum-ui/core": "19.9.2",
-        "@momentum-ui/icons": "7.45.0",
+        "@momentum-ui/icons": "7.54.0",
         "@momentum-ui/utils": "6.2.7",
         "@momentum-ui/web-components": "^2.0.13",
         "@open-wc/testing-helpers": "1.8.9",
