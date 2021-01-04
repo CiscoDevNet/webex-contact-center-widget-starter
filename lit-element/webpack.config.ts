@@ -112,11 +112,20 @@ export const commonDev = merge(common, {
     new CopyWebpackPlugin([
       { from: `${pModules}/@momentum-ui/core/fonts`, to: "fonts" },
       { from: `${pModules}/@momentum-ui/core/images`, to: "images" },
-      { from: `${pModules}/@momentum-ui/core/css/momentum-ui.min.css`, to: "css" },
-      { from: `${pModules}/@momentum-ui/core/css/momentum-ui.min.css.map`, to: "css" },
+      {
+        from: `${pModules}/@momentum-ui/core/css/momentum-ui.min.css`,
+        to: "css"
+      },
+      {
+        from: `${pModules}/@momentum-ui/core/css/momentum-ui.min.css.map`,
+        to: "css"
+      },
       { from: `${pModules}/@momentum-ui/icons/fonts`, to: "fonts" },
       { from: `${pModules}/@momentum-ui/icons/fonts`, to: "icons/fonts" },
-      { from: `${pModules}/@momentum-ui/icons/css/momentum-ui-icons.min.css`, to: "css" }
+      {
+        from: `${pModules}/@momentum-ui/icons/css/momentum-ui-icons.min.css`,
+        to: "css"
+      }
     ])
   ]
 });
@@ -137,7 +146,6 @@ const commonDist = merge(common, {
     filename: "[name].js",
     libraryTarget: "umd"
   },
-  externals: [nodeExternals({ modulesFromFile: true })],
   plugins: [
     new CleanWebpackPlugin(),
     new RemovePlugin({
