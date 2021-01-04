@@ -110,6 +110,8 @@ export default class MyCustomComponent extends LitElement {
     if (this.casesTableData.length > this.casesHeader.length && type === "cases") {
       return html`
         <md-table
+          class="covid-table"
+          format="number"
           tabledata="${this.casesTableData}"
           ?sorting=${this.sorted}
           no-borders
@@ -118,6 +120,8 @@ export default class MyCustomComponent extends LitElement {
     } else if (this.deathsTableData.length > this.deathsHeader.length &&  this.deathsTableData && type === "recovered") {
       return html`
         <md-table
+          class="covid-table"
+          format="number"
           tabledata="${this.deathsTableData}"
           ?sorting=${this.sorted}
           no-borders
