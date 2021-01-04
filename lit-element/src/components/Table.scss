@@ -19,3 +19,7 @@
     margin-right: 16px;
   }
 }
+
+.covid-table::part(cell) {
+  font-size: 12px;
+}

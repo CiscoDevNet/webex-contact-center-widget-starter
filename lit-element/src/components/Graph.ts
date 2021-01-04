@@ -87,6 +87,7 @@ export default class MyCustomComponent extends LitElement {
         legend: {
           position: 'bottom',
           labels: {
+            fontColor: "gray",
             fontSize: 10,
             boxWidth: 20
           },
@@ -98,6 +99,9 @@ export default class MyCustomComponent extends LitElement {
         },
         scales: {
           xAxes: [{
+            ticks: {
+              fontColor: "gray"
+            },
             gridLines: {
               display: false
             }
@@ -105,6 +109,7 @@ export default class MyCustomComponent extends LitElement {
           yAxes: [
             {
               ticks: {
+                fontColor: "gray",
                 beginAtZero: true,
                 callback: function(value, index, values) {
                   if(Number(value) >= 1000){
