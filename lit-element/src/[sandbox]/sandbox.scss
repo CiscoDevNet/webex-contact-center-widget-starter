@@ -14,6 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    width: 100vw;
   }
   .default-maximize-area {
     top: 0;
@@ -36,21 +37,23 @@
   .toggle {
     display: flex;
     height: 50px;
-    &-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-evenly;
-      width: 100%;
-    }
+  }
+
+  .toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
   }
 
   .switch-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    md-label {
-      margin: 0 1em;
-    }
+  }
+
+  .switch-container md-label {
+    margin: 0 1em;
   }
 
   md-input.theme-switch::part(input) {
