@@ -73,6 +73,7 @@ export default class MyCustomComponent extends LitElement {
 
   firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
+    document.addEventListener("theme-changed", this.refreshTokenData)
     this.initMap();
   }
 
