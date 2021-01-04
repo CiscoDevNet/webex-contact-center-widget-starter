@@ -20,15 +20,15 @@
   margin: .75rem 0 0 .75rem;
   height: 2.3rem;
   width: 12rem;
-}
-    padding: 20px;
+  padding: 20px;
 }
 
 .action-container {
-    padding: 10px 2px;
-    display: flex;
-    flex-direction: column;
-    md-button {
-        margin: 10px 0;
-    }
+  padding: 10px 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+md-button {
+  margin: 10px 0;
 }

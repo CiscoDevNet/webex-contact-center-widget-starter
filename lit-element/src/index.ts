@@ -37,6 +37,7 @@ export default class MyCustomComponent extends LitElement {
     `;
   }
  
+  render() {
     return html`
       <my-custom-component
         api-key=""
