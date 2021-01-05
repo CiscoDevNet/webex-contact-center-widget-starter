@@ -147,9 +147,11 @@ export default class MyCustomComponent extends LitElement {
       <div class="table-section">
         <div class="header">
           <span class="header-text">Total Cases by County</span>
-          <md-button circle hasRemoveStyle size="28"
-            ><md-icon slot="icon" name="info_12"></md-icon
-          ></md-button>
+          <md-tooltip message="Covid-19 trends by county">
+            <md-button circle hasRemoveStyle size="28"
+              ><md-icon slot="icon" name="info_12"></md-icon
+            ></md-button>
+          </md-tooltip>
           <md-button class="button-right-align" circle hasRemoveStyle size="28"
             ><md-icon slot="icon" name="more_20"></md-icon
           ></md-button>

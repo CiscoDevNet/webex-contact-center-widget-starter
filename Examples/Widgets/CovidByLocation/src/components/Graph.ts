@@ -108,6 +108,10 @@ export default class MyCustomComponent extends LitElement {
           }],
           yAxes: [
             {
+              gridLines: {
+                z: 2,
+                color: '#EDEDED'
+              },
               ticks: {
                 fontColor: "gray",
                 beginAtZero: true,
@@ -213,7 +217,9 @@ export default class MyCustomComponent extends LitElement {
       <div class="graph-section">
         <div class="header">
           <span class="header-text">Active Cases Trend</span>
-          <md-button circle hasRemoveStyle><md-icon slot="icon" name="info_12"></md-icon></md-button>
+          <md-tooltip message="Covid-19 trends within county">
+            <md-button circle hasRemoveStyle><md-icon slot="icon" name="info_12"></md-icon></md-button>
+          </md-tooltip>
           <md-button class="button-right-align" circle hasRemoveStyle><md-icon slot="icon" name="more_20"></md-icon></md-button>
         </div>
         <div class="sub-body">
