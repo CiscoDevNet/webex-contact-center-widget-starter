@@ -14,8 +14,8 @@ import styles from "./sandbox.scss";
 @customElement("wcc-widget-starter-lit")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
-  @internalProperty() containerWidth = "600px";
-  @internalProperty() containerHeight = "610px";
+  @internalProperty() containerWidth = "591px";
+  @internalProperty() containerHeight = "700px";
 
   static get styles() {
     return styles;
