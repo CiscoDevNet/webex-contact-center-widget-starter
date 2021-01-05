@@ -14,8 +14,8 @@ import styles from "./sandbox.scss";
 @customElement("wcc-widget-starter-lit")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
-  @internalProperty() containerWidth = "591px";
-  @internalProperty() containerHeight = "700px";
+  @internalProperty() containerWidth = "600px";
+  @internalProperty() containerHeight = "180px";
 
   static get styles() {
     return styles;
@@ -100,16 +100,14 @@ export class Sandbox extends LitElement {
 
   render() {
     return html`
-    <div class="toggle">
+      <div class="toggle">
         ${this.themeToggle()}
       </div>
       <md-theme lumos ?darkTheme=${this.darkTheme}>
         <div class="container">
           <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <covid-by-location></covid-by-location>
+            <hospital-bed-capacity></hospital-bed-capacity>
           </div>
-          </div>
-        </md-theme>
         </div>
       </md-theme>
     `;

@@ -17,7 +17,6 @@ import {
 import styles from "./App.scss";
 import "./Graph";
 import "./Table";
-import "./Hospitals";
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
@@ -152,7 +151,6 @@ export default class MyCustomComponent extends LitElement {
           ></my-graph>
           <my-table class="table-widget" .stateCountyData=${this.stateCountyData}></my-table>
         </div>
-        <my-hospital-stats class="hospital-stats-widget"></my-hospital-stats>
       </div>
     `;
   }

@@ -25,6 +25,7 @@ export default class MyCustomComponent extends LitElement {
   | undefined = undefined;
 
   @internalProperty() tableReady = false;
+  @internalProperty() statePostal = "";
   @internalProperty() countyCases: Array<string> = [];
   @internalProperty() countyNewCases: Array<string> = [];
 
@@ -44,6 +45,7 @@ export default class MyCustomComponent extends LitElement {
     this.tableReady = false;
     this.casesTableData = this.casesHeader;
     this.deathsTableData = this.deathsHeader;
+    this.statePostal = "";
   };
 
   updated(changeProperties: PropertyValues) {
@@ -57,6 +59,12 @@ export default class MyCustomComponent extends LitElement {
       let totalStateDeaths = 0;
       let generatedCasesTableData = "";
       let generatedDeathTableData = "";
+
+
+      if (this.stateCountyData.length) {
+        this.statePostal = (this.stateCountyData[0] as any).state;
+        console.log('[log] statePostal', this.statePostal);
+      }
 
       this.stateCountyData.forEach((countyData: any, index) => {
         const countyName = countyData.county;
@@ -86,19 +94,23 @@ export default class MyCustomComponent extends LitElement {
       console.log('[log] totals cases/new/deaths', this.stateTotalCases, this.stateTotalNewCases, this.stateTotalDeaths);
       // TODO, total cases is running out of the cell.
 
-      this.casesTableData =
-        this.casesTableData + `Total State Cases, ${this.stateTotalCases}, ${this.stateTotalNewCases} \n`;
+      const statePostalValue = this.statePostal.length === 2 ? this.statePostal : "State";
+
+      if (this.stateTotalCases > 0) {
+        this.casesTableData =
+        this.casesTableData + `Total ${statePostalValue} Cases, ${this.stateTotalCases}, ${this.stateTotalNewCases} \n`;
 
       this.casesTableData =
       this.casesTableData + generatedCasesTableData;
 
       this.deathsTableData =
-        this.deathsTableData + `Total State Deaths, ${this.stateTotalDeaths} \n`;
+        this.deathsTableData + `Total ${statePostalValue} Deaths, ${this.stateTotalDeaths} \n`;
 
       this.deathsTableData =
         this.deathsTableData + generatedDeathTableData;
 
       this.tableReady = true;
+      }
     }
   }
 
@@ -150,7 +162,7 @@ export default class MyCustomComponent extends LitElement {
               hasRemoveStyle
               size="28"
             >
-              <md-icon slot="icon" name="sort-down_16"></md-icon>
+              <!-- <md-icon slot="icon" name="sort-down_16"></md-icon> -->
             </md-button>
           <div class="tab-header-row">
             <md-tabs>

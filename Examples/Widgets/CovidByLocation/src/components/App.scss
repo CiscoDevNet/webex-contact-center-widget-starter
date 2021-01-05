@@ -67,5 +67,6 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 .cases-by-location {
   border-bottom: $main-border;
   display: flex;
-  height: 295px;
+  flex-wrap: wrap;
+  // height: 295px;
 }
