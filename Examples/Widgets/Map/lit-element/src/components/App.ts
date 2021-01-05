@@ -91,7 +91,6 @@ export default class MyCustomComponent extends LitElement {
   }
 
   updatePins = (places: google.maps.places.PlaceResult[]) => {
-    console.log("Update Pins Function");
     let markers: google.maps.Marker[] = [];
 
     if (places.length == 0) {
@@ -101,7 +100,6 @@ export default class MyCustomComponent extends LitElement {
     // Clear out the old markers.
     async function clearMarkers() {
       markers.forEach(marker => {
-        console.log(marker);
         marker.setMap(null);
       });
       markers = [];
@@ -112,7 +110,6 @@ export default class MyCustomComponent extends LitElement {
       const bounds = new google.maps.LatLngBounds();
       places.forEach(place => {
         if (!place.geometry) {
-          console.log("Returned place contains no geometry");
           return;
         }
         const icon = {
@@ -145,7 +142,6 @@ export default class MyCustomComponent extends LitElement {
 
   initMap = () => {
     if (!this.map) {
-      console.log("NO MAP DETECTED");
       const mapTheme = this.darkTheme ? darkMap : lightMap;
       this.loader
         .load()
@@ -163,7 +159,6 @@ export default class MyCustomComponent extends LitElement {
         })
         .then(() => this.updateAttributeSearch());
     } else {
-      console.log("MAP DETECTED");
       this.updateAttributeSearch().then(() => {
         this.map?.panTo({ lat: this.latitude, lng: this.longitude });
         this.refreshTokenData();
@@ -176,7 +171,6 @@ export default class MyCustomComponent extends LitElement {
     if (this.map && this.search) {
       const places = new google.maps.places.PlacesService(this.map);
       const attributeQuery = this.search.split(" ").join("%") || undefined;
-      console.log(attributeQuery);
       places.nearbySearch(
         {
           keyword: attributeQuery,
@@ -207,7 +201,6 @@ export default class MyCustomComponent extends LitElement {
       // Listen for the event fired when the user selects a prediction and retrieve
       // more details for that place.
       searchBox.addListener("places_changed", () => {
-        console.log("Google API event Listener");
         this.updatePins(searchBox.getPlaces());
       });
     }
