@@ -12,9 +12,16 @@ import styles from "./App.scss";
 import { logger } from "./sdk";
 import { Service } from "@agentx/agentx-services-types";
 import { Notifications } from "@uuip/unified-ui-platform-sdk";
+import { consultTransferMockPayLoad } from "@/[sandbox]/sandbox.mock";
+
+interface FeedItem {
+  title: string | undefined;
+  link: string | undefined
+}
+
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
-  @property({type: String}) rssFeedAddress = "https://www.who.int/feeds/entity/csr/don/en/rss.xml"
+  @property({ type: String }) rssFeedAddress = "https://www.who.int/feeds/entity/csr/don/en/rss.xml"
   /**
    * Replace this with the logic to obtain interaction ID you need
    * through agentxJsApi.actions sub-module or through external props
@@ -27,17 +34,20 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() contacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
   @internalProperty() acceptedContacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
 
-  @internalProperty() rssFeedItems?: NodeListOf<Element>;
+  @internalProperty() rawFeedData?: NodeListOf<Element>;
+  @internalProperty() renderFeedData?: FeedItem[];
+  @internalProperty() loading: boolean = true;
   @internalProperty() totalPage: number = 1;
   @internalProperty() hasPreviousPage: boolean = true;
   @internalProperty() hasNextPage: boolean = true;
   @internalProperty() currentPage: number = 1;
+  @internalProperty() updateDelay: number = 1000;
 
   static get styles() {
     return styles;
   }
 
-  firstUpdated(changedProperties: PropertyValues){
+  firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties)
     this.getFeed();
   }
@@ -361,14 +371,46 @@ export default class MyCustomComponent extends LitElement {
       .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(data => {
-        this.rssFeedItems = data.querySelectorAll("item");
-        this.totalPage = this.rssFeedItems.length;
+        this.rawFeedData = data.querySelectorAll("item");
+        this.totalPage = this.rawFeedData.length;
       })
-  }
-  // parse Items into <md-link> tags that have the <title> for text and <link> for hyperlink.
-  // set timer to animate slide right to left, increment current page prop
-  // 
 
+    this.parseFeedItems()
+    // show "loading" while it parses the content
+    setTimeout(() => {
+      this.loading = false;
+    }, 2000);
+  }
+
+  // set timer to animate slide right to left, increment current page prop
+  updateFeedItem() {
+    setInterval(
+      () => {
+        this.renderFeedItem()
+        //increment currentPage, loop when hits totalPages
+      }, this.updateDelay);
+  }
+
+  renderFeedItem() {
+    const title = this.renderFeedData && this.renderFeedData[this.currentPage].title
+    const link = this.renderFeedData && this.renderFeedData[this.currentPage].link
+    console.log(title, link)
+    return html`
+      <md-link href=${link}>${title}</md-link>
+    `
+  }
+
+  // parse Items into <md-link> tags that have the <title> for text and <link> for hyperlink.
+  parseFeedItems() {
+    const feedData: FeedItem[] = []
+    this.rawFeedData?.forEach(item => {
+      feedData.push({
+        title: item.querySelector("title")?.innerHTML,
+        link: item.querySelector("link")?.innerHTML
+      })
+    })
+    this.renderFeedData = feedData;
+  }
 
   private computeFirst() {
     if (this.currentPage >= 1) {
@@ -389,7 +431,7 @@ export default class MyCustomComponent extends LitElement {
       <md-icon name="icon-arrow-left_16"></md-icon>
     </md-button>
     <md-button hasRemoveStyle class="md-pagination-nav" aria-label="Previous Page" ?disabled=${!this.hasNextPage}
-      aria-disabled=${this.hasNextPage} @click=${() => this.computeNext(this.currentPage + 1)}
+      aria-disabled=${this.hasNextPage} @click=${()=> this.computeNext(this.currentPage + 1)}
       part="pagination-next"
       >
       <md-icon name="icon-arrow-right_16"></md-icon>
@@ -402,7 +444,7 @@ export default class MyCustomComponent extends LitElement {
       <div class="container">
         <md-badge color="blue">
           <md-icon name="icon-rss-circle_24" color="blue" size="12"></md-icon>
-          Current RSS Feed Item
+          ${this.loading ? html`<md-loading></md-loading>` : this.updateFeedItem()}
           ${this.getPageArrows()}
         </md-badge>
       </div>
