@@ -34,6 +34,7 @@ export default class MyCustomComponent extends LitElement {
   @property({ type: String }) locale = "en-US";
   @property({ type: String }) selectedCountyFIPS = "";
   @property({ type: Number }) maxDataPoints = 30;
+  @property({ type: Boolean }) darkTheme = false;
 
   @internalProperty() myChart: Chart | undefined = undefined;
   @internalProperty() label: Array<string> = [];
@@ -87,7 +88,7 @@ export default class MyCustomComponent extends LitElement {
         legend: {
           position: 'bottom',
           labels: {
-            fontColor: "gray",
+            fontColor: getComputedStyle(this).getPropertyValue("--md-primary-text-color"),
             fontSize: 10,
             boxWidth: 20
           },
@@ -100,7 +101,7 @@ export default class MyCustomComponent extends LitElement {
         scales: {
           xAxes: [{
             ticks: {
-              fontColor: "gray"
+              fontColor: getComputedStyle(this).getPropertyValue("--md-secondary-text-color"),
             },
             gridLines: {
               display: false
@@ -110,10 +111,10 @@ export default class MyCustomComponent extends LitElement {
             {
               gridLines: {
                 z: 2,
-                color: '#EDEDED'
+                color: getComputedStyle(this).getPropertyValue("--md-dynamic-layout-button-border-color")
               },
               ticks: {
-                fontColor: "gray",
+                fontColor: getComputedStyle(this).getPropertyValue("--md-secondary-text-color"),
                 beginAtZero: true,
                 callback: function(value, index, values) {
                   if(Number(value) >= 1000){
@@ -143,12 +144,34 @@ export default class MyCustomComponent extends LitElement {
     })
   }
 
+  closestElement(selector: string, base = this) {
+    function __closestFrom(el: unknown): HTMLElement | null {
+      if (!el || el === document || el === window) return null;
+      // @ts-ignore
+      const found = el.closest(selector);
+      // @ts-ignore
+      return found ? found : __closestFrom(el.getRootNode().host);
+    }
+    return __closestFrom(base);
+  }
+
+  refreshTokenData = () => {
+    const themeWrapper: unknown = this.closestElement("md-theme");
+    // @ts-ignore
+    this.lumos = themeWrapper.lumos;
+    // @ts-ignore
+    this.darkTheme = themeWrapper.darkTheme;
+  };
+
   handleRadioChange = (event: CustomEvent) => {
     this.specificity = event?.detail?.selected;
   };
 
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
+
+    document.addEventListener("theme-changed", this.refreshTokenData);
+
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     this.radioGroup.addEventListener(
@@ -202,6 +225,10 @@ export default class MyCustomComponent extends LitElement {
 
   protected async updated(changeProperties: PropertyValues) {
     super.updated(changeProperties);
+
+    if (changeProperties.has("darkTheme")) {
+      this.renderChart();
+    }
 
     if (changeProperties.has("specificity")) {
       await this.collectChartData();
