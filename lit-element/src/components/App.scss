@@ -6,21 +6,21 @@
  *
  */
  
- :host {
-  display: block;
-  background-color: var(--md-primary-bg-color);
-  color: var(--md-primary-text-color);
+:host {
+    display: block;
+    background-color: var(--md-primary-bg-color);
+    color: var(--md-primary-text-color);
 }
 
 .container {
-  padding: 20px;
+    padding: 20px;
 }
 
 .action-container {
-  padding: 10px 2px;
-  display: flex;
-  flex-direction: column;
-  md-button {
-      margin: 10px 0;
-  }
+    padding: 10px 2px;
+    display: flex;
+    flex-direction: column;
+    md-button {
+        margin: 10px 0;
+    }
 }

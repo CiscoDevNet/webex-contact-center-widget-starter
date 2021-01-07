@@ -137,7 +137,6 @@ const commonDist = merge(common, {
     filename: "[name].js",
     libraryTarget: "umd"
   },
-  externals: [nodeExternals({ modulesFromFile: true })],
   plugins: [
     new CleanWebpackPlugin(),
     new RemovePlugin({
