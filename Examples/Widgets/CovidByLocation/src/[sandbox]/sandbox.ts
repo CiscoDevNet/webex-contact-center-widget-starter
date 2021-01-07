@@ -99,6 +99,8 @@ export class Sandbox extends LitElement {
   }
 
   render() {
+    const key = "1318b408f01c4aa3b5f79dedc6c90848";
+
     return html`
     <div class="toggle">
         ${this.themeToggle()}
@@ -106,7 +108,7 @@ export class Sandbox extends LitElement {
       <md-theme lumos ?darkTheme=${this.darkTheme}>
         <div class="container">
           <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-            <covid-by-location></covid-by-location>
+            <covid-by-location api-key=${key} selectedCountyState="Sarasota County, FL"></covid-by-location>
           </div>
           </div>
         </md-theme>

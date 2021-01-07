@@ -6,7 +6,7 @@
  *
  */
 
-import { html, LitElement, customElement, css, internalProperty } from "lit-element";
+import { html, LitElement, customElement, css, internalProperty, property } from "lit-element";
 import { agentxJsApi } from "@agentx/agentx-js-api";
 import "./components/App";
 /**
@@ -15,6 +15,8 @@ import "./components/App";
 @customElement("covid-by-location")
 export default class CovidByLocation extends LitElement {
   @internalProperty() private contacts: string[] = [];
+  @property({ type: String }) selectedCountyState = "Santa Clara County, CA";
+  @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "1318b408f01c4aa3b5f79dedc6c90848";
   
   private readonly logger = agentxJsApi.logger.createLogger("[Widget-Using-JSAPI]");
 
@@ -31,7 +33,7 @@ export default class CovidByLocation extends LitElement {
  
   render() {
     return html`
-      <my-custom-component></my-custom-component>
+      <my-custom-component api-key=${this.apiKey} selectedCountyState=${this.selectedCountyState}></my-custom-component>
     `;
   }
 }
