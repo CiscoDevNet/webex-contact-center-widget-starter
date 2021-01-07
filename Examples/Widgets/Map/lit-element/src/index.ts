@@ -11,7 +11,8 @@ import {
   LitElement,
   customElement,
   css,
-  internalProperty
+  internalProperty,
+  property
 } from "lit-element";
 import { agentxJsApi } from "@agentx/agentx-js-api";
 import "./components/App";
@@ -21,6 +22,7 @@ import "./components/App";
 @customElement("my-custom-widget")
 export default class MyCustomComponent extends LitElement {
   @internalProperty() private contacts: string[] = [];
+  @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
 
   private readonly logger = agentxJsApi.logger.createLogger(
     "[Widget-Using-JSAPI]"
@@ -36,11 +38,11 @@ export default class MyCustomComponent extends LitElement {
       }
     `;
   }
- 
+
   render() {
     return html`
       <my-custom-component
-        api-key=""
+        api-key=${this.apiKey}
         search="Harborview medical"
         search-enabled
       ></my-custom-component>
