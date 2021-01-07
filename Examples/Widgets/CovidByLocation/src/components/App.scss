@@ -16,10 +16,6 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
 .container {
   height: 100%;
-
-  .graph-widget {
-    border-right: $main-border;
-  }
 }
 
 .main-header {
@@ -38,7 +34,7 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 }
 
 .header {
-  padding: 5px 16px;
+  padding: 5px 16px 16px;
 
   .header-text {
     font-size: 14px;
@@ -58,15 +54,21 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
   .city-combobox::part(combobox) {
     width: 260px;
   }
-
-  .combobox-row {
-    padding-bottom: 16px;
-  }
 }
 
 .cases-by-location {
   border-bottom: $main-border;
   display: flex;
   flex-wrap: wrap;
-  // height: 295px;
+
+  .graph-widget {
+    border-right: $main-border;
+    width: 50%;
+    min-width: 294px;
+  }
+
+  .table-widget {
+    width: 49%;
+    min-width: 294px;
+  }
 }

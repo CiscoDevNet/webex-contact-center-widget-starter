@@ -106,7 +106,7 @@ export class Sandbox extends LitElement {
       <md-theme lumos ?darkTheme=${this.darkTheme}>
         <div class="container">
           <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <covid-by-location></covid-by-location>
+            <covid-by-location></covid-by-location>
           </div>
           </div>
         </md-theme>
