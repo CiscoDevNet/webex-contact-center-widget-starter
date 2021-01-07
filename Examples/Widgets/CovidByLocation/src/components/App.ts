@@ -20,7 +20,8 @@ import "./Table";
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
-  @property() selectedCountyState = "Santa Clara County, CA";
+  @property({ type: String }) selectedCountyState = "";
+  @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "1318b408f01c4aa3b5f79dedc6c90848";
 
   @internalProperty() countyOptions: Array<string> = [];
   @internalProperty() selectedCounty = "";
@@ -44,10 +45,8 @@ export default class MyCustomComponent extends LitElement {
   };
 
   fetchAllCounties = async () => {
-    const key = "1318b408f01c4aa3b5f79dedc6c90848";
-
     return await fetch(
-      `https://api.covidactnow.org/v2/counties.json?apiKey=${key}`
+      `https://api.covidactnow.org/v2/counties.json?apiKey=${this.apiKey}`
     )
       .then((response) => {
         return response.json();
