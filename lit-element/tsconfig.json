@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "ES2016",
     "module": "commonjs",
-    "types": ["googlemaps"],
 
     "strict": true,
     "esModuleInterop": true,
