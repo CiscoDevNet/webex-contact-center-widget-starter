@@ -126,9 +126,11 @@ export default class MyCustomComponent extends LitElement {
       <div class="container">
         <div class="main-header">
           <span class="header-text">COVID Cases by Location</span>
-          <md-button circle hasRemoveStyle
-            ><md-icon slot="icon" name="maximize_16"></md-icon
-          ></md-button>
+          <md-tooltip message="expand widget">
+            <md-button circle hasRemoveStyle
+              ><md-icon slot="icon" name="maximize_16"></md-icon
+            ></md-button>
+          </md-tooltip>
         </div>
         <div class="body">
           <div class="combobox-row">

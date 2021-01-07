@@ -21,8 +21,8 @@ import styles from "./Table.scss";
 export default class MyCustomComponent extends LitElement {
   @property({ type: Boolean }) sorted = false;
   @property({ type: Array, attribute: false }) stateCountyData:
-  | Array<Object>
-  | undefined = undefined;
+    | Array<Object>
+    | undefined = undefined;
 
   @internalProperty() tableReady = false;
   @internalProperty() statePostal = "";
@@ -60,10 +60,8 @@ export default class MyCustomComponent extends LitElement {
       let generatedCasesTableData = "";
       let generatedDeathTableData = "";
 
-
       if (this.stateCountyData.length) {
         this.statePostal = (this.stateCountyData[0] as any).state;
-        console.log('[log] statePostal', this.statePostal);
       }
 
       this.stateCountyData.forEach((countyData: any, index) => {
@@ -84,32 +82,31 @@ export default class MyCustomComponent extends LitElement {
 
         if (this.stateCountyData && index < this.stateCountyData?.length - 1) {
           generatedCasesTableData = generatedCasesTableData + ` \n`;
-          generatedDeathTableData = generatedDeathTableData +  '\n';
+          generatedDeathTableData = generatedDeathTableData + "\n";
         }
       });
 
       this.stateTotalCases = totalStateCases;
       this.stateTotalNewCases = totalStateNewCases;
       this.stateTotalDeaths = totalStateDeaths;
-      console.log('[log] totals cases/new/deaths', this.stateTotalCases, this.stateTotalNewCases, this.stateTotalDeaths);
-      // TODO, total cases is running out of the cell.
 
-      const statePostalValue = this.statePostal.length === 2 ? this.statePostal : "State";
+      const statePostalValue =
+        this.statePostal.length === 2 ? this.statePostal : "State";
 
       if (this.stateTotalCases > 0) {
         this.casesTableData =
-        this.casesTableData + `Total ${statePostalValue} Cases, ${this.stateTotalCases}, ${this.stateTotalNewCases} \n`;
+          this.casesTableData +
+          `Total ${statePostalValue} Cases, ${this.stateTotalCases}, ${this.stateTotalNewCases} \n`;
 
-      this.casesTableData =
-      this.casesTableData + generatedCasesTableData;
+        this.casesTableData = this.casesTableData + generatedCasesTableData;
 
-      this.deathsTableData =
-        this.deathsTableData + `Total ${statePostalValue} Deaths, ${this.stateTotalDeaths} \n`;
+        this.deathsTableData =
+          this.deathsTableData +
+          `Total ${statePostalValue} Deaths, ${this.stateTotalDeaths} \n`;
 
-      this.deathsTableData =
-        this.deathsTableData + generatedDeathTableData;
+        this.deathsTableData = this.deathsTableData + generatedDeathTableData;
 
-      this.tableReady = true;
+        this.tableReady = true;
       }
     }
   }
@@ -119,7 +116,10 @@ export default class MyCustomComponent extends LitElement {
   };
 
   renderTable = (type: string) => {
-    if (this.casesTableData.length > this.casesHeader.length && type === "cases") {
+    if (
+      this.casesTableData.length > this.casesHeader.length &&
+      type === "cases"
+    ) {
       return html`
         <md-table
           class="covid-table"
@@ -129,7 +129,11 @@ export default class MyCustomComponent extends LitElement {
           no-borders
         ></md-table>
       `;
-    } else if (this.deathsTableData.length > this.deathsHeader.length &&  this.deathsTableData && type === "recovered") {
+    } else if (
+      this.deathsTableData.length > this.deathsHeader.length &&
+      this.deathsTableData &&
+      type === "recovered"
+    ) {
       return html`
         <md-table
           class="covid-table"
@@ -157,15 +161,6 @@ export default class MyCustomComponent extends LitElement {
           ></md-button>
         </div>
         <div class="sub-body">
-        <md-button
-              class="sort-button-icon"
-              @button-click=${this.handleSort}
-              circle
-              hasRemoveStyle
-              size="28"
-            >
-              <!-- <md-icon slot="icon" name="sort-down_16"></md-icon> -->
-            </md-button>
           <div class="tab-header-row">
             <md-tabs>
               <md-tab slot="tab">

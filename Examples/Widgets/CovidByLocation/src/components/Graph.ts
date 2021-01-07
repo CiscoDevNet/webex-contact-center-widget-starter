@@ -228,7 +228,9 @@ export default class MyCustomComponent extends LitElement {
             <md-radio slot="radio" value="weekly">Weekly</md-radio>
             <md-radio slot="radio" value="monthly">Monthly</md-radio>
           </md-radiogroup>
-          <canvas id="myChart" width="262" height="200" aria-label="Covid Cases Graph" role="img"></canvas>
+          <div class="chart-container">
+            <canvas id="myChart" height="210" class="my-chart" aria-label="Covid Cases Graph" role="img"></canvas>
+          </div>
         </div>
       </div>
     `;

@@ -1,22 +1,21 @@
 @import "./App.scss";
 
 .table-section {
-  width: 296px;
   height: 100%;
+
+  .header {
+    padding: 0 16px;
+  }
 
   .sub-body {
     height: 261px;
-    overflow: scroll;
-  }
-}
+    overflow-y: auto;
+    width: 100%;
+    padding: 0;
 
-.sort-button-icon {
-  position: absolute;
-  right: 12px;
-
-  &::part(button) {
-    top: 15px;
-    margin-right: 16px;
+    .tab-header-row {
+      margin: 0 12px;
+    }
   }
 }
 

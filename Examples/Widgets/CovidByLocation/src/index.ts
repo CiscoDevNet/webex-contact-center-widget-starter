@@ -6,7 +6,7 @@
  *
  */
 
-import { html, LitElement, customElement, css, internalProperty } from "lit-element";
+import { html, LitElement, customElement, css } from "lit-element";
 // import { agentxJsApi } from "@agentx/agentx-js-api";
 import "./components/App";
 
@@ -15,8 +15,6 @@ import "./components/App";
  */
 @customElement("covid-by-location")
 export default class CovidByLocation extends LitElement {
-  @internalProperty() private contacts: string[] = [];
-  
   // private readonly logger = agentxJsApi.logger.createLogger("[Widget-Using-JSAPI]");
 
   static get styles() {
