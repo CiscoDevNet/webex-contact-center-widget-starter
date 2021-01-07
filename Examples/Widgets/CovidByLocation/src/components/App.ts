@@ -124,14 +124,14 @@ export default class MyCustomComponent extends LitElement {
   render() {
     return html`
       <div class="container">
-        <div class="main-header">
+        <!-- <div class="main-header">
           <span class="header-text">COVID Cases by Location</span>
           <md-tooltip message="expand widget">
             <md-button circle hasRemoveStyle
               ><md-icon slot="icon" name="maximize_16"></md-icon
             ></md-button>
           </md-tooltip>
-        </div>
+        </div> -->
         <div class="body">
           <div class="combobox-row">
             <md-combobox

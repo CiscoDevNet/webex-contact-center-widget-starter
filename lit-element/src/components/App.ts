@@ -355,6 +355,7 @@ export default class MyCustomComponent extends LitElement {
               <md-button @button-click=${() => this.getClientLocale()}
                 >Get current Locale</md-button
               >
+
               <md-button @button-click=${() => this.changeState("Idle")}
                 >Change State to Idle</md-button
               >
@@ -366,6 +367,7 @@ export default class MyCustomComponent extends LitElement {
               >
             </div>
           </md-tab-panel>
+
           <md-tab slot="tab">agentxJsApi.agentContact</md-tab>
           <md-tab-panel slot="panel">
             <div class="action-container">
@@ -374,11 +376,14 @@ export default class MyCustomComponent extends LitElement {
               <md-button @button-click=${() => this.getBuddyAgents()}
                 >Get Buddy Agents</md-button
               >
+
               <h3>Get vTeam list</h3>
               <md-button @button-click=${() => this.getVTeamList()}
                 >Get vTeam list</md-button
               >
+
               <h3>Accept interactions</h3>
+
               ${
                 this.contacts.map(contact => {
                   if (this.acceptedContacts.indexOf(contact) != -1) {
@@ -390,14 +395,17 @@ export default class MyCustomComponent extends LitElement {
                   }
                 })
               }
+
               <h3>End interaction</h3>
               <md-button @button-click=${() => this.endInteraction()}
                 >End interaction for ${this.sampleInteractionId}</md-button
               >
+
               <h3>Wrap Up interaction</h3>
               <md-button @button-click=${() => this.wrapUpInteraction()}
                 >Wrap Up interaction for ${this.sampleInteractionId}</md-button
               >
+
               <h3>Consult</h3>
               <md-label
                 >Fetch buddy agents before initiating a consult</md-label
@@ -408,6 +416,7 @@ export default class MyCustomComponent extends LitElement {
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
+
               <md-label
                 >Make sure to have active conference before ending</md-label
               >
@@ -417,7 +426,9 @@ export default class MyCustomComponent extends LitElement {
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
+
               <h3>Consult Conference</h3>
+
               <md-button
                 @button-click=${() => this.consultConferenceWithAgent()}
                 >Consult Conference with
@@ -435,6 +446,7 @@ export default class MyCustomComponent extends LitElement {
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
+
               <h3>Consult Transfer</h3>
               <md-button @button-click=${() => this.consultTransferToAgent()}
                 >Consult Transfer to
@@ -442,6 +454,7 @@ export default class MyCustomComponent extends LitElement {
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
+
               <h3>vTeam Transfer</h3>
               <md-label>Fetch vTeam before initiating a transfer</md-label>
               <md-button @button-click=${() => this.vTeamTransfer()}
@@ -450,6 +463,7 @@ export default class MyCustomComponent extends LitElement {
               >
             </div>
           </md-tab-panel>
+
           <md-tab slot="tab">agentxJsApi.shortcutKey</md-tab>
           <md-tab-panel slot="panel">
             <div class=“action-container”>
@@ -457,17 +471,21 @@ export default class MyCustomComponent extends LitElement {
               <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.DEFAULT_SHORTCUT_KEYS)}
                   >Get Default Shortcut Keys</md-button
                 >
+
                 <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.MODIFIERS)}
                   >Get Shortcut Keys Modifiers</md-button
                 >
+
                 <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.REGISTERED_KEYS)}
                   >Get all registered Shortcut Keys</md-button
                 >
+
                 <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.getRegisteredKeys())}
                   >Get all registered Shortcut Keys</md-button
                 >
             </div>
           </md-tab-panel>
+
           <md-tab slot="tab">agentxJsApi.actions</md-tab>
           <md-tab-panel slot="panel">
             <div class="action-container">
@@ -475,18 +493,22 @@ export default class MyCustomComponent extends LitElement {
               <md-button @button-click=${() => this.getToken()}
                 >Get Agent Desktop auth token</md-button
               >
+
               <md-button @button-click=${() => this.getToken()}
                 >Get idle codes</md-button
               >
+
               <md-button @button-click=${() => this.getToken()}
                 >Get wrap up codes</md-button
               >
+
               <md-button @button-click=${() => this.getToken()}
                 >Fire notification</md-button
               >
               
             </div>
           </md-tab-panel>
+
           <md-tab slot="tab">Vertical overflow tab</md-tab>
           <md-tab-panel slot="panel">
             <p>
@@ -534,6 +556,7 @@ export default class MyCustomComponent extends LitElement {
               Etiam orci quam, vestibulum egestas rutrum non, dapibus a justo.
             </p>
           </md-tab-panel>
+
         </md-tabs>
         <slot></slot>
       </div>
