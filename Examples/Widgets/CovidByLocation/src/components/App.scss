@@ -71,4 +71,15 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
     width: 49%;
     min-width: 294px;
   }
+
+  &.column-view {
+    .graph-widget {
+      border-right: unset;
+      width: 100%;
+    }
+
+    .table-widget {
+      width: 100%;
+    }
+  }
 }
