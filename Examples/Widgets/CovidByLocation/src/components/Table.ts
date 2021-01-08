@@ -13,6 +13,7 @@ import {
   property,
   internalProperty,
   PropertyValues,
+  query,
 } from "lit-element";
 import { nothing } from "lit-html";
 import styles from "./Table.scss";
@@ -37,6 +38,9 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() stateTotalNewCases = 0;
   @internalProperty() stateTotalDeaths = 0;
 
+  @query(".table-section") tableContainer!: HTMLDivElement;
+  @query(".sub-body") subBody!: HTMLDivElement;
+
   static get styles() {
     return styles;
   }
@@ -47,6 +51,22 @@ export default class MyCustomComponent extends LitElement {
     this.deathsTableData = this.deathsHeader;
     this.statePostal = "";
   };
+
+  firstUpdated(changeProperties: PropertyValues) {
+    super.firstUpdated(changeProperties);
+
+    // @ts-ignore
+    var ro = new ResizeObserver((entries: any) => {
+      for (let entry of entries) {
+        const cr = entry.contentRect;
+        console.log('Element:', entry.target);
+        console.log(`Element size: ${cr.width}px x ${cr.height}px`);
+
+        this.subBody.style.height = `${cr.height - 30}px`;
+      }
+    });
+    ro.observe(this.tableContainer);
+  }
 
   updated(changeProperties: PropertyValues) {
     super.updated(changeProperties);
