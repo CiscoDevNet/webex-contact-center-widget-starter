@@ -42,7 +42,7 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() hasPreviousPage: boolean = true;
   @internalProperty() hasNextPage: boolean = true;
   @internalProperty() currentPage: number = 0;
-  @internalProperty() updateDelay: number = 1000;
+  @internalProperty() updateDelay: number = 5000;
 
   static get styles() {
     return styles;
@@ -60,6 +60,7 @@ export default class MyCustomComponent extends LitElement {
     this.subscribeAgentContactDataEvents()
     this.subscribeDialerEvents();
     this.subscribeScreenpopEvent();
+    setInterval(()=>{this.computeNext(this.currentPage + 1)}, this.updateDelay)
   }
 
   disconnectedCallback() {
