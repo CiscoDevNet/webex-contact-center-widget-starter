@@ -42,6 +42,8 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() dailyNewCases: Array<number> = [];
   @internalProperty() specificity: Graph.specificity = "daily";
 
+  @query(".chart-container") chartContainer!: HTMLDivElement;
+
   @property({ type: Array, attribute: false }) data:
     | Array<{ county: string }>
     | undefined = undefined;
@@ -173,6 +175,14 @@ export default class MyCustomComponent extends LitElement {
     document.addEventListener("theme-changed", this.refreshTokenData);
 
     await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // @ts-ignore
+    var ro = new ResizeObserver((entries: any) => {
+      for (let entry of entries) {
+        this.renderChart();
+      }
+    });
+    ro.observe(this.chartContainer);
 
     this.radioGroup.addEventListener(
       "radio-change",
