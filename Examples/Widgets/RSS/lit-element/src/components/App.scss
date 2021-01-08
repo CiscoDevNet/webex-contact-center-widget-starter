@@ -5,26 +5,43 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
- 
+
 :host {
-    display: block;
-    background-color: var(--md-primary-bg-color);
-    color: var(--md-primary-text-color);
+  display: block;
+  background-color: var(--md-primary-bg-color);
+  color: var(--md-primary-text-color);
 }
 
 .container {
-    padding: 20px;
+  padding: 20px;
 }
 
 md-badge::part(badge) {
-    border-radius: 6px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
 }
 
+.link-wrapper {
+  max-width: 300px;
+  display: flex;
+  overflow-x: hidden;
+}
+
+.feed-nav-arrows {
+  line-height: normal;
+}
+// .slide {
+//     width: auto;
+//     flex-shrink: 0;
+//     height: 100%;
+// }
+
 .action-container {
-    padding: 10px 2px;
-    display: flex;
-    flex-direction: column;
-    md-button {
-        margin: 10px 0;
-    }
+  padding: 10px 2px;
+  display: flex;
+  flex-direction: column;
+  md-button {
+    margin: 10px 0;
+  }
 }

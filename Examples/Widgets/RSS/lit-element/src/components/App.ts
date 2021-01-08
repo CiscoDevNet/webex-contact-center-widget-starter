@@ -13,6 +13,7 @@ import { logger } from "./sdk";
 import { Service } from "@agentx/agentx-services-types";
 import { Notifications } from "@uuip/unified-ui-platform-sdk";
 import { consultTransferMockPayLoad } from "@/[sandbox]/sandbox.mock";
+import { isTemplatePartActive } from "lit-html";
 
 interface FeedItem {
   title: string | undefined;
@@ -412,6 +413,17 @@ export default class MyCustomComponent extends LitElement {
     this.renderFeedData = feedData;
   }
 
+  getCurrentItem(currentPage: number) {
+    const item = this.renderFeedData && this.renderFeedData[currentPage];
+    const title = item && item.title;
+    const link = item && item.link;
+    return html`
+      <div class="link-wrapper">
+        <md-link href=${link} class="slide" target="blank">${title}</md-link>
+      </div>
+    `
+  }
+
   private computeFirst() {
     if (this.currentPage >= 1) {
       this.currentPage = 1;
@@ -426,25 +438,27 @@ export default class MyCustomComponent extends LitElement {
 
   getPageArrows() {
     return html`
-    <md-button hasRemoveStyle class="md-pagination-nav" aria-label="First Page" ?disabled=${!this.hasPreviousPage}
-      aria-disabled=${this.hasPreviousPage} @click=${this.computeFirst} part="pagination-first">
-      <md-icon name="icon-arrow-left_16"></md-icon>
-    </md-button>
-    <md-button hasRemoveStyle class="md-pagination-nav" aria-label="Previous Page" ?disabled=${!this.hasNextPage}
-      aria-disabled=${this.hasNextPage} @click=${()=> this.computeNext(this.currentPage + 1)}
-      part="pagination-next"
-      >
-      <md-icon name="icon-arrow-right_16"></md-icon>
-    </md-button>
+    <div class="feed-nav-arrows">
+      <md-button hasRemoveStyle class="md-pagination-nav" aria-label="First Page" ?disabled=${!this.hasPreviousPage}
+        aria-disabled=${this.hasPreviousPage} @click=${this.computeFirst} part="pagination-first">
+        <md-icon name="icon-arrow-left_16"></md-icon>
+      </md-button>
+      <md-button hasRemoveStyle class="md-pagination-nav" aria-label="Previous Page" ?disabled=${!this.hasNextPage}
+        aria-disabled=${this.hasNextPage} @click=${()=> this.computeNext(this.currentPage + 1)}
+        part="pagination-next"
+        >
+        <md-icon name="icon-arrow-right_16"></md-icon>
+      </md-button>
+    </div>
   `
   }
 
   render() {
     return html`
       <div class="container">
-        <md-badge color="blue">
+        <md-badge color="blue" width="400px">
           <md-icon name="icon-rss-circle_24" color="blue" size="12"></md-icon>
-          ${this.loading ? html`<md-loading></md-loading>` : this.updateFeedItem()}
+          ${this.loading ? html`<md-loading></md-loading>` : this.getCurrentItem(this.currentPage)}
           ${this.getPageArrows()}
         </md-badge>
       </div>
