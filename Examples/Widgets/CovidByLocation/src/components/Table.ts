@@ -55,14 +55,12 @@ export default class MyCustomComponent extends LitElement {
   firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
 
+
     // @ts-ignore
     var ro = new ResizeObserver((entries: any) => {
       for (let entry of entries) {
         const cr = entry.contentRect;
-        console.log('Element:', entry.target);
-        console.log(`Element size: ${cr.width}px x ${cr.height}px`);
-
-        this.subBody.style.height = `${cr.height - 30}px`;
+        this.subBody.style.height = `${cr.height - 27}px`;
       }
     });
     ro.observe(this.tableContainer);

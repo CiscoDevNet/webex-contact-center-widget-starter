@@ -13,6 +13,7 @@ import {
   internalProperty,
   PropertyValues,
   property,
+  query,
 } from "lit-element";
 import styles from "./App.scss";
 import "./Graph";
@@ -28,6 +29,9 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() selectedStatePostal = "";
   @internalProperty() selectedCountyFIPS = "";
   @internalProperty() stateCountyData: Array<Object> = [];
+  @internalProperty() columnView = false;
+
+  @query(".cases-by-location") flexContainer!: HTMLDivElement;
 
   static get styles() {
     return styles;
@@ -92,6 +96,20 @@ export default class MyCustomComponent extends LitElement {
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
 
+    // @ts-ignore
+    var ro = new ResizeObserver((entries: any) => {
+      for (let entry of entries) {
+        const cr = entry.contentRect;
+
+        if (cr.width > 589) {
+          this.columnView = false;
+        } else {
+          this.columnView = true;
+        }
+      }
+    });
+    ro.observe(this.flexContainer);
+
     if (!this.selectedStatePostal) {
       await this.fetchUsersLocation().then(userLocationData => {
         console.log("[log] fetchUsersLocation DATA", userLocationData);
@@ -145,7 +163,7 @@ export default class MyCustomComponent extends LitElement {
             </md-combobox>
           </div>
         </div>
-        <div class="cases-by-location">
+        <div class=${`cases-by-location ${this.columnView ? "column-view" : ""}`}>
           <my-graph
             class="graph-widget"
             selectedCountyFIPS=${this.selectedCountyFIPS}
