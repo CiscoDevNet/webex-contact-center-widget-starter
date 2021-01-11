@@ -6,7 +6,13 @@
  *
  */
 
-import { html, LitElement, customElement, css, internalProperty } from "lit-element";
+import {
+  html,
+  LitElement,
+  customElement,
+  css,
+  internalProperty
+} from "lit-element";
 import { agentxJsApi } from "@agentx/agentx-js-api";
 import "./components/App";
 /**
@@ -15,8 +21,10 @@ import "./components/App";
 @customElement("my-custom-widget")
 export default class MyCustomComponent extends LitElement {
   @internalProperty() private contacts: string[] = [];
-  
-  private readonly logger = agentxJsApi.logger.createLogger("[Widget-Using-JSAPI]");
+
+  private readonly logger = agentxJsApi.logger.createLogger(
+    "[Widget-Using-JSAPI]"
+  );
 
   static get styles() {
     return css`
@@ -28,10 +36,12 @@ export default class MyCustomComponent extends LitElement {
       }
     `;
   }
- 
+
   render() {
     return html`
-      <my-custom-component></my-custom-component>
+      <rss-component
+        rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml"
+      ></rss-component>
     `;
   }
 }
