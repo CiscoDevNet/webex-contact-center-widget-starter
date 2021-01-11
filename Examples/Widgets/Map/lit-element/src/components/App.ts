@@ -21,7 +21,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import { map as lightMap } from "./lightMap";
 import { darkMap } from "./darkMap";
 import { nothing } from "lit-html";
-@customElement("my-custom-component")
+@customElement("map-component")
 export default class MyCustomComponent extends LitElement {
   @property({ type: Number, reflect: true }) latitude = 47.6062;
   @property({ type: Number, reflect: true }) longitude = -122.3321;
@@ -73,7 +73,7 @@ export default class MyCustomComponent extends LitElement {
 
   firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
-    document.addEventListener("theme-changed", this.refreshTokenData)
+    document.addEventListener("theme-changed", this.refreshTokenData);
     this.initMap();
   }
 
@@ -207,9 +207,6 @@ export default class MyCustomComponent extends LitElement {
   };
 
   generateSearchInput = () => {
-
-    // display: none if not a child of id="map"
-    
     return html`
       <md-input
         id="pac-input"
