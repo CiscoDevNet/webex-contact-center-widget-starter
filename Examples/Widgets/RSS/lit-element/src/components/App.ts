@@ -103,9 +103,9 @@ export default class MyCustomComponent extends LitElement {
     // add text overflow ellipses
     return html`
       <div class="link-wrapper">
-        <md-link href=${link} target="blank"
-          >${this.currentPage + 1} - ${title}</md-link
-        >
+        <md-link href=${link} target="blank">
+          ${this.currentPage + 1} - ${title}
+        </md-link>
       </div>
     `;
   }
