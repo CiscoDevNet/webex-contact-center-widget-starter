@@ -7,7 +7,6 @@
  */
 
 import { html, LitElement, customElement, css, internalProperty, property } from "lit-element";
-import { agentxJsApi } from "@agentx/agentx-js-api";
 import "./components/App";
 /**
  * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
@@ -18,8 +17,6 @@ export default class CovidByLocation extends LitElement {
   @property({ type: String }) selectedCountyState = "Santa Clara County, CA";
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "1318b408f01c4aa3b5f79dedc6c90848";
   
-  private readonly logger = agentxJsApi.logger.createLogger("[Widget-Using-JSAPI]");
-
   static get styles() {
     return css`
       :host {
