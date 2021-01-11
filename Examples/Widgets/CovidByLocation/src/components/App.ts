@@ -21,8 +21,13 @@ import "./Table";
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
-  @property({ type: String }) selectedCountyState = "";
+  /**
+   * Property: apiKey
+   * Access API Key: Covid Act Now Website
+   * https://apidocs.covidactnow.org/access
+   */
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "1318b408f01c4aa3b5f79dedc6c90848";
+  @property({ type: String }) selectedCountyState = "";
 
   @internalProperty() countyOptions: Array<string> = [];
   @internalProperty() selectedCounty = "";
