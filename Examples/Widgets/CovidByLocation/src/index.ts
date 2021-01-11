@@ -15,6 +15,11 @@ import "./components/App";
 export default class CovidByLocation extends LitElement {
   @internalProperty() private contacts: string[] = [];
   @property({ type: String }) selectedCountyState = "Santa Clara County, CA";
+  /**
+   * Property: apiKey
+   * Access API Key: Covid Act Now Website
+   * https://apidocs.covidactnow.org/access
+   */
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "1318b408f01c4aa3b5f79dedc6c90848";
   
   static get styles() {
