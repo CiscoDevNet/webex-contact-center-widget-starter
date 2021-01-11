@@ -207,12 +207,16 @@ export default class MyCustomComponent extends LitElement {
   };
 
   generateSearchInput = () => {
+
+    // display: none if not a child of id="map"
+    
     return html`
       <md-input
         id="pac-input"
         class="controls"
         type="text"
-        placeholder="Search Box"
+        shape="pill"
+        placeholder="${this.search}"
       ></md-input>
     `;
   };
