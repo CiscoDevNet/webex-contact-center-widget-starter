@@ -7,7 +7,7 @@
  */
 
 import { agentxJsApi } from "@agentx/agentx-js-api";
-import { html, LitElement, customElement, internalProperty, property, PropertyValues } from "lit-element";
+import { html, LitElement, customElement, internalProperty, property, PropertyValues, query } from "lit-element";
 import styles from "./App.scss";
 import { logger } from "./sdk";
 import { Service } from "@agentx/agentx-services-types";
@@ -44,6 +44,8 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() currentPage: number = 0;
   @internalProperty() updateDelay: number = 5000;
 
+  @query("md-link") link!: HTMLElement;
+
   static get styles() {
     return styles;
   }
@@ -51,6 +53,15 @@ export default class MyCustomComponent extends LitElement {
   firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties)
     this.getFeed();
+  }
+
+  updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties)
+    if (this.link.clientWidth > this.link.parentElement!.clientWidth) 
+    {this.link.className = "overflow"}
+    // , getComputedStyle(this.link).direction)
+    // if link width > wrapper width, then 1 sec pause and then slide left, then right
+    // lol account for localization
   }
 
   connectedCallback() {
@@ -405,7 +416,7 @@ export default class MyCustomComponent extends LitElement {
     const link = item && item.link;
     return html`
       <div class="link-wrapper">
-        <md-link href=${link} class="slide" target="blank">${this.currentPage + 1} - ${title}</md-link>
+        <md-link href=${link} target="blank">${this.currentPage + 1} - ${title}</md-link>
       </div>
     `
   }
@@ -428,13 +439,13 @@ export default class MyCustomComponent extends LitElement {
       <md-button hasRemoveStyle class="md-pagination-nav" aria-label="Next Page" ?disabled=${!this.hasPreviousPage}
         aria-disabled=${this.hasPreviousPage} @click=${()=> this.computePrevious(this.currentPage - 1)}
         part="pagination-prev">
-        <md-icon name="icon-arrow-left_16"></md-icon>
+        <md-icon name="icon-arrow-left_12"></md-icon>
       </md-button>
       <md-button hasRemoveStyle class="md-pagination-nav" aria-label="Previous Page" ?disabled=${!this.hasNextPage}
         aria-disabled=${this.hasNextPage} @click=${() => this.computeNext(this.currentPage + 1)}
         part="pagination-next"
         >
-        <md-icon name="icon-arrow-right_16"></md-icon>
+        <md-icon name="icon-arrow-right_12"></md-icon>
       </md-button>
     </div>
   `
@@ -444,7 +455,7 @@ export default class MyCustomComponent extends LitElement {
     return html`
       <div class="container">
         <md-badge color="blue" width="400px">
-          <md-icon name="icon-rss-circle_24" color="blue" size="12"></md-icon>
+          <md-icon name="icon-rss-circle_24" color="blue" size="16"></md-icon>
           ${this.loading ? html`<md-loading></md-loading>` : this.getCurrentItem(this.currentPage)}
           ${this.getPageArrows()}
         </md-badge>
