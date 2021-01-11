@@ -69,7 +69,7 @@ export class Sandbox extends LitElement {
     <md-theme lumos ?darkTheme=${this.darkTheme}>
       <div class="container">
         <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <my-custom-widget></my-custom-widget>
+          <my-custom-widget api-key="AIzaSyDlVE8flzwPFbSzuGdaaatrGrG3WIULw5I"></my-custom-widget>
         </div>
       </div>
     </md-theme>

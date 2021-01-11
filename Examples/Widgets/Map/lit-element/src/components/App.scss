@@ -23,6 +23,14 @@
   padding: 20px;
 }
 
+.controls {
+  display: none;
+}
+
+#map .controls {
+  display: block;
+}
+
 .action-container {
   padding: 10px 2px;
   display: flex;
