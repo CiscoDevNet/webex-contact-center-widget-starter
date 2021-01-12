@@ -31,6 +31,12 @@ export namespace Graph {
 
 @customElement("my-graph")
 export default class MyCustomComponent extends LitElement {
+    /**
+   * Property: apiKey
+   * Access API Key: Covid Act Now Website
+   * https://apidocs.covidactnow.org/access
+   */
+  @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
   @property({ type: String }) locale = "en-US";
   @property({ type: String }) selectedCountyFIPS = "";
   @property({ type: Number }) maxDataPoints = 30;
@@ -137,8 +143,7 @@ export default class MyCustomComponent extends LitElement {
   fetchCountyTimeline = async (countyFIPS: string) => {
     if (!countyFIPS) return;
 
-    const key = "1318b408f01c4aa3b5f79dedc6c90848";
-    return await fetch(`https://api.covidactnow.org/v2/county/${countyFIPS}.timeseries.json?apiKey=${key}`)
+    return await fetch(`https://api.covidactnow.org/v2/county/${countyFIPS}.timeseries.json?apiKey=${this.apiKey}`)
     .then(response => {
       return response.json();
     }).then(data => {
