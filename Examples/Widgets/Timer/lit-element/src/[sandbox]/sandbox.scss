@@ -1,0 +1,67 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+ 
+.container {
+    box-sizing: border-box;
+    padding: 20px;
+    min-height: calc(100vh - 27px);
+    background-color: var(--md-secondary-bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100vw;
+  }
+  .default-maximize-area {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+  }
+  .grid {
+    display: grid;
+    grid-template-areas: "iframes css" "async async";
+
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50% 50%;
+    height: 80vh;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    grid-gap: 1px;
+  }
+  .toggle {
+    display: flex;
+    height: 50px;
+  }
+
+  .toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+  }
+
+  .switch-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .switch-container md-label {
+    margin: 0 1em;
+  }
+
+  md-input.theme-switch::part(input) {
+    margin-bottom: -1rem;
+  }
+
+  .widget-container {
+    width: 500px;
+    height: 80vh;
+    border: 1px solid var(--md-primary-seperator-color, #000);
+  }
