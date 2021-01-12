@@ -26,7 +26,7 @@ export default class MyCustomComponent extends LitElement {
    * Access API Key: Covid Act Now Website
    * https://apidocs.covidactnow.org/access
    */
-  @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "1318b408f01c4aa3b5f79dedc6c90848";
+  @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
   @property({ type: String }) selectedCountyState = "";
 
   @internalProperty() countyOptions: Array<string> = [];
@@ -160,7 +160,7 @@ export default class MyCustomComponent extends LitElement {
               shape="pill"
               class="city-combobox"
               .options=${this.countyOptions}
-              placeholder="Placeholder"
+              placeholder="US County"
               .value=${[this.selectedCountyState]}
               @change-selected="${(e: CustomEvent) =>
                 this.handleStateSelection(e)}"
@@ -170,6 +170,7 @@ export default class MyCustomComponent extends LitElement {
         </div>
         <div class=${`cases-by-location ${this.columnView ? "column-view" : ""}`}>
           <my-graph
+            api-key=${this.apiKey}
             class="graph-widget"
             selectedCountyFIPS=${this.selectedCountyFIPS}
           ></my-graph>
