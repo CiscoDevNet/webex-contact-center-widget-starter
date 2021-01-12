@@ -1,0 +1,56 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+:host {
+  display: block;
+  background-color: var(--md-primary-bg-color);
+  color: var(--md-primary-text-color);
+}
+
+.container {
+  padding: 16px;
+}
+
+md-badge::part(badge) {
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0.5rem;
+}
+
+.link-wrapper {
+  width: 300px;
+  display: flex;
+  justify-content: flex-start;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.feed-nav-arrows {
+  line-height: normal;
+}
+
+.action-container {
+  padding: 10px 2px;
+  display: flex;
+  flex-direction: column;
+  md-button {
+    margin: 10px 0;
+  }
+}
+
+md-link {
+  width: 300px;
+  text-align: left;
+  &:host {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
