@@ -8,7 +8,6 @@
 import "@momentum-ui/web-components";
 import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
-import { agentContactData } from "./sandbox.mock";
 import styles from "./sandbox.scss";
 
 @customElement("wcc-widget-starter-lit")
@@ -62,9 +61,6 @@ export class Sandbox extends LitElement {
           <md-label class="switch" text="New Contact">
             Send Contact
           </md-label>
-          <md-button @button-click=${() => this.sendContact()}
-            >Send Chat Contact</md-button
-          >
         </div>
       </div>
     `;
@@ -81,21 +77,6 @@ export class Sandbox extends LitElement {
     } else if (aspect === "darkTheme") {
       this.darkTheme = !this.darkTheme;
     } else return console.error("Invalid data-aspect input");
-  }
-
-  sendContact() {
-    let contactEvent: any /** Service.Aqm.Contact.AgentContact **/ = {
-      type: "",
-      orgId: "",
-      trackingId: "",
-      data: agentContactData,
-    };
-    const event = new CustomEvent("eAgentContact", {
-      detail: contactEvent,
-      composed: true,
-      bubbles: true
-    });
-    document.dispatchEvent(event);
   }
 
   render() {
