@@ -16,7 +16,6 @@ import {
   query
 } from "lit-element";
 import styles from "./App.scss";
-import { logger } from "./sdk";
 
 interface FeedItem {
   title: string | undefined;
@@ -27,11 +26,6 @@ interface FeedItem {
 export default class MyCustomComponent extends LitElement {
   @property({ type: String, attribute: "rss-feed" }) rssFeedAddress = "";
   @property({ type: Number, attribute: "update-delay" }) updateDelay = 5000;
-
-  /**
-   * Replace this with the logic to obtain interaction ID you need
-   * through agentxJsApi.actions sub-module or through external props
-   */
 
   @internalProperty() rawFeedData?: NodeListOf<Element>;
   @internalProperty() renderFeedData?: FeedItem[];

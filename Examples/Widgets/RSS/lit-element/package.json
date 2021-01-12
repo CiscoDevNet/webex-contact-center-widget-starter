@@ -1,9 +1,9 @@
 {
-    "name": "webex-contact-center-widget-starter",
+    "name": "rss-feed-widget",
     "version": "1.0.0",
     "author": {
-        "name": "Yana Harris",
-        "email": "yanaha@cisco.com"
+        "name": "Kevin Hyde",
+        "email": "kehyde@cisco.com"
     },
     "license": "MIT",
     "repository": "git@github.com:CiscoDevNet/webex-contact-center-widget-starter.git",
