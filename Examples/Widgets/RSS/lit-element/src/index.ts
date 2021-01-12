@@ -16,9 +16,6 @@ import {
 } from "lit-element";
 import { agentxJsApi } from "@agentx/agentx-js-api";
 import "./components/App";
-/**
- * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
- */
 @customElement("rss-feed-widget")
 export default class MyCustomComponent extends LitElement {
   @property({ type: String, attribute: "rss-feed" }) rssFeedAddress = "";
