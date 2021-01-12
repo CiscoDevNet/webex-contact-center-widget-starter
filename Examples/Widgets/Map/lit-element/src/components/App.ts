@@ -227,7 +227,6 @@ export default class MyCustomComponent extends LitElement {
       <div class="container">
         ${(this.searchEnabled && this.generateSearchInput()) || nothing}
         <div id="map"></div>
-        <md-button @click=${this.refreshTokenData}>Update theme</md-button>
       </div>
     `;
   }
