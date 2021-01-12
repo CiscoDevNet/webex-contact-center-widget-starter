@@ -42,17 +42,6 @@ export default class MyCustomComponent extends LitElement {
     return styles;
   }
 
-  fetchUsersLocation = async () => {
-    return fetch("https://ipapi.co/json/")
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
-        console.log("[log] location data", data);
-        return data;
-      });
-  };
-
   fetchAllCounties = async () => {
     return await fetch(
       `https://api.covidactnow.org/v2/counties.json?apiKey=${this.apiKey}`
@@ -115,15 +104,6 @@ export default class MyCustomComponent extends LitElement {
     });
     ro.observe(this.flexContainer);
 
-    if (!this.selectedStatePostal) {
-      await this.fetchUsersLocation().then(userLocationData => {
-        console.log("[log] fetchUsersLocation DATA", userLocationData);
-        // TODO figure out county user Location
-
-        this.selectedStatePostal = userLocationData.region_code;
-      });
-    }
-
     if (this.selectedCountyState) {
       this.parseCountyAndState();
       await this.fetchAllCounties().then(result => {
@@ -146,14 +126,6 @@ export default class MyCustomComponent extends LitElement {
   render() {
     return html`
       <div class="container">
-        <!-- <div class="main-header">
-          <span class="header-text">COVID Cases by Location</span>
-          <md-tooltip message="expand widget">
-            <md-button circle hasRemoveStyle
-              ><md-icon slot="icon" name="maximize_16"></md-icon
-            ></md-button>
-          </md-tooltip>
-        </div> -->
         <div class="body">
           <div class="combobox-row">
             <md-combobox
