@@ -69,7 +69,7 @@ export class Sandbox extends LitElement {
     <md-theme lumos ?darkTheme=${this.darkTheme}>
       <div class="container">
         <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <md-timer-widget></md-timer-widget>
+          <timer-widget></timer-widget>
         </div>
       </div>
     </md-theme>
