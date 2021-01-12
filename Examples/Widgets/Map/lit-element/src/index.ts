@@ -16,22 +16,20 @@ import {
 } from "lit-element";
 import { agentxJsApi } from "@agentx/agentx-js-api";
 import "./components/App";
-/**
- * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
- */
 @customElement("map-widget")
-// name as map widget
-
-// leave comments for the adding of API key
 export default class MyCustomComponent extends LitElement {
-  /** 
-  Configure your AgentX Environment with the default values needed.
-  Latitude / Longitude: where you want the map to be centered by default
-  Search-Enabled: what search term the map should load with
-  Search: toggle search input field on/off
-  Zoom: set default zoom level of map
-  API Key: Add your Google Maps API key
-  **/
+  /**
+   * Configure your AgentX Environment with the default values needed.
+   * Latitude / Longitude: where you want the map to be centered by default
+   * Search-Enabled: what search term the map should load with
+   * Search: toggle search input field on/off
+   * Zoom: set default zoom level of map
+   * !! API KEY REQUIRED !!
+   * This Map Widget requires a Google Maps API Key that is configured to provide the JavaScript and Places API
+   * Get your key by visiting https://developers.google.com/maps/documentation/javascript/get-api-key
+   * Once Activated, place your API Key in the application config as an attribute
+   * e.g. "attributes": { "title": "Maps Widget", "api-key": "AI----3W--w5I-etc" },
+   */
 
   @property({ type: Number, reflect: true }) latitude = 47.6062;
   @property({ type: Number, reflect: true }) longitude = -122.3321;
