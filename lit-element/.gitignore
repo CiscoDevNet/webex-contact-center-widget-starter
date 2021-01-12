@@ -1,6 +1,6 @@
 /node_modules
 /dist
 yarn-error.log
-Examples/Widgets/RSS/lit-element/yarn-error.log
+**/yarn-error.log
 yarn.lock
 .npmrc
