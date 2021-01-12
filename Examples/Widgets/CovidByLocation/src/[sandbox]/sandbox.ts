@@ -99,7 +99,12 @@ export class Sandbox extends LitElement {
   }
 
   render() {
-    const key = "1318b408f01c4aa3b5f79dedc6c90848";
+   /**
+    * Property: apiKey
+    * Access API Key: Covid Act Now Website
+    * https://apidocs.covidactnow.org/access
+    */
+    const key = "";
 
     return html`
     <div class="toggle">
