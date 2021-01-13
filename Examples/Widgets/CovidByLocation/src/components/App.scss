@@ -1,0 +1,87 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+$main-border: 1px solid var(--md-primary-seperator-color, #ccc);
+
+:host {
+  display: block;
+  background-color: var(--md-primary-bg-color);
+  color: var(--md-primary-text-color);
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: $main-border;
+
+  .header-text {
+    font-size: 16px;
+  }
+}
+
+.sub-body {
+  padding: 0 12px;
+}
+
+.header {
+  padding: 5px 16px 16px;
+
+  .header-text {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 150%;
+    margin-right: 12px;
+  }
+}
+
+.button-right-align {
+  float: right;
+}
+
+.app-header {
+  padding: 16px;
+
+  .city-combobox::part(combobox) {
+    width: 260px;
+  }
+}
+
+.cases-by-location {
+  display: flex;
+  height: 100%;
+  flex-wrap: wrap;
+
+  .graph-widget {
+    border-right: $main-border;
+    width: 50%;
+    min-width: 294px;
+  }
+
+  .table-widget {
+    width: 49%;
+    min-width: 294px;
+  }
+
+  &.column-view {
+    .graph-widget {
+      border-right: unset;
+      width: 100%;
+    }
+
+    .table-widget {
+      width: 100%;
+    }
+  }
+}
