@@ -37,6 +37,9 @@ const common: webpack.Configuration = {
       "@img": pImg
     }
   },
+  externals: {
+    moment: 'moment'
+  },
   module: {
     rules: [
       {
