@@ -7,7 +7,7 @@
  */
 
 import { html, LitElement, customElement, css, internalProperty } from "lit-element";
-import { agentxJsApi } from "@agentx/agentx-js-api";
+import { Desktop } from "@wxcc-desktop/js-api";
 import "./components/App";
 /**
  * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
@@ -16,7 +16,7 @@ import "./components/App";
 export default class MyCustomComponent extends LitElement {
   @internalProperty() private contacts: string[] = [];
   
-  private readonly logger = agentxJsApi.logger.createLogger("[Widget-Using-JSAPI]");
+  private readonly logger = Desktop.logger.createLogger("[Widget-Using-JSAPI]");
 
   static get styles() {
     return css`

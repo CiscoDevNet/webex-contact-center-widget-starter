@@ -1,6 +1,6 @@
-import { agentxJsApi } from "@agentx/agentx-js-api";
+import { Desktop } from "@wxcc-desktop/js-api";
 
 /**
  * Replace the namespace here according to your widget/component name
  */
-export const logger = agentxJsApi.logger.createLogger("my-custom-widget");
+export const logger = Desktop.logger.createLogger("my-custom-widget");

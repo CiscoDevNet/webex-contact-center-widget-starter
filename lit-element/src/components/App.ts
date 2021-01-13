@@ -6,17 +6,17 @@
  *
  */
 
-import { agentxJsApi } from "@agentx/agentx-js-api";
+import { Desktop } from "@wxcc-desktop/js-api";
 import { html, LitElement, customElement, internalProperty } from "lit-element";
 import styles from "./App.scss";
 import { logger } from "./sdk";
-import { Service } from "@agentx/agentx-services-types";
+import { Service } from "@wxcc-desktop/js-api-types";
 import { Notifications } from "@uuip/unified-ui-platform-sdk";
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
   /**
    * Replace this with the logic to obtain interaction ID you need
-   * through agentxJsApi.actions sub-module or through external props
+   * through Desktop.actions sub-module or through external props
    */
   @internalProperty() sampleInteractionId: Service.Aqm.Contact.Interaction["interactionId"] =
     "58f76ca3-409f-11eb-8606-f1b296a9b969";
@@ -40,28 +40,28 @@ export default class MyCustomComponent extends LitElement {
 
   disconnectedCallback() {
     super. disconnectedCallback();
-    agentxJsApi.agentContact.removeAllEventListeners();
-    agentxJsApi.dialer.removeAllEventListeners();
-    agentxJsApi.screenpop.removeAllEventListeners()
+    Desktop.agentContact.removeAllEventListeners();
+    Desktop.dialer.removeAllEventListeners();
+    Desktop.screenpop.removeAllEventListeners()
   }
 
   async init() {
-    await agentxJsApi.config.init();
+    await Desktop.config.init();
   }
 
   subscribeScreenpopEvent() {
-    agentxJsApi.screenpop.addEventListener("eScreenPop", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
+    Desktop.screenpop.addEventListener("eScreenPop", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
   }
 
   subscribeDialerEvents() {
-    agentxJsApi.dialer.addEventListener("eOutdialFailed", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
+    Desktop.dialer.addEventListener("eOutdialFailed", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
   }
 
   subscribeAgentContactDataEvents() {
-    agentxJsApi.agentContact.addEventListener("eAgentContact", (msg: Service.Aqm.Contact.AgentContact) =>
+    Desktop.agentContact.addEventListener("eAgentContact", (msg: Service.Aqm.Contact.AgentContact) =>
       logger.info("AgentContact eAgentContact: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentContactAssigned",
       (msg: Service.Aqm.Contact.AgentContact) => {
         logger.info("AgentContact eAgentContactAssigned: ", msg);
@@ -69,7 +69,7 @@ export default class MyCustomComponent extends LitElement {
         logger.info(this.acceptedContacts);
       }
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentContactEnded",
       (msg: Service.Aqm.Contact.AgentContact) => {
         logger.info("AgentContact eAgentContactEnded: ", msg);
@@ -80,11 +80,11 @@ export default class MyCustomComponent extends LitElement {
         }
       }
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentContactWrappedUp",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactWrappedUp: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentOfferContact",
       (msg: Service.Aqm.Contact.AgentContact) => {
         logger.info("AgentContact eAgentOfferContact: ", msg);
@@ -93,7 +93,7 @@ export default class MyCustomComponent extends LitElement {
         logger.info(this.contacts);
       }
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentOfferContactRona",
       (msg: Service.Aqm.Contact.AgentContact) => {
         logger.info("AgentContact eAgentOfferContactRona: ", msg);
@@ -105,59 +105,59 @@ export default class MyCustomComponent extends LitElement {
         }
       }
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentOfferConsult",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentOfferConsult: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener("eAgentWrapup", (msg: Service.Aqm.Contact.AgentContact) =>
+    Desktop.agentContact.addEventListener("eAgentWrapup", (msg: Service.Aqm.Contact.AgentContact) =>
       logger.info("AgentContact eAgentWrapup: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener("eAgentContactHeld", (msg: Service.Aqm.Contact.AgentContact) =>
+    Desktop.agentContact.addEventListener("eAgentContactHeld", (msg: Service.Aqm.Contact.AgentContact) =>
       logger.info("AgentContact eAgentContactHeld: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentContactUnHeld",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactUnHeld: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eCallRecordingStarted",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eCallRecordingStarted: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentConsultCreated",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultCreated: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentConsultConferenced",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultConferenced: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentConsultEnded",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEnded: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentCtqCancelled",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelled: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener("eAgentConsulting", (msg: any) =>
+    Desktop.agentContact.addEventListener("eAgentConsulting", (msg: any) =>
       logger.info("AgentContact eAgentConsulting: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentConsultFailed",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultFailed: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentConsultEndFailed",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEndFailed: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener("eAgentCtqFailed", (msg: any) =>
+    Desktop.agentContact.addEventListener("eAgentCtqFailed", (msg: any) =>
       logger.info("AgentContact eAgentCtqFailed: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentCtqCancelFailed",
       (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
     );
-    agentxJsApi.agentContact.addEventListener(
+    Desktop.agentContact.addEventListener(
       "eAgentConsultConferenceEndFailed",
       (msg: Service.Aqm.Contact.AgentContact) =>
         logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
@@ -173,7 +173,7 @@ export default class MyCustomComponent extends LitElement {
   }
 
   async changeState(s: "Available" | "Idle") {
-    const agentState = await agentxJsApi.agentStateInfo.stateChange({
+    const agentState = await Desktop.agentStateInfo.stateChange({
       state: s,
       auxCodeIdArray: "0",
     });
@@ -181,31 +181,31 @@ export default class MyCustomComponent extends LitElement {
   }
 
   async getAgentAddressBooks() {
-    const books = await agentxJsApi.agentStateInfo.fetchAddressBooks();
+    const books = await Desktop.agentStateInfo.fetchAddressBooks();
     logger.info("Address books: ", books);
   }
 
   async getAgentInfo() {
-    const latestData = agentxJsApi.agentStateInfo.latestData;
+    const latestData = Desktop.agentStateInfo.latestData;
     logger.info("AgentStateInfo latestData: ", latestData);
   }
 
   getClientLocale() {
-    logger.info("Client locale: ", agentxJsApi.config.clientLocale);
+    logger.info("Client locale: ", Desktop.config.clientLocale);
   }
 
   async getToken() {
-    const token = await agentxJsApi.actions.getToken();
+    const token = await Desktop.actions.getToken();
     logger.info(token);
   }
 
   async getIdleCodes() {
-    const idle = await agentxJsApi.actions.getIdleCodes();
+    const idle = await Desktop.actions.getIdleCodes();
     logger.info(idle);
   }
 
   async getwrapupCodes() {
-    const wrapup = await agentxJsApi.actions.getWrapUpCodes();
+    const wrapup = await Desktop.actions.getWrapUpCodes();
     logger.info(wrapup);
   }
 
@@ -218,7 +218,7 @@ export default class MyCustomComponent extends LitElement {
         data: "Lorem Ipsum Dolor"
       }
     };
-    const [ status, reason, mode ]: [ Notifications.ItemMeta.Status, Notifications.ItemMeta.StatusChangeEventReason, Notifications.ItemMeta.Mode ] = await agentxJsApi.actions.fireGeneralAutoDismissNotification(raw as Notifications.ItemMeta.Raw & { data: { mode: Notifications.ItemMeta.Mode.AutoDismiss; }; })
+    const [ status, reason, mode ]: [ Notifications.ItemMeta.Status, Notifications.ItemMeta.StatusChangeEventReason, Notifications.ItemMeta.Mode ] = await Desktop.actions.fireGeneralAutoDismissNotification(raw as Notifications.ItemMeta.Raw & { data: { mode: Notifications.ItemMeta.Mode.AutoDismiss; }; })
     logger.info(status, reason, mode);
   }
 
@@ -229,7 +229,7 @@ export default class MyCustomComponent extends LitElement {
       state: "Available",
     };
 
-    this.buddyAgents = await agentxJsApi.agentContact.buddyAgents({
+    this.buddyAgents = await Desktop.agentContact.buddyAgents({
       data: buddyAgentPayload,
     });
     logger.info(this.buddyAgents);
@@ -243,28 +243,28 @@ export default class MyCustomComponent extends LitElement {
       type: "inboundqueue",
     };
 
-    this.vTeam = await agentxJsApi.agentContact.vteamList({
+    this.vTeam = await Desktop.agentContact.vteamList({
       data: vTeamPayload,
     });
     logger.info(this.vTeam, this.vTeam!.data.data.vteamList);
   }
 
   async acceptInteraction(interactionId: string) {
-    let acceptInteraction = await agentxJsApi.agentContact.accept({
+    let acceptInteraction = await Desktop.agentContact.accept({
       interactionId: interactionId,
     });
     logger.info(acceptInteraction);
   }
 
   async endInteraction() {
-    let endedInteraction = await agentxJsApi.agentContact.end({
+    let endedInteraction = await Desktop.agentContact.end({
       interactionId: this.sampleInteractionId,
     });
     logger.info(endedInteraction);
   }
 
   async wrapUpInteraction() {
-    let wrappedUpInteraction = await agentxJsApi.agentContact.wrapup({
+    let wrappedUpInteraction = await Desktop.agentContact.wrapup({
       interactionId: this.sampleInteractionId,
       data: {
         wrapUpReason: "Example reason here",
@@ -276,7 +276,7 @@ export default class MyCustomComponent extends LitElement {
   }
 
   async consultWithAgent() {
-    let consult = await agentxJsApi.agentContact.consult({
+    let consult = await Desktop.agentContact.consult({
       interactionId: this.sampleInteractionId,
       data: {
         agentId: this.agentId,
@@ -289,7 +289,7 @@ export default class MyCustomComponent extends LitElement {
   }
 
   async consultConferenceWithAgent() {
-    let consult = await agentxJsApi.agentContact.consultConference({
+    let consult = await Desktop.agentContact.consultConference({
       interactionId: this.sampleInteractionId,
       data: {
         agentId: this.agentId,
@@ -301,7 +301,7 @@ export default class MyCustomComponent extends LitElement {
   }
 
   async endConferenceWithAgent() {
-    let consult = await agentxJsApi.agentContact.consultEnd({
+    let consult = await Desktop.agentContact.consultEnd({
       interactionId: this.sampleInteractionId,
       isConsult: false,
     });
@@ -309,7 +309,7 @@ export default class MyCustomComponent extends LitElement {
   }
 
   async endConsultConferenceWithAgent() {
-    let consult = await agentxJsApi.agentContact.consultEnd({
+    let consult = await Desktop.agentContact.consultEnd({
       interactionId: this.sampleInteractionId,
       isConsult: true,
     });
@@ -317,7 +317,7 @@ export default class MyCustomComponent extends LitElement {
   }
 
   async consultTransferToAgent() {
-    let consult = await agentxJsApi.agentContact.consultTransfer({
+    let consult = await Desktop.agentContact.consultTransfer({
       interactionId: this.sampleInteractionId,
       data: {
         agentId: this.agentId,
@@ -330,7 +330,7 @@ export default class MyCustomComponent extends LitElement {
   }
 
   async vTeamTransfer() {
-    let consult = await agentxJsApi.agentContact.vteamTransfer({
+    let consult = await Desktop.agentContact.vteamTransfer({
       interactionId: this.sampleInteractionId,
       data: {
         vteamId: this.vTeam?.data.data.vteamList[0].analyzerId,
@@ -345,7 +345,7 @@ export default class MyCustomComponent extends LitElement {
       <div class="container">
         <h1>Custom Component Contents</h1>
         <md-tabs>
-          <md-tab slot="tab">agentxJsApi.agentStateInfo</md-tab>
+          <md-tab slot="tab">Desktop.agentStateInfo</md-tab>
           <md-tab-panel slot="panel">
             <div class="action-container">
               <h2>Monitor data output in console log</h2>
@@ -368,10 +368,10 @@ export default class MyCustomComponent extends LitElement {
             </div>
           </md-tab-panel>
 
-          <md-tab slot="tab">agentxJsApi.agentContact</md-tab>
+          <md-tab slot="tab">Desktop.agentContact</md-tab>
           <md-tab-panel slot="panel">
             <div class="action-container">
-              <h2>agentxJsApi.agentContact sub-module</h2>
+              <h2>Desktop.agentContact sub-module</h2>
               <h3>Get Buddy Agents</h3>
               <md-button @button-click=${() => this.getBuddyAgents()}
                 >Get Buddy Agents</md-button
@@ -464,29 +464,29 @@ export default class MyCustomComponent extends LitElement {
             </div>
           </md-tab-panel>
 
-          <md-tab slot="tab">agentxJsApi.shortcutKey</md-tab>
+          <md-tab slot="tab">Desktop.shortcutKey</md-tab>
           <md-tab-panel slot="panel">
             <div class=“action-container”>
               <h2>Monitor data output in console log</h2>
-              <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.DEFAULT_SHORTCUT_KEYS)}
+              <md-button @button-click=${() => logger.info(Desktop.shortcutKey.DEFAULT_SHORTCUT_KEYS)}
                   >Get Default Shortcut Keys</md-button
                 >
 
-                <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.MODIFIERS)}
+                <md-button @button-click=${() => logger.info(Desktop.shortcutKey.MODIFIERS)}
                   >Get Shortcut Keys Modifiers</md-button
                 >
 
-                <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.REGISTERED_KEYS)}
+                <md-button @button-click=${() => logger.info(Desktop.shortcutKey.REGISTERED_KEYS)}
                   >Get all registered Shortcut Keys</md-button
                 >
 
-                <md-button @button-click=${() => logger.info(agentxJsApi.shortcutKey.getRegisteredKeys())}
+                <md-button @button-click=${() => logger.info(Desktop.shortcutKey.getRegisteredKeys())}
                   >Get all registered Shortcut Keys</md-button
                 >
             </div>
           </md-tab-panel>
 
-          <md-tab slot="tab">agentxJsApi.actions</md-tab>
+          <md-tab slot="tab">Desktop.actions</md-tab>
           <md-tab-panel slot="panel">
             <div class="action-container">
               <h2>Monitor data output in console log</h2>
