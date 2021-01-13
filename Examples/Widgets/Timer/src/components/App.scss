@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
+ @import "../assets/styles/variables";
  
 :host {
     display: block;
@@ -13,7 +15,13 @@
 }
 
 .container {
-    padding: 20px;
+    width: 136px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    font-family: var( --font-family-light);
+    font-weight: 300;
+    font-size: .75rem;
 }
 
 .action-container {
@@ -23,4 +31,14 @@
     md-button {
         margin: 10px 0;
     }
+}
+
+.timer-unit {
+    border-radius: 100%;
+    width: 36px;
+    height: 36px;
+    border: 2px solid #EDEDED;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
