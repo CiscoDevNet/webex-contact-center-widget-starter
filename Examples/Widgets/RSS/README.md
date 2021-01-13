@@ -8,3 +8,5 @@ Setting up your development environment:
 3. Run `yarn start` to start the playground app.
 
 To use the RSS Feed Widget, add a URL src link to an XML RSS feed in the 'rss-feed' attribute.
+
+![Widget Example Screenshot](./static/map-screenshot.png)
