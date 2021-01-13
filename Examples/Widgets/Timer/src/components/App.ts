@@ -19,9 +19,9 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() now = DateTime.fromISO("19:56:19Z")
   @internalProperty() end = DateTime.fromISO("19:56:19Z").plus(Duration.fromISO(this.duration))
   @internalProperty() remaining = this.end.diff(DateTime.local()).toFormat('hh:mm:ss')
-  @internalProperty() remainingHours = this.end.diff(DateTime.local()).toFormat('hh')
-  @internalProperty() remainingMinutes = this.end.diff(DateTime.local()).milliseconds
-  @internalProperty() remainingSeconds = this.end.diff(DateTime.local()).toFormat('ss')
+  @internalProperty() remainingHours = this.remaining.split(":")[0]
+  @internalProperty() remainingMinutes = this.remaining.split(":")[1]
+  @internalProperty() remainingSeconds = this.remaining.split(":")[2]
 
   @internalProperty() timer: Duration = Duration.fromObject({ hours: 8 })
 
@@ -29,9 +29,9 @@ export default class MyCustomComponent extends LitElement {
     super.connectedCallback();
     setInterval(() => {
       this.remaining = this.end.diff(DateTime.local()).toFormat('hh:mm:ss') // This is the meat
-      this.remainingHours = this.end.diff(DateTime.local()).toFormat('hh')
-      this.remainingMinutes = this.end.diff(DateTime.local()).milliseconds
-      this.remainingSeconds = this.end.diff(DateTime.local()).toFormat('s')
+      this.remainingHours = this.remaining.split(":")[0]
+      this.remainingMinutes = this.remaining.split(":")[1]
+      this.remainingSeconds = this.remaining.split(":")[2]
     }, 1000)
   }
 
@@ -43,29 +43,12 @@ export default class MyCustomComponent extends LitElement {
     return styles;
   }
 
-  formatNumber = (interval: string): string => { // this might still be useful
-    function padDigit(num: number) {
-      if (num < 10) {
-        return `0${num}`
-      } else return num.toString()
-    }
-    switch (interval) {
-      case "hour":
-        return padDigit(DateTime.local().hour).concat("h")
-      case "minute":
-        return padDigit(DateTime.local().minute).concat("m")
-      case "second":
-        return padDigit(DateTime.local().second).concat("s")
-      default:
-        return "00"
-    }
-  }
-
   render() {
     return html`
       <div class="container">
-        <span>${this.remainingHours}h:${this.remainingMinutes}m:${this.remainingSeconds}s</span>
-        <p>${this.remaining}</p>
+        <div class="timer-unit hours">${this.remainingHours}h</div>
+        <div class="timer-unit minutes">${this.remainingMinutes}m</div>
+        <div class="timer-unit seconds">${this.remainingSeconds}s</div>
       </div>
     `;
   }
