@@ -14,7 +14,7 @@ import {
   internalProperty,
   property
 } from "lit-element";
-import { agentxJsApi } from "@agentx/agentx-js-api";
+import { Desktop } from "@wxcc-desktop/js-api";
 import "./components/App";
 @customElement("rss-feed-widget")
 export default class MyCustomComponent extends LitElement {
@@ -24,7 +24,7 @@ export default class MyCustomComponent extends LitElement {
 
   @internalProperty() private contacts: string[] = [];
 
-  private readonly logger = agentxJsApi.logger.createLogger(
+  private readonly logger = Desktop.logger.createLogger(
     "[Widget-Using-JSAPI]"
   );
 
