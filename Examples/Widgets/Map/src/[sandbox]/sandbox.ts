@@ -89,7 +89,7 @@ export class Sandbox extends LitElement {
     <md-theme lumos ?darkTheme=${this.darkTheme}>
       <div class="container">
         <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <map-widget api-key="" search-enabled></map-widget>
+          <map-widget api-key="AIzaSyDlVE8flzwPFbSzuGdaaatrGrG3WIULw5I" search-enabled></map-widget>
         </div>
       </div>
     </md-theme>

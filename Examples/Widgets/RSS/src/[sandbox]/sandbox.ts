@@ -8,7 +8,6 @@
 import "@momentum-ui/web-components";
 import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
-import { agentContactData } from "./sandbox.mock";
 import styles from "./sandbox.scss";
 
 @customElement("wcc-widget-starter-lit")
