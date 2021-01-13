@@ -126,7 +126,7 @@ export default class MyCustomComponent extends LitElement {
   render() {
     return html`
       <div class="container">
-        <div class="body">
+        <div class="app-header">
           <div class="combobox-row">
             <md-combobox
               shape="pill"

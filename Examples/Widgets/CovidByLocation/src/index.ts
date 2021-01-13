@@ -20,7 +20,7 @@ export default class CovidByLocation extends LitElement {
    * Access API Key: Covid Act Now Website
    * https://apidocs.covidactnow.org/access
    */
-  @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "1318b408f01c4aa3b5f79dedc6c90848";
+  @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
   
   static get styles() {
     return css`
@@ -35,7 +35,7 @@ export default class CovidByLocation extends LitElement {
  
   render() {
     return html`
-      <my-custom-component api-key=${this.apiKey} selectedCountyState=${this.selectedCountyState}></my-custom-component>
+      <my-custom-component style="height: 100%" api-key=${this.apiKey} selectedCountyState=${this.selectedCountyState}></my-custom-component>
     `;
   }
 }
