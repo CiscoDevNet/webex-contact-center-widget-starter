@@ -8,6 +8,16 @@
 }
 
 .graph-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .sub-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
   md-radio {
     margin-right: 0.5rem;
   }

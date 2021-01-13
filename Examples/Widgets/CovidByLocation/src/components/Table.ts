@@ -60,7 +60,7 @@ export default class MyCustomComponent extends LitElement {
     var ro = new ResizeObserver((entries: any) => {
       for (let entry of entries) {
         const cr = entry.contentRect;
-        this.subBody.style.height = `${cr.height - 27}px`;
+        this.subBody.style.height = `${cr.height - 45}px`;
       }
     });
     ro.observe(this.tableContainer);
