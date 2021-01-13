@@ -1,0 +1,24 @@
+@import "./App.scss";
+
+.chart-container {
+  position: relative;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+}
+
+.graph-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .sub-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  md-radio {
+    margin-right: 0.5rem;
+  }
+}
