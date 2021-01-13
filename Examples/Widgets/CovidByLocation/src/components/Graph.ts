@@ -67,6 +67,9 @@ export default class MyCustomComponent extends LitElement {
   };
 
   renderChart = () => {
+    if (this.myChart) {
+      this.myChart.destroy();
+    }
     const ctx = (this.shadowRoot?.getElementById("myChart") as any).getContext(
       "2d"
     );
