@@ -80,6 +80,7 @@ export default class MyCustomComponent extends LitElement {
   update(changedProperties: PropertyValues) {
     super.update(changedProperties);
     if (
+      changedProperties.has("apiKey") ||
       changedProperties.has("search") ||
       changedProperties.has("latitude") ||
       changedProperties.has("longitude") ||
