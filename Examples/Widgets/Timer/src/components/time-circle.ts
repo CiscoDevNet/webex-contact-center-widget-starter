@@ -14,7 +14,6 @@ export default class MyCustomComponent extends LitElement {
   @property({ type: Number, attribute: "time-limit" }) timeLimit = 0;
   @property({ type: Number, attribute: "time-left" }) timeLeft = 0;
   @property({ type: String}) color = "green";
-
   @query(".wrapper") wrapper!: HTMLElement;
   @internalProperty() FULL_DASH_ARRAY = 283;
 
