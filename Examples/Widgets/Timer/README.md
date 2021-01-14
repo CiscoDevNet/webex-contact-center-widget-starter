@@ -11,3 +11,5 @@ To use the Timer Widget:
 1. Pass a time to the `duration` attribute following the string format: "hh:mm:ss".
 2. Toggle the boolean attribute `paused` ro stop and start the timer.
 3. Changing the `duration` attribute will reset the timer beginning at the new time.
+
+![Widget Example Screenshot](./static/timer_screenshot.png)
