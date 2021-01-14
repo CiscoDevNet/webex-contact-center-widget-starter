@@ -8,7 +8,7 @@
 
 :host {
   display: block;
-  background-color: var(--md-primary-bg-color);
+  background-color: transparent;
   color: var(--md-primary-text-color);
 }
 
@@ -24,7 +24,7 @@ md-badge::part(badge) {
 }
 
 .link-wrapper {
-  width: 300px;
+  width: 100%;
   display: flex;
   justify-content: flex-start;
   overflow: hidden;
@@ -46,11 +46,13 @@ md-badge::part(badge) {
 }
 
 md-link {
-  width: 300px;
   text-align: left;
-  &:host {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+  width: 100%;
+}
+md-link::part(link) {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  overflow: hidden;
 }
