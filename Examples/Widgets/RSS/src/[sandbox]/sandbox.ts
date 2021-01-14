@@ -8,7 +8,6 @@
 import "@momentum-ui/web-components";
 import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
-import { agentContactData } from "./sandbox.mock";
 import styles from "./sandbox.scss";
 
 @customElement("wcc-widget-starter-lit")
@@ -83,7 +82,7 @@ export class Sandbox extends LitElement {
     <md-theme lumos ?darkTheme=${this.darkTheme}>
       <div class="container">
         <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml"></rss-feed-widget>
+          <rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml" update-delay=5000></rss-feed-widget>
         </div>
       </div>
     </md-theme>

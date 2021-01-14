@@ -41,7 +41,7 @@ export default class MyCustomComponent extends LitElement {
 
   render() {
     return html`
-      <rss-component rss-feed=${this.rssFeedAddress}></rss-component>
+      <rss-component rss-feed=${this.rssFeedAddress} update-delay=${this.updateDelay}></rss-component>
     `;
   }
 }
