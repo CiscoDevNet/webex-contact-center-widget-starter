@@ -6,18 +6,16 @@
  *
  */
 
-import { html, LitElement, customElement, css, internalProperty } from "lit-element";
-import { agentxJsApi } from "@agentx/agentx-js-api";
+import { html, LitElement, customElement, css, property } from "lit-element";
 import "./components/App";
 /**
  * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
  */
 @customElement("timer-widget")
 export default class MyCustomComponent extends LitElement {
-  @internalProperty() private contacts: string[] = [];
+  @property({ type: String, reflect: true }) duration = ""
+  @property({ type: Boolean }) paused = false
   
-  private readonly logger = agentxJsApi.logger.createLogger("[Widget-Using-JSAPI]");
-
   static get styles() {
     return css`
       :host {
@@ -31,7 +29,7 @@ export default class MyCustomComponent extends LitElement {
  
   render() {
     return html`
-      <timer-component></timer-component>
+      <timer-component duration=${this.duration} ?paused=${this.paused}></timer-component>
     `;
   }
 }
