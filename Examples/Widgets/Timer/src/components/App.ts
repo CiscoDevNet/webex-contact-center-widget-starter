@@ -60,15 +60,16 @@ export default class MyCustomComponent extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div class="container" role="timer"
+        aria-label="${this.remainingHours} hours, ${this.remainingMinutes} minutes, ${this.remainingSeconds} seconds remaining">
         <time-circle time-limit=8 time-left=${Number(this.remainingHours)} color=${this.hoursColor}>
-          <div slot="time-unit" class="hours">${this.remainingHours}h</div>
+          <div slot="time-unit" class="hours" aria-label="${this.remainingHours} hours">${this.remainingHours}h</div>
         </time-circle>
         <time-circle time-limit=60 time-left=${Number(this.remainingMinutes)} color=${this.minutesColor}>
-          <div slot="time-unit" class="minutes">${this.remainingMinutes}m</div>
+          <div slot="time-unit" class="minutes" aria-label="${this.remainingMinutes} minutes">${this.remainingMinutes}m</div>
         </time-circle>
         <time-circle time-limit=60 time-left=${Number(this.remainingSeconds)} color=${this.secondsColor}>
-          <div slot="time-unit" class="seconds">${this.remainingSeconds}s</div>
+          <div slot="time-unit" class="seconds" aria-label="${this.remainingSeconds} seconds">${this.remainingSeconds}s</div>
         </time-circle>
       </div>
     `;
