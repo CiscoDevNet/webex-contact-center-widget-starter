@@ -15,8 +15,8 @@
 }
 
 .container {
-  //   width: 136px;
-  //   display: flex;
+  width: 136px;
+  display: flex;
   justify-content: space-between;
   flex-direction: row;
   font-family: var(--font-family-light);
@@ -31,16 +31,6 @@
   md-button {
     margin: 10px 0;
   }
-}
-
-.timer-unit {
-  border-radius: 100%;
-  width: 36px;
-  height: 36px;
-  border: 2px solid #ededed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* Sets the containers height and width */
@@ -93,7 +83,7 @@
   transform-origin: center;
 
   /* One second aligns with the speed of the countdown timer */
-  transition: 1s linear all;
+  transition: 100ms linear all;
 
   /* Allows the ring to change color when the color value updates */
   stroke: currentColor;
@@ -102,8 +92,4 @@
 .base-timer__svg {
   /* Flips the svg and makes the animation to move left-to-right */
   transform: scaleX(-1);
-}
-
-.green {
-    stroke: blue;
 }
