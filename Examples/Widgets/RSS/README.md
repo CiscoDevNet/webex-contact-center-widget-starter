@@ -9,4 +9,4 @@ Setting up your development environment:
 
 To use the RSS Feed Widget, add a URL src link to an XML RSS feed in the 'rss-feed' attribute.
 
-![Widget Example Screenshot](./static/map-screenshot.png)
+![Widget Example Screenshot](./static/rss-screenshot.png)
