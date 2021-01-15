@@ -7,7 +7,8 @@ Please refer the Provisioning --> Desktop Layout section in Cisco Webex Contact 
 * **Header_Added_Desktop Layout.json** - This layout have RSS widget added in Header Section
 * **Demo_Widgets_Added_Desktop Layout.json** - This layout have RSS widget in Header, map widget and covid-by-location widget in the desktop layout (Note: google map API key is required for these widget in attribute section)
 
-**Disclaimer** 
+**Disclaimer**
+
 These layouts are only samples and are NOT guaranteed to be bug free and production quality.
 
 
