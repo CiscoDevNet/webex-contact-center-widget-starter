@@ -7,7 +7,7 @@
  */
 
 import { html, LitElement, customElement, css, internalProperty } from "lit-element";
-import { Desktop } from "@wxcc-desktop/js-api";
+import { Desktop } from "@wxcc-desktop/sdk";
 import "./components/App";
 /**
  * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"

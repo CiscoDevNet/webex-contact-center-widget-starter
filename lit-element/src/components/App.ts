@@ -6,11 +6,11 @@
  *
  */
 
-import { Desktop } from "@wxcc-desktop/js-api";
+import { Desktop } from "@wxcc-desktop/sdk";
 import { html, LitElement, customElement, internalProperty } from "lit-element";
 import styles from "./App.scss";
 import { logger } from "./sdk";
-import { Service } from "@wxcc-desktop/js-api-types";
+import { Service } from "@wxcc-desktop/sdk-types";
 import { Notifications } from "@uuip/unified-ui-platform-sdk";
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {

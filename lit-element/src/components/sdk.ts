@@ -1,4 +1,4 @@
-import { Desktop } from "@wxcc-desktop/js-api";
+import { Desktop } from "@wxcc-desktop/sdk";
 
 /**
  * Replace the namespace here according to your widget/component name
