@@ -152,7 +152,7 @@ export default class MyCustomComponent extends LitElement {
   render() {
     return html`
       <div class="container">
-        <md-badge color="blue">
+        <md-badge color="blue" width="240px">
           <md-icon name="icon-rss-circle_24" color="blue" size="16"></md-icon>
           ${this.loading
             ? html`
