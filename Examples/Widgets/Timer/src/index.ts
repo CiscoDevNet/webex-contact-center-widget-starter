@@ -6,8 +6,9 @@
  *
  */
 
-import { html, LitElement, customElement, css, property } from "lit-element";
+import { html, LitElement, customElement, css, property, query } from "lit-element";
 import "./components/App";
+import TimerComponent from "./components/App";
 /**
  * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
  */
@@ -15,7 +16,14 @@ import "./components/App";
 export default class MyCustomComponent extends LitElement {
   @property({ type: String, reflect: true }) duration = ""
   @property({ type: Boolean }) paused = false
-  
+
+  @query("timer-component") timerComponent!: TimerComponent;
+
+  public setTimer = (time: string) => {
+    this.duration = time;
+    this.timerComponent.resetDuration(time);
+  }
+
   static get styles() {
     return css`
       :host {
@@ -26,7 +34,7 @@ export default class MyCustomComponent extends LitElement {
       }
     `;
   }
- 
+
   render() {
     return html`
       <timer-component duration=${this.duration} ?paused=${this.paused}></timer-component>
