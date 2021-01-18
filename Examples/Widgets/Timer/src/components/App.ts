@@ -44,8 +44,7 @@ export default class TimerComponent extends LitElement {
   }
   
   disconnectedCallback(){
-    super.disconnectedCallback()
-    alert(`time saved as ${this.remaining}`)
+    super.disconnectedCallback();
   }
 
   resetDuration = (time:string) => {
