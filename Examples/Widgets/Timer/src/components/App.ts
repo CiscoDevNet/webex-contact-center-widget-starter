@@ -11,7 +11,7 @@ import { html, LitElement, customElement, internalProperty, property, query, Pro
 import styles from "./App.scss";
 import "./time-circle"
 @customElement("timer-component")
-export default class MyCustomComponent extends LitElement {
+export default class TimerComponent extends LitElement {
   @property({ type: String, reflect: true }) duration = ""
   @property({ type: Boolean }) paused = false
   @property({ type: String, attribute: "hours-color" }) hoursColor = "#0A78CC"
@@ -28,28 +28,28 @@ export default class MyCustomComponent extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.resetDuration()
+    const savedTime = window.localStorage.getItem("time-remaining") ? window.localStorage.getItem("time-remaining")! : this.duration;
+    this.resetDuration(savedTime)
     setInterval(() => {
       if (!this.paused) {
         this.durationData = this.durationData.minus({ seconds: 1 })
-        this.remaining = this.durationData.toFormat('hh:mm:ss')
+        this.remaining = this.durationData.toFormat('hh:mm:ss');
         this.remainingHours = this.remaining.split(":")[0]
         this.remainingMinutes = this.remaining.split(":")[1]
         this.remainingSeconds = this.remaining.split(":")[2]
         this.duration = this.remaining
+        window.localStorage.setItem("time-remaining", this.remaining)
       }
     }, 1000)
   }
-
-  updated(changedProperties: PropertyValues) {
-    super.updated(changedProperties)
-    if (changedProperties.has("duration")) {
-      this.resetDuration()
-    }
+  
+  disconnectedCallback(){
+    super.disconnectedCallback()
+    alert(`time saved as ${this.remaining}`)
   }
 
-  resetDuration = () => {
-    const durationData = this.duration.split(":");
+  resetDuration = (time:string) => {
+    const durationData = time.split(":");
     const durationObj = { hours: Number(durationData[0]), minutes: Number(durationData[1]), seconds: Number(durationData[2]) }
     this.durationData = Duration.fromObject(durationObj)
   }
