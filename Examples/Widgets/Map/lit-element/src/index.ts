@@ -14,7 +14,7 @@ import {
   internalProperty,
   property
 } from "lit-element";
-import { Desktop } from "@wxcc-desktop/js-api";
+import { Desktop } from "@wxcc-desktop/sdk";
 import "./components/App";
 @customElement("map-widget")
 export default class MyCustomComponent extends LitElement {

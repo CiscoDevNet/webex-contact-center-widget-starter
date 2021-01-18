@@ -14,7 +14,7 @@ import {
   internalProperty,
   property
 } from "lit-element";
-import { Desktop } from "@wxcc-desktop/js-api";
+import { Desktop } from "@wxcc-desktop/sdk";
 import "./components/App";
 @customElement("rss-feed-widget")
 export default class MyCustomComponent extends LitElement {
