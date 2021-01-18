@@ -10,3 +10,5 @@ Setting up your development environment:
 To get a Google Maps API Key:
 1. Go to https://developers.google.com/maps/documentation/javascript/get-api-key for setup instructions
 2. Activate both the Maps JavaScript API and the Places API for full operability.
+
+![Widget Example Screenshot](./static/map-screenshot.png)
