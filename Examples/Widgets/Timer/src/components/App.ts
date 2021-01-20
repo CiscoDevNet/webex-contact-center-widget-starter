@@ -7,7 +7,7 @@
  */
 
 import { DateTime, Duration, Interval } from "luxon";
-import { html, LitElement, customElement, internalProperty, property, query, PropertyValues } from "lit-element";
+import { html, LitElement, customElement, internalProperty, property, query } from "lit-element";
 import styles from "./App.scss";
 import "./time-circle"
 @customElement("timer-component")
@@ -59,10 +59,6 @@ export default class TimerComponent extends LitElement {
         }
       }
     }, 1000)
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback()
   }
 
   setDuration = (startTime: string, duration: string) => {
