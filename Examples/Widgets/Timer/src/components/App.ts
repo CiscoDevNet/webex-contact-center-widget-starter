@@ -49,6 +49,13 @@ export default class TimerComponent extends LitElement {
           this.paused = true;
           window.localStorage.removeItem("timer-start");
           window.localStorage.removeItem("timer-duration")
+          this.dispatchEvent(new CustomEvent("timer-expired", {
+            bubbles: true,
+            composed: true,
+            detail: {
+              payload: `${this.duration} long timer has expired`
+            }
+          }))
         }
       }
     }, 1000)
