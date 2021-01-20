@@ -19,6 +19,7 @@ export default class TimerComponent extends LitElement {
   @property({ type: String, attribute: "minutes-color" }) minutesColor = "#73A321"
   @property({ type: String, attribute: "seconds-color" }) secondsColor = "#875AE0"
 
+  @internalProperty() endTime = "";
   @internalProperty() durationData!: Duration;
   @internalProperty() remainingHours!: string;
   @internalProperty() remainingMinutes!: string;
@@ -64,6 +65,7 @@ export default class TimerComponent extends LitElement {
     const durationObj = { hours: Number(hours), minutes: Number(minutes), seconds: Number(seconds) }
     const start = DateTime.fromISO(startTime)
     const end = start.plus(Duration.fromObject(durationObj))
+    this.endTime = end.toLocal().toFormat("h:mm:ss a")
     const now = DateTime.local()
     if (now > end) { this.resetTimer() }
     const remaining = Interval.fromDateTimes(now, end)
@@ -85,18 +87,22 @@ export default class TimerComponent extends LitElement {
 
   render() {
     return html`
-      <div class="container" role="timer"
-        aria-label="${this.remainingHours} hours, ${this.remainingMinutes} minutes, ${this.remainingSeconds} seconds remaining">
-        <time-circle time-limit=8 time-left=${Number(this.remainingHours)} color=${this.hoursColor}>
-          <div slot="time-unit" class="hours" aria-label="${this.remainingHours} hours">${this.remainingHours}h</div>
-        </time-circle>
-        <time-circle time-limit=60 time-left=${Number(this.remainingMinutes)} color=${this.minutesColor}>
-          <div slot="time-unit" class="minutes" aria-label="${this.remainingMinutes} minutes">${this.remainingMinutes}m</div>
-        </time-circle>
-        <time-circle time-limit=60 time-left=${Number(this.remainingSeconds)} color=${this.secondsColor}>
-          <div slot="time-unit" class="seconds" aria-label="${this.remainingSeconds} seconds">${this.remainingSeconds}s</div>
-        </time-circle>
-      </div>
+      <md-tooltip message="Timer expires at ${this.endTime}">
+        <div class="container" role="timer"
+          aria-label="${this.remainingHours} hours, ${this.remainingMinutes} minutes, ${this.remainingSeconds} seconds remaining">
+          <time-circle time-limit=8 time-left=${Number(this.remainingHours)} color=${this.hoursColor}>
+            <div slot="time-unit" class="hours" aria-label="${this.remainingHours} hours">${this.remainingHours}h</div>
+          </time-circle>
+          <time-circle time-limit=60 time-left=${Number(this.remainingMinutes)} color=${this.minutesColor}>
+            <div slot="time-unit" class="minutes" aria-label="${this.remainingMinutes} minutes">${this.remainingMinutes}m
+            </div>
+          </time-circle>
+          <time-circle time-limit=60 time-left=${Number(this.remainingSeconds)} color=${this.secondsColor}>
+            <div slot="time-unit" class="seconds" aria-label="${this.remainingSeconds} seconds">${this.remainingSeconds}s
+            </div>
+          </time-circle>
+        </div>
+      </md-tooltip>
     `;
   }
 }
