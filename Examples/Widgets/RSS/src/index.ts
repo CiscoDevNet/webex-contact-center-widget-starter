@@ -14,7 +14,6 @@ import {
   internalProperty,
   property
 } from "lit-element";
-import { agentxJsApi } from "@agentx/agentx-js-api";
 import "./components/App";
 @customElement("rss-feed-widget")
 export default class MyCustomComponent extends LitElement {
@@ -23,10 +22,6 @@ export default class MyCustomComponent extends LitElement {
   @property({ type: Number, attribute: "update-delay" }) updateDelay = 5000;
 
   @internalProperty() private contacts: string[] = [];
-
-  private readonly logger = agentxJsApi.logger.createLogger(
-    "[Widget-Using-JSAPI]"
-  );
 
   static get styles() {
     return css`
