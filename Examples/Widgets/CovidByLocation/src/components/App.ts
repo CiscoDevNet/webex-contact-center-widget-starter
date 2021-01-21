@@ -29,6 +29,11 @@ export default class MyCustomComponent extends LitElement {
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
   @property({ type: String }) selectedCountyState = "";
 
+  @internalProperty() allCounties?: Array<{
+    fips: string;
+    county: string;
+    state: string;
+  }>;
   @internalProperty() countyOptions: Array<string> = [];
   @internalProperty() selectedCounty = "";
   @internalProperty() selectedStatePostal = "";
@@ -50,42 +55,56 @@ export default class MyCustomComponent extends LitElement {
         return response.json();
       })
       .then((data) => {
+        this.allCounties = data;
         return data;
       });
   };
 
-  generateCollections = async (allUSACounties: Array<{ fips: string, county: string, state: string }>) => {
+  generateCollections = async (
+    selectedCounty: string,
+    selectedStatePostal: string
+  ) => {
     this.stateCountyData = [];
     const generatedStateCountyData: Object[] = [];
     this.countyOptions = [];
     const generatedCountyOptions: string[] = [];
 
-    allUSACounties.forEach(countyData => {
-      generatedCountyOptions.push(`${countyData.county}, ${countyData.state}`);
+    if (this.allCounties && selectedStatePostal && selectedCounty) {
+      this.allCounties.forEach((countyData) => {
+        generatedCountyOptions.push(
+          `${countyData.county}, ${countyData.state}`
+        );
 
-      if (this.selectedStatePostal && this.selectedStatePostal === countyData.state) {
-        generatedStateCountyData.push(countyData);
+        if (selectedStatePostal === countyData.state) {
+          generatedStateCountyData.push(countyData);
 
-        if (this.selectedCounty && this.selectedCounty === countyData.county) {
-          this.selectedCountyFIPS = countyData.fips;
+          if (selectedCounty === countyData.county) {
+            this.selectedCountyFIPS = countyData.fips;
+          }
         }
-      }
-    });
+      });
 
-    this.stateCountyData = generatedStateCountyData;
-    this.countyOptions = generatedCountyOptions;
+      this.stateCountyData = generatedStateCountyData;
+      this.countyOptions = generatedCountyOptions;
+    }
   };
 
   handleStateSelection = (event: CustomEvent) => {
     this.selectedCountyState = event?.detail?.value;
-    this.parseCountyAndState();
-    console.log("[log] handleStateSelection", this.selectedCounty, this.selectedStatePostal);
+  };
+
+  handleClear = () => {
+    this.stateCountyData = [];
+    this.selectedCounty = "";
+    this.selectedCountyFIPS = "";
   };
 
   parseCountyAndState = () => {
-    this.selectedCounty = this.selectedCountyState.split(', ')[0];
-    this.selectedStatePostal = this.selectedCountyState.split(', ')[1];
-  }
+    if (this.selectedCountyState) {
+      this.selectedCounty = this.selectedCountyState.split(", ")[0];
+      this.selectedStatePostal = this.selectedCountyState.split(", ")[1];
+    }
+  };
 
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
@@ -106,8 +125,8 @@ export default class MyCustomComponent extends LitElement {
 
     if (this.selectedCountyState) {
       this.parseCountyAndState();
-      await this.fetchAllCounties().then(result => {
-        this.generateCollections(result);
+      await this.fetchAllCounties().then(() => {
+        this.generateCollections(this.selectedCounty, this.selectedStatePostal);
       });
     }
   }
@@ -115,11 +134,9 @@ export default class MyCustomComponent extends LitElement {
   async updated(changeProperties: PropertyValues) {
     super.updated(changeProperties);
 
-    if (changeProperties.has('selectedCountyState')) {
+    if (this.allCounties && this.selectedCountyState && changeProperties.has("selectedCountyState")) {
       this.parseCountyAndState();
-      await this.fetchAllCounties().then(result => {
-        this.generateCollections(result);
-      });
+      this.generateCollections(this.selectedCounty, this.selectedStatePostal);
     }
   }
 
@@ -134,19 +151,25 @@ export default class MyCustomComponent extends LitElement {
               .options=${this.countyOptions}
               placeholder="US County"
               .value=${[this.selectedCountyState]}
+              @remove-all-selected=${() => this.handleClear()}
               @change-selected="${(e: CustomEvent) =>
                 this.handleStateSelection(e)}"
             >
             </md-combobox>
           </div>
         </div>
-        <div class=${`cases-by-location ${this.columnView ? "column-view" : ""}`}>
+        <div
+          class=${`cases-by-location ${this.columnView ? "column-view" : ""}`}
+        >
           <my-graph
             api-key=${this.apiKey}
             class="graph-widget"
             selectedCountyFIPS=${this.selectedCountyFIPS}
           ></my-graph>
-          <my-table class="table-widget" .stateCountyData=${this.stateCountyData}></my-table>
+          <my-table
+            class="table-widget"
+            .stateCountyData=${this.stateCountyData}
+          ></my-table>
         </div>
       </div>
     `;
