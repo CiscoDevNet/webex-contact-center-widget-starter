@@ -205,9 +205,12 @@ export default class MyCustomComponent extends LitElement {
   }
 
   collectChartData = async () => {
-    if (!this.selectedCountyFIPS) return;
-
     this.clearData();
+
+    if (!this.selectedCountyFIPS) {
+      this.renderChart();
+      return;
+    }
 
     return await this.fetchCountyTimeline(this.selectedCountyFIPS).then(countyData => {
       let countyTimeline = countyData.actualsTimeseries;
