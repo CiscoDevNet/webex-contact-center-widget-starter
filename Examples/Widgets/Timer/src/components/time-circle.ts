@@ -19,10 +19,6 @@ export default class MyCustomComponent extends LitElement {
 
   timePassed: number = this.timeLimit - this.timeLeft;
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
   updated(changedProperties: PropertyValues) {
     super.updated(changedProperties)
     if (changedProperties.has("timeLeft")) {
