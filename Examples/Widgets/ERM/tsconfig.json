@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",
+    "module": "commonjs",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./*"],
+      "@css/*": ["./assets/styles/*"],
+      "@img/*": ["./assets/images/*"],
+    }
+  },
+  "files": [
+    "webpack.config.ts",
+    "webpack.config.dev.server.ts"
+  ]
+}
