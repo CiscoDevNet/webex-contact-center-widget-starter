@@ -1,0 +1,37 @@
+@import "./App.scss";
+
+.table-section {
+  height: 100%;
+
+  .header {
+    padding: 0 16px;
+  }
+
+  .sub-body {
+    min-height: 261px;
+    overflow-y: auto;
+    width: 100%;
+    padding: 0;
+
+    .tab-header-row {
+      margin: 0 12px;
+    }
+  }
+}
+
+.covid-table {
+  &::part(left-cell) {
+    font-size: 12px;
+    font-weight: bold;
+    vertical-align: middle;
+  }
+
+  &::part(cell) {
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  &::part(first-row) {
+    color: var(--md-alert-error-text-color);
+  }
+}

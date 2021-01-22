@@ -61,19 +61,36 @@ export class Sandbox extends LitElement {
   }
 
   render() {
+    /**
+     * Property googleApiKey
+     * Access your API key from Google Maps Platform
+     * https://cloud.google.com/maps-platform
+     */
+    const googleApiKey = "";
+
+    /**
+    * Property: covidApiKey
+    * Access API Key: Covid Act Now Website
+    * https://apidocs.covidactnow.org/access
+    */
+    const covidApiKey = "";
+
     return html`
-    <div class="toggle">
-      ${this.themeToggle()}
-    </div>
-    <md-theme lumos ?darkTheme=${this.darkTheme}>
-      <div class="container">
-        <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <my-custom-widget></my-custom-widget>
-        </div>
+      <div class="toggle">
+        ${this.themeToggle()}
       </div>
-    </md-theme>
-    </div>
-    </md-theme>
+      <md-theme lumos ?darkTheme=${this.darkTheme}>
+        <div class="container">
+          <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
+            <hospital-bed-capacity
+              google-api-key=${googleApiKey}
+              covid-api-key=${covidApiKey}
+              latitude=${40.7128}
+              longitude=${-74.0060}>
+            </hospital-bed-capacity>
+          </div>
+        </div>
+      </md-theme>
     `;
   }
 }

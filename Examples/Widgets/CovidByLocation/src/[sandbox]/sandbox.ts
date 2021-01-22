@@ -13,8 +13,8 @@ import styles from "./sandbox.scss";
 @customElement("wcc-widget-starter-lit")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
-  @internalProperty() containerWidth = "500px";
-  @internalProperty() containerHeight = "80vh";
+  @internalProperty() containerWidth = "591px";
+  @internalProperty() containerHeight = "500px";
 
   static get styles() {
     return styles;
@@ -23,25 +23,44 @@ export class Sandbox extends LitElement {
   themeToggle() {
     return html`
       <div class="toggle-container">
-        <md-checkbox type="checkbox" id="theme-switch" class="theme-switch" data-aspect="darkTheme" label="Dark Mode"
-          @checkbox-change=${(e: MouseEvent)=> this.toggleSetting(e)}
+        <md-checkbox
+          type="checkbox"
+          id="theme-switch"
+          class="theme-switch"
+          data-aspect="darkTheme"
+          label="Dark Mode"
+          @checkbox-change=${(e: MouseEvent) => this.toggleSetting(e)}
           ?checked=${this.darkTheme}
-          >Dark Mode</md-checkbox>
+          >Dark Mode</md-checkbox
+        >
         <div class="switch-container">
           <md-label class="switch" text="Responsive">
             Widget Boundary
           </md-label>
-          <md-input type="text" id="width-switch" class="theme-switch" data-aspect="responsive-width" @click=${(e:
-            MouseEvent)=> this.toggleSetting(e)}
+          <md-input
+            type="text"
+            id="width-switch"
+            class="theme-switch"
+            data-aspect="responsive-width"
+            @click=${(e: MouseEvent) => this.toggleSetting(e)}
             @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
             value=${this.containerWidth}
-            ></md-input>
+          ></md-input>
           <md-label>x</md-label>
-          <md-input type="text" id="height-switch" class="theme-switch" data-aspect="responsive-height" @click=${(e:
-            MouseEvent)=> this.toggleSetting(e)}
+          <md-input
+            type="text"
+            id="height-switch"
+            class="theme-switch"
+            data-aspect="responsive-height"
+            @click=${(e: MouseEvent) => this.toggleSetting(e)}
             @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
             value=${this.containerHeight}
-            ></md-input>
+          ></md-input>
+        </div>
+        <div class="switch-container">
+          <md-label class="switch" text="New Contact">
+            Send Contact
+          </md-label>
         </div>
       </div>
     `;
@@ -61,19 +80,26 @@ export class Sandbox extends LitElement {
   }
 
   render() {
+   /**
+    * Property: apiKey
+    * Access API Key: Covid Act Now Website
+    * https://apidocs.covidactnow.org/access
+    */
+    const key = "";
+
     return html`
     <div class="toggle">
-      ${this.themeToggle()}
-    </div>
-    <md-theme lumos ?darkTheme=${this.darkTheme}>
-      <div class="container">
-        <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <my-custom-widget></my-custom-widget>
-        </div>
+        ${this.themeToggle()}
       </div>
-    </md-theme>
-    </div>
-    </md-theme>
+      <md-theme lumos ?darkTheme=${this.darkTheme}>
+        <div class="container">
+          <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
+            <covid-by-location api-key=${key} selectedCountyState="Santa Clara County, CA"></covid-by-location>
+          </div>
+          </div>
+        </md-theme>
+        </div>
+      </md-theme>
     `;
   }
 }
