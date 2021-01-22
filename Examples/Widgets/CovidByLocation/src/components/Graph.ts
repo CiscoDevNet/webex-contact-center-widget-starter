@@ -145,14 +145,16 @@ export default class MyCustomComponent extends LitElement {
 
   fetchCountyTimeline = async (countyFIPS: string) => {
     if (!countyFIPS) return;
-
-    return await fetch(`https://api.covidactnow.org/v2/county/${countyFIPS}.timeseries.json?apiKey=${this.apiKey}`)
-    .then(response => {
-      return response.json();
-    }).then(data => {
-      return data;
-    })
-  }
+    return await fetch(
+      `https://api.covidactnow.org/v2/county/${countyFIPS}.timeseries.json?apiKey=${this.apiKey}`
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        return data;
+      });
+  };
 
   closestElement(selector: string, base = this) {
     function __closestFrom(el: unknown): HTMLElement | null {
@@ -251,7 +253,7 @@ export default class MyCustomComponent extends LitElement {
       this.renderChart();
     }
 
-    if (changeProperties.has("specificity")) {
+    if (this.selectedCountyFIPS && changeProperties.has("specificity")) {
       await this.collectChartData();
     }
 

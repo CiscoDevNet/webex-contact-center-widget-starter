@@ -13,7 +13,6 @@ import "./components/App";
  */
 @customElement("covid-by-location")
 export default class CovidByLocation extends LitElement {
-  @internalProperty() private contacts: string[] = [];
   @property({ type: String }) selectedCountyState = "Santa Clara County, CA";
   /**
    * Property: apiKey
