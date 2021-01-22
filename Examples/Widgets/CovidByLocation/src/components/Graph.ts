@@ -17,6 +17,7 @@ import {
 } from "lit-element";
 import Chart from "chart.js";
 import styles from "./Graph.scss";
+import { nothing } from "lit-html";
 
 const SPECIFICITY = {
   DAILY: 'daily',
@@ -47,6 +48,8 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() activeCases: Array<number> = [];
   @internalProperty() dailyNewCases: Array<number> = [];
   @internalProperty() specificity: Graph.specificity = "daily";
+  @internalProperty() loading = true;
+  @internalProperty() firstTime = true;
 
   @query(".chart-container") chartContainer!: HTMLDivElement;
 
@@ -198,19 +201,19 @@ export default class MyCustomComponent extends LitElement {
       "radio-change",
       this.handleRadioChange as EventListener
     );
-
-    if (this.selectedCountyFIPS) {
-      await this.collectChartData();
-    }
-
-    this.renderChart();
   }
 
   collectChartData = async () => {
+    this.loading = true;
     this.clearData();
 
     if (!this.selectedCountyFIPS) {
-      this.renderChart();
+      if (this.firstTime) {
+        this.firstTime = false;
+      } else {
+        this.renderChart();
+        this.loading = false;
+      }
       return;
     }
 
@@ -243,6 +246,7 @@ export default class MyCustomComponent extends LitElement {
       });
     }).then(() => {
       this.renderChart();
+      this.loading = false;
     });
   }
 
@@ -262,6 +266,14 @@ export default class MyCustomComponent extends LitElement {
     }
   }
 
+  renderLoading = () => {
+    return html`
+      <div class="loading-container">
+        <md-spinner></md-spinner>
+      </div>
+    `;
+  };
+
   render() {
     return html`
       <div class="graph-section">
@@ -274,13 +286,14 @@ export default class MyCustomComponent extends LitElement {
         </div>
         <div class="sub-body">
           <md-radiogroup group-label="group_process" alignment="horizontal" checked="0">
-            <md-radio slot="radio" value="daily">Daily</md-radio>
-            <md-radio slot="radio" value="weekly">Weekly</md-radio>
-            <md-radio slot="radio" value="monthly">Monthly</md-radio>
+            <md-radio slot="radio" value="daily" ?disabled=${!this.selectedCountyFIPS || this.loading}>Daily</md-radio>
+            <md-radio slot="radio" value="weekly" ?disabled=${!this.selectedCountyFIPS || this.loading}>Weekly</md-radio>
+            <md-radio slot="radio" value="monthly" ?disabled=${!this.selectedCountyFIPS || this.loading}>Monthly</md-radio>
           </md-radiogroup>
-          <div class="chart-container">
+          <div class=${`chart-container ${this.loading ? "hide-while-loading" : ""}`}>
             <canvas id="myChart" height="210" class="my-chart" aria-label="Covid Cases Graph" role="img"></canvas>
           </div>
+          ${this.loading ? this.renderLoading() : nothing}
         </div>
       </div>
     `;
