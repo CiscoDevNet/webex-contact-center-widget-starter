@@ -5,6 +5,19 @@
   margin: auto;
   height: 100%;
   width: 100%;
+
+  &.hide-while-loading {
+    display: none;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  height: 100%;
+  width: 100%;
 }
 
 .graph-section {
