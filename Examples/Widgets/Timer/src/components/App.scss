@@ -1,0 +1,95 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+@import "../assets/styles/variables";
+
+:host {
+  display: block;
+  background-color: transparent;
+  color: var(--md-primary-text-color);
+}
+
+.container {
+  width: 136px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  font-family: var(--font-family-light);
+  font-weight: 300;
+  font-size: 0.75rem;
+}
+
+.action-container {
+  padding: 10px 2px;
+  display: flex;
+  flex-direction: column;
+  md-button {
+    margin: 10px 0;
+  }
+}
+
+/* Sets the containers height and width */
+.base-timer {
+  position: relative;
+  height: 40px;
+  width: 40px;
+}
+
+/* Removes SVG styling that would hide the time label */
+.base-timer__circle {
+  fill: none;
+  stroke: none;
+}
+
+/* The SVG path that displays the timer's progress */
+.base-timer__path-elapsed {
+  stroke-width: 4px;
+  stroke: #ededed;
+}
+
+.base-timer__label {
+  position: absolute;
+
+  /* Size should match the parent container */
+  height: 40px;
+  width: 40px;
+
+  /* Keep the label aligned to the top */
+  top: 0;
+
+  /* Create a flexible box that centers content vertically and horizontally */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Sort of an arbitrary number; adjust to your liking */
+  font-size: 12px;
+}
+
+.base-timer__path-remaining {
+  /* Just as thick as the original ring */
+  stroke-width: 4px;
+
+  /* Rounds the line endings to create a seamless circle */
+  stroke-linecap: square;
+
+  /* Makes sure the animation starts at the top of the circle */
+  transform: rotate(90deg);
+  transform-origin: center;
+
+  /* One second aligns with the speed of the countdown timer */
+  transition: 100ms linear all;
+
+  /* Allows the ring to change color when the color value updates */
+  stroke: currentColor;
+}
+
+.base-timer__svg {
+  /* Flips the svg and makes the animation to move left-to-right */
+  transform: scaleX(-1);
+}
