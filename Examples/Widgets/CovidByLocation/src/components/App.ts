@@ -60,21 +60,29 @@ export default class MyCustomComponent extends LitElement {
       });
   };
 
-  generateCollections = async (
+  createOptions = () => {
+    this.countyOptions = [];
+    const generatedCountyOptions: string[] = [];
+
+    if (this.allCounties?.length) {
+      this.allCounties.forEach((countyData) => {
+        generatedCountyOptions.push(
+          `${countyData.county}, ${countyData.state}`
+        );
+      });
+    }
+    this.countyOptions = generatedCountyOptions;
+  }
+
+  generateCollections = (
     selectedCounty: string,
     selectedStatePostal: string
   ) => {
     this.stateCountyData = [];
     const generatedStateCountyData: Object[] = [];
-    this.countyOptions = [];
-    const generatedCountyOptions: string[] = [];
 
     if (this.allCounties && selectedStatePostal && selectedCounty) {
       this.allCounties.forEach((countyData) => {
-        generatedCountyOptions.push(
-          `${countyData.county}, ${countyData.state}`
-        );
-
         if (selectedStatePostal === countyData.state) {
           generatedStateCountyData.push(countyData);
 
@@ -85,7 +93,6 @@ export default class MyCustomComponent extends LitElement {
       });
 
       this.stateCountyData = generatedStateCountyData;
-      this.countyOptions = generatedCountyOptions;
     }
   };
 
@@ -96,6 +103,8 @@ export default class MyCustomComponent extends LitElement {
   handleClear = () => {
     this.stateCountyData = [];
     this.selectedCounty = "";
+    this.selectedStatePostal = "";
+    this.selectedCountyState = "";
     this.selectedCountyFIPS = "";
   };
 
@@ -126,6 +135,7 @@ export default class MyCustomComponent extends LitElement {
     if (this.selectedCountyState) {
       this.parseCountyAndState();
       await this.fetchAllCounties().then(() => {
+        this.createOptions();
         this.generateCollections(this.selectedCounty, this.selectedStatePostal);
       });
     }
@@ -158,9 +168,7 @@ export default class MyCustomComponent extends LitElement {
             </md-combobox>
           </div>
         </div>
-        <div
-          class=${`cases-by-location ${this.columnView ? "column-view" : ""}`}
-        >
+        <div class=${`cases-by-location ${this.columnView ? "column-view" : ""}`}>
           <my-graph
             api-key=${this.apiKey}
             class="graph-widget"
