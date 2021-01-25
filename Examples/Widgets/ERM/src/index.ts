@@ -12,35 +12,30 @@ import {
   customElement,
   css,
   internalProperty,
-  property
+  property,
+  PropertyValues
 } from "lit-element";
 import "./components/Summary";
 import "./components/Visits";
-import * as data from "./customer-data/mock-customer.json";
-/**
- * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
- */
+import { data } from "./customer-data/mock-customer";
+import style from "./components/App.scss";
+
 @customElement("erm-widget")
 export default class MyCustomComponent extends LitElement {
   @property({ type: String, attribute: "phone-number" }) phoneNumber:
     | string
     | undefined;
 
-  @internalProperty() customerData!: Record<string, any>; // nice to define the interface when solidified
+  @internalProperty() customerData!: typeof data;
 
   connectedCallback() {
     super.connectedCallback();
-    console.log(data);
-    // this.customerData = this.fetchCustomerData(number)
+    this.customerData = data;
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
   }
-
-  // fetchCustomerDate = async (queryValue) => {
-  //   return customerData
-  // }
 
   // formatPhoneNumber() {
   //   if (true) {
@@ -49,21 +44,32 @@ export default class MyCustomComponent extends LitElement {
   // }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        height: 100%;
-        position: relative;
-        overflow: auto;
-      }
-    `;
+    return [
+      style,
+      css`
+        :host {
+          display: block;
+          height: 100%;
+          position: relative;
+          overflow: auto;
+        }
+      `
+    ];
   }
 
   render() {
     return html`
       <div class="container">
-        <customer-summary .customerData=${this.customerData}></customer-summary>
-        <customer-visits .visits=${this.customerData.visits}></customer-visits>
+        <customer-summary
+          .customerData=${this.customerData ? this.customerData : undefined}
+          >test</customer-summary
+        >
+        <customer-visits
+          .visits=${this.customerData.visits
+            ? this.customerData.visits
+            : undefined}
+          >test</customer-visits
+        >
       </div>
     `;
   }

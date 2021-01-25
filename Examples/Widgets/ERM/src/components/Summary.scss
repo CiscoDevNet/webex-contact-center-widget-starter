@@ -1,0 +1,41 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+// @import "./App";
+
+
+.summary-container {
+  padding: 1rem;
+}
+
+.cust-info-header {
+  display: grid;
+  gap: 0px 0px;
+  grid-template-areas:
+    "avatar h1 h1 h1"
+    "avatar age age age"
+    "avatar phone phone phone";
+  md-avatar {
+    grid-area: avatar;
+  }
+  h1 {
+    grid-area: h1;
+  }
+  div.age-gender {
+    grid-area: age;
+  }
+  div.phone {
+    grid-area: phone;
+  }
+}
+
+table {
+  .label {
+    color: var(--primary-text-color, #777);
+  }
+}
