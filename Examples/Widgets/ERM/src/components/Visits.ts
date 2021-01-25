@@ -13,14 +13,12 @@ import {
   internalProperty,
   property
 } from "lit-element";
-import styles from "./App.scss";
+import styles from "./Visits.scss";
 @customElement("customer-visits")
 export default class CustomerVisits extends LitElement {
-  @property({ type: String, attribute: "phone-number" }) phoneNumber:
-    | string
+  @property({ type: Array, attribute: false }) visits:
+    | Array<object>
     | undefined;
-
-  @internalProperty() customerData!: Record<string, any>; // nice to define the interface when solidified
 
   static get styles() {
     return styles;
@@ -28,12 +26,20 @@ export default class CustomerVisits extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // this.customerData = this.fetchCustomerData(number)
+    console.log(this.visits);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
   }
+
+  generateTime = (i: number) => {
+    return html`
+      <div class="time-of-day">
+        ${String(i).padStart(2, "0")}:00
+      </div>
+    `;
+  };
 
   // fetchCustomerDate = async (queryValue) => {
   //   return customerData
@@ -46,10 +52,27 @@ export default class CustomerVisits extends LitElement {
   // }
 
   render() {
+    const hours = [...Array(24).keys()];
+
     return html`
-      <div class="container">
-        <customer-summary .customerData=${this.customerData}></customer-summary>
-        <customer-visits .visits=${this.customerData.visits}></customer-visits>
+      <div class="visits-container" part="visits">
+        <div class="filters">
+          <md-input searchable></md-input>
+          <md-badge color="violet">9 visits</md-badge>
+          <div class="more-actions">
+            <md-icon name="icon-filter_16"></md-icon>
+            <md-icon name="icon-more-adr_16"></md-icon>
+          </div>
+        </div>
+        <div class="visits-grid">
+          <div class="time">
+            ${hours.map(i => this.generateTime(i))}
+          </div>
+          <div class="matrix-wrapper">
+            <div class="visits-matrix"></div>
+          </div>
+          <div class="date"></div>
+        </div>
       </div>
     `;
   }

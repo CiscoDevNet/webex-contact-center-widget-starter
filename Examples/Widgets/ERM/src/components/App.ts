@@ -6,13 +6,21 @@
  *
  */
 
-import { html, LitElement, customElement, internalProperty, property } from "lit-element";
+import {
+  html,
+  LitElement,
+  customElement,
+  internalProperty,
+  property
+} from "lit-element";
 import styles from "./App.scss";
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
-  @property({ type: String, attribute: "phone-number" }) phoneNumber: string | undefined;
+  @property({ type: String, attribute: "phone-number" }) phoneNumber:
+    | string
+    | undefined;
 
-  @internalProperty() customerData!: Object; // nice to define the interface when solidified
+  @internalProperty() customerData!: Record<string, any>; // nice to define the interface when solidified
 
   static get styles() {
     return styles;
