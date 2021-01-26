@@ -59,7 +59,7 @@ export default class CustomerSummary extends LitElement {
           <div class="phone">${this.customerData?.phone}</div>
         </section>
 
-        <md-badge color="green" pill="false"
+        <md-badge small color="green" pill="false"
           >MRN# ${this.customerData?.MRN}</md-badge
         >
         <table>

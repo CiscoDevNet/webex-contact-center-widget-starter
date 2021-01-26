@@ -17,8 +17,8 @@
     flex-direction: row;
 
     > :first-child {
-        max-width: 18.4rem;
         height: 100%;
+        margin-right: 1rem;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.16);
     }
 }
