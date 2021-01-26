@@ -8,9 +8,10 @@
 
 // @import "./App";
 
-
 .summary-container {
   padding: 1rem;
+  height: 100vh;
+  font-size: 12px;
 }
 
 .cust-info-header {
@@ -22,9 +23,12 @@
     "avatar phone phone phone";
   md-avatar {
     grid-area: avatar;
+    align-self: center;
   }
   h1 {
+    font-size: 14px;
     grid-area: h1;
+    margin: 0;
   }
   div.age-gender {
     grid-area: age;
@@ -32,6 +36,11 @@
   div.phone {
     grid-area: phone;
   }
+}
+
+md-badge::part(badge) {
+  margin: 1rem 0;
+  border-radius: 4px;
 }
 
 table {
