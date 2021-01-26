@@ -17,6 +17,8 @@ import {
 } from "lit-element";
 import { Loader } from "@googlemaps/js-api-loader";
 import styles from "./Hospitals.scss";
+import { nothing } from "lit-html";
+import { ifDefined } from "lit-html/directives/if-defined";
 
 @customElement("my-hospital-stats")
 export default class Hospitals extends LitElement {
@@ -37,12 +39,19 @@ export default class Hospitals extends LitElement {
   @property({ type: Number, reflect: true }) latitude = 37.40527;
   @property({ type: Number, reflect: true }) longitude = -122.01178;
 
+  @internalProperty() expanded = false;
   @internalProperty() statePostal = "";
   @internalProperty() county = "";
   @internalProperty() bedCapacity = "";
 
   @internalProperty() hospitalName = "";
   @internalProperty() hospitalAddress = "";
+
+  @internalProperty() hospitalImage: String | undefined = undefined;
+  @internalProperty() hospitalPhoneNumber = "";
+  @internalProperty() hospitalHours = "";
+  @internalProperty() hospitalParking = "";
+  @internalProperty() hospitalDirections = "";
 
   @internalProperty() map?: google.maps.Map;
   @internalProperty() nearestHospitalData?: any;
@@ -51,6 +60,7 @@ export default class Hospitals extends LitElement {
   @internalProperty() loading = false;
   @internalProperty() errorMessage = "";
 
+  @query(".hospital-widget") hospitalWidget!: HTMLDivElement;
   @query("#map") mapDiv?: HTMLElement;
 
   @internalProperty() loader = new Loader({
@@ -66,6 +76,23 @@ export default class Hospitals extends LitElement {
 
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
+
+    // @ts-ignore
+    var ro = new ResizeObserver((entries: any) => {
+      for (let entry of entries) {
+        const cr = entry.contentRect;
+        if (cr.width > 450) {
+          if (!this.expanded) {
+            this.expanded = true;
+          }
+        } else {
+          if (this.expanded) {
+            this.expanded = false;
+          }
+        }
+      }
+    });
+    ro.observe(this.hospitalWidget);
 
     await this.fetchAllCounties()
       .then(() => this.initMap(this.longitude, this.latitude))
@@ -123,7 +150,6 @@ export default class Hospitals extends LitElement {
       (results: any, status: google.maps.GeocoderStatus) => {
         if (status === "OK") {
           this.hospitalAddress = results[0].formatted_address;
-
           const addressDetails = results[0].address_components.reduce(
             (seed: any, obj: any) => (
               obj.types.forEach((t: any) => (seed[t] = obj.short_name)), seed
@@ -151,17 +177,27 @@ export default class Hospitals extends LitElement {
       return places.nearbySearch(
         {
           location: { lat: this.latitude, lng: this.longitude },
-          rankBy: google.maps.places.RankBy.DISTANCE,
+          // rankBy: google.maps.places.RankBy.DISTANCE,
+          rankBy: google.maps.places.RankBy.PROMINENCE,
+          radius: 50,
           type: "hospital",
-          keyword: "(emergency) AND ((medical centre) OR hospital)",
+          keyword: "establishment",
         },
         (results: any) => {
           if (results.length) {
             this.nearestHospitalData = results[0];
+            console.log("[log] nearestHospitalData", this.nearestHospitalData);
             this.hospitalName = this.nearestHospitalData?.name;
             this.getFormattedAddress(
               this.nearestHospitalData?.geometry?.location
             );
+
+            if (this.nearestHospitalData?.photos?.length) {
+              const hospitalImageInfo = this.nearestHospitalData?.photos[0];
+              this.hospitalImage = hospitalImageInfo.getUrl();
+            }
+
+            this.hospitalHours = this.nearestHospitalData?.opening_hours?.isOpen();
             this.errorMessage = "";
           } else {
             this.loading = false;
@@ -204,7 +240,7 @@ export default class Hospitals extends LitElement {
       return this.countyData;
     } else {
       this.loading = false;
-      this.errorMessage = "Unreconizable statePostal & County";
+      this.errorMessage = "Unrecognizable statePostal & County";
     }
   };
 
@@ -221,7 +257,7 @@ export default class Hospitals extends LitElement {
 
   renderLoading = () => {
     return html`
-      <div class="body loading">
+      <div class="loading-wrapper">
         <md-spinner></md-spinner>
       </div>
     `;
@@ -235,32 +271,99 @@ export default class Hospitals extends LitElement {
     `;
   };
 
-  renderContent = () => {
-    return this.errorMessage
-      ? this.renderNoHospital()
+  renderSubHeader = () => {
+    return this.expanded
+      ? html`
+          <div class="hospital-header expanded">
+            <span class="header-text">${this.hospitalName}</span>
+            <md-badge class="bed-capacity-badge" color="mint"
+              >${this.bedCapacity}</md-badge
+            >
+            <div class="icons right-align">
+              <md-button circle hasRemoveStyle size="28">
+                <md-icon slot="icon" name="location_16"></md-icon>
+              </md-button>
+              <md-button circle hasRemoveStyle size="28">
+                <md-icon slot="icon" name="info_16"></md-icon>
+              </md-button>
+              <md-button circle hasRemoveStyle size="28">
+                <md-icon slot="icon" name="share-c-native-adr_16"></md-icon>
+              </md-button>
+              <md-button circle hasRemoveStyle size="28">
+                <md-icon slot="icon" name="language_16"></md-icon>
+              </md-button>
+            </div>
+          </div>
+        `
       : html`
-          <div class="body">
+          <div class="hospital-header">
             <md-badge class="hospital-badge" color="mint" split>
               <span slot="split-left">
                 ${`${this.county}, ${this.statePostal}`}
               </span>
               <span slot="split-right">${this.bedCapacity}</span>
             </md-badge>
-            <div class="hospital row">
-              <span class="title">Hospital</span>
-              <span class="value">${this.hospitalName}</span>
-            </div>
-            <div class="address row">
-              <span class="title">Address</span>
-              <span class="value">${this.hospitalAddress}</span>
-            </div>
           </div>
+        `;
+  };
+
+  expandedHospitalDetails = () => {
+    return html`
+      <div class="contact row">
+        <span class="title">Contact Info</span>
+        <span class="value">${this.hospitalPhoneNumber}</span>
+      </div>
+      <div class="hours row">
+        <span class="title">Hours</span>
+        <span class="value">${this.hospitalHours}</span>
+      </div>
+      <div class="parking row">
+        <span class="title">Parking</span>
+        <span class="value">${this.hospitalParking}</span>
+      </div>
+      <div class="direction row">
+        <span class="title">Direction</span>
+        <span class="value">${this.hospitalDirections}</span>
+      </div>
+    `;
+  };
+
+  renderHospitalDetails = () => {
+    return html`
+      <div class=${`hospital-details ${this.expanded ? "expanded" : ""}`}>
+        <div class="hospital row">
+          <span class="title">Hospital</span>
+          <span class="value">${this.hospitalName}</span>
+        </div>
+        <div class="address row">
+          <span class="title">Address</span>
+          <span class="value">${this.hospitalAddress}</span>
+        </div>
+        ${this.expanded ? this.expandedHospitalDetails() : nothing}
+      </div>
+    `;
+  };
+
+  renderImage = () => {
+    return this.expanded
+      ? html`
+          <img class="hospital-image" src=${ifDefined(this.hospitalImage)} />
+        `
+      : nothing;
+  };
+
+  renderContent = () => {
+    return this.errorMessage
+      ? this.renderNoHospital()
+      : html`
+          ${this.renderImage()} ${this.renderSubHeader()}
+          ${this.renderHospitalDetails()}
         `;
   };
 
   render() {
     return html`
-      <div class="hosiptal-section">
+      <div class="hospital-widget">
         ${this.loading ? this.renderLoading() : this.renderContent()}
         <div id="map"></div>
       </div>
