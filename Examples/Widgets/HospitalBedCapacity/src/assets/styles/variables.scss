@@ -1,0 +1,52 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+ 
+:host {
+  /* Font Size */
+  --font-size-small: 12px;
+  --font-size-medium: 14px;
+  --font-size-large: 16px;
+
+  /* Spacing tokens */
+  --space-token-cardinal: 5px;
+  --space-token-even: 2px;
+  --space-error-input: 4px 8px;
+
+  /* Heights */
+  --error-input-height: 32px;
+
+  /* Font Weight */
+  --font-weight-lite: 300;
+
+  /* Font family */
+  --font-family: "CiscoSansTT Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-family-light: "CiscoSansTT Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* Colors */
+  --light-green-color: #44cf50;
+  --color-gray-70: #545454;
+  --color-link: #00a0d1;
+  --color-error-detail: #535759;
+  --color-gray-border: #ccc;
+  --color-error-text: #a12512;
+  --color-count-notifications: #fff;
+
+  /* Border radius */
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 12px;
+  --border-radius-circle: 100%;
+
+  /* Animation */
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+  --default-animation-duration: 300ms;
+  --quick-animation-duration: 150ms;
+
+  /* Box shadow */
+  --box-shadow: 0 0 4px 2px rgba(0, 160, 209, 0.75);
+}

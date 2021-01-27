@@ -15,13 +15,13 @@ import TimerComponent from "./components/App";
 @customElement("timer-widget")
 export default class MyCustomComponent extends LitElement {
   @property({ type: String, reflect: true }) duration = ""
+  @property({ type: String, reflect: true }) remaining = ""
   @property({ type: Boolean }) paused = false
 
   @query("timer-component") timerComponent!: TimerComponent;
 
-  public setTimer = (time: string) => {
-    this.duration = time;
-    this.timerComponent.resetDuration(time);
+  public resetTimer = () => {
+    this.timerComponent.resetTimer();
   }
 
   static get styles() {

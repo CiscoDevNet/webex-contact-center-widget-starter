@@ -1,0 +1,58 @@
+$main-border: 1px solid var(--md-primary-seperator-color, #ccc);
+
+:host {
+  display: block;
+  background-color: var(--md-primary-bg-color);
+  color: var(--md-primary-text-color);
+}
+
+.body.loading {
+  padding: 33px;
+  display: flex;
+  justify-content: center;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: $main-border;
+
+  .header-text {
+    font-size: 16px;
+  }
+}
+
+.button-right-align {
+  float: right;
+}
+
+.body {
+  padding: 16px;
+
+  .city-combobox::part(combobox) {
+    width: 260px;
+  }
+}
+
+.hospitals-section {
+  height: 171px;
+}
+
+.hospital-badge::part(badge) {
+  padding: 0.25rem 1rem;
+}
+
+.row {
+  font-size: 14px;
+  margin-top: 8px;
+  line-height: 21px;
+
+  .title {
+    color: var(--md-secondary-text-color, #545454);
+  }
+  .value {
+    color: var(--md-primary-text-color, #121212);
+    margin-left: 30px;
+  }
+}
