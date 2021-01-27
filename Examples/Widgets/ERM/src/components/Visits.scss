@@ -151,3 +151,7 @@ div.month-line:last-child {
   display: flex;
   justify-content: space-between;
 }
+
+md-badge::part(badge) {
+  z-index: 100;
+}

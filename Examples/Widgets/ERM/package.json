@@ -22,7 +22,9 @@
         "test": "jest"
     },
     "dependencies": {
-        "@agentx/agentx-js-api": "^1.2.0"
+        "@agentx/agentx-js-api": "^1.2.0",
+        "@types/luxon": "^1.25.1",
+        "luxon": "^1.25.0"
     },
     "resolutions": {
         "jest": "^26.4.2",

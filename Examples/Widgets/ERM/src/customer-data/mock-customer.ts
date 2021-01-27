@@ -42,8 +42,7 @@ export const data = {
     {
       title: "General Visit",
       summary: "",
-      date: "10/21/2020",
-      time: "15:00:00",
+      date: "2020-11-20T08:13:22",
       facility: "BOSCO Polyclinic",
       clinician: "Cr. Amy Grace",
       department: "Accident and Emergency",
@@ -55,7 +54,7 @@ export const data = {
       title: "commodo mollit",
       summary:
         "eiusmod laboris sint cupidatat et aliquip mollit occaecat ut aliqua cupidatat eiusmod duis laborum ex sint amet amet pariatur ipsum elit anim duis est et elit id ut laborum elit",
-      date: "2020-11-20T06:13:22 +08:00",
+      date: "2020-11-20T10:13:22",
       facility: "ZILPHUR",
       clinician: "Dr. Higgins Avila",
       department: "dolore fugiat",
@@ -67,7 +66,7 @@ export const data = {
       title: "ea nostrud",
       summary:
         "magna consectetur elit minim enim exercitation tempor aute est esse labore officia ea sunt nulla nostrud id enim occaecat consectetur voluptate do excepteur ipsum aute deserunt officia pariatur exercitation nulla",
-      date: "2020-02-18T11:02:13 +08:00",
+      date: "2020-02-18T11:02:13",
       facility: "QIAO",
       clinician: "Dr. Lucille Whitehead",
       department: "sit ex",
@@ -79,7 +78,7 @@ export const data = {
       title: "qui qui",
       summary:
         "dolor ut laborum consectetur excepteur consequat sunt aliqua laboris eu consectetur occaecat laboris aute exercitation Lorem labore qui ut officia minim anim duis irure mollit aliqua eu anim consequat aliqua",
-      date: "2020-05-22T04:04:46 +07:00",
+      date: "2020-05-22T09:04:46",
       facility: "INJOY",
       clinician: "Dr. Kellie Christian",
       department: "et commodo",
@@ -91,7 +90,7 @@ export const data = {
       title: "occaecat excepteur",
       summary:
         "ea sit exercitation consequat sint exercitation mollit occaecat ea nostrud nisi ipsum ullamco ex occaecat enim commodo dolor commodo consequat nulla tempor voluptate commodo ea incididunt culpa sint aute minim",
-      date: "2020-02-19T04:53:32 +08:00",
+      date: "2020-02-19T14:53:32",
       facility: "FREAKIN",
       clinician: "Dr. Warren Manning",
       department: "dolor cupidatat",
@@ -103,7 +102,7 @@ export const data = {
       title: "aliqua laborum",
       summary:
         "tempor pariatur sit ullamco irure proident culpa dolor id proident pariatur tempor sit do consequat commodo cillum culpa nisi mollit officia cupidatat sint qui anim officia dolor dolore excepteur pariatur",
-      date: "2020-12-14T01:04:36 +08:00",
+      date: "2020-12-14T16:04:36",
       facility: "OPTIQUE",
       clinician: "Dr. Sonia Sullivan",
       department: "officia consectetur",
@@ -115,7 +114,7 @@ export const data = {
       title: "et nostrud",
       summary:
         "aliqua exercitation et eiusmod sit labore esse veniam amet labore consequat eu irure eu aliqua in officia non duis esse deserunt ad amet cillum veniam adipisicing consectetur mollit et mollit",
-      date: "2020-08-26T01:01:37 +07:00",
+      date: "2020-08-26T14:01:37",
       facility: "EMOLTRA",
       clinician: "Dr. Frank Valencia",
       department: "eiusmod culpa",
