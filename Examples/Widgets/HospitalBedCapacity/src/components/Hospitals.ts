@@ -161,10 +161,9 @@ export default class Hospitals extends LitElement {
         },
         (results: any, status: google.maps.places.PlacesServiceStatus) => {
           if (status === "OK") {
-            console.log("[log] Place Details", results);
-            this.hospitalPhoneNumber = results?.formatted_phone_number;
-            this.hospitalWebsite = results?.website;
-            this.hospitalRating = results?.rating;
+            this.hospitalPhoneNumber = results?.formatted_phone_number || "NA";
+            this.hospitalWebsite = results?.website || "NA";
+            this.hospitalRating = results?.rating || "NA";
             this.numberOfRatings = results?.user_ratings_total;
             this.hospitalHours = results?.opening_hours?.isOpen();
           } else {
@@ -199,6 +198,7 @@ export default class Hospitals extends LitElement {
           }
         } else {
           console.error("Geocoder failed due to " + status);
+          this.loading = false;
           this.errorMessage = "Unable to find a nearby hospital";
         }
       }
@@ -211,16 +211,14 @@ export default class Hospitals extends LitElement {
       return places.nearbySearch(
         {
           location: { lat: this.latitude, lng: this.longitude },
-          // rankBy: google.maps.places.RankBy.DISTANCE,
           rankBy: google.maps.places.RankBy.PROMINENCE,
-          radius: 50,
+          radius: 250,
           type: "hospital",
           keyword: "establishment",
         },
-        (results: any) => {
-          if (results.length) {
+        (results: any, status: google.maps.places.PlacesServiceStatus) => {
+          if (status === "OK") {
             this.nearestHospitalData = results[0];
-            console.log("[log] nearestHospitalData", this.nearestHospitalData);
             this.hospitalName = this.nearestHospitalData?.name;
             this.getFormattedAddress(
               this.nearestHospitalData?.geometry?.location
@@ -233,8 +231,10 @@ export default class Hospitals extends LitElement {
 
             this.nearestHospitalPlaceId = this.nearestHospitalData?.place_id;
             this.errorMessage = "";
+            this.loading = false;
           } else {
             this.loading = false;
+            console.error("google api failed to find near by hospital");
             this.errorMessage = "Unable to find nearby Hospitals";
           }
         }
@@ -299,7 +299,7 @@ export default class Hospitals extends LitElement {
 
   renderNoHospital = () => {
     return html`
-      <div class="body loading">
+      <div class="loading-wrapper">
         <h3>${this.errorMessage}</h3>
       </div>
     `;
@@ -309,12 +309,14 @@ export default class Hospitals extends LitElement {
     return this.expanded
       ? html`
           <div class="hospital-header expanded flex-parent">
-            <span class="header-text flex-child long-and-truncated"
-              >${this.hospitalName}</span
-            >
-            <md-badge class="bed-capacity-badge" color="mint"
-              >${this.bedCapacity}</md-badge
-            >
+            <div class="left-section">
+              <span class="header-text flex-child long-and-truncated"
+                >${this.hospitalName}</span
+              >
+              <md-badge small class="bed-capacity-badge" color="mint"
+                >${this.bedCapacity}</md-badge
+              >
+            </div>
             <div class="icons right-align flex-child short-and-fixed">
               <md-button circle hasRemoveStyle size="28">
                 <md-icon slot="icon" name="location_16"></md-icon>
@@ -359,23 +361,29 @@ export default class Hospitals extends LitElement {
           <div class="value cell">${this.hospitalPhoneNumber}</div>
           <div class="value cell">${this.hospitalWebsite}</div>
           <div class="value cell">
-            ${this.hospitalRating} (${this.numberOfRatings})
+            ${this.hospitalRating && this.numberOfRatings ? `${this.hospitalRating} (${this.numberOfRatings})` : "NA"}
           </div>
         </div>
       </div>
     `;
   };
 
-  renderHospitalDetails = () => {
-    return html`
-      <div class=${`hospital-details ${this.expanded ? "expanded" : ""}`}>
-        <div class="warning-block">
+  renderWarningBlock = () => {
+    return this.expanded ? html`
+      <div class="warning-block">
           <md-icon name="warning_12"></md-icon>
           <span class="warning-text"
             >COVID-19 testing lab | Referral required | Tests limited to certain
             patients</span
           >
         </div>
+    ` : nothing;
+  }
+
+  renderHospitalDetails = () => {
+    return html`
+      <div class=${`hospital-details ${this.expanded ? "expanded" : ""}`}>
+        ${this.renderWarningBlock()}
         <div class="details">
           <div class="title-column">
             <div class="title cell">Hospital</div>

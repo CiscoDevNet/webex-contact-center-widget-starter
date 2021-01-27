@@ -37,6 +37,12 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
   .flex-parent {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
+    .left-section {
+      min-width: 0;
+      display: inline-flex;
+    }
   }
 
   .long-and-truncated {
@@ -65,13 +71,6 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
     &.expanded {
       border-bottom: $main-border;
       padding: 0.875rem 1.5rem 0.875rem 0.875rem;
-
-      md-badge::part(badge) {
-        height: 20px;
-        padding: 2px 8px;
-        font-size: 10px;
-        line-height: 150%;
-      }
 
       .header-text {
         font-size: 16px;
@@ -123,7 +122,7 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
       .title-column {
         width: 100px;
-        margin-right: 2rem;
+        margin-right: 1.5rem;
 
         .title {
           color: var(--md-secondary-text-color, #545454);
