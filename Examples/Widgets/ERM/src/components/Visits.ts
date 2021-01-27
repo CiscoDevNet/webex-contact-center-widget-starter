@@ -6,18 +6,15 @@
  *
  */
 
-import {
-  html,
-  LitElement,
-  customElement,
-  internalProperty,
-  property
-} from "lit-element";
+import { data } from "@/customer-data/mock-customer";
+import { DateTime, Duration } from "luxon";
+import { html, LitElement, customElement, property } from "lit-element";
 import styles from "./Visits.scss";
+import { weekStartDays } from "@momentum-ui/web-components/dist/types/components/datepicker/DatePicker";
 @customElement("customer-visits")
 export default class CustomerVisits extends LitElement {
   @property({ type: Array, attribute: false }) visits:
-    | Array<object>
+    | Array<CustomerVisit>
     | undefined;
 
   static get styles() {
@@ -55,15 +52,38 @@ export default class CustomerVisits extends LitElement {
     }
   };
 
-  // fetchCustomerDate = async (queryValue) => {
-  //   return customerData
-  // }
+  matrixPosition = (date: string) => {
+    const time = DateTime.fromISO(date).toLocal();
+    const adjustedTime = time.minus({ minutes: 450 }); // 60 * 7.5 to set baseline of 7:30
+    const hour = time.hour;
+    // debugger;
+    // const month = time.month;
+    const day = time.day;
 
-  // formatPhoneNumber() {
-  //   if (true) {
-  //     return formattedNumber
-  //   } else return errorMessage
-  // }
+    // 0 out of 100 should equal 7:30AM  -  7 hours
+    // 100 out of 100 should equal 16:30PM  -
+    const xPosition = (400 / 9) * (hour - 7) - 33;
+    console.log(time, hour);
+    // const yPosition = (100 / 12) * month;
+    // 0 is 0 days
+    // 100 is 365 days
+    const yPosition = (100 / 365) * day;
+
+    return [xPosition, yPosition];
+  };
+
+  renderVisitBadge = (visit: CustomerVisit) => {
+    const [bottom, left] = this.matrixPosition(visit.date);
+    return html`
+      <md-badge
+        color="blue"
+        small
+        style="position: absolute; bottom: ${bottom}px; left: ${left}%"
+      >
+        ${visit.date}
+      </md-badge>
+    `;
+  };
 
   render() {
     const hours = [...Array(24).keys()];
@@ -106,7 +126,9 @@ export default class CustomerVisits extends LitElement {
             </div>
           </div>
           <div class="matrix-wrapper">
-            <div class="visits-matrix"></div>
+            <div class="visits-matrix">
+              ${this.visits?.map(visit => this.renderVisitBadge(visit))}
+            </div>
           </div>
           <div class="date"></div>
         </div>
