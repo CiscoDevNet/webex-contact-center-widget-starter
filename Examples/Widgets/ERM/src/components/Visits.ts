@@ -54,19 +54,11 @@ export default class CustomerVisits extends LitElement {
 
   matrixPosition = (date: string) => {
     const time = DateTime.fromISO(date).toLocal();
-    const adjustedTime = time.minus({ minutes: 450 }); // 60 * 7.5 to set baseline of 7:30
     const hour = time.hour;
-    // debugger;
-    // const month = time.month;
-    const day = time.day;
+    const day = time.ordinal;
 
-    // 0 out of 100 should equal 7:30AM  -  7 hours
-    // 100 out of 100 should equal 16:30PM  -
+    // breaking har-code height of 400px in hour large chunks, compenstated for out of range hours and 33px
     const xPosition = (400 / 9) * (hour - 7) - 33;
-    console.log(time, hour);
-    // const yPosition = (100 / 12) * month;
-    // 0 is 0 days
-    // 100 is 365 days
     const yPosition = (100 / 365) * day;
 
     return [xPosition, yPosition];
