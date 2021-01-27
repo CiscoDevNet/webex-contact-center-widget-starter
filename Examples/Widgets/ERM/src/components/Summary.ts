@@ -6,13 +6,7 @@
  *
  */
 
-import {
-  html,
-  LitElement,
-  customElement,
-  internalProperty,
-  property
-} from "lit-element";
+import { html, LitElement, customElement, property } from "lit-element";
 import { ifDefined } from "lit-html/directives/if-defined";
 import styles from "./Summary.scss";
 import { data } from "../customer-data/mock-customer";

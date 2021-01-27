@@ -6,11 +6,9 @@
  *
  */
 
-import { data } from "@/customer-data/mock-customer";
-import { DateTime, Duration } from "luxon";
+import { DateTime } from "luxon";
 import { html, LitElement, customElement, property } from "lit-element";
 import styles from "./Visits.scss";
-import { weekStartDays } from "@momentum-ui/web-components/dist/types/components/datepicker/DatePicker";
 @customElement("customer-visits")
 export default class CustomerVisits extends LitElement {
   @property({ type: Array, attribute: false }) visits:

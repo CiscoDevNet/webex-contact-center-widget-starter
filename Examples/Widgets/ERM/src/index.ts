@@ -12,8 +12,7 @@ import {
   customElement,
   css,
   internalProperty,
-  property,
-  PropertyValues
+  property
 } from "lit-element";
 import "./components/Summary";
 import "./components/Visits";
