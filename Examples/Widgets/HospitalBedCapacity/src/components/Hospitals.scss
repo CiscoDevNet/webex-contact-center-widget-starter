@@ -23,10 +23,40 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
     height: 204px;
     object-fit: cover;
     width: 100%;
+
+    &.void {
+      display: flex;
+      justify-content: center;
+
+      span {
+        padding-top: 6rem;
+      }
+    }
+  }
+
+  .flex-parent {
+    display: flex;
+    align-items: center;
+  }
+
+  .long-and-truncated {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .short-and-fixed {
+    flex: 0 0 auto;
   }
 
   .hospital-header {
     padding: 1rem 1rem 0 1rem;
+
+    .left-header-portion {
+      display: flex;
+      flex: 1 1 0%;
+    }
 
     .hospital-badge::part(badge) {
       padding: 0.25rem 1rem;
@@ -63,18 +93,55 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
   .hospital-details {
     padding: 1rem;
+    font-size: 14px;
+    line-height: 21px;
 
-    .row {
-      font-size: 14px;
-      margin-top: 8px;
-      line-height: 21px;
+    .warning-block {
+      background-color: var(--md-secondary-bg-color, #f7f7f7);
+      border-radius: 4px;
+      padding: 8px;
+      margin-bottom: 8px;
 
-      .title {
+      md-icon {
+        color: var(--md-alert-warning-text-color, #7d4705);
+        margin: 0 8px;
+      }
+
+      .warning-text {
+        font-size: 12px;
+        line-height: 150%;
         color: var(--md-secondary-text-color, #545454);
       }
-      .value {
-        color: var(--md-primary-text-color, #121212);
-        margin-left: 30px;
+    }
+
+    .details {
+      display: flex;
+
+      .cell {
+        margin-top: 0.5rem;
+      }
+
+      .title-column {
+        width: 100px;
+        margin-right: 2rem;
+
+        .title {
+          color: var(--md-secondary-text-color, #545454);
+        }
+      }
+
+      .value-column {
+        .value {
+          color: var(--md-primary-text-color, #121212);
+
+          &.open {
+            color: var(--md-alert-success-text-color, #12615a);
+          }
+
+          &.closed {
+            color: var(--md-alert-error-text-color, #a12512);
+          }
+        }
       }
     }
   }

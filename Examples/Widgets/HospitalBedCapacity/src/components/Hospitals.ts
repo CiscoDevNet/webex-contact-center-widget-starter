@@ -47,11 +47,14 @@ export default class Hospitals extends LitElement {
   @internalProperty() hospitalName = "";
   @internalProperty() hospitalAddress = "";
 
-  @internalProperty() hospitalImage: String | undefined = undefined;
+  @internalProperty() hospitalImage: string = "";
   @internalProperty() hospitalPhoneNumber = "";
+  @internalProperty() hospitalWebsite = "";
+  @internalProperty() hospitalRating = "";
+  @internalProperty() numberOfRatings = "";
   @internalProperty() hospitalHours = "";
-  @internalProperty() hospitalParking = "";
-  @internalProperty() hospitalDirections = "";
+
+  @internalProperty() nearestHospitalPlaceId = "";
 
   @internalProperty() map?: google.maps.Map;
   @internalProperty() nearestHospitalData?: any;
@@ -124,6 +127,13 @@ export default class Hospitals extends LitElement {
     if (this.bedCapacity && changeProperties.has("bedCapacity")) {
       this.loading = false;
     }
+
+    if (
+      this.nearestHospitalPlaceId &&
+      changeProperties.has("nearestHospitalPlaceId")
+    ) {
+      this.fetchPlaceDetails();
+    }
   }
 
   initMap = async (longitude: number, latitude: number) => {
@@ -140,6 +150,30 @@ export default class Hospitals extends LitElement {
       .catch((err) => {
         console.error("Failed to initMap due to ", err);
       });
+  };
+
+  fetchPlaceDetails = () => {
+    if (this.map) {
+      const service = new google.maps.places.PlacesService(this.map);
+      service.getDetails(
+        {
+          placeId: this.nearestHospitalPlaceId,
+        },
+        (results: any, status: google.maps.places.PlacesServiceStatus) => {
+          if (status === "OK") {
+            console.log("[log] Place Details", results);
+            this.hospitalPhoneNumber = results?.formatted_phone_number;
+            this.hospitalWebsite = results?.website;
+            this.hospitalRating = results?.rating;
+            this.numberOfRatings = results?.user_ratings_total;
+            this.hospitalHours = results?.opening_hours?.isOpen();
+          } else {
+            console.error("PlacesService failed due to " + status);
+            this.errorMessage = "Unable to find a nearby hospital details";
+          }
+        }
+      );
+    }
   };
 
   getFormattedAddress = (location: { lat: number; lng: number }) => {
@@ -197,7 +231,7 @@ export default class Hospitals extends LitElement {
               this.hospitalImage = hospitalImageInfo.getUrl();
             }
 
-            this.hospitalHours = this.nearestHospitalData?.opening_hours?.isOpen();
+            this.nearestHospitalPlaceId = this.nearestHospitalData?.place_id;
             this.errorMessage = "";
           } else {
             this.loading = false;
@@ -274,12 +308,14 @@ export default class Hospitals extends LitElement {
   renderSubHeader = () => {
     return this.expanded
       ? html`
-          <div class="hospital-header expanded">
-            <span class="header-text">${this.hospitalName}</span>
+          <div class="hospital-header expanded flex-parent">
+            <span class="header-text flex-child long-and-truncated"
+              >${this.hospitalName}</span
+            >
             <md-badge class="bed-capacity-badge" color="mint"
               >${this.bedCapacity}</md-badge
             >
-            <div class="icons right-align">
+            <div class="icons right-align flex-child short-and-fixed">
               <md-button circle hasRemoveStyle size="28">
                 <md-icon slot="icon" name="location_16"></md-icon>
               </md-button>
@@ -309,21 +345,23 @@ export default class Hospitals extends LitElement {
 
   expandedHospitalDetails = () => {
     return html`
-      <div class="contact row">
-        <span class="title">Contact Info</span>
-        <span class="value">${this.hospitalPhoneNumber}</span>
-      </div>
-      <div class="hours row">
-        <span class="title">Hours</span>
-        <span class="value">${this.hospitalHours}</span>
-      </div>
-      <div class="parking row">
-        <span class="title">Parking</span>
-        <span class="value">${this.hospitalParking}</span>
-      </div>
-      <div class="direction row">
-        <span class="title">Direction</span>
-        <span class="value">${this.hospitalDirections}</span>
+      <div class="details">
+        <div class="title-column">
+          <div class="title cell">Hours</div>
+          <div class="title cell">Contact Info</div>
+          <div class="title cell">Website</div>
+          <div class="title cell">Rating</div>
+        </div>
+        <div class="value-column">
+          <div class=${`value cell ${this.hospitalHours ? "open" : "closed"}`}>
+            ${this.hospitalHours ? "Open" : "Closed"}
+          </div>
+          <div class="value cell">${this.hospitalPhoneNumber}</div>
+          <div class="value cell">${this.hospitalWebsite}</div>
+          <div class="value cell">
+            ${this.hospitalRating} (${this.numberOfRatings})
+          </div>
+        </div>
       </div>
     `;
   };
@@ -331,13 +369,22 @@ export default class Hospitals extends LitElement {
   renderHospitalDetails = () => {
     return html`
       <div class=${`hospital-details ${this.expanded ? "expanded" : ""}`}>
-        <div class="hospital row">
-          <span class="title">Hospital</span>
-          <span class="value">${this.hospitalName}</span>
+        <div class="warning-block">
+          <md-icon name="warning_12"></md-icon>
+          <span class="warning-text"
+            >COVID-19 testing lab | Referral required | Tests limited to certain
+            patients</span
+          >
         </div>
-        <div class="address row">
-          <span class="title">Address</span>
-          <span class="value">${this.hospitalAddress}</span>
+        <div class="details">
+          <div class="title-column">
+            <div class="title cell">Hospital</div>
+            <div class="title cell">Address</div>
+          </div>
+          <div class="value-column">
+            <div class="value cell">${this.hospitalName}</div>
+            <div class="value cell">${this.hospitalAddress}</div>
+          </div>
         </div>
         ${this.expanded ? this.expandedHospitalDetails() : nothing}
       </div>
@@ -347,7 +394,18 @@ export default class Hospitals extends LitElement {
   renderImage = () => {
     return this.expanded
       ? html`
-          <img class="hospital-image" src=${ifDefined(this.hospitalImage)} />
+          ${this.hospitalImage
+            ? html`
+                <img
+                  class="hospital-image"
+                  src=${ifDefined(this.hospitalImage)}
+                />
+              `
+            : html`
+                <div class="hospital-image void">
+                  <span>No Image Found</span>
+                </div>
+              `}
         `
       : nothing;
   };
