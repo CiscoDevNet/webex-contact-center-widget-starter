@@ -85,8 +85,8 @@ export class Sandbox extends LitElement {
             <hospital-bed-capacity
               google-api-key=${googleApiKey}
               covid-api-key=${covidApiKey}
-              latitude=${40.7128}
-              longitude=${-74.0060}>
+              latitude=${37.369350}
+              longitude=${-122.079552}>
             </hospital-bed-capacity>
           </div>
         </div>
