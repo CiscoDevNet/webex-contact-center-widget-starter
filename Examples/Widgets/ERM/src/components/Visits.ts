@@ -96,7 +96,7 @@ export default class CustomerVisits extends LitElement {
       <div class="visits-container" part="visits">
         <div class="filters">
           <md-input searchable shape="pill"></md-input>
-          <md-badge color="violet">9 visits</md-badge>
+          <md-badge color="violet" small>9 visits</md-badge>
           <div class="more-actions">
             <md-icon name="icon-filter_16"></md-icon>
             <md-icon name="icon-more-adr_16"></md-icon>
