@@ -9,10 +9,12 @@ Testing in development environment:
 To use the Timer Widget:
 
 1. Pass a time to the `duration` attribute following the string format: "hh:mm:ss".
-2. Toggle the boolean attribute `paused` ro stop and start the timer.
+2. Toggle the boolean attribute `paused` to stop and start the timer.
 
-The time remaining will persist in the browser's `localstorage`. To change, update or reset the timer, use the widget's public method `setTime(time:string):void` and pass it a string in the format "hh:mm:ss"
+The browser's `localstorage` will keep a store of the active timer's start timestamp and duration setting. To change, update the duration and reset the timer, use the widget's public method `resetTimer():void`.
 
-NOTE: Changing the `duration` attribute will reset the timer beginning at the new time.
+Timer is set to a default of "08:00:00"
+
+When the timer runs down to "00:00:00" it will automatically pause, emit a custom event named "timer-expired", and clear the localstorage values until reset. 
 
 ![Widget Example Screenshot](./static/timer_screenshot.png)

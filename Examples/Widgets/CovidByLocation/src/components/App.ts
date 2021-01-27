@@ -29,6 +29,11 @@ export default class MyCustomComponent extends LitElement {
   @property({ type: String, reflect: true, attribute: "api-key" }) apiKey = "";
   @property({ type: String }) selectedCountyState = "";
 
+  @internalProperty() allCounties?: Array<{
+    fips: string;
+    county: string;
+    state: string;
+  }>;
   @internalProperty() countyOptions: Array<string> = [];
   @internalProperty() selectedCounty = "";
   @internalProperty() selectedStatePostal = "";
@@ -50,42 +55,65 @@ export default class MyCustomComponent extends LitElement {
         return response.json();
       })
       .then((data) => {
+        this.allCounties = data;
         return data;
       });
   };
 
-  generateCollections = async (allUSACounties: Array<{ fips: string, county: string, state: string }>) => {
-    this.stateCountyData = [];
-    const generatedStateCountyData: Object[] = [];
+  createOptions = () => {
     this.countyOptions = [];
     const generatedCountyOptions: string[] = [];
 
-    allUSACounties.forEach(countyData => {
-      generatedCountyOptions.push(`${countyData.county}, ${countyData.state}`);
-
-      if (this.selectedStatePostal && this.selectedStatePostal === countyData.state) {
-        generatedStateCountyData.push(countyData);
-
-        if (this.selectedCounty && this.selectedCounty === countyData.county) {
-          this.selectedCountyFIPS = countyData.fips;
-        }
-      }
-    });
-
-    this.stateCountyData = generatedStateCountyData;
+    if (this.allCounties?.length) {
+      this.allCounties.forEach((countyData) => {
+        generatedCountyOptions.push(
+          `${countyData.county}, ${countyData.state}`
+        );
+      });
+    }
     this.countyOptions = generatedCountyOptions;
+  }
+
+  generateCollections = (
+    selectedCounty: string,
+    selectedStatePostal: string
+  ) => {
+    this.stateCountyData = [];
+    const generatedStateCountyData: Object[] = [];
+
+    if (this.allCounties && selectedStatePostal && selectedCounty) {
+      this.allCounties.forEach((countyData) => {
+        if (selectedStatePostal === countyData.state) {
+          generatedStateCountyData.push(countyData);
+
+          if (selectedCounty === countyData.county) {
+            this.selectedCountyFIPS = countyData.fips;
+          }
+        }
+      });
+
+      this.stateCountyData = generatedStateCountyData;
+    }
   };
 
   handleStateSelection = (event: CustomEvent) => {
     this.selectedCountyState = event?.detail?.value;
-    this.parseCountyAndState();
-    console.log("[log] handleStateSelection", this.selectedCounty, this.selectedStatePostal);
+  };
+
+  handleClear = () => {
+    this.stateCountyData = [];
+    this.selectedCounty = "";
+    this.selectedStatePostal = "";
+    this.selectedCountyState = "";
+    this.selectedCountyFIPS = "";
   };
 
   parseCountyAndState = () => {
-    this.selectedCounty = this.selectedCountyState.split(', ')[0];
-    this.selectedStatePostal = this.selectedCountyState.split(', ')[1];
-  }
+    if (this.selectedCountyState) {
+      this.selectedCounty = this.selectedCountyState.split(", ")[0];
+      this.selectedStatePostal = this.selectedCountyState.split(", ")[1];
+    }
+  };
 
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
@@ -106,8 +134,9 @@ export default class MyCustomComponent extends LitElement {
 
     if (this.selectedCountyState) {
       this.parseCountyAndState();
-      await this.fetchAllCounties().then(result => {
-        this.generateCollections(result);
+      await this.fetchAllCounties().then(() => {
+        this.createOptions();
+        this.generateCollections(this.selectedCounty, this.selectedStatePostal);
       });
     }
   }
@@ -115,11 +144,9 @@ export default class MyCustomComponent extends LitElement {
   async updated(changeProperties: PropertyValues) {
     super.updated(changeProperties);
 
-    if (changeProperties.has('selectedCountyState')) {
+    if (this.allCounties && this.selectedCountyState && changeProperties.has("selectedCountyState")) {
       this.parseCountyAndState();
-      await this.fetchAllCounties().then(result => {
-        this.generateCollections(result);
-      });
+      this.generateCollections(this.selectedCounty, this.selectedStatePostal);
     }
   }
 
@@ -134,6 +161,7 @@ export default class MyCustomComponent extends LitElement {
               .options=${this.countyOptions}
               placeholder="US County"
               .value=${[this.selectedCountyState]}
+              @remove-all-selected=${() => this.handleClear()}
               @change-selected="${(e: CustomEvent) =>
                 this.handleStateSelection(e)}"
             >
@@ -146,7 +174,10 @@ export default class MyCustomComponent extends LitElement {
             class="graph-widget"
             selectedCountyFIPS=${this.selectedCountyFIPS}
           ></my-graph>
-          <my-table class="table-widget" .stateCountyData=${this.stateCountyData}></my-table>
+          <my-table
+            class="table-widget"
+            .stateCountyData=${this.stateCountyData}
+          ></my-table>
         </div>
       </div>
     `;
