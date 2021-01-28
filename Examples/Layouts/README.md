@@ -7,3 +7,9 @@ Please refer the Provisioning --> Desktop Layout section in Cisco Webex Contact 
 * **Header_Added_Desktop Layout.json** - This layout have RSS widget added in Header Section
 * **Demo_Widgets_Added_Desktop Layout.json** - This layout have RSS widget in Header, map widget and covid-by-location widget in the desktop layout (Note: google map API key is required for these widget in attribute section)
 
+**Disclaimer**
+
+These layouts are for reference only and some of these might required additional configuration (e.g API key for Google Maps) to function properly. Please note, all hosted images and widgets are for demo purposes only and it is always recommended to obtain an independent hosting solution for these. If any issue is discovered in Example widgets please feel free to raise it at https://github.com/CiscoDevNet/webex-contact-center-widget-starter/issues
+
+
+
