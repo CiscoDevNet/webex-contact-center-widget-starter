@@ -19,6 +19,20 @@
 .filters {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+
+  md-input {
+    flex-grow: 1;
+  }
+  
+  md-badge {
+    margin-left: .75rem;
+    flex-grow: 2;
+
+    &::part(badge) {
+      border-radius: .25rem;
+    }
+  }
 }
 
 .matrix-wrapper {

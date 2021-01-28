@@ -73,8 +73,12 @@ export default class CustomerVisits extends LitElement {
           <md-input searchable shape="pill"></md-input>
           <md-badge color="violet" small>${this.visits?.length} visits</md-badge>
           <div class="more-actions">
-            <md-icon name="icon-filter_16"></md-icon>
-            <md-icon name="icon-more-adr_16"></md-icon>
+            <md-button hasRemoveStyle>
+              <md-icon name="icon-filter_16"></md-icon>
+            </md-button>  
+            <md-button hasRemoveStyle>
+              <md-icon name="icon-more-adr_16"></md-icon>
+            </md-button>
           </div>
         </div>
         <div class="visits-grid">
