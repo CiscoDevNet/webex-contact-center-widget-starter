@@ -29,16 +29,6 @@ export default class CustomerSummary extends LitElement {
     super.disconnectedCallback();
   }
 
-  // fetchCustomerDate = async (queryValue) => {
-  //   return customerData
-  // }
-
-  // formatPhoneNumber() {
-  //   if (true) {
-  //     return formattedNumber
-  //   } else return errorMessage
-  // }
-
   render() {
     return html`
       <div class="summary-container" part="summary">
