@@ -9,6 +9,25 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
 .hospital-widget {
   height: 100%;
+  display: flex;
+
+  .left-side {
+    width: 396px;
+    flex: 0 1 auto;
+    border-right: $main-border;
+    height: 100%;
+    overflow: auto;
+
+    .hospital-item {
+      height: 151px;
+      width: 100%;
+      border: $main-border;
+    }
+  }
+
+  .right-side {
+    flex: 1;
+  }
 
   .loading-wrapper {
     height: 100%;
@@ -114,23 +133,21 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
     }
 
     .details {
-      display: flex;
+      display: block;
+      margin-top: 1rem;
 
-      .cell {
-        margin-top: 0.5rem;
-      }
-
-      .title-column {
-        width: 100px;
-        margin-right: 1.5rem;
+      .row {
+        display: flex;
+        flex-direction: row;
+        margin-top: 8px;
 
         .title {
+          width: 7rem;
           color: var(--md-secondary-text-color, #545454);
         }
-      }
 
-      .value-column {
         .value {
+          flex: 1;
           color: var(--md-primary-text-color, #121212);
 
           &.open {
