@@ -71,7 +71,7 @@ export default class CustomerVisits extends LitElement {
       <div class="visits-container" part="visits">
         <div class="filters">
           <md-input searchable shape="pill"></md-input>
-          <md-badge color="violet" small>9 visits</md-badge>
+          <md-badge color="violet" small>${this.visits?.length} visits</md-badge>
           <div class="more-actions">
             <md-icon name="icon-filter_16"></md-icon>
             <md-icon name="icon-more-adr_16"></md-icon>
@@ -93,7 +93,6 @@ export default class CustomerVisits extends LitElement {
           <div class="matrix-wrapper">
             <div class="visits-matrix">
               ${this.visits?.map(visit => {
-                console.log("fatrt")
                 return html`<visit-badge .visit=${visit}></visit-badge>`})}
             </div>
           </div>
