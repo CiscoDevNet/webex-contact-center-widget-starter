@@ -65,17 +65,19 @@ export default class CustomerVisits extends LitElement {
   renderVisitBadge = (visit: CustomerVisit) => {
     const [bottom, left, formattedDate] = this.matrixPosition(visit.date);
     return html`
-    <div class="mock-badge" style="position: absolute; bottom: ${bottom}px; left: ${left}%">
-      <span class="split-left">
-        <md-badge circle small color="blue" style="margin-right: .25rem">
-          <md-icon name="icon-email_12" size=12 ></md-icon>
-        </md-badge>
-        ${visit.title}</span>
-      <span class="split-separator"> | </span>
-      <span name="split-right" class="split split-right">
-        ${formattedDate}
-      </span>
-    </div>
+    <md-tooltip message="${visit.title}" style="z-index: 100; position: absolute; bottom: ${bottom}px; left: ${left}%">
+      <div class="mock-badge" >
+        <span class="split-left">
+          <md-badge circle small color="blue" style="margin-right: .25rem">
+            <md-icon name="icon-document_12" size=12 ></md-icon>
+          </md-badge>
+          ${visit.title}</span>
+          <span class="split-separator"> | </span>
+          <span name="split-right" class="split split-right">
+            ${formattedDate}
+          </span>
+        </div>
+      </md-tooltip>
     `
   };
 
