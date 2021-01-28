@@ -19,6 +19,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import styles from "./Hospitals.scss";
 import { nothing } from "lit-html";
 import { ifDefined } from "lit-html/directives/if-defined";
+import "./HospitalItem";
 
 @customElement("my-hospital-stats")
 export default class Hospitals extends LitElement {
@@ -57,6 +58,7 @@ export default class Hospitals extends LitElement {
   @internalProperty() nearestHospitalPlaceId = "";
 
   @internalProperty() map?: google.maps.Map;
+  @internalProperty() allNearbyHospitals?: Array<string> = [];
   @internalProperty() nearestHospitalData?: any;
   @internalProperty() allUSACounties?: any;
   @internalProperty() countyData?: any;
@@ -218,6 +220,8 @@ export default class Hospitals extends LitElement {
         },
         (results: any, status: google.maps.places.PlacesServiceStatus) => {
           if (status === "OK") {
+            this.allNearbyHospitals = results;
+            console.log("[log] allNearby", this.allNearbyHospitals);
             this.nearestHospitalData = results[0];
             this.hospitalName = this.nearestHospitalData?.name;
             this.getFormattedAddress(
@@ -314,7 +318,7 @@ export default class Hospitals extends LitElement {
                 >${this.hospitalName}</span
               >
               <md-badge small class="bed-capacity-badge" color="mint"
-                >${this.bedCapacity}</md-badge
+                >${this.bedCapacity || "NA"}</md-badge
               >
             </div>
             <div class="icons right-align flex-child short-and-fixed">
@@ -347,54 +351,60 @@ export default class Hospitals extends LitElement {
 
   expandedHospitalDetails = () => {
     return html`
-      <div class="details">
-        <div class="title-column">
-          <div class="title cell">Hours</div>
-          <div class="title cell">Contact Info</div>
-          <div class="title cell">Website</div>
-          <div class="title cell">Rating</div>
+      <div class="row">
+        <div class="title">Hours</div>
+        <div class=${`value ${this.hospitalHours ? "open" : "closed"}`}>
+          ${this.hospitalHours ? "Open" : "Closed"}
         </div>
-        <div class="value-column">
-          <div class=${`value cell ${this.hospitalHours ? "open" : "closed"}`}>
-            ${this.hospitalHours ? "Open" : "Closed"}
-          </div>
-          <div class="value cell">${this.hospitalPhoneNumber}</div>
-          <div class="value cell">${this.hospitalWebsite}</div>
-          <div class="value cell">
-            ${this.hospitalRating && this.numberOfRatings ? `${this.hospitalRating} (${this.numberOfRatings})` : "NA"}
-          </div>
+      </div>
+      <div class="row">
+        <div class="title">Contact Info</div>
+        <div class="value">${this.hospitalPhoneNumber}</div>
+      </div>
+      <div class="row">
+        <div class="title">Website</div>
+        <div class="value">${this.hospitalWebsite}</div>
+      </div>
+      <div class="row">
+        <div class="title">Ratings</div>
+        <div class="value">
+          ${this.hospitalRating && this.numberOfRatings
+            ? `${this.hospitalRating} (${this.numberOfRatings})`
+            : "NA"}
         </div>
       </div>
     `;
   };
 
   renderWarningBlock = () => {
-    return this.expanded ? html`
-      <div class="warning-block">
-          <md-icon name="warning_12"></md-icon>
-          <span class="warning-text"
-            >COVID-19 testing lab | Referral required | Tests limited to certain
-            patients</span
-          >
-        </div>
-    ` : nothing;
-  }
+    return this.expanded
+      ? html`
+          <div class="warning-block">
+            <md-icon name="warning_12"></md-icon>
+            <span class="warning-text"
+              >COVID-19 testing lab | Referral required | Tests limited to
+              certain patients</span
+            >
+          </div>
+        `
+      : nothing;
+  };
 
   renderHospitalDetails = () => {
     return html`
       <div class=${`hospital-details ${this.expanded ? "expanded" : ""}`}>
         ${this.renderWarningBlock()}
         <div class="details">
-          <div class="title-column">
-            <div class="title cell">Hospital</div>
-            <div class="title cell">Address</div>
+          <div class="row">
+            <div class="title">Hospital</div>
+            <div class="value">${this.hospitalName}</div>
           </div>
-          <div class="value-column">
-            <div class="value cell">${this.hospitalName}</div>
-            <div class="value cell">${this.hospitalAddress}</div>
+          <div class="row">
+            <div class="title">Address</div>
+            <div class="value">${this.hospitalAddress}</div>
           </div>
+          ${this.expanded ? this.expandedHospitalDetails() : nothing}
         </div>
-        ${this.expanded ? this.expandedHospitalDetails() : nothing}
       </div>
     `;
   };
@@ -422,8 +432,37 @@ export default class Hospitals extends LitElement {
     return this.errorMessage
       ? this.renderNoHospital()
       : html`
-          ${this.renderImage()} ${this.renderSubHeader()}
-          ${this.renderHospitalDetails()}
+          <div class="left-side">
+            ${this.allNearbyHospitals
+              ? this.allNearbyHospitals?.map((hospitalData: any, index) => {
+                  if (index < 5) {
+                    const { name, place_id, vicinity } = hospitalData;
+                    console.log(
+                      "[log] render Content",
+                      hospitalData,
+                      name,
+                      place_id,
+                      vicinity
+                    );
+
+                    return html`
+                      <my-hospital-item
+                        name=${name}
+                        placeId=${place_id}
+                        vicinity=${vicinity}
+                        county=${this.county}
+                        statePostal=${this.statePostal}
+                        bedCapacity=${this.bedCapacity}
+                      ></my-hospital-item>
+                    `;
+                  }
+                })
+              : nothing}
+          </div>
+          <div class="right-side">
+            ${this.renderImage()} ${this.renderSubHeader()}
+            ${this.renderHospitalDetails()}
+          </div>
         `;
   };
 
