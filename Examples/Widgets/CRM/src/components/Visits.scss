@@ -6,7 +6,7 @@
  *
  */
 
-// @import "./App.scss";
+@import "./TableStyles";
 
 :host {
   width: 100vw;
@@ -176,7 +176,7 @@ md-badge {
   cursor: pointer;
 
   &:hover {
-    background-color: #E6FBFF;
+    background-color: #e6fbff;
   }
 
   .split-left {
@@ -186,4 +186,54 @@ md-badge {
   .split-separator {
     margin: 0 0.25rem;
   }
+}
+
+md-menu-overlay::part(overlay-content) {
+  width: 16.5rem;
+}
+
+.visit-overlay-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.visit-details-header {
+  border-bottom: 1px solid #cccccc;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+
+  md-badge {
+  }
+
+  &:nth-child(2) {
+    width: 80%;
+    text-align: start;
+  }
+
+  h2, h3  {
+    margin: 0;
+  }
+
+  h2 {
+    font-size: .875rem;
+  }
+  
+  h3 {
+    font-size: .625rem;
+    font-weight: lighter;
+    color: var(--primary-text-color, #777);
+  }
+
+}
+
+.visit-details-content {
+  // width: 100%;
+  padding: 1rem;
+}
+
+table {
+  @include table;
 }

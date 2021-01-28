@@ -6,7 +6,7 @@
  *
  */
 
-// @import "./App";
+@import "./TableStyles";
 
 .summary-container {
   padding: 1rem;
@@ -44,7 +44,5 @@ md-badge::part(badge) {
 }
 
 table {
-  .label {
-    color: var(--primary-text-color, #777);
-  }
+  @include table;
 }
