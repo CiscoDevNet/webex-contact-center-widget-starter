@@ -140,7 +140,6 @@ div.month-line::before {
   width: 0.625rem;
   align-self: center;
   position: absolute;
-  // left: 16px;
 }
 
 div.month-line:last-child {
@@ -152,6 +151,37 @@ div.month-line:last-child {
   justify-content: space-between;
 }
 
-md-badge::part(badge) {
+md-badge {
+  box-shadow: 0px 0px 1px 0px #000000 18%;
+  box-shadow: 0px 2px 4px 0px #000000 16%;
+}
+
+.mock-badge {
+  display: flex;
+  height: 1rem;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 1.5rem;
+  margin-bottom: auto;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
   z-index: 100;
+  font-size: 0.625rem;
+  line-height: normal;
+
+
+  padding: 0.25rem 1rem 0.25rem 0;
+  background-color: #ffffff;
+
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.18);
+
+  .split-left {
+    display: flex;
+    align-items: center;
+  }
+  .split-separator {
+    margin: 0 0.25rem;
+  }
 }
