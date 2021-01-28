@@ -54,25 +54,29 @@ export default class CustomerVisits extends LitElement {
     const time = DateTime.fromISO(date).toLocal();
     const hour = time.hour;
     const day = time.ordinal;
-
-    // breaking har-code height of 400px in hour large chunks, compenstated for out of range hours and 33px
+    const formattedDate = time.toSQLDate();
+    // this breaks hard-coded height of 400px into hour-sized chunks, & compensates for out-of-range hours and 33px baseline shift.
     const xPosition = (400 / 9) * (hour - 7) - 33;
     const yPosition = (100 / 365) * day;
 
-    return [xPosition, yPosition];
+    return [xPosition, yPosition, formattedDate];
   };
 
   renderVisitBadge = (visit: CustomerVisit) => {
-    const [bottom, left] = this.matrixPosition(visit.date);
+    const [bottom, left, formattedDate] = this.matrixPosition(visit.date);
     return html`
-      <md-badge
-        color="blue"
-        small
-        style="position: absolute; bottom: ${bottom}px; left: ${left}%"
-      >
-        ${visit.date}
-      </md-badge>
-    `;
+    <div class="mock-badge" style="position: absolute; bottom: ${bottom}px; left: ${left}%">
+      <span class="split-left">
+        <md-badge circle small color="blue" style="margin-right: .25rem">
+          <md-icon name="icon-email_12" size=12 ></md-icon>
+        </md-badge>
+        ${visit.title}</span>
+      <span class="split-separator"> | </span>
+      <span name="split-right" class="split split-right">
+        ${formattedDate}
+      </span>
+    </div>
+    `
   };
 
   render() {
