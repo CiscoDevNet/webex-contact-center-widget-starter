@@ -10,6 +10,7 @@ import { html, LitElement, customElement, property } from "lit-element";
 import { ifDefined } from "lit-html/directives/if-defined";
 import styles from "./Summary.scss";
 import { data } from "../customer-data/mock-customer";
+import { nothing } from "lit-html";
 @customElement("customer-summary")
 export default class CustomerSummary extends LitElement {
   @property({ type: Object, attribute: false }) customerData?:
@@ -48,31 +49,56 @@ export default class CustomerSummary extends LitElement {
         >
         <table>
           <tr>
-            <td>
-              <span class="label">Date of Birth</span class="label">
+            <td class="title">
+              Date of Birth
             </td>
-            <td>
+            <td class="value">
               ${this.customerData?.DOB}
             </td>
           </tr>
           <tr>
-            <td>
-              <span class="label">Address</span class="label">
+            <td class="title">
+              Address
             </td>
-            <td>
+            <td class="value">
               ${this.customerData?.address}
             </td>
           </tr>
           <tr>
-            <td>
-              <span class="label">Insurance</span class="label">
+            <td class="title">
+              Insurance
             </td>
-            <td>
-              <span>${this.customerData?.insurance.provider}</span>
-              <span>${this.customerData?.insurance.planName}</span>
-              <span>${this.customerData?.insurance.planNumber}</span>
-              <span>${this.customerData?.insurance.groupNumber}</span>
+            <td class="value">
+              <span>${this.customerData?.insurance.provider}</span><br>
+              <span>${this.customerData?.insurance.planName}</span><br>
+              <span>${this.customerData?.insurance.planNumber}</span><br>
+              <span>${this.customerData?.insurance.groupNumber}</span><br>
               <span>${this.customerData?.insurance.memberID}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="title">
+              Next of Kin
+            </td>
+            <td class="value">
+              <span>${this.customerData?.nextToKin.name} ${this.customerData?.nextToKin["phone number"]}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="title">
+              Conditions
+            </td>
+            <td class="value">
+              ${this.customerData?.conditions.map(condition => html`<span>${condition}</span><br>`)}
+            </td>
+          </tr>
+          <tr>
+            <td class="title">
+              Allergies
+            </td>
+            <td class="value">
+              ${this.customerData?.allergies.map((allergy, i, arr) => {
+                return html`<span>${allergy}</span>${i < arr.length - 1 ? " | " : nothing}`})}
             </td>
           </tr>
           

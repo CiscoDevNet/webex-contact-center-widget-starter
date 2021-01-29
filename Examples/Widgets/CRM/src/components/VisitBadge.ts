@@ -57,50 +57,50 @@ export default class VisitBadge extends LitElement {
       <div class="visit-details-content">
       <table>
           <tr>
-            <td>
-              <span class="label">Facility</span class="label">
+            <td class="title">
+              Facility
             </td>
-            <td>
+            <td class="value">
               ${visit.facility}
             </td>
           </tr>
           <tr>
-            <td>
-              <span class="label">Clinician</span class="label">
+            <td class="title">
+              Clinician
             </td>
-            <td>
+            <td class="value">
               ${visit.clinician}
             </td>
           </tr>
           <tr>
-            <td>
-              <span class="label">Department</span class="label">
+            <td class="title">
+              Department
             </td>
-            <td>
+            <td class="value">
               <span>${visit.department}</span>
             </td>
           </tr>
           <tr>
-            <td>
-              <span class="label">Condition</span class="label">
+            <td class="title">
+              Condition
             </td>
-            <td>
+            <td class="value">
               <span>${visit.condition}</span>
             </td>
           </tr>
           <tr>
-            <td>
-              <span class="label">Type</span class="label">
+            <td class="title">
+              Type
             </td>
-            <td>
+            <td class="value">
               <span>${visit.type}</span>
             </td>
           </tr>
           <tr>
-            <td>
-              <span class="label">O2 Stat</span class="label">
+            <td class="title">
+              O2 Stat
             </td>
-            <td>
+            <td class="value">
               <span>${visit.O2Stat}</span>
             </td>
           </tr>
