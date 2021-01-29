@@ -21,6 +21,8 @@ export default class HospitalItem extends LitElement {
   @property({ type: String }) name = "";
   @property({ type: String }) placeId = "";
   @property({ type: String }) vicinity = "";
+  @property({ type: Boolean }) selected = false;
+  @property({ type: Boolean }) expanded = false;
 
   @property({ type: String }) county = "NA";
   @property({ type: String }) statePostal = "NA";
@@ -40,29 +42,6 @@ export default class HospitalItem extends LitElement {
     return styles;
   }
 
-  fetchPlaceDetails = () => {
-    if (this.map) {
-      const service = new google.maps.places.PlacesService(this.map);
-      service.getDetails(
-        {
-          placeId: this.placeId,
-        },
-        (results: any, status: google.maps.places.PlacesServiceStatus) => {
-          if (status === "OK") {
-            this.hospitalPhoneNumber = results?.formatted_phone_number || "NA";
-            this.hospitalWebsite = results?.website || "NA";
-            this.hospitalRating = results?.rating || "NA";
-            this.numberOfRatings = results?.user_ratings_total;
-            this.hospitalHours = results?.opening_hours?.isOpen();
-          } else {
-            console.error("PlacesService failed due to " + status);
-            this.errorMessage = "Unable to find a nearby hospital details";
-          }
-        }
-      );
-    }
-  };
-
   renderLoading = () => {
     return html`
       <div class="loading-wrapper">
@@ -81,10 +60,6 @@ export default class HospitalItem extends LitElement {
         <div class="row">
           <div class="title">Address</div>
           <div class="value">${this.vicinity}</div>
-        </div>
-        <div class="row">
-          <div class="title">Phone</div>
-          <div class="value">${this.hospitalPhoneNumber}</div>
         </div>
       </div>
     `;
@@ -106,7 +81,11 @@ export default class HospitalItem extends LitElement {
 
   render() {
     return html`
-      <div class="hospital-item">
+      <div
+        class=${`hospital-item ${this.expanded ? "expanded" : ""} ${
+          this.selected ? "selected" : ""
+        }`}
+      >
         ${this.loading ? this.renderLoading() : this.renderContent()}
       </div>
     `;
