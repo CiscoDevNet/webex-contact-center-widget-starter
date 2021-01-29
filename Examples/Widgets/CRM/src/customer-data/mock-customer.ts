@@ -48,7 +48,7 @@ export const data = {
       department: "Accident and Emergency",
       condition: "Throat irritation",
       type: "Out patient",
-      "O2 stat": 75
+      O2Stat: 75
     },
     {
       title: "commodo mollit",
@@ -60,7 +60,7 @@ export const data = {
       department: "dolore fugiat",
       condition: "quis",
       type: "et",
-      "O2 stat": 11
+      O2Stat: 11
     },
     {
       title: "ea nostrud",
@@ -72,7 +72,7 @@ export const data = {
       department: "sit ex",
       condition: "ut",
       type: "duis",
-      "O2 stat": 5
+      O2Stat: 5
     },
     {
       title: "qui qui",
@@ -84,7 +84,7 @@ export const data = {
       department: "et commodo",
       condition: "culpa",
       type: "consequat",
-      "O2 stat": 80
+      O2Stat: 80
     },
     {
       title: "occaecat excepteur",
@@ -96,7 +96,7 @@ export const data = {
       department: "dolor cupidatat",
       condition: "ipsum",
       type: "culpa",
-      "O2 stat": 79
+      O2Stat: 79
     },
     {
       title: "aliqua laborum",
@@ -108,7 +108,7 @@ export const data = {
       department: "officia consectetur",
       condition: "aute",
       type: "laborum",
-      "O2 stat": 11
+      O2Stat: 11
     },
     {
       title: "et nostrud",
@@ -120,7 +120,7 @@ export const data = {
       department: "eiusmod culpa",
       condition: "duis",
       type: "laboris",
-      "O2 stat": 33
+      O2Stat: 33
     }
   ]
 };
