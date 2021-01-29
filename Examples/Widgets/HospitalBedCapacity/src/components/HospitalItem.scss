@@ -1,9 +1,15 @@
+$main-border: 1px solid var(--md-primary-seperator-color, #ccc);
+
+:host {
+  padding: 2px;
+  border-bottom: $main-border;
+}
+
 .hospital-item {
   padding: 16px;
-  border-bottom: 1px solid var(--md-primary-seperator-color, #ccc);
 
   &.selected {
-    background-color: var(--md-secondary-background-color, #f7f7f7);
+    background-color: var(--md-secondary-bg-color, #f7f7f7);
   }
 }
 

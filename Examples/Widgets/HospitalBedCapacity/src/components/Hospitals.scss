@@ -1,41 +1,43 @@
 $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
-:host {
-  display: block;
+.hospital-widget {
+  display: flex;
+  height: 100%;
   background-color: var(--md-primary-bg-color);
   color: var(--md-primary-text-color);
-  height: 100%;
-}
 
-.hospital-widget {
-  height: 100%;
-  display: flex;
-
-  .left-side {
+  .hospital-list {
     width: 396px;
     flex: 0 1 auto;
     border-right: $main-border;
     height: 100%;
     overflow: auto;
 
+    md-list {
+      padding: 1px;
+    }
+
     .hospital-item {
       height: 151px;
       width: 100%;
-      border: $main-border;
     }
   }
 
   .right-side {
     flex: 1;
   }
+}
 
-  .loading-wrapper {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding-top: 2rem;
-  }
+.loading-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 10rem;
+}
+
+.hospital-details {
+  height: 100%;
 
   .hospital-image {
     display: block;
@@ -109,7 +111,7 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
     }
   }
 
-  .hospital-details {
+  .hospital-data {
     padding: 1rem;
     font-size: 14px;
     line-height: 21px;
@@ -156,6 +158,10 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
           &.closed {
             color: var(--md-alert-error-text-color, #a12512);
+          }
+
+          .pop-out-icon {
+            margin-left: 0.5rem;
           }
         }
       }

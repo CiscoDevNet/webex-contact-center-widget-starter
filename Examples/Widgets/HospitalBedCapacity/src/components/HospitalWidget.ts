@@ -18,11 +18,11 @@ import {
 import { Loader } from "@googlemaps/js-api-loader";
 import styles from "./Hospitals.scss";
 import { nothing } from "lit-html";
-import { ifDefined } from "lit-html/directives/if-defined";
 import "./HospitalItem";
+import "./HospitalDetails";
 
-@customElement("my-hospital-stats")
-export default class Hospitals extends LitElement {
+@customElement("my-hospital-widget")
+export default class HospitalWidget extends LitElement {
   /**
    * Property googleApiKey
    * Access your API key from Google Maps Platform
@@ -55,9 +55,10 @@ export default class Hospitals extends LitElement {
   @internalProperty() numberOfRatings = "";
   @internalProperty() hospitalHours = "";
 
-  @internalProperty() nearestHospitalPlaceId = "";
+  @internalProperty() selectedHospitalId = "";
 
   @internalProperty() map?: google.maps.Map;
+  @internalProperty() hospitalIds: Array<string> = [];
   @internalProperty() allNearbyHospitals?: Array<string> = [];
   @internalProperty() nearestHospitalData?: any;
   @internalProperty() allUSACounties?: any;
@@ -86,7 +87,7 @@ export default class Hospitals extends LitElement {
     var ro = new ResizeObserver((entries: any) => {
       for (let entry of entries) {
         const cr = entry.contentRect;
-        if (cr.width > 450) {
+        if (cr.width > 750) {
           if (!this.expanded) {
             this.expanded = true;
           }
@@ -101,7 +102,7 @@ export default class Hospitals extends LitElement {
 
     await this.fetchAllCounties()
       .then(() => this.initMap(this.longitude, this.latitude))
-      .then(() => this.nearestHospital());
+      .then(() => this.nearestHospitals());
   }
 
   async update(changeProperties: PropertyValues) {
@@ -109,9 +110,10 @@ export default class Hospitals extends LitElement {
 
     if (changeProperties.has("latitude") || changeProperties.has("longitude")) {
       this.loading = true;
-      await this.initMap(this.latitude, this.longitude).then(() =>
-        this.nearestHospital()
-      );
+      await this.initMap(this.latitude, this.longitude).then(() => {
+        this.getFormattedAddress({ lat: this.latitude, lng: this.longitude });
+        this.nearestHospitals();
+      });
     }
 
     if (
@@ -129,13 +131,6 @@ export default class Hospitals extends LitElement {
     if (this.bedCapacity && changeProperties.has("bedCapacity")) {
       this.loading = false;
     }
-
-    if (
-      this.nearestHospitalPlaceId &&
-      changeProperties.has("nearestHospitalPlaceId")
-    ) {
-      this.fetchPlaceDetails();
-    }
   }
 
   initMap = async (longitude: number, latitude: number) => {
@@ -152,29 +147,6 @@ export default class Hospitals extends LitElement {
       .catch((err) => {
         console.error("Failed to initMap due to ", err);
       });
-  };
-
-  fetchPlaceDetails = () => {
-    if (this.map) {
-      const service = new google.maps.places.PlacesService(this.map);
-      service.getDetails(
-        {
-          placeId: this.nearestHospitalPlaceId,
-        },
-        (results: any, status: google.maps.places.PlacesServiceStatus) => {
-          if (status === "OK") {
-            this.hospitalPhoneNumber = results?.formatted_phone_number || "NA";
-            this.hospitalWebsite = results?.website || "NA";
-            this.hospitalRating = results?.rating || "NA";
-            this.numberOfRatings = results?.user_ratings_total;
-            this.hospitalHours = results?.opening_hours?.isOpen();
-          } else {
-            console.error("PlacesService failed due to " + status);
-            this.errorMessage = "Unable to find a nearby hospital details";
-          }
-        }
-      );
-    }
   };
 
   getFormattedAddress = (location: { lat: number; lng: number }) => {
@@ -207,7 +179,8 @@ export default class Hospitals extends LitElement {
     );
   };
 
-  nearestHospital = () => {
+  nearestHospitals = () => {
+    this.hospitalIds = [];
     if (this.map) {
       const places = new google.maps.places.PlacesService(this.map);
       return places.nearbySearch(
@@ -221,19 +194,15 @@ export default class Hospitals extends LitElement {
         (results: any, status: google.maps.places.PlacesServiceStatus) => {
           if (status === "OK") {
             this.allNearbyHospitals = results;
-            console.log("[log] allNearby", this.allNearbyHospitals);
             this.nearestHospitalData = results[0];
             this.hospitalName = this.nearestHospitalData?.name;
-            this.getFormattedAddress(
-              this.nearestHospitalData?.geometry?.location
-            );
 
             if (this.nearestHospitalData?.photos?.length) {
               const hospitalImageInfo = this.nearestHospitalData?.photos[0];
               this.hospitalImage = hospitalImageInfo.getUrl();
             }
 
-            this.nearestHospitalPlaceId = this.nearestHospitalData?.place_id;
+            this.selectedHospitalId = this.nearestHospitalData?.place_id;
             this.errorMessage = "";
             this.loading = false;
           } else {
@@ -283,7 +252,7 @@ export default class Hospitals extends LitElement {
   };
 
   fetchCountyBedCapacity = async (countyData: any) => {
-    const { currentUsageTotal, capacity } = countyData?.actuals?.hospitalBeds;
+    const { currentUsageTotal, capacity } = countyData?.actuals?.icuBeds;
     const percentage = `${((currentUsageTotal / capacity) * 100).toFixed(0)}%`;
     this.bedCapacity = percentage;
     return percentage;
@@ -293,183 +262,66 @@ export default class Hospitals extends LitElement {
     return styles;
   }
 
-  renderLoading = () => {
-    return html`
-      <div class="loading-wrapper">
-        <md-spinner></md-spinner>
-      </div>
-    `;
+  handleSelection = (event: CustomEvent) => {
+    const selectedIndex = event.detail.selected;
+    this.selectedHospitalId = this.hospitalIds[selectedIndex];
   };
 
-  renderNoHospital = () => {
-    return html`
-      <div class="loading-wrapper">
-        <h3>${this.errorMessage}</h3>
-      </div>
-    `;
-  };
-
-  renderSubHeader = () => {
-    return this.expanded
+  renderHospitalList = () => {
+    const ids: Array<string> = [];
+    return this.allNearbyHospitals && this.expanded
       ? html`
-          <div class="hospital-header expanded flex-parent">
-            <div class="left-section">
-              <span class="header-text flex-child long-and-truncated"
-                >${this.hospitalName}</span
-              >
-              <md-badge small class="bed-capacity-badge" color="mint"
-                >${this.bedCapacity || "NA"}</md-badge
-              >
-            </div>
-            <div class="icons right-align flex-child short-and-fixed">
-              <md-button circle hasRemoveStyle size="28">
-                <md-icon slot="icon" name="location_16"></md-icon>
-              </md-button>
-              <md-button circle hasRemoveStyle size="28">
-                <md-icon slot="icon" name="info_16"></md-icon>
-              </md-button>
-              <md-button circle hasRemoveStyle size="28">
-                <md-icon slot="icon" name="share-c-native-adr_16"></md-icon>
-              </md-button>
-              <md-button circle hasRemoveStyle size="28">
-                <md-icon slot="icon" name="language_16"></md-icon>
-              </md-button>
-            </div>
-          </div>
-        `
-      : html`
-          <div class="hospital-header">
-            <md-badge class="hospital-badge" color="mint" split>
-              <span slot="split-left">
-                ${`${this.county}, ${this.statePostal}`}
-              </span>
-              <span slot="split-right">${this.bedCapacity}</span>
-            </md-badge>
-          </div>
-        `;
-  };
-
-  expandedHospitalDetails = () => {
-    return html`
-      <div class="row">
-        <div class="title">Hours</div>
-        <div class=${`value ${this.hospitalHours ? "open" : "closed"}`}>
-          ${this.hospitalHours ? "Open" : "Closed"}
-        </div>
-      </div>
-      <div class="row">
-        <div class="title">Contact Info</div>
-        <div class="value">${this.hospitalPhoneNumber}</div>
-      </div>
-      <div class="row">
-        <div class="title">Website</div>
-        <div class="value">${this.hospitalWebsite}</div>
-      </div>
-      <div class="row">
-        <div class="title">Ratings</div>
-        <div class="value">
-          ${this.hospitalRating && this.numberOfRatings
-            ? `${this.hospitalRating} (${this.numberOfRatings})`
-            : "NA"}
-        </div>
-      </div>
-    `;
-  };
-
-  renderWarningBlock = () => {
-    return this.expanded
-      ? html`
-          <div class="warning-block">
-            <md-icon name="warning_12"></md-icon>
-            <span class="warning-text"
-              >COVID-19 testing lab | Referral required | Tests limited to
-              certain patients</span
+          <div class=${`hospital-list ${this.expanded ? "expanded" : ""}`}>
+            <md-list
+              @list-item-change=${(event: CustomEvent) =>
+                this.handleSelection(event)}
+              activated=${0}
             >
+              ${this.allNearbyHospitals
+                ? this.allNearbyHospitals?.map(
+                    (hospitalData: any, index: number) => {
+                      if (index < 6) {
+                        const { name, place_id, vicinity } = hospitalData;
+                        ids.push(place_id);
+                        return html`
+                          <my-hospital-item
+                            slot="list-item"
+                            name=${name}
+                            placeId=${place_id}
+                            vicinity=${vicinity}
+                            county=${this.county}
+                            statePostal=${this.statePostal}
+                            bedCapacity=${this.bedCapacity}
+                            ?selected=${this.selectedHospitalId === place_id}
+                            ?expanded=${this.expanded}
+                          ></my-hospital-item>
+                        `;
+                      }
+                      this.hospitalIds = ids;
+                    }
+                  )
+                : nothing}
+            </md-list>
           </div>
         `
       : nothing;
-  };
-
-  renderHospitalDetails = () => {
-    return html`
-      <div class=${`hospital-details ${this.expanded ? "expanded" : ""}`}>
-        ${this.renderWarningBlock()}
-        <div class="details">
-          <div class="row">
-            <div class="title">Hospital</div>
-            <div class="value">${this.hospitalName}</div>
-          </div>
-          <div class="row">
-            <div class="title">Address</div>
-            <div class="value">${this.hospitalAddress}</div>
-          </div>
-          ${this.expanded ? this.expandedHospitalDetails() : nothing}
-        </div>
-      </div>
-    `;
-  };
-
-  renderImage = () => {
-    return this.expanded
-      ? html`
-          ${this.hospitalImage
-            ? html`
-                <img
-                  class="hospital-image"
-                  src=${ifDefined(this.hospitalImage)}
-                />
-              `
-            : html`
-                <div class="hospital-image void">
-                  <span>No Image Found</span>
-                </div>
-              `}
-        `
-      : nothing;
-  };
-
-  renderContent = () => {
-    return this.errorMessage
-      ? this.renderNoHospital()
-      : html`
-          <div class="left-side">
-            ${this.allNearbyHospitals
-              ? this.allNearbyHospitals?.map((hospitalData: any, index) => {
-                  if (index < 5) {
-                    const { name, place_id, vicinity } = hospitalData;
-                    console.log(
-                      "[log] render Content",
-                      hospitalData,
-                      name,
-                      place_id,
-                      vicinity
-                    );
-
-                    return html`
-                      <my-hospital-item
-                        name=${name}
-                        placeId=${place_id}
-                        vicinity=${vicinity}
-                        county=${this.county}
-                        statePostal=${this.statePostal}
-                        bedCapacity=${this.bedCapacity}
-                      ></my-hospital-item>
-                    `;
-                  }
-                })
-              : nothing}
-          </div>
-          <div class="right-side">
-            ${this.renderImage()} ${this.renderSubHeader()}
-            ${this.renderHospitalDetails()}
-          </div>
-        `;
   };
 
   render() {
     return html`
       <div class="hospital-widget">
-        ${this.loading ? this.renderLoading() : this.renderContent()}
+        ${this.renderHospitalList()}
+        <div class="right-side">
+          <my-hospital-details
+            googleApiKey=${this.googleApiKey}
+            .map=${this.map}
+            place-id=${this.selectedHospitalId}
+            county=${this.county}
+            statePostal=${this.statePostal}
+            bedCapacity=${this.bedCapacity}
+            ?expanded=${this.expanded}
+          ></my-hospital-details>
+        </div>
         <div id="map"></div>
       </div>
     `;
