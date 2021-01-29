@@ -12,6 +12,7 @@ import styles from "./VisitBadge.scss";
 import { nothing } from "lit-html";
 @customElement("visit-badge")
 export default class VisitBadge extends LitElement {
+  @property({type: Number, attribute: "o2-limit"}) o2Limit = 80
   @property({ type: Object, attribute: false }) visit:
     | CustomerVisit
     | undefined;
@@ -39,6 +40,14 @@ export default class VisitBadge extends LitElement {
 
     return [xPosition, yPosition, formattedDate];
   };
+
+  formatO2Stat = (stat:number) => {
+    if (stat < this.o2Limit) {
+      return html`<span style="color: red; line-height: normal">%${stat.toString()}<md-icon name="icon-warning_16" color="red" style="position:relative; bottom: -3px"></md-icon></span>`
+    } else {
+      return html`<span>%${stat.toString()}</span>`
+    }
+  }
 
   visitDetailsOverlay =(visit:CustomerVisit, formattedDate: string) => {
     return html`
@@ -101,7 +110,7 @@ export default class VisitBadge extends LitElement {
               O2 Stat
             </td>
             <td class="value">
-              <span>${visit.O2Stat}</span>
+              ${this.formatO2Stat(visit.O2Stat)}
             </td>
           </tr>
           
