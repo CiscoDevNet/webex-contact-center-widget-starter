@@ -21,7 +21,7 @@ export const data = {
   longitude: 25.892618,
   nextToKin: {
     name: "Mona",
-    "phone number": "(+1) 2345-1234-00",
+    "phone number": "(+1) 245-1234-000",
     email: "mona@website.com"
   },
   allergies: ["penecillin", "aspirin"],

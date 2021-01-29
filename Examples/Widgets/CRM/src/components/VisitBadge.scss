@@ -89,6 +89,4 @@ md-menu-overlay::part(overlay-content) {
   padding: 1rem;
 }
 
-table {
-  @include table;
-}
+@include table;

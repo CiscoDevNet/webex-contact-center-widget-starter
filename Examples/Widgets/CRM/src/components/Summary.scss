@@ -12,6 +12,7 @@
   padding: 1rem;
   height: 100vh;
   font-size: 12px;
+  min-width: 280px;
 }
 
 .cust-info-header {
@@ -43,6 +44,4 @@ md-badge::part(badge) {
   border-radius: 4px;
 }
 
-table {
-  @include table;
-}
+@include table;
