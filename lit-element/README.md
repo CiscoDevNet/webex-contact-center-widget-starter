@@ -1,5 +1,5 @@
 # WCC Widget Starter: Lit Element 
-[![Generic badge](https://img.shields.io/badge/Completion-95%-greed.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/Completion-95-green)](https://shields.io/)
 
 This widget starter can be run on `localhost` to be reviewed. In case you (the developer) are using this widget starter as a foundation of your custom widget, running the sandbox environment on `localhost` would be a perfect way to build your widget's logic and interface. It will also allow you to experiment with theme switching (light/dark) as well as test various container sizes that your widget might fit. 
 
