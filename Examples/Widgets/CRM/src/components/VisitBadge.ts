@@ -7,15 +7,21 @@
  */
 
 import { DateTime } from "luxon";
-import { html, LitElement, customElement, property } from "lit-element";
+import { html, LitElement, customElement, property, PropertyValues, query, internalProperty } from "lit-element";
 import styles from "./VisitBadge.scss";
 import { nothing } from "lit-html";
+import { MenuOverlay } from "@momentum-ui/web-components";
 @customElement("visit-badge")
 export default class VisitBadge extends LitElement {
   @property({type: Number, attribute: "o2-limit"}) o2Limit = 80
   @property({ type: Object, attribute: false }) visit:
     | CustomerVisit
     | undefined;
+
+  @query(".wrapper") wrapper!: HTMLElement | undefined;
+  @query("md-menu-overlay") menu!: MenuOverlay | undefined;
+  @internalProperty() coords = {x:0, y:0}
+  @internalProperty() menuOpen = false
 
   static get styles() {
     return styles;
@@ -25,8 +31,27 @@ export default class VisitBadge extends LitElement {
     super.connectedCallback();
   }
 
+  firstUpdated(changedProperties: PropertyValues) {
+    super.firstUpdated(changedProperties);
+    // this.setCoordinates()
+  }
+
   disconnectedCallback() {
     super.disconnectedCallback();
+  }
+
+  setCoordinates = () => {
+    const {x, y} = this.wrapper?.getBoundingClientRect() || {x:0, y:0};
+    this.coords = {x,y}
+    console.log(this.coords)
+    this.menu!.style.position = "fixed"
+    // this.menu!.style.left = x.toString()
+    this.wrapper!.style.top = (y - 25).toString()
+  }
+
+  toggleMenuOpen = () => {
+    this.menuOpen = !this.menuOpen
+    this.menuOpen === true ? this.menu!.style.position = "fixed" : this.menu!.style.position = "absolute"
   }
 
   matrixPosition = (date: string) => {
@@ -122,25 +147,27 @@ export default class VisitBadge extends LitElement {
   renderVisitBadge = (visit: CustomerVisit) => {
     const [bottom, left, formattedDate] = this.matrixPosition(visit.date);
     return html`
-    <md-tooltip message="${visit.title}" style="z-index: 100; position: absolute; bottom: ${bottom}px; left: ${left}%">
-      <md-menu-overlay>
-        <div class="mock-badge" slot="menu-trigger" aria-haspopup="true" aria-expanded="true">
-          <span class="split-left">
-            <md-badge circle small color="blue" style="margin-right: .25rem">
-              <md-icon name="icon-document_12" size=12 ></md-icon>
-            </md-badge>
-            ${visit.title}
-          </span>
-          <span class="split-separator"> | </span>
-          <span name="split-right" class="split split-right">
-            ${formattedDate}
-          </span>
-        </div>
-        <div class="visit-overlay-content">
-          ${this.visitDetailsOverlay(visit, formattedDate as string)}
-        </div>
-      </md-menu-overlay>
-    </md-tooltip>
+      <div class="wrapper" style="z-index: 100; position: absolute; bottom: ${bottom}px; left: ${left}%">
+        <md-menu-overlay>
+          <div class="mock-badge" slot="menu-trigger" aria-haspopup="true" aria-expanded="true" @click=${this.toggleMenuOpen}>
+            <md-tooltip message="${visit.title}" >
+              <span class="split-left">
+                <md-badge circle small color="blue" style="margin-right: .25rem">
+                  <md-icon name="icon-document_12" size=12 ></md-icon>
+                </md-badge>
+                ${visit.title}
+              </span>
+              <span class="split-separator"> | </span>
+              <span name="split-right" class="split split-right">
+                ${formattedDate}
+              </span>
+            </div>
+            <div class="visit-overlay-content">
+              ${this.visitDetailsOverlay(visit, formattedDate as string)}
+            </md-tooltip>
+          </div>
+        </md-menu-overlay>
+      </div>
     `
   };
 

@@ -96,6 +96,7 @@ export default class CustomerVisits extends LitElement {
           </div>
           <div class="matrix-wrapper">
             <div class="visits-matrix">
+            <span style="position:fixed;top:211px; left:515px">FART</span>
               ${this.visits?.map(visit => {
                 return html`<visit-badge .visit=${visit}></visit-badge>`})}
             </div>
