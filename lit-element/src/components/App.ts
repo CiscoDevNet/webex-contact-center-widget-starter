@@ -7,7 +7,7 @@
  */
 
 import { Desktop } from "@wxcc-desktop/sdk";
-import { html, LitElement, customElement, internalProperty } from "lit-element";
+import { html, LitElement, customElement, internalProperty, property } from "lit-element";
 import styles from "./App.scss";
 import { logger } from "./sdk";
 import { Service } from "@wxcc-desktop/sdk-types";
@@ -15,12 +15,30 @@ import { Notifications } from "@uuip/unified-ui-platform-sdk";
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
   /**
+   * These values will be replaced with STORE values through Data provider
+   * in JSON layout configuration file
+   * Data provider documentation: 
+   * https://apim-dev-portal.appstaging.ciscoccservice.com/documentation/guides/desktop#data-provider%E2%80%94widget-properties-and-attributes
+   */
+
+  @property({ type: String, attribute: "agent-id", reflect: true }) agentId = "7d12d9ea-e8e0-41ee-81bf-c11a685b64ed";
+  @property({ type: String, attribute: "agent-profile-id", reflect: true }) agentProfileId = "AXCLfZhH9S1oTdqE1OFw";
+  @property({ type: String, attribute: "agent-session-id", reflect: true }) agentSessionId = "5a84d32c-691b-4500-b163-d6cdba2a3163";
+  
+  /**
    * Replace this with the logic to obtain interaction ID you need
    * through Desktop.actions sub-module or through external props
    */
+
   @internalProperty() sampleInteractionId: Service.Aqm.Contact.Interaction["interactionId"] =
     "58f76ca3-409f-11eb-8606-f1b296a9b969";
-  @internalProperty() agentId = "7d12d9ea-e8e0-41ee-81bf-c11a685b64ed";
+    
+  /**
+   * Replace this with the logic to obtain mediaResourceId you need
+   * through Desktop.actions sub-module or through external props
+   */
+
+  @internalProperty() mediaResourceId: Service.Aqm.Contact.consultTransferPayLoad["mediaResourceId"] = "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8";
   @internalProperty() buddyAgents: Service.Aqm.Contact.BuddyAgentsSuccess | null = null;
   @internalProperty() vTeam: Service.Aqm.Contact.VTeamSuccess | null = null;
   @internalProperty() contacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
@@ -224,7 +242,7 @@ export default class MyCustomComponent extends LitElement {
 
   async getBuddyAgents() {
     const buddyAgentPayload = {
-      agentProfileId: "AXCLfZhH9S1oTdqE1OFw",
+      agentProfileId: this.agentProfileId,
       channelName: "chat",
       state: "Available",
     };
@@ -237,8 +255,8 @@ export default class MyCustomComponent extends LitElement {
 
   async getVTeamList() {
     const vTeamPayload = {
-      agentProfileId: "AXCLfZhH9S1oTdqE1OFw",
-      agentSessionId: "5a84d32c-691b-4500-b163-d6cdba2a3163",
+      agentProfileId: this.agentProfileId,
+      agentSessionId: this.agentSessionId,
       channelType: "chat",
       type: "inboundqueue",
     };
@@ -372,18 +390,18 @@ export default class MyCustomComponent extends LitElement {
           <md-tab-panel slot="panel">
             <div class="action-container">
               <h2>Desktop.agentContact sub-module</h2>
-              <h3>Get Buddy Agents</h3>
+              <h3>Get Available Agents</h3>
               <md-button @button-click=${() => this.getBuddyAgents()}
-                >Get Buddy Agents</md-button
+                >Get Available Agents</md-button
               >
 
-              <h3>Get vTeam list</h3>
+              <h3>Get channel specific team list</h3>
               <md-button @button-click=${() => this.getVTeamList()}
-                >Get vTeam list</md-button
+                >Get Team list</md-button
               >
 
               <h3>Accept interactions</h3>
-
+              <span>New incoming interactions will appear here</span>
               ${
                 this.contacts.map(contact => {
                   if (this.acceptedContacts.indexOf(contact) != -1) {
@@ -494,15 +512,15 @@ export default class MyCustomComponent extends LitElement {
                 >Get Agent Desktop auth token</md-button
               >
 
-              <md-button @button-click=${() => this.getToken()}
+              <md-button @button-click=${() => this.getIdleCodes()}
                 >Get idle codes</md-button
               >
 
-              <md-button @button-click=${() => this.getToken()}
+              <md-button @button-click=${() => this.getwrapupCodes()}
                 >Get wrap up codes</md-button
               >
 
-              <md-button @button-click=${() => this.getToken()}
+              <md-button @button-click=${() => this.fireNotification()}
                 >Fire notification</md-button
               >
               
