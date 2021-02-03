@@ -206,6 +206,10 @@ export default class MyCustomComponent extends LitElement {
   async getAgentInfo() {
     const latestData = Desktop.agentStateInfo.latestData;
     logger.info("AgentStateInfo latestData: ", latestData);
+    if (latestData.agentSessionId && latestData.agentProfileID) {
+      this.agentSessionId = latestData.agentSessionId;
+      this.agentProfileId = latestData.agentProfileID;
+    }
   }
 
   getClientLocale() {
@@ -391,11 +395,13 @@ export default class MyCustomComponent extends LitElement {
             <div class="action-container">
               <h2>Desktop.agentContact sub-module</h2>
               <h3>Get Available Agents</h3>
+              <p>Make sure to fetch latest agent info first before invoking this method</p>
               <md-button @button-click=${() => this.getBuddyAgents()}
                 >Get Available Agents</md-button
               >
 
               <h3>Get channel specific team list</h3>
+              <p>Make sure to fetch latest agent info first before invoking this method</p>
               <md-button @button-click=${() => this.getVTeamList()}
                 >Get Team list</md-button
               >

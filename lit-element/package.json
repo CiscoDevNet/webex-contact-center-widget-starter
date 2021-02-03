@@ -22,7 +22,7 @@
         "test": "jest"
     },
     "dependencies": {
-        "@wxcc-desktop/sdk": "^1.2.2"
+        "@wxcc-desktop/sdk": "^1.2.5"
     },
     "resolutions": {
         "jest": "^26.4.2",
