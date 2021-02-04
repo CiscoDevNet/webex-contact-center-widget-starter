@@ -1,6 +1,8 @@
 ## Sandbox use disclaimer
 This sandbox is considered helpful for various purposes of your WXCC widget development. It does, however, have it's limitations. Below you will find a list of functions you are able or not able to test within this sandbox. 
 
+**Note**: All JS API methods that are being invoked in this starter display response data in the browser `Console log`. Please open Developer tools/Console to be able to see activity as you press sample buttons within this starter widget. 
+
 ### You are bale to test within this sandbox:
 <details>
     <summary>Widget appearance.</summary>
