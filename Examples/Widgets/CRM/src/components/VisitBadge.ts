@@ -7,25 +7,45 @@
  */
 
 import { DateTime } from "luxon";
-import { html, LitElement, customElement, property, PropertyValues, query, internalProperty } from "lit-element";
+import {
+  html,
+  LitElement,
+  customElement,
+  property,
+  PropertyValues,
+  query,
+  internalProperty
+} from "lit-element";
 import styles from "./VisitBadge.scss";
 import { nothing } from "lit-html";
 import { MenuOverlay } from "@momentum-ui/web-components";
+
+interface VisitTypes {
+  [key: string]: {
+    icon: string;
+    color: string;
+  };
+}
 @customElement("visit-badge")
 export default class VisitBadge extends LitElement {
-  @property({type: Number, attribute: "o2-limit"}) o2Limit = 80
+  @property({ type: Number, attribute: "o2-limit" }) o2Limit = 80;
+  @property({ type: String, attribute: "visit-type" }) visitType =
+    "General Visit";
   @property({ type: Object, attribute: false }) visit:
     | CustomerVisit
     | undefined;
 
   @query(".wrapper") wrapper!: HTMLElement | undefined;
   @query("md-menu-overlay") menu!: MenuOverlay | undefined;
-  @internalProperty() coords = {x:0, y:0}
-  @internalProperty() menuOpen = false
+  @internalProperty() coords = { x: 0, y: 0 };
+  @internalProperty() menuOpen = false;
 
-  static get styles() {
-    return styles;
-  }
+  VISITTYPES: VisitTypes = {
+    "General Visit": { icon: "icon-document_12", color: "blue" },
+    "Follow-up Visit": { icon: "icon-document_12", color: "violet" },
+    "Full Body Checkup": { icon: "icon-file-locked_12", color: "orange" },
+    "Medical Tests": { icon: "icon-document_12", color: "green" }
+  };
 
   connectedCallback() {
     super.connectedCallback();
@@ -41,18 +61,20 @@ export default class VisitBadge extends LitElement {
   }
 
   setCoordinates = () => {
-    const {x, y} = this.wrapper?.getBoundingClientRect() || {x:0, y:0};
-    this.coords = {x,y}
-    console.log(this.coords)
-    this.menu!.style.position = "fixed"
+    const { x, y } = this.wrapper?.getBoundingClientRect() || { x: 0, y: 0 };
+    this.coords = { x, y };
+    console.log(this.coords);
+    this.menu!.style.position = "fixed";
     // this.menu!.style.left = x.toString()
-    this.wrapper!.style.top = (y - 25).toString()
-  }
+    this.wrapper!.style.top = (y - 25).toString();
+  };
 
   toggleMenuOpen = () => {
-    this.menuOpen = !this.menuOpen
-    this.menuOpen === true ? this.menu!.style.position = "fixed" : this.menu!.style.position = "absolute"
-  }
+    this.menuOpen = !this.menuOpen;
+    this.menuOpen === true
+      ? (this.menu!.style.position = "fixed")
+      : (this.menu!.style.position = "absolute");
+  };
 
   matrixPosition = (date: string) => {
     const time = DateTime.fromISO(date).toLocal();
@@ -66,30 +88,55 @@ export default class VisitBadge extends LitElement {
     return [xPosition, yPosition, formattedDate];
   };
 
-  formatO2Stat = (stat:number) => {
-    if (stat < this.o2Limit) {
-      return html`<span style="color: red; line-height: normal">%${stat.toString()}<md-icon name="icon-warning_16" color="red" style="position:relative; bottom: -3px"></md-icon></span>`
-    } else {
-      return html`<span>%${stat.toString()}</span>`
-    }
-  }
+  getVisitIcon = () => {
+    return html`
+      <md-icon
+        name=${this.VISITTYPES[this.visitType].icon}
+        color="default"
+      ></md-icon>
+    `;
+  };
 
-  visitDetailsOverlay =(visit:CustomerVisit, formattedDate: string) => {
+  formatO2Stat = (stat: number) => {
+    if (stat < this.o2Limit) {
+      return html`
+        <span style="color: red; line-height: normal"
+          >%${stat.toString()}<md-icon
+            name="icon-warning_16"
+            color="red"
+            style="position:relative; bottom: -3px"
+          ></md-icon
+        ></span>
+      `;
+    } else {
+      return html`
+        <span>%${stat.toString()}</span>
+      `;
+    }
+  };
+
+  visitDetailsOverlay = (visit: CustomerVisit, formattedDate: string) => {
     return html`
       <div class="visit-details-header">
-        <md-badge small circle color="blue"><md-icon name="icon-document_12" color="blue"></md-icon></md-badge>
+        <md-badge small circle color=${this.VISITTYPES[this.visitType].color}>
+          ${this.getVisitIcon()}
+        </md-badge>
         <div>
           <h2>${visit.title}</h2>
           <h3>${formattedDate}</h3>
         </div>
         <div>
-        <md-button hasremovestyle class="md-close md-modal__close" aria-label="Close Modal">
-          <md-icon name="cancel_14"></md-icon>
-        </md-button>
+          <md-button
+            hasremovestyle
+            class="md-close md-modal__close"
+            aria-label="Close Modal"
+          >
+            <md-icon name="cancel_14"></md-icon>
+          </md-button>
         </div>
       </div>
       <div class="visit-details-content">
-      <table>
+        <table>
           <tr>
             <td class="title">
               Facility
@@ -138,41 +185,57 @@ export default class VisitBadge extends LitElement {
               ${this.formatO2Stat(visit.O2Stat)}
             </td>
           </tr>
-          
         </table>
       </div>
-    `
-  }
+    `;
+  };
 
   renderVisitBadge = (visit: CustomerVisit) => {
     const [bottom, left, formattedDate] = this.matrixPosition(visit.date);
     return html`
-      <div class="wrapper" style="z-index: 100; position: absolute; bottom: ${bottom}px; left: ${left}%">
+      <div
+        class="wrapper"
+        style="z-index: 100; position: absolute; bottom: ${bottom}px; left: ${left}%"
+      >
         <md-menu-overlay>
-          <div class="mock-badge" slot="menu-trigger" aria-haspopup="true" aria-expanded="true" @click=${this.toggleMenuOpen}>
-            <md-tooltip message="${visit.title}" >
-              <span class="split-left">
-                <md-badge circle small color="blue" style="margin-right: .25rem">
-                  <md-icon name="icon-document_12" size=12 ></md-icon>
+          <div
+            slot="menu-trigger"
+            aria-haspopup="true"
+            aria-expanded="true"
+            @click=${this.toggleMenuOpen}
+          >
+            <md-tooltip message="${visit.title}" class="mock-badge">
+              <span>
+                <md-badge
+                  circle
+                  small
+                  color=${this.VISITTYPES[this.visitType].color}
+                  style="margin-right: .25rem"
+                >
+                  ${this.getVisitIcon()}
                 </md-badge>
                 ${visit.title}
               </span>
+
               <span class="split-separator"> | </span>
-              <span name="split-right" class="split split-right">
+              <span>
                 ${formattedDate}
               </span>
-            </div>
-            <div class="visit-overlay-content">
-              ${this.visitDetailsOverlay(visit, formattedDate as string)}
             </md-tooltip>
+          </div>
+          <div class="visit-overlay-content">
+            ${this.visitDetailsOverlay(visit, formattedDate as string)}
           </div>
         </md-menu-overlay>
       </div>
-    `
+    `;
   };
 
+  static get styles() {
+    return styles;
+  }
+
   render() {
-    
     return html`
       ${this.visit ? this.renderVisitBadge(this.visit) : nothing}
     `;

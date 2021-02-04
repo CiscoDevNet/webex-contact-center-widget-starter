@@ -51,7 +51,7 @@ export const data = {
       O2Stat: 75
     },
     {
-      title: "commodo mollit",
+      title: "Follow-up Visit",
       summary:
         "eiusmod laboris sint cupidatat et aliquip mollit occaecat ut aliqua cupidatat eiusmod duis laborum ex sint amet amet pariatur ipsum elit anim duis est et elit id ut laborum elit",
       date: "2020-11-20T10:13:22",
@@ -63,7 +63,7 @@ export const data = {
       O2Stat: 11
     },
     {
-      title: "ea nostrud",
+      title: "Full Body Checkup",
       summary:
         "magna consectetur elit minim enim exercitation tempor aute est esse labore officia ea sunt nulla nostrud id enim occaecat consectetur voluptate do excepteur ipsum aute deserunt officia pariatur exercitation nulla",
       date: "2020-02-18T11:02:13",
@@ -75,7 +75,7 @@ export const data = {
       O2Stat: 5
     },
     {
-      title: "qui qui",
+      title: "General Visit",
       summary:
         "dolor ut laborum consectetur excepteur consequat sunt aliqua laboris eu consectetur occaecat laboris aute exercitation Lorem labore qui ut officia minim anim duis irure mollit aliqua eu anim consequat aliqua",
       date: "2020-05-22T09:04:46",
@@ -87,7 +87,7 @@ export const data = {
       O2Stat: 80
     },
     {
-      title: "occaecat excepteur",
+      title: "Medical Tests",
       summary:
         "ea sit exercitation consequat sint exercitation mollit occaecat ea nostrud nisi ipsum ullamco ex occaecat enim commodo dolor commodo consequat nulla tempor voluptate commodo ea incididunt culpa sint aute minim",
       date: "2020-02-19T14:53:32",
@@ -99,7 +99,7 @@ export const data = {
       O2Stat: 79
     },
     {
-      title: "aliqua laborum",
+      title: "General Visit",
       summary:
         "tempor pariatur sit ullamco irure proident culpa dolor id proident pariatur tempor sit do consequat commodo cillum culpa nisi mollit officia cupidatat sint qui anim officia dolor dolore excepteur pariatur",
       date: "2020-10-14T16:04:36",
@@ -111,7 +111,7 @@ export const data = {
       O2Stat: 11
     },
     {
-      title: "et nostrud",
+      title: "Medical Tests",
       summary:
         "aliqua exercitation et eiusmod sit labore esse veniam amet labore consequat eu irure eu aliqua in officia non duis esse deserunt ad amet cillum veniam adipisicing consectetur mollit et mollit",
       date: "2020-03-26T13:01:37",
