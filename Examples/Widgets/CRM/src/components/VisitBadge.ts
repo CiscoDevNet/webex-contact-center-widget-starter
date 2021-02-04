@@ -20,12 +20,19 @@ import styles from "./VisitBadge.scss";
 import { nothing } from "lit-html";
 import { MenuOverlay } from "@momentum-ui/web-components";
 
-interface VisitTypes {
+export interface VisitTypes {
   [key: string]: {
     icon: string;
     color: string;
   };
 }
+
+export const VisitTypeNames = [
+  "General Visit",
+  "Follow-up Visit",
+  "Full Body Checkup",
+  "Medical Tests"
+];
 @customElement("visit-badge")
 export default class VisitBadge extends LitElement {
   @property({ type: Number, attribute: "o2-limit" }) o2Limit = 80;
@@ -53,7 +60,6 @@ export default class VisitBadge extends LitElement {
 
   firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
-    // this.setCoordinates()
   }
 
   disconnectedCallback() {
@@ -65,7 +71,6 @@ export default class VisitBadge extends LitElement {
     this.coords = { x, y };
     console.log(this.coords);
     this.menu!.style.position = "fixed";
-    // this.menu!.style.left = x.toString()
     this.wrapper!.style.top = (y - 25).toString();
   };
 
