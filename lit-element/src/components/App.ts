@@ -43,6 +43,9 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() vTeam: Service.Aqm.Contact.VTeamSuccess | null = null;
   @internalProperty() contacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
   @internalProperty() acceptedContacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
+  @internalProperty() assignedContacts: { 
+    interaction: Service.Aqm.Contact.Interaction
+  }[] = [];
 
   static get styles() {
     return styles;
@@ -242,6 +245,13 @@ export default class MyCustomComponent extends LitElement {
     };
     const [ status, reason, mode ]: [ Notifications.ItemMeta.Status, Notifications.ItemMeta.StatusChangeEventReason, Notifications.ItemMeta.Mode ] = await Desktop.actions.fireGeneralAutoDismissNotification(raw as Notifications.ItemMeta.Raw & { data: { mode: Notifications.ItemMeta.Mode.AutoDismiss; }; })
     logger.info(status, reason, mode);
+  }
+
+  async getTaskMap() {
+    const taskMap: Map<string, any> = await Desktop.actions.getTaskMap();
+    console.log(taskMap);
+    this.assignedContacts = Array.from(taskMap.values());
+    console.log(this.assignedContacts[0])
   }
 
   async getBuddyAgents() {
@@ -529,6 +539,18 @@ export default class MyCustomComponent extends LitElement {
               <md-button @button-click=${() => this.fireNotification()}
                 >Fire notification</md-button
               >
+
+              <md-button @button-click=${() => this.getTaskMap()}
+                >Get full ist of assigned tasks including CAD variables</md-button
+              >
+              <span>
+                  ${this.assignedContacts.length > 0 ? html`
+                    ${this.assignedContacts[0].interaction.callAssociatedData &&
+                    this.assignedContacts[0].interaction.callAssociatedData["ani"]["value"] + " " + 
+                    this.assignedContacts[0].interaction.callAssociatedData["customerName"]["value"]}
+                  `: 
+                `First assigned task CAD variables will appear here.`}
+              </span>
               
             </div>
           </md-tab-panel>
