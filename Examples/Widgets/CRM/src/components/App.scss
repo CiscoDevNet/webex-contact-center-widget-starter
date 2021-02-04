@@ -15,6 +15,7 @@
 .container {
     display: flex;
     flex-direction: row;
+    height: 100%;
 
     > :first-child {
         height: 100%;

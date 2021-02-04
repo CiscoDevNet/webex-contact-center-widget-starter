@@ -9,15 +9,20 @@
 @import "./TableStyles";
 
 .summary-container {
+  box-sizing: border-box;
   padding: 1rem;
-  height: 100vh;
+  height: 100%;
   font-size: 12px;
-  min-width: 280px;
+  min-width: 312px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .cust-info-header {
   display: grid;
-  gap: 0px 0px;
+  gap: 0px 1rem;
+  grid-auto-columns: max-content;
   grid-template-areas:
     "avatar h1 h1 h1"
     "avatar age age age"
@@ -39,9 +44,24 @@
   }
 }
 
+md-avatar::part(avatar) {
+  width: 60px;
+  height: 60px;
+  border: 2px solid #07C1E4;
+  border-radius: 100%;
+}
+
 md-badge::part(badge) {
   margin: 1rem 0;
   border-radius: 4px;
 }
 
 @include table;
+
+table {
+  flex-grow: 1
+}
+
+md-button {
+  margin-bottom: .5rem;
+}
