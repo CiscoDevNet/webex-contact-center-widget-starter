@@ -9,7 +9,7 @@
 import { DateTime } from "luxon";
 import { html, LitElement, customElement, property } from "lit-element";
 import styles from "./Visits.scss";
-import "./VisitBadge"
+import "./VisitBadge";
 @customElement("customer-visits")
 export default class CustomerVisits extends LitElement {
   @property({ type: Array, attribute: false }) visits:
@@ -49,7 +49,7 @@ export default class CustomerVisits extends LitElement {
       `;
     }
   };
-  
+
   render() {
     const hours = [...Array(24).keys()];
     const months = [
@@ -71,11 +71,13 @@ export default class CustomerVisits extends LitElement {
       <div class="visits-container" part="visits">
         <div class="filters">
           <md-input searchable shape="pill"></md-input>
-          <md-badge color="violet" small>${this.visits?.length} visits</md-badge>
+          <md-badge color="violet" small
+            >${this.visits?.length} visits</md-badge
+          >
           <div class="more-actions">
             <md-button hasRemoveStyle>
               <md-icon name="icon-filter_16"></md-icon>
-            </md-button>  
+            </md-button>
             <md-button hasRemoveStyle>
               <md-icon name="icon-more-adr_16"></md-icon>
             </md-button>
@@ -96,9 +98,15 @@ export default class CustomerVisits extends LitElement {
           </div>
           <div class="matrix-wrapper">
             <div class="visits-matrix">
-            <span style="position:fixed;top:211px; left:515px">FART</span>
+              <span style="position:fixed;top:211px; left:515px">FART</span>
               ${this.visits?.map(visit => {
-                return html`<visit-badge .visit=${visit}></visit-badge>`})}
+                return html`
+                  <visit-badge
+                    .visit=${visit}
+                    visit-type=${visit.title}
+                  ></visit-badge>
+                `;
+              })}
             </div>
           </div>
           <div class="date"></div>
