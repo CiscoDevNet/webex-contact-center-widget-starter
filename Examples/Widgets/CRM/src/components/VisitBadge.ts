@@ -18,13 +18,15 @@ import {
 } from "lit-element";
 import styles from "./VisitBadge.scss";
 import { nothing } from "lit-html";
-import { MenuOverlay } from "@momentum-ui/web-components";
-
 export interface VisitTypes {
   [key: string]: {
     icon: string;
     color: string;
   };
+}
+
+interface MenuElement extends HTMLElement {
+  isOpen: boolean;
 }
 
 export const VisitTypeNames = [
@@ -42,10 +44,11 @@ export default class VisitBadge extends LitElement {
     | CustomerVisit
     | undefined;
 
-  @query(".wrapper") wrapper!: HTMLElement | undefined;
-  @query("md-menu-overlay") menu!: HTMLElement | undefined;
   @internalProperty() coords = { x: 0, y: 0 };
   @internalProperty() menuOpen = false;
+
+  @query(".wrapper") wrapper!: HTMLElement | undefined;
+  @query("md-menu-overlay") menu!: MenuElement | undefined;
 
   VISITTYPES: VisitTypes = {
     "General Visit": { icon: "icon-document_12", color: "blue" },
@@ -54,31 +57,10 @@ export default class VisitBadge extends LitElement {
     "Medical Tests": { icon: "icon-document_12", color: "green" }
   };
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
-  firstUpdated(changedProperties: PropertyValues) {
-    super.firstUpdated(changedProperties);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-  }
-
-  setCoordinates = () => {
-    const { x, y } = this.wrapper?.getBoundingClientRect() || { x: 0, y: 0 };
-    this.coords = { x, y };
-    console.log(this.coords);
+  fixOverlayPosition = () => {
+    const yCoord = this.menu!.getBoundingClientRect().top;
     this.menu!.style.position = "fixed";
-    this.wrapper!.style.top = (y - 25).toString();
-  };
-
-  toggleMenuOpen = () => {
-    this.menuOpen = !this.menuOpen;
-    this.menuOpen === true
-      ? (this.menu!.style.position = "fixed")
-      : (this.menu!.style.position = "absolute");
+    this.menu!.style.top = yCoord.toString() + "px";
   };
 
   matrixPosition = (date: string) => {
@@ -120,6 +102,11 @@ export default class VisitBadge extends LitElement {
     }
   };
 
+  closeMenu = () => {
+    this.menu ? (this.menu.isOpen = false) : null;
+    this.menu!.removeAttribute("style");
+  };
+
   visitDetailsOverlay = (visit: CustomerVisit, formattedDate: string) => {
     return html`
       <div class="visit-details-header">
@@ -135,6 +122,7 @@ export default class VisitBadge extends LitElement {
             hasremovestyle
             class="md-close md-modal__close"
             aria-label="Close Modal"
+            @click=${this.closeMenu}
           >
             <md-icon name="cancel_14"></md-icon>
           </md-button>
@@ -202,12 +190,14 @@ export default class VisitBadge extends LitElement {
         class="wrapper"
         style="z-index: 100; position: absolute; bottom: ${bottom}px; left: ${left}%"
       >
-        <md-menu-overlay>
+        <md-menu-overlay @menu-overlay-close=${this.closeMenu}>
           <div
             slot="menu-trigger"
             aria-haspopup="true"
             aria-expanded="true"
-            @click=${this.toggleMenuOpen}
+            @click=${this.fixOverlayPosition}
+            role="button"
+            tabindex="0"
           >
             <md-tooltip message="${visit.title}" class="mock-badge">
               <span>
