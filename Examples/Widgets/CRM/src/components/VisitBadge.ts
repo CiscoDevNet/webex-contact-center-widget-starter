@@ -43,7 +43,7 @@ export default class VisitBadge extends LitElement {
     | undefined;
 
   @query(".wrapper") wrapper!: HTMLElement | undefined;
-  @query("md-menu-overlay") menu!: MenuOverlay | undefined;
+  @query("md-menu-overlay") menu!: HTMLElement | undefined;
   @internalProperty() coords = { x: 0, y: 0 };
   @internalProperty() menuOpen = false;
 
@@ -220,11 +220,10 @@ export default class VisitBadge extends LitElement {
                   ${this.getVisitIcon()}
                 </md-badge>
                 ${visit.title}
-              </span>
-
-              <span class="split-separator"> | </span>
-              <span>
-                ${formattedDate}
+                <span class="split-separator"> | </span>
+                <span>
+                  ${formattedDate}
+                </span>
               </span>
             </md-tooltip>
           </div>

@@ -4,7 +4,7 @@ export const data = {
   MRN: "366A7-234BZ",
   isActive: false,
   balance: "$1,315.22",
-  picture: "http://placehold.it/60x60",
+  picture: "https://i.pravatar.cc/300",
   age: 40,
   eyeColor: "brown",
   name: "Jonathan Gadot",

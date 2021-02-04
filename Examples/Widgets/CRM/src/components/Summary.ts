@@ -34,9 +34,10 @@ export default class CustomerSummary extends LitElement {
     return html`
       <div class="summary-container" part="summary">
         <section class="cust-info-header">
-          <md-avatar src=${ifDefined(
-            this.customerData?.picture
-          )} size="56"></md-avatar>
+          <md-avatar
+            src=${ifDefined(this.customerData?.picture)}
+            size="56"
+          ></md-avatar>
           <h1>${this.customerData?.name}</h1>
           <div class="age-gender">
             ${this.customerData?.age} years old, ${this.customerData?.gender}
@@ -69,10 +70,10 @@ export default class CustomerSummary extends LitElement {
               Insurance
             </td>
             <td class="value">
-              <span>${this.customerData?.insurance.provider}</span><br>
-              <span>${this.customerData?.insurance.planName}</span><br>
-              <span>${this.customerData?.insurance.planNumber}</span><br>
-              <span>${this.customerData?.insurance.groupNumber}</span><br>
+              <span>${this.customerData?.insurance.provider}</span><br />
+              <span>${this.customerData?.insurance.planName}</span><br />
+              <span>${this.customerData?.insurance.planNumber}</span><br />
+              <span>${this.customerData?.insurance.groupNumber}</span><br />
               <span>${this.customerData?.insurance.memberID}</span>
             </td>
           </tr>
@@ -81,7 +82,10 @@ export default class CustomerSummary extends LitElement {
               Next of Kin
             </td>
             <td class="value">
-              <span>${this.customerData?.nextToKin.name} ${this.customerData?.nextToKin["phone number"]}</span>
+              <span
+                >${this.customerData?.nextToKin.name}
+                ${this.customerData?.nextToKin["phone number"]}</span
+              >
             </td>
           </tr>
           <tr>
@@ -89,7 +93,12 @@ export default class CustomerSummary extends LitElement {
               Conditions
             </td>
             <td class="value">
-              ${this.customerData?.conditions.map(condition => html`<span>${condition}</span><br>`)}
+              ${this.customerData?.conditions.map(
+                condition =>
+                  html`
+                    <span>${condition}</span><br />
+                  `
+              )}
             </td>
           </tr>
           <tr>
@@ -98,11 +107,17 @@ export default class CustomerSummary extends LitElement {
             </td>
             <td class="value">
               ${this.customerData?.allergies.map((allergy, i, arr) => {
-                return html`<span>${allergy}</span>${i < arr.length - 1 ? " | " : nothing}`})}
+                return html`
+                  <span>${allergy}</span>${i < arr.length - 1 ? " | " : nothing}
+                `;
+              })}
             </td>
           </tr>
-          
         </table>
+
+        <md-button type="button" variant="primary" size="32"
+          >View Full Medical Record</md-button
+        >
       </div>
     `;
   }
