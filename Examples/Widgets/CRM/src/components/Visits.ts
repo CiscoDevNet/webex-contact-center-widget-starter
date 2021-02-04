@@ -6,19 +6,25 @@
  *
  */
 
-import { DateTime } from "luxon";
-import { html, LitElement, customElement, property } from "lit-element";
+import {
+  html,
+  LitElement,
+  customElement,
+  property,
+  internalProperty,
+  PropertyValues
+} from "lit-element";
 import styles from "./Visits.scss";
 import "./VisitBadge";
+import { VisitTypeNames } from "./VisitBadge";
+import { nothing } from "lit-html";
 @customElement("customer-visits")
 export default class CustomerVisits extends LitElement {
   @property({ type: Array, attribute: false }) visits:
     | Array<CustomerVisit>
     | undefined;
 
-  static get styles() {
-    return styles;
-  }
+  @internalProperty() filterSelection: string | undefined = undefined;
 
   connectedCallback() {
     super.connectedCallback();
@@ -26,6 +32,13 @@ export default class CustomerVisits extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+  }
+
+  updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties);
+    if (changedProperties.has("filterSelection")) {
+      this.render();
+    }
   }
 
   generateTime = (i: number | string | undefined) => {
@@ -50,6 +63,10 @@ export default class CustomerVisits extends LitElement {
     }
   };
 
+  static get styles() {
+    return styles;
+  }
+
   render() {
     const hours = [...Array(24).keys()];
     const months = [
@@ -70,7 +87,19 @@ export default class CustomerVisits extends LitElement {
     return html`
       <div class="visits-container" part="visits">
         <div class="filters">
-          <md-input searchable shape="pill"></md-input>
+          <md-combobox
+            searchable
+            .options=${VisitTypeNames}
+            placeholder="Filter by Visit Type"
+            allow-custom-value
+            shape="pill"
+            @change-selected=${(e: CustomEvent) => {
+              this.filterSelection = e.detail.value;
+            }}
+            @remove-all-selected=${() => {
+              this.filterSelection = undefined;
+            }}
+          ></md-combobox>
           <md-badge color="violet" small
             >${this.visits?.length} visits</md-badge
           >
@@ -98,14 +127,24 @@ export default class CustomerVisits extends LitElement {
           </div>
           <div class="matrix-wrapper">
             <div class="visits-matrix">
-              <span style="position:fixed;top:211px; left:515px">FART</span>
               ${this.visits?.map(visit => {
-                return html`
-                  <visit-badge
-                    .visit=${visit}
-                    visit-type=${visit.title}
-                  ></visit-badge>
-                `;
+                if (this.filterSelection === undefined) {
+                  return html`
+                    <visit-badge
+                      .visit=${visit}
+                      visit-type=${visit.title}
+                    ></visit-badge>
+                  `;
+                } else {
+                  return visit.title === this.filterSelection
+                    ? html`
+                        <visit-badge
+                          .visit=${visit}
+                          visit-type=${visit.title}
+                        ></visit-badge>
+                      `
+                    : nothing;
+                }
               })}
             </div>
           </div>

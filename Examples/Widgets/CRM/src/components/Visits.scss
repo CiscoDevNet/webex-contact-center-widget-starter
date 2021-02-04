@@ -21,8 +21,9 @@
   justify-content: space-between;
   align-items: baseline;
 
-  md-input {
+  md-combobox {
     flex-grow: 1;
+    z-index: 100;
   }
   
   md-badge {
@@ -32,6 +33,12 @@
     &::part(badge) {
       border-radius: .25rem;
     }
+  }
+
+  .more-actions {
+    width: 3rem;
+    display: flex;
+    justify-content: space-between;
   }
 }
 
@@ -51,6 +58,7 @@
   grid-template-areas:
     "time grid"
     "year month";
+    margin-top: 1rem;
 }
 
 .visits-matrix {
