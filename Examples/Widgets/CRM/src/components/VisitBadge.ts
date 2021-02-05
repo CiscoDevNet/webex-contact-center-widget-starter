@@ -12,9 +12,7 @@ import {
   LitElement,
   customElement,
   property,
-  PropertyValues,
   query,
-  internalProperty
 } from "lit-element";
 import styles from "./VisitBadge.scss";
 import { nothing } from "lit-html";
@@ -24,7 +22,6 @@ export interface VisitTypes {
     color: string;
   };
 }
-
 interface MenuElement extends HTMLElement {
   isOpen: boolean;
 }
@@ -44,10 +41,6 @@ export default class VisitBadge extends LitElement {
     | CustomerVisit
     | undefined;
 
-  @internalProperty() coords = { x: 0, y: 0 };
-  @internalProperty() menuOpen = false;
-
-  @query(".wrapper") wrapper!: HTMLElement | undefined;
   @query("md-menu-overlay") menu!: MenuElement | undefined;
 
   VISITTYPES: VisitTypes = {

@@ -15,23 +15,18 @@
 }
 
 .mock-badge {
-  color: var(--md-primary-text-color, #777);
-  background-color: var(--md-primary-bg-color, #fff);
   display: flex;
-  height: 1rem;
   justify-content: flex-start;
   align-items: center;
+  color: var(--md-primary-text-color, #777);
+  background-color: var(--md-primary-bg-color, #fff);
   border-radius: 1.5rem;
-  margin-bottom: auto;
-  overflow: hidden;
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
-  z-index: 100;
-  font-size: 0.625rem;
-  line-height: normal;
   padding: 0.25rem 1rem 0.25rem 0;
+  height: 1rem;
+  white-space: nowrap;
+  font-size: 0.625rem;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.18);
+  z-index: 1;
   cursor: pointer;
   
   &:hover {

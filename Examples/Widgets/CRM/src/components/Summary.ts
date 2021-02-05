@@ -17,13 +17,8 @@ export default class CustomerSummary extends LitElement {
   @property({ type: Boolean}) compact = false
   @property({ type: Object, attribute: false }) customerData?:
     | typeof data
-    | undefined; // nice to define the interface when solidified
+    | undefined;
 
-
-  connectedCallback() {
-    super.connectedCallback();
-    console.log(this.customerData);
-  }
 
   private get resizeClassMap() {
     return {
