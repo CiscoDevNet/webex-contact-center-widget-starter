@@ -12,8 +12,11 @@ import {
   customElement,
   css,
   internalProperty,
-  property
+  property,
+  PropertyValues,
+  query
 } from "lit-element";
+import { classMap } from "lit-html/directives/class-map";
 import "./components/Summary";
 import "./components/Visits";
 import { data } from "./customer-data/mock-customer";
@@ -25,22 +28,37 @@ export default class MyCustomComponent extends LitElement {
     | string
     | undefined;
 
+  @internalProperty() compact = false;
   @internalProperty() customerData!: typeof data;
+  @query(".container")container!: HTMLElement;
 
   connectedCallback() {
     super.connectedCallback();
     this.customerData = data;
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
+  firstUpdated(changedProperties: PropertyValues) {
+    super.firstUpdated(changedProperties)
+    // @ts-ignore
+    var ro = new ResizeObserver((entries: any) => {
+      for (let entry of entries) {
+        const cr = entry.contentRect;
+
+        if (cr.width > 589) {
+          this.compact = false;
+        } else {
+          this.compact = true;
+        }
+      }
+    });
+    ro.observe(this.container);
   }
 
-  // formatPhoneNumber() {
-  //   if (true) {
-  //     return formattedNumber
-  //   } else return errorMessage
-  // }
+  private get resizeClassMap() {
+    return {
+      "compact": this.compact
+    }
+  }
 
   static get styles() {
     return [
@@ -58,9 +76,10 @@ export default class MyCustomComponent extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div class="container ${classMap(this.resizeClassMap)}">
         <customer-summary
           .customerData=${this.customerData ? this.customerData : undefined}
+          ?compact=${this.compact}
           >test</customer-summary
         >
         <customer-visits

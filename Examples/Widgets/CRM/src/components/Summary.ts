@@ -11,23 +11,28 @@ import { ifDefined } from "lit-html/directives/if-defined";
 import styles from "./Summary.scss";
 import { data } from "../customer-data/mock-customer";
 import { nothing } from "lit-html";
+import { classMap } from "lit-html/directives/class-map";
 @customElement("customer-summary")
 export default class CustomerSummary extends LitElement {
+  @property({ type: Boolean}) compact = false
   @property({ type: Object, attribute: false }) customerData?:
     | typeof data
     | undefined; // nice to define the interface when solidified
 
-  static get styles() {
-    return styles;
-  }
 
   connectedCallback() {
     super.connectedCallback();
     console.log(this.customerData);
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
+  private get resizeClassMap() {
+    return {
+      "compact": this.compact
+    }
+  }
+
+  static get styles() {
+    return styles;
   }
 
   render() {
@@ -48,7 +53,7 @@ export default class CustomerSummary extends LitElement {
         <md-badge small color="green" pill="false"
           >MRN# ${this.customerData?.MRN}</md-badge
         >
-        <table>
+        <table class="${classMap(this.resizeClassMap)}">
           <tr>
             <td class="title">
               Date of Birth
