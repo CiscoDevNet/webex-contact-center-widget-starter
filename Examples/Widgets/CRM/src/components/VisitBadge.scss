@@ -30,7 +30,7 @@
   cursor: pointer;
   
   &:hover {
-    background-color: #e6fbff;
+    background-color: var(--badge-cyan-bg-color,#e6fbff);
   }
   span {
     display: inline-flex;

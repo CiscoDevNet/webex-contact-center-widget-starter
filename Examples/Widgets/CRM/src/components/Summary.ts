@@ -42,7 +42,10 @@ export default class CustomerSummary extends LitElement {
           <div class="age-gender">
             ${this.customerData?.age} years old, ${this.customerData?.gender}
           </div>
-          <div class="phone">${this.customerData?.phone}</div>
+          <div class="phone">
+            <md-icon name="icon-audio-call_14" size="10"></md-icon>
+            ${this.customerData?.phone}
+          </div>
         </section>
 
         <md-badge small color="green" pill="false"

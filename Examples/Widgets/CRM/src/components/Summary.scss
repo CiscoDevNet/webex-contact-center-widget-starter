@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
+@import "../assets/styles/variables";
 @import "./TableStyles";
 
 .summary-container {
@@ -38,9 +38,11 @@
   }
   div.age-gender {
     grid-area: age;
+    color: var(--md-secondary-text-color, #545454)
   }
   div.phone {
     grid-area: phone;
+    color: var(--md-secondary-text-color, #545454)
   }
 }
 
