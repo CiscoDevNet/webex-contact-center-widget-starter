@@ -60,6 +60,7 @@ export default class VisitBadge extends LitElement {
   fixOverlayPosition = () => {
     const yCoord = this.menu!.getBoundingClientRect().top;
     this.menu!.style.position = "fixed";
+    this.menu!.style.zIndex = "100";
     this.menu!.style.top = yCoord.toString() + "px";
   };
 
@@ -188,7 +189,7 @@ export default class VisitBadge extends LitElement {
     return html`
       <div
         class="wrapper"
-        style="z-index: 100; position: absolute; bottom: ${bottom}px; left: ${left}%"
+        style="position: absolute; bottom: ${bottom}px; left: ${left}%"
       >
         <md-menu-overlay @menu-overlay-close=${this.closeMenu}>
           <div
