@@ -6,7 +6,6 @@
  *
  */
 
-@import "./TableStyles";
 
 :host {
   width: 100vw;
@@ -50,11 +49,11 @@
 }
 
 .visits-grid {
-  font-size: 12px;
+  font-size: .75rem;
   display: grid;
   grid-template-columns: 1fr 16fr;
   grid-template-rows: 10fr auto;
-  gap: 9px;
+  gap: .6rem;
   grid-template-areas:
     "time grid"
     "year month";
@@ -63,8 +62,6 @@
 
 .visits-matrix {
   background-color: #f7f7f7;
-  width: 500px;
-  height: 500px;
   position: relative;
   width: 100%;
   height: 100%;
@@ -76,8 +73,6 @@
   width: 100%;
   height: 100%;
   position: absolute;
-  top: 0;
-  left: 0;
   background: repeating-linear-gradient(
       to right,
       transparent,

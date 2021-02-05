@@ -26,14 +26,6 @@ export default class CustomerVisits extends LitElement {
 
   @internalProperty() filterSelection: string | undefined = undefined;
 
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-  }
-
   updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
     if (changedProperties.has("filterSelection")) {
