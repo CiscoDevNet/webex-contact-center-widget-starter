@@ -15,6 +15,7 @@ import {
   query,
   PropertyValues,
 } from "lit-element";
+import ResizeObserver from 'resize-observer-polyfill';
 import { Loader } from "@googlemaps/js-api-loader";
 import styles from "./Hospitals.scss";
 import { nothing } from "lit-html";
@@ -47,13 +48,7 @@ export default class HospitalWidget extends LitElement {
 
   @internalProperty() hospitalName = "";
   @internalProperty() hospitalAddress = "";
-
-  @internalProperty() hospitalImage: string = "";
-  @internalProperty() hospitalPhoneNumber = "";
-  @internalProperty() hospitalWebsite = "";
-  @internalProperty() hospitalRating = "";
-  @internalProperty() numberOfRatings = "";
-  @internalProperty() hospitalHours = "";
+  @internalProperty() hospitalImage = "";
 
   @internalProperty() selectedHospitalId = "";
 
@@ -83,8 +78,7 @@ export default class HospitalWidget extends LitElement {
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
 
-    // @ts-ignore
-    var ro = new ResizeObserver((entries: any) => {
+    const ro = new ResizeObserver((entries: any) => {
       for (let entry of entries) {
         const cr = entry.contentRect;
         if (cr.width > 750) {
@@ -157,12 +151,22 @@ export default class HospitalWidget extends LitElement {
       (results: any, status: google.maps.GeocoderStatus) => {
         if (status === "OK") {
           this.hospitalAddress = results[0].formatted_address;
-          const addressDetails = results[0].address_components.reduce(
-            (seed: any, obj: any) => (
-              obj.types.forEach((t: any) => (seed[t] = obj.short_name)), seed
-            ),
-            {}
-          );
+
+          const componentForm: any = {
+            administrative_area_level_1: 'short_name',
+            administrative_area_level_2: 'short_name',
+            country: 'short_name'
+          };
+
+          let addressDetails: any = {};
+          const place = results[0];
+          for (let i = 0; i < place.address_components.length; i++) {
+            const addressType: any = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+              addressDetails[addressType] = place.address_components[i]["short_name"];
+            }
+          }
+
           if (addressDetails.country && addressDetails.country === "US") {
             this.county = addressDetails.administrative_area_level_2;
             this.statePostal = addressDetails.administrative_area_level_1;
@@ -258,10 +262,6 @@ export default class HospitalWidget extends LitElement {
     return percentage;
   };
 
-  static get styles() {
-    return styles;
-  }
-
   handleSelection = (event: CustomEvent) => {
     const selectedIndex = event.detail.selected;
     this.selectedHospitalId = this.hospitalIds[selectedIndex];
@@ -306,6 +306,10 @@ export default class HospitalWidget extends LitElement {
         `
       : nothing;
   };
+
+  static get styles() {
+    return styles;
+  }
 
   render() {
     return html`

@@ -28,20 +28,6 @@ export default class HospitalItem extends LitElement {
   @property({ type: String }) statePostal = "NA";
   @property({ type: String }) bedCapacity = "NA";
 
-  @internalProperty() loading = false;
-  @internalProperty() errorMessage = "";
-
-  @internalProperty() hospitalAddress = "NA";
-  @internalProperty() hospitalPhoneNumber = "NA";
-  @internalProperty() hospitalWebsite = "NA";
-  @internalProperty() hospitalRating = "NA";
-  @internalProperty() numberOfRatings = 0;
-  @internalProperty() hospitalHours = false;
-
-  static get styles() {
-    return styles;
-  }
-
   renderLoading = () => {
     return html`
       <div class="loading-wrapper">
@@ -79,15 +65,20 @@ export default class HospitalItem extends LitElement {
     `;
   };
 
+  static get styles() {
+    return styles;
+  }
+
   render() {
     return html`
-      <div
+      <li
+        role="listitem"
         class=${`hospital-item ${this.expanded ? "expanded" : ""} ${
           this.selected ? "selected" : ""
         }`}
       >
-        ${this.loading ? this.renderLoading() : this.renderContent()}
-      </div>
+        ${this.renderContent()}
+      </li>
     `;
   }
 }

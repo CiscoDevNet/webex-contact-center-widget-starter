@@ -21,8 +21,7 @@ import "./HospitalItem";
 @customElement("my-hospital-details")
 export default class HospitalDetails extends LitElement {
   @property({ type: Object }) map?: google.maps.Map;
-  @property({ type: String, reflect: true, attribute: "place-id" }) placeId =
-    "";
+  @property({ type: String, reflect: true, attribute: "place-id" }) placeId = "";
   @property({ type: String }) county = "";
   @property({ type: String }) statePostal = "";
   @property({ type: String }) bedCapacity = "";
