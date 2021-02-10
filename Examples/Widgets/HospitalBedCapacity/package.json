@@ -22,7 +22,8 @@
         "test": "jest"
     },
     "dependencies": {
-        "@googlemaps/js-api-loader": "^1.11.1"
+        "@googlemaps/js-api-loader": "^1.11.1",
+        "resize-observer-polyfill": "^1.5.1"
     },
     "resolutions": {
         "jest": "^26.4.2",

@@ -68,6 +68,21 @@ function ruleTS({ isDev }: { isDev: boolean }) {
   };
 }
 
+function ruleMD () {
+  return {
+      test: /\.md$/,
+      use: [
+          {
+              loader: "html-loader"
+          },
+          {
+              loader: "markdown-loader",
+              options: {}
+          }
+      ]
+    }
+}
+
 function ruleCSS({ isDev }: { isDev: boolean }) {
   return {
     test: /\.scss$/,
@@ -102,7 +117,7 @@ export const commonDev = merge(common, {
     path: pBuild
   },
   module: {
-    rules: [ruleTS({ isDev: true }), ruleCSS({ isDev: true })]
+    rules: [ruleTS({ isDev: true }), ruleCSS({ isDev: true }), ruleMD()]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -160,7 +175,7 @@ const distDev = merge(commonDist, {
   mode: "development",
   devtool: "source-map",
   module: {
-    rules: [ruleTS({ isDev: true }), ruleCSS({ isDev: true })]
+    rules: [ruleTS({ isDev: true }), ruleCSS({ isDev: true }), ruleMD()]
   }
 });
 
@@ -173,7 +188,7 @@ const distProd = merge(commonDist, {
   name: "distProd",
   mode: "production",
   module: {
-    rules: [ruleTS({ isDev: false }), ruleCSS({ isDev: false })]
+    rules: [ruleTS({ isDev: false }), ruleCSS({ isDev: false }), ruleMD()]
   }
 });
 
