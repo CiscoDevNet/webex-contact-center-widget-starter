@@ -82,7 +82,7 @@ export class Sandbox extends LitElement {
     <md-theme lumos ?darkTheme=${this.darkTheme}>
       <div class="container">
         <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <erm-widget></erm-widget>
+          <crm-widget phone-number="+1 (800) 471-2389"></crm-widget>
         </div>
       </div>
     </md-theme>

@@ -6,12 +6,17 @@
  *
  */
 
- @import "../assets/styles/variables";
+@import "../assets/styles/variables";
 
 @import "./TableStyles";
 
 :host {
   width: 100vw;
+}
+
+.menu-trigger::part(button) {
+  padding: 0;
+  height: 100%;
 }
 
 .mock-badge {
@@ -28,9 +33,9 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.18);
   z-index: 1;
   cursor: pointer;
-  
+
   &:hover {
-    background-color: var(--badge-cyan-bg-color,#e6fbff);
+    background-color: var(--badge-cyan-bg-color, #e6fbff);
   }
   span {
     display: inline-flex;
@@ -63,20 +68,20 @@ md-menu-overlay::part(overlay-content) {
     text-align: start;
   }
 
-  h2, h3  {
+  h2,
+  h3 {
     margin: 0;
   }
 
   h2 {
-    font-size: .875rem;
+    font-size: 0.875rem;
   }
-  
+
   h3 {
-    font-size: .625rem;
+    font-size: 0.625rem;
     font-weight: lighter;
     color: var(--primary-text-color, #777);
   }
-
 }
 
 .visit-details-content {
