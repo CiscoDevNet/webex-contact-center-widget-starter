@@ -10,7 +10,6 @@ import {
   html,
   LitElement,
   customElement,
-  internalProperty,
   property,
 } from "lit-element";
 import styles from "./HospitalItem.scss";

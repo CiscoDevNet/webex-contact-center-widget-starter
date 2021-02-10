@@ -52,21 +52,7 @@ export default class HospitalDetails extends LitElement {
     this.loading = true;
     if (this.map) {
       const service = new google.maps.places.PlacesService(this.map);
-      service.getDetails(
-        {
-          placeId: this.placeId,
-          fields: [
-            "name",
-            "formatted_address",
-            "formatted_phone_number",
-            "rating",
-            "website",
-            "url",
-            "user_ratings_total",
-            "opening_hours",
-            "photos",
-          ],
-        },
+      service.getDetails({ placeId: this.placeId },
         (results: any, status: google.maps.places.PlacesServiceStatus) => {
           if (status === "OK") {
             const {
@@ -90,7 +76,6 @@ export default class HospitalDetails extends LitElement {
             this.user_ratings_total = user_ratings_total;
             this.isOpen = opening_hours?.isOpen();
             this.image = photos?.length ? photos[0].getUrl() : undefined;
-
             setTimeout(() => (this.loading = false), 150);
           } else {
             console.error("PlacesService failed due to " + status);
