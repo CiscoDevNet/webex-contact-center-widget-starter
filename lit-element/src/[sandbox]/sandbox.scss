@@ -16,6 +16,14 @@
     align-items: flex-start;
     width: 100vw;
   }
+  .disclaimer {
+    position: absolute;
+    left: 20px;
+    width: calc(50vw - 250px - 40px);
+    max-height: calc(100vh - 70px);
+    overflow-x: auto;
+    color: var(--md-secondary-text-color);
+  }
   .default-maximize-area {
     top: 0;
     right: 0;

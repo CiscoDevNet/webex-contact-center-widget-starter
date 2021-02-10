@@ -15,11 +15,15 @@ import {
   query,
   PropertyValues,
 } from "lit-element";
+import ResizeObserver from 'resize-observer-polyfill';
 import { Loader } from "@googlemaps/js-api-loader";
 import styles from "./Hospitals.scss";
+import { nothing } from "lit-html";
+import "./HospitalItem";
+import "./HospitalDetails";
 
-@customElement("my-hospital-stats")
-export default class Hospitals extends LitElement {
+@customElement("my-hospital-widget")
+export default class HospitalWidget extends LitElement {
   /**
    * Property googleApiKey
    * Access your API key from Google Maps Platform
@@ -37,20 +41,27 @@ export default class Hospitals extends LitElement {
   @property({ type: Number, reflect: true }) latitude = 37.40527;
   @property({ type: Number, reflect: true }) longitude = -122.01178;
 
+  @internalProperty() expanded = false;
   @internalProperty() statePostal = "";
   @internalProperty() county = "";
   @internalProperty() bedCapacity = "";
 
   @internalProperty() hospitalName = "";
   @internalProperty() hospitalAddress = "";
+  @internalProperty() hospitalImage = "";
+
+  @internalProperty() selectedHospitalId = "";
 
   @internalProperty() map?: google.maps.Map;
+  @internalProperty() hospitalIds: Array<string> = [];
+  @internalProperty() allNearbyHospitals?: Array<string> = [];
   @internalProperty() nearestHospitalData?: any;
   @internalProperty() allUSACounties?: any;
   @internalProperty() countyData?: any;
   @internalProperty() loading = false;
   @internalProperty() errorMessage = "";
 
+  @query(".hospital-widget") hospitalWidget!: HTMLDivElement;
   @query("#map") mapDiv?: HTMLElement;
 
   @internalProperty() loader = new Loader({
@@ -67,9 +78,25 @@ export default class Hospitals extends LitElement {
   async firstUpdated(changeProperties: PropertyValues) {
     super.firstUpdated(changeProperties);
 
+    const ro = new ResizeObserver((entries: any) => {
+      for (let entry of entries) {
+        const cr = entry.contentRect;
+        if (cr.width > 750) {
+          if (!this.expanded) {
+            this.expanded = true;
+          }
+        } else {
+          if (this.expanded) {
+            this.expanded = false;
+          }
+        }
+      }
+    });
+    ro.observe(this.hospitalWidget);
+
     await this.fetchAllCounties()
       .then(() => this.initMap(this.longitude, this.latitude))
-      .then(() => this.nearestHospital());
+      .then(() => this.nearestHospitals());
   }
 
   async update(changeProperties: PropertyValues) {
@@ -77,9 +104,10 @@ export default class Hospitals extends LitElement {
 
     if (changeProperties.has("latitude") || changeProperties.has("longitude")) {
       this.loading = true;
-      await this.initMap(this.latitude, this.longitude).then(() =>
-        this.nearestHospital()
-      );
+      await this.initMap(this.latitude, this.longitude).then(() => {
+        this.getFormattedAddress({ lat: this.latitude, lng: this.longitude });
+        this.nearestHospitals();
+      });
     }
 
     if (
@@ -124,12 +152,21 @@ export default class Hospitals extends LitElement {
         if (status === "OK") {
           this.hospitalAddress = results[0].formatted_address;
 
-          const addressDetails = results[0].address_components.reduce(
-            (seed: any, obj: any) => (
-              obj.types.forEach((t: any) => (seed[t] = obj.short_name)), seed
-            ),
-            {}
-          );
+          const componentForm: any = {
+            administrative_area_level_1: 'short_name',
+            administrative_area_level_2: 'short_name',
+            country: 'short_name'
+          };
+
+          let addressDetails: any = {};
+          const place = results[0];
+          for (let i = 0; i < place.address_components.length; i++) {
+            const addressType: any = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+              addressDetails[addressType] = place.address_components[i]["short_name"];
+            }
+          }
+
           if (addressDetails.country && addressDetails.country === "US") {
             this.county = addressDetails.administrative_area_level_2;
             this.statePostal = addressDetails.administrative_area_level_1;
@@ -139,32 +176,42 @@ export default class Hospitals extends LitElement {
           }
         } else {
           console.error("Geocoder failed due to " + status);
+          this.loading = false;
           this.errorMessage = "Unable to find a nearby hospital";
         }
       }
     );
   };
 
-  nearestHospital = () => {
+  nearestHospitals = () => {
+    this.hospitalIds = [];
     if (this.map) {
       const places = new google.maps.places.PlacesService(this.map);
       return places.nearbySearch(
         {
           location: { lat: this.latitude, lng: this.longitude },
-          rankBy: google.maps.places.RankBy.DISTANCE,
+          rankBy: google.maps.places.RankBy.PROMINENCE,
+          radius: 250,
           type: "hospital",
-          keyword: "(emergency) AND ((medical centre) OR hospital)",
+          keyword: "establishment",
         },
-        (results: any) => {
-          if (results.length) {
+        (results: any, status: google.maps.places.PlacesServiceStatus) => {
+          if (status === "OK") {
+            this.allNearbyHospitals = results;
             this.nearestHospitalData = results[0];
             this.hospitalName = this.nearestHospitalData?.name;
-            this.getFormattedAddress(
-              this.nearestHospitalData?.geometry?.location
-            );
+
+            if (this.nearestHospitalData?.photos?.length) {
+              const hospitalImageInfo = this.nearestHospitalData?.photos[0];
+              this.hospitalImage = hospitalImageInfo.getUrl();
+            }
+
+            this.selectedHospitalId = this.nearestHospitalData?.place_id;
             this.errorMessage = "";
+            this.loading = false;
           } else {
             this.loading = false;
+            console.error("google api failed to find near by hospital");
             this.errorMessage = "Unable to find nearby Hospitals";
           }
         }
@@ -204,64 +251,81 @@ export default class Hospitals extends LitElement {
       return this.countyData;
     } else {
       this.loading = false;
-      this.errorMessage = "Unreconizable statePostal & County";
+      this.errorMessage = "Unrecognizable statePostal & County";
     }
   };
 
   fetchCountyBedCapacity = async (countyData: any) => {
-    const { currentUsageTotal, capacity } = countyData?.actuals?.hospitalBeds;
+    const { currentUsageTotal, capacity } = countyData?.actuals?.icuBeds;
     const percentage = `${((currentUsageTotal / capacity) * 100).toFixed(0)}%`;
     this.bedCapacity = percentage;
     return percentage;
+  };
+
+  handleSelection = (event: CustomEvent) => {
+    const selectedIndex = event.detail.selected;
+    this.selectedHospitalId = this.hospitalIds[selectedIndex];
+  };
+
+  renderHospitalList = () => {
+    const ids: Array<string> = [];
+    return this.allNearbyHospitals && this.expanded
+      ? html`
+          <div class=${`hospital-list ${this.expanded ? "expanded" : ""}`}>
+            <md-list
+              @list-item-change=${(event: CustomEvent) =>
+                this.handleSelection(event)}
+              activated=${0}
+            >
+              ${this.allNearbyHospitals
+                ? this.allNearbyHospitals?.map(
+                    (hospitalData: any, index: number) => {
+                      if (index < 6) {
+                        const { name, place_id, vicinity } = hospitalData;
+                        ids.push(place_id);
+                        return html`
+                          <my-hospital-item
+                            slot="list-item"
+                            name=${name}
+                            placeId=${place_id}
+                            vicinity=${vicinity}
+                            county=${this.county}
+                            statePostal=${this.statePostal}
+                            bedCapacity=${this.bedCapacity}
+                            ?selected=${this.selectedHospitalId === place_id}
+                            ?expanded=${this.expanded}
+                          ></my-hospital-item>
+                        `;
+                      }
+                      this.hospitalIds = ids;
+                    }
+                  )
+                : nothing}
+            </md-list>
+          </div>
+        `
+      : nothing;
   };
 
   static get styles() {
     return styles;
   }
 
-  renderLoading = () => {
-    return html`
-      <div class="body loading">
-        <md-spinner></md-spinner>
-      </div>
-    `;
-  };
-
-  renderNoHospital = () => {
-    return html`
-      <div class="body loading">
-        <h3>${this.errorMessage}</h3>
-      </div>
-    `;
-  };
-
-  renderContent = () => {
-    return this.errorMessage
-      ? this.renderNoHospital()
-      : html`
-          <div class="body">
-            <md-badge class="hospital-badge" color="mint" split>
-              <span slot="split-left">
-                ${`${this.county}, ${this.statePostal}`}
-              </span>
-              <span slot="split-right">${this.bedCapacity}</span>
-            </md-badge>
-            <div class="hospital row">
-              <span class="title">Hospital</span>
-              <span class="value">${this.hospitalName}</span>
-            </div>
-            <div class="address row">
-              <span class="title">Address</span>
-              <span class="value">${this.hospitalAddress}</span>
-            </div>
-          </div>
-        `;
-  };
-
   render() {
     return html`
-      <div class="hosiptal-section">
-        ${this.loading ? this.renderLoading() : this.renderContent()}
+      <div class="hospital-widget">
+        ${this.renderHospitalList()}
+        <div class="right-side">
+          <my-hospital-details
+            googleApiKey=${this.googleApiKey}
+            .map=${this.map}
+            place-id=${this.selectedHospitalId}
+            county=${this.county}
+            statePostal=${this.statePostal}
+            bedCapacity=${this.bedCapacity}
+            ?expanded=${this.expanded}
+          ></my-hospital-details>
+        </div>
         <div id="map"></div>
       </div>
     `;
