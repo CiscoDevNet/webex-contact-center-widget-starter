@@ -37,6 +37,8 @@
         "lit-html": "^1.2.1"
     },
     "devDependencies": {
+        "@agentx/agentx-services": "npm:@wxcc-desktop/sdk-types@^1.0.3",
+        "@agentx/agentx": "npm:@wxcc-desktop/sdk-types@^1.0.3",
         "@babel/core": "^7.9.0",
         "@babel/preset-env": "^7.9.0",
         "@momentum-ui/core": "19.9.2",
@@ -55,7 +57,7 @@
         "@types/webpack-node-externals": "^1.7.1",
         "@typescript-eslint/eslint-plugin": "^2.22.0",
         "@typescript-eslint/parser": "^2.22.0",
-        "@wxcc-desktop/sdk-types": "^1.0.2",
+        "@wxcc-desktop/sdk-types": "npm:@wxcc-desktop/sdk-types@^1.0.3",
         "alias-resolve-loader": "^2.0.4",
         "babel-jest": "26.3.0",
         "check-peer-dependencies": "2.0.1",
