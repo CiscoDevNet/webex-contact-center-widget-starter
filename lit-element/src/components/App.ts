@@ -50,9 +50,9 @@ export default class MyCustomComponent extends LitElement {
   static get styles() {
     return styles;
   }
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback();
-    this.init();
+    await Desktop.config.init();
     this.getCurrentInteractionId();
     this.subscribeAgentContactDataEvents()
     this.subscribeDialerEvents();
@@ -64,10 +64,6 @@ export default class MyCustomComponent extends LitElement {
     Desktop.agentContact.removeAllEventListeners();
     Desktop.dialer.removeAllEventListeners();
     Desktop.screenpop.removeAllEventListeners()
-  }
-
-  async init() {
-    await Desktop.config.init();
   }
 
   subscribeScreenpopEvent() {
@@ -86,7 +82,7 @@ export default class MyCustomComponent extends LitElement {
       "eAgentContactAssigned",
       (msg: Service.Aqm.Contact.AgentContact) => {
         logger.info("AgentContact eAgentContactAssigned: ", msg);
-        this.acceptedContacts.push(msg.data.interactionId);
+        this.acceptedContacts = [...this.acceptedContacts, msg.data.interactionId];
         logger.info(this.acceptedContacts);
       }
     );
@@ -108,21 +104,21 @@ export default class MyCustomComponent extends LitElement {
     Desktop.agentContact.addEventListener(
       "eAgentOfferContact",
       (msg: Service.Aqm.Contact.AgentContact) => {
-        logger.info("AgentContact eAgentOfferContact: ", msg);
+        logger.info("AgentContact eAgentOfferContact: ", msg.data.interactionId);
         // AUX Sandbox Contact
-        this.contacts.push(msg.data.interactionId);
-        logger.info(this.contacts);
+        this.contacts = [...this.contacts, msg.data.interactionId];
+        logger.info("AgentContact eAgentOfferContact: ", this.contacts);
       }
     );
     Desktop.agentContact.addEventListener(
       "eAgentOfferContactRona",
       (msg: Service.Aqm.Contact.AgentContact) => {
-        logger.info("AgentContact eAgentOfferContactRona: ", msg);
+        logger.info("AgentContact eAgentOfferContactRona: ", msg.data.interactionId);
         // AUX Sandbox Contact
         const idx = this.contacts.indexOf(msg.data.interactionId);
         if (idx != -1) {
-          this.contacts = this.contacts.slice(idx, 1);
-          logger.info(this.contacts);
+          this.contacts = [...this.contacts.filter(interactionId => interactionId !== msg.data.interactionId)]
+          logger.info("AgentContact eAgentOfferContactRona: ", this.contacts);
         }
       }
     );
@@ -419,11 +415,11 @@ export default class MyCustomComponent extends LitElement {
               <h3>Accept interactions</h3>
               <span>New incoming interactions will appear here</span>
               ${
-                this.contacts.map(contact => {
-                  if (this.acceptedContacts.indexOf(contact) != -1) {
+                this.contacts.map(interactionId => {
+                  if (this.acceptedContacts.indexOf(interactionId) == -1) {
                     return html`
-                      <md-button @button-click=${() => this.acceptInteraction(contact)}
-                        >Accept interaction for ${contact}</md-button
+                      <md-button @button-click=${() => this.acceptInteraction(interactionId)}
+                        >Accept interaction for ${interactionId}</md-button
                       >
                     `
                   }
