@@ -14,16 +14,15 @@ import { nothing } from "lit-html";
 import { classMap } from "lit-html/directives/class-map";
 @customElement("customer-summary")
 export default class CustomerSummary extends LitElement {
-  @property({ type: Boolean}) compact = false
+  @property({ type: Boolean }) compact = false;
   @property({ type: Object, attribute: false }) customerData?:
     | typeof data
     | undefined;
 
-
   private get resizeClassMap() {
     return {
-      "compact": this.compact
-    }
+      compact: this.compact
+    };
   }
 
   static get styles() {
@@ -117,10 +116,6 @@ export default class CustomerSummary extends LitElement {
             </td>
           </tr>
         </table>
-
-        <md-button type="button" variant="primary" size="32"
-          >View Full Medical Record</md-button
-        >
       </div>
     `;
   }

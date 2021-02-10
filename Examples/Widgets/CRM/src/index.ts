@@ -22,7 +22,7 @@ import "./components/Visits";
 import { data } from "./customer-data/mock-customer";
 import style from "./components/App.scss";
 
-@customElement("erm-widget")
+@customElement("crm-widget")
 export default class MyCustomComponent extends LitElement {
   @property({ type: String, attribute: "phone-number" }) phoneNumber:
     | string
@@ -30,7 +30,7 @@ export default class MyCustomComponent extends LitElement {
 
   @internalProperty() compact = false;
   @internalProperty() customerData!: typeof data;
-  @query(".container")container!: HTMLElement;
+  @query(".container") container!: HTMLElement;
 
   connectedCallback() {
     super.connectedCallback();
@@ -38,10 +38,10 @@ export default class MyCustomComponent extends LitElement {
   }
 
   firstUpdated(changedProperties: PropertyValues) {
-    super.firstUpdated(changedProperties)
+    super.firstUpdated(changedProperties);
     // @ts-ignore
-    var ro = new ResizeObserver((entries: any) => {
-      for (let entry of entries) {
+    const ro = new ResizeObserver((entries: any) => {
+      for (const entry of entries) {
         const cr = entry.contentRect;
 
         if (cr.width > 589) {
@@ -56,8 +56,8 @@ export default class MyCustomComponent extends LitElement {
 
   private get resizeClassMap() {
     return {
-      "compact": this.compact
-    }
+      compact: this.compact
+    };
   }
 
   static get styles() {

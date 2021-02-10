@@ -7,13 +7,7 @@
  */
 
 import { DateTime } from "luxon";
-import {
-  html,
-  LitElement,
-  customElement,
-  property,
-  query,
-} from "lit-element";
+import { html, LitElement, customElement, property, query } from "lit-element";
 import styles from "./VisitBadge.scss";
 import { nothing } from "lit-html";
 export interface VisitTypes {
@@ -52,9 +46,11 @@ export default class VisitBadge extends LitElement {
 
   fixOverlayPosition = () => {
     const yCoord = this.menu!.getBoundingClientRect().top;
+    const xCoord = this.menu!.getBoundingClientRect().left;
     this.menu!.style.position = "fixed";
     this.menu!.style.zIndex = "100";
     this.menu!.style.top = yCoord.toString() + "px";
+    this.menu!.style.left = xCoord.toString() + "px";
   };
 
   matrixPosition = (date: string) => {
@@ -93,6 +89,14 @@ export default class VisitBadge extends LitElement {
       return html`
         <span>%${stat.toString()}</span>
       `;
+    }
+  };
+
+  handleKeydown = (e: KeyboardEvent) => {
+    if (e.code === "Space" || e.code === "Enter") {
+      console.log(e.code);
+      // e.preventDefault();
+      this.fixOverlayPosition();
     }
   };
 
@@ -183,15 +187,17 @@ export default class VisitBadge extends LitElement {
       <div
         class="wrapper"
         style="position: absolute; bottom: ${bottom}px; left: ${left}%"
+        tabindex="-1"
       >
-        <md-menu-overlay @menu-overlay-close=${this.closeMenu}>
-          <div
+        <md-menu-overlay
+          @menu-overlay-close=${this.closeMenu}
+          @menu-overlay-open=${this.fixOverlayPosition}
+        >
+          <md-button
             slot="menu-trigger"
+            class="menu-trigger"
             aria-haspopup="true"
             aria-expanded="true"
-            @click=${this.fixOverlayPosition}
-            role="button"
-            tabindex="0"
           >
             <md-tooltip message="${visit.title}" class="mock-badge">
               <span>
@@ -210,7 +216,7 @@ export default class VisitBadge extends LitElement {
                 </span>
               </span>
             </md-tooltip>
-          </div>
+          </md-button>
           <div class="visit-overlay-content">
             ${this.visitDetailsOverlay(visit, formattedDate as string)}
           </div>

@@ -28,22 +28,11 @@ export default class MyCustomComponent extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // this.customerData = this.fetchCustomerData(number)
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
   }
-
-  // fetchCustomerDate = async (queryValue) => {
-  //   return customerData
-  // }
-
-  // formatPhoneNumber() {
-  //   if (true) {
-  //     return formattedNumber
-  //   } else return errorMessage
-  // }
 
   render() {
     return html`
