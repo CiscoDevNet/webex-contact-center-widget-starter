@@ -7,7 +7,7 @@
  */
 
 import { html, LitElement, customElement, css, internalProperty, property } from "lit-element";
-import "./components/Hospitals";
+import "./components/HospitalWidget";
 
 /**
  * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
@@ -44,12 +44,12 @@ export default class HospitalBedCapacity extends LitElement {
 
   render() {
     return html`
-      <my-hospital-stats
+      <my-hospital-widget
         covi-api-key=${this.covidApiKey}
         google-api-key=${this.googleApiKey}
         latitude=${this.latitude}
         longitude=${this.longitude}>
-      </my-hospital-stats>
+      </my-hospital-widget>
     `;
   }
 }
