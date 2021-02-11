@@ -22,6 +22,10 @@ import { nothing } from "lit-html";
 import "./HospitalItem";
 import "./HospitalDetails";
 
+declare global {
+  interface Window { gm_authFailure: any; }
+}
+
 @customElement("my-hospital-widget")
 export default class HospitalWidget extends LitElement {
   /**
@@ -38,8 +42,8 @@ export default class HospitalWidget extends LitElement {
    */
   @property({ type: String, reflect: true, attribute: "covi-api-key" })
   covidApiKey = "";
-  @property({ type: Number, reflect: true }) latitude = 37.40527;
-  @property({ type: Number, reflect: true }) longitude = -122.01178;
+  @property({ type: Number, reflect: true }) latitude = 0;
+  @property({ type: Number, reflect: true }) longitude = 0;
 
   @internalProperty() expanded = false;
   @internalProperty() statePostal = "";
@@ -58,8 +62,11 @@ export default class HospitalWidget extends LitElement {
   @internalProperty() nearestHospitalData?: any;
   @internalProperty() allUSACounties?: any;
   @internalProperty() countyData?: any;
-  @internalProperty() loading = false;
+
+  @internalProperty() loading = true;
   @internalProperty() errorMessage = "";
+
+  covidAPIError = false;
 
   @query(".hospital-widget") hospitalWidget!: HTMLDivElement;
   @query("#map") mapDiv?: HTMLElement;
@@ -94,40 +101,55 @@ export default class HospitalWidget extends LitElement {
     });
     ro.observe(this.hospitalWidget);
 
-    await this.fetchAllCounties()
-      .then(() => this.initMap(this.longitude, this.latitude))
-      .then(() => this.nearestHospitals());
+    window.gm_authFailure = (err: any) => {
+      this.setErrorMsg('googleApiKey is invalid', err);
+    }
   }
 
   async update(changeProperties: PropertyValues) {
     super.update(changeProperties);
 
-    if (changeProperties.has("latitude") || changeProperties.has("longitude")) {
-      this.loading = true;
-      await this.initMap(this.latitude, this.longitude).then(() => {
-        this.getFormattedAddress({ lat: this.latitude, lng: this.longitude });
-        this.nearestHospitals();
-      });
+    if (changeProperties.has('googleApiKey') || changeProperties.has('covidApiKey')) {
+      if (!this.googleApiKey) {
+        this.setErrorMsg("googleApiKey is not defined");
+      } else if (!this.covidApiKey) {
+        this.setErrorMsg("covidApiKey is not defined");
+      }
     }
 
-    if (
-      this.allUSACounties &&
-      changeProperties.has("statePostal") &&
-      changeProperties.has("county")
-    ) {
-      this.fetchCountyData(this.statePostal, this.county);
+    if (this.googleApiKey && this.covidApiKey && (changeProperties.has('longitude') || changeProperties.has('latitude'))) {
+      if (!this.latitude || this.latitude === 0) {
+        this.setErrorMsg("latitude is not defined");
+
+      } else if (!this.longitude || this.longitude === 0) {
+        this.setErrorMsg("longitude is not defined");
+      } else {
+        this.loading = true;
+        await this.fetchAllCounties()
+        .then(() => {
+          if (!this.covidAPIError) {
+            return this.initMap(this.latitude, this.longitude)
+            .then(() => {
+              this.getFormattedAddress(this.latitude, this.longitude);
+              this.nearestHospitals(this.map, this.latitude, this.longitude);
+            });
+          }
+        });
+      }
     }
 
-    if (this.countyData && changeProperties.has("countyData")) {
+    if (changeProperties.has("countyData")) {
       this.fetchCountyBedCapacity(this.countyData);
-    }
-
-    if (this.bedCapacity && changeProperties.has("bedCapacity")) {
-      this.loading = false;
     }
   }
 
-  initMap = async (longitude: number, latitude: number) => {
+  setErrorMsg = (message: string, error?: any) => {
+    this.loading = false;
+    this.errorMessage = message;
+    error ? console.error(message, error) : console.error(message);
+  }
+
+  initMap = async (latitude: number, longitude: number) => {
     return await this.loader
       .load()
       .then(() => {
@@ -139,14 +161,14 @@ export default class HospitalWidget extends LitElement {
         }
       })
       .catch((err) => {
-        console.error("Failed to initMap due to ", err);
+        this.setErrorMsg('Failed to initialize google map', err);
       });
   };
 
-  getFormattedAddress = (location: { lat: number; lng: number }) => {
+  getFormattedAddress = (lat: number, lng: number) => {
     return new google.maps.Geocoder().geocode(
       {
-        location,
+        location: { lat, lng }
       },
       (results: any, status: google.maps.GeocoderStatus) => {
         if (status === "OK") {
@@ -170,30 +192,27 @@ export default class HospitalWidget extends LitElement {
           if (addressDetails.country && addressDetails.country === "US") {
             this.county = addressDetails.administrative_area_level_2;
             this.statePostal = addressDetails.administrative_area_level_1;
+            this.fetchCountyData(this.statePostal, this.county);
           } else {
-            this.loading = false;
-            this.errorMessage = "Location is outside of the US";
+            this.setErrorMsg("Latitude and Longitude is located outside of the US");
           }
         } else {
-          console.error("Geocoder failed due to " + status);
-          this.loading = false;
-          this.errorMessage = "Unable to find a nearby hospital";
+          this.setErrorMsg("Geocoder failed to fetch address details", status);
         }
       }
     );
   };
 
-  nearestHospitals = () => {
+  nearestHospitals = (map: google.maps.Map | undefined, latitude: number, longitude: number) => {
     this.hospitalIds = [];
-    if (this.map) {
-      const places = new google.maps.places.PlacesService(this.map);
+    if (map) {
+      const places = new google.maps.places.PlacesService(map);
       return places.nearbySearch(
         {
-          location: { lat: this.latitude, lng: this.longitude },
-          rankBy: google.maps.places.RankBy.PROMINENCE,
-          radius: 250,
+          location: { lat: latitude, lng: longitude },
+          rankBy: google.maps.places.RankBy.DISTANCE,
           type: "hospital",
-          keyword: "establishment",
+          keyword: "(emergency) AND (establishment) AND ((medical centre) OR hospital)"
         },
         (results: any, status: google.maps.places.PlacesServiceStatus) => {
           if (status === "OK") {
@@ -210,9 +229,7 @@ export default class HospitalWidget extends LitElement {
             this.errorMessage = "";
             this.loading = false;
           } else {
-            this.loading = false;
-            console.error("google api failed to find near by hospital");
-            this.errorMessage = "Unable to find nearby Hospitals";
+            this.setErrorMsg("google maps placeService nearbySearch failed", status);
           }
         }
       );
@@ -220,46 +237,47 @@ export default class HospitalWidget extends LitElement {
   };
 
   fetchAllCounties = async () => {
-    return await fetch(
-      `https://api.covidactnow.org/v2/counties.json?apiKey=${this.covidApiKey}`
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((allCounties) => {
-        this.allUSACounties = allCounties;
-        return allCounties;
-      });
-  };
-
-  fetchCountyData = (statePostal: string, county: string) => {
-    if (this.allUSACounties && statePostal && county) {
-      const countyResults = this.allUSACounties.filter(
-        (countyData: { state: string; county: string }) => {
-          return (
-            statePostal === countyData.state && county === countyData.county
-          );
-        }
-      );
-      this.countyData = countyResults[0];
-      if (!this.countyData) {
-        console.error("failed to fetch county data");
-        this.loading = false;
-        this.bedCapacity = "NA";
-      }
-
-      return this.countyData;
-    } else {
-      this.loading = false;
-      this.errorMessage = "Unrecognizable statePostal & County";
+    if (!this.allUSACounties) {
+      return await fetch(
+        `https://api.covidactnow.org/v2/counties.json?apiKey=${this.covidApiKey}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((allCounties) => {
+          this.allUSACounties = allCounties;
+        }).catch((err) => {
+          this.setErrorMsg('Covid Act Now API call failed', err);
+          this.covidAPIError = true;
+        });
     }
   };
 
-  fetchCountyBedCapacity = async (countyData: any) => {
-    const { currentUsageTotal, capacity } = countyData?.actuals?.icuBeds;
-    const percentage = `${((currentUsageTotal / capacity) * 100).toFixed(0)}%`;
-    this.bedCapacity = percentage;
-    return percentage;
+  fetchCountyData = (statePostal: string, county: string) => {
+      const countyResults = this.allUSACounties.filter(
+        (countyData: { state: string; county: string }) => {
+          return (
+            statePostal.toLowerCase() === countyData.state.toLowerCase() && county.toLowerCase() === countyData.county.toLowerCase()
+          );
+        }
+      );
+      if (countyResults.length === 0) {
+        this.setErrorMsg("Unrecognizable statePostal & County", status);
+      } else {
+        this.countyData = countyResults[0];
+      }
+  };
+
+  fetchCountyBedCapacity = (countyData: any) => {
+
+    if (countyData) {
+      const { currentUsageTotal, capacity } = countyData?.actuals?.icuBeds;
+      const percentage = `${((currentUsageTotal / capacity) * 100).toFixed(0)}%`;
+      this.bedCapacity = percentage;
+    } else {
+      this.bedCapacity = "NA";
+    }
+    this.loading = false;
   };
 
   handleSelection = (event: CustomEvent) => {
@@ -269,7 +287,7 @@ export default class HospitalWidget extends LitElement {
 
   renderHospitalList = () => {
     const ids: Array<string> = [];
-    return this.allNearbyHospitals && this.expanded
+    return this.allNearbyHospitals && this.expanded && !this.loading
       ? html`
           <div class=${`hospital-list ${this.expanded ? "expanded" : ""}`}>
             <md-list
@@ -307,13 +325,30 @@ export default class HospitalWidget extends LitElement {
       : nothing;
   };
 
+  renderLoading = () => {
+    return html`
+      <div class="loading-wrapper">
+        <md-spinner></md-spinner>
+      </div>
+    `;
+  };
+
+  renderErrorMessage = () => {
+    return html`
+      <div class="error-wrapper">
+        <h3>${this.errorMessage}</h3>
+      </div>
+    `;
+  };
+
   static get styles() {
     return styles;
   }
 
-  render() {
-    return html`
-      <div class="hospital-widget">
+  renderContent = () => {
+    return this.errorMessage && !this.loading
+      ? this.renderErrorMessage()
+      : html`
         ${this.renderHospitalList()}
         <div class="right-side">
           <my-hospital-details
@@ -326,6 +361,13 @@ export default class HospitalWidget extends LitElement {
             ?expanded=${this.expanded}
           ></my-hospital-details>
         </div>
+        `;
+  };
+
+  render() {
+    return html`
+      <div class="hospital-widget">
+        ${this.loading ? this.renderLoading() : this.renderContent()}
         <div id="map"></div>
       </div>
     `;
