@@ -28,8 +28,9 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
   }
 }
 
-.loading-wrapper {
-  height: 100%;
+.loading-wrapper,
+.error-wrapper {
+  height: 100px;
   width: 100%;
   display: flex;
   justify-content: center;
