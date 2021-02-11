@@ -33,7 +33,7 @@ Once you are ready to export your widget, all you need is to run the following c
 yarn build
 ```
 
-This will create a `build` folder in the root directory of your widget with a single `direflowBundle.js` file that contains your entire widget. This file can be renamed and uploaded to a preferred location on a CDN (e.g. an S3 bucket on AWS. Please keep in mind tht this file has to be publicly available over the internet to be accessible to Agent or Supervisor Desktop).
+This will create a `build` folder in the root directory of your widget with a single `react-widget-starter.js` file that contains your entire widget. This file can be renamed and uploaded to a preferred location on a CDN (e.g. an S3 bucket on AWS. Please keep in mind tht this file has to be publicly available over the internet to be accessible to Agent or Supervisor Desktop).
 
 ### Sharing widget information with Agent/Supervisor Desktop administrator
 
