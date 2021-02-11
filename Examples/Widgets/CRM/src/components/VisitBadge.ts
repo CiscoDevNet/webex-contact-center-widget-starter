@@ -187,7 +187,6 @@ export default class VisitBadge extends LitElement {
       <div
         class="wrapper"
         style="position: absolute; bottom: ${bottom}px; left: ${left}%"
-        tabindex="-1"
       >
         <md-menu-overlay
           @menu-overlay-close=${this.closeMenu}
