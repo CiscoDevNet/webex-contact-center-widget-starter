@@ -17,10 +17,13 @@ import {
   query
 } from "lit-element";
 import { classMap } from "lit-html/directives/class-map";
+// import { Service } from "@wxcc-desktop/sdk-types";
+// import { Desktop } from "@wxcc-desktop/sdk";
 import "./components/Summary";
 import "./components/Visits";
 import { data } from "./customer-data/mock-customer";
 import style from "./components/App.scss";
+import { nothing } from "lit-html";
 
 @customElement("crm-widget")
 export default class MyCustomComponent extends LitElement {
@@ -32,10 +35,21 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() customerData!: typeof data;
   @query(".container") container!: HTMLElement;
 
+  // @internalProperty() assignedContacts: { 
+  //   interaction: Service.Aqm.Contact.Interaction
+  // }[] = [];
+
   connectedCallback() {
     super.connectedCallback();
     this.customerData = data;
   }
+
+  // async getTaskMap() {
+  //   const taskMap: Map<string, any> = await Desktop.actions.getTaskMap();
+  //   console.log(taskMap);
+  //   this.assignedContacts = Array.from(taskMap.values());
+  //   console.log(this.assignedContacts[0])
+  // }
 
   firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
@@ -74,13 +88,83 @@ export default class MyCustomComponent extends LitElement {
     ];
   }
 
+  // re-wire the SDK to find the phone number and pipe that into the Summary 
+
   render() {
     return html`
       <div class="container ${classMap(this.resizeClassMap)}">
         <customer-summary
           .customerData=${this.customerData ? this.customerData : undefined}
           ?compact=${this.compact}
-          >test</customer-summary
+          phone-number=${"whatever"}
+          >
+          <table>
+          <tr>
+            <td class="title">
+              Date of Birth
+            </td>
+            <td class="value">
+              ${this.customerData?.DOB}
+            </td>
+          </tr>
+          <tr>
+            <td class="title">
+              Address
+            </td>
+            <td class="value">
+              ${this.customerData?.address}
+            </td>
+          </tr>
+          <tr>
+            <td class="title">
+              Insurance
+            </td>
+            <td class="value">
+              <span>${this.customerData?.insurance.provider}</span><br />
+              <span>${this.customerData?.insurance.planName}</span><br />
+              <span>${this.customerData?.insurance.planNumber}</span><br />
+              <span>${this.customerData?.insurance.groupNumber}</span><br />
+              <span>${this.customerData?.insurance.memberID}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="title">
+              Next of Kin
+            </td>
+            <td class="value">
+              <span
+                >${this.customerData?.nextToKin.name}
+                ${this.customerData?.nextToKin["phone number"]}</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td class="title">
+              Conditions
+            </td>
+            <td class="value">
+              ${this.customerData?.conditions.map(
+                condition =>
+                  html`
+                    <span>${condition}</span><br />
+                  `
+              )}
+            </td>
+          </tr>
+          <tr>
+            <td class="title">
+              Allergies
+            </td>
+            <td class="value">
+              ${this.customerData?.allergies.map((allergy, i, arr) => {
+                return html`
+                  <span>${allergy}</span>${i < arr.length - 1 ? " | " : nothing}
+                `;
+              })}
+            </td>
+          </tr>
+        </table>
+          </customer-summary
         >
         <customer-visits
           .visits=${this.customerData.visits

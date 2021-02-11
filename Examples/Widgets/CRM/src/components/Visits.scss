@@ -6,7 +6,6 @@
  *
  */
 
-
 :host {
   width: 100vw;
 }
@@ -24,13 +23,13 @@
     flex-grow: 1;
     z-index: 100;
   }
-  
+
   md-badge {
-    margin-left: .75rem;
+    margin-left: 0.75rem;
     flex-grow: 2;
 
     &::part(badge) {
-      border-radius: .25rem;
+      border-radius: 0.25rem;
     }
   }
 
@@ -42,6 +41,7 @@
 }
 
 .matrix-wrapper {
+  position: relative;
   border-radius: 0.5rem;
   width: 100%;
   height: 25rem;
@@ -49,19 +49,19 @@
 }
 
 .visits-grid {
-  font-size: .75rem;
+  font-size: 0.75rem;
   display: grid;
   grid-template-columns: 1fr 16fr;
   grid-template-rows: 10fr auto;
-  gap: .6rem;
+  gap: 0.6rem;
   grid-template-areas:
     "time grid"
     "year month";
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 .visits-matrix {
-  background-color: var(--md-secondary-bg-color,#f7f7f7);
+  background-color: var(--md-secondary-bg-color, #f7f7f7);
   position: relative;
   width: 100%;
   height: 100%;
@@ -77,8 +77,8 @@
       to right,
       transparent,
       transparent 3px,
-      var(--md-secondary-bg-color,#f7f7f7) 3px,
-      var(--md-secondary-bg-color,#f7f7f7) 7px
+      var(--md-secondary-bg-color, #f7f7f7) 3px,
+      var(--md-secondary-bg-color, #f7f7f7) 7px
     ),
     repeating-linear-gradient(
       to bottom,
@@ -87,6 +87,17 @@
       var(--md-quaternary-bg-color, #dedede) 5.57%,
       var(--md-quaternary-bg-color, #dedede) 5.57%
     );
+    z-index: 0;
+}
+
+.visits-matrix::after {
+  content: "";
+  position: absolute;
+  background-color: var(--md-secondary-bg-color, #f7f7f7);
+  top: 0px;
+  left: 100%;
+  height: 100%;
+  width: 50%;
 }
 
 .time {
@@ -146,4 +157,3 @@ div.month-line:last-child {
   display: flex;
   justify-content: space-between;
 }
-
