@@ -1,5 +1,6 @@
 .hospital-item {
   padding: 16px;
+  border-radius: 4px;
 
   &.selected {
     background-color: var(--md-secondary-bg-color, #f7f7f7);
