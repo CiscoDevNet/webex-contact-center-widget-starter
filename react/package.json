@@ -12,6 +12,8 @@
     "@types/node": "12.7.8",
     "@types/react": "16.9.3",
     "@types/react-dom": "16.9.1",
+    "@wxcc-desktop/sdk": "^1.2.5",
+    "@wxcc-desktop/sdk-types": "^1.0.3",
     "copy-webpack-plugin": "^5.0.2",
     "direflow-component": "3.2.4",
     "direflow-scripts": "^3.5.1",
@@ -21,10 +23,10 @@
     "webpack-node-externals": "^2.5.2"
   },
   "devDependencies": {
-    "@momentum-ui/core": "19.9.2",
-    "@momentum-ui/icons": "7.45.0",
-    "@momentum-ui/utils": "6.2.7",
-    "@momentum-ui/web-components": "^2.0.13",
+    "@momentum-ui/core": "^19.9.2",
+    "@momentum-ui/icons": "^7.45.0",
+    "@momentum-ui/utils": "^6.2.7",
+    "@momentum-ui/web-components": "^2.1.2",
     "@types/html-webpack-plugin": "^3.2.4",
     "@types/jest": "24.0.18",
     "@types/react-test-renderer": "16.9.1",
@@ -39,10 +41,10 @@
     "typescript": "^3.7.0"
   },
   "peerDependencies": {
-    "@momentum-ui/core": "19.9.2",
-    "@momentum-ui/icons": "7.45.0",
-    "@momentum-ui/utils": "6.2.7",
-    "@momentum-ui/web-components": "^2.0.13"
+    "@momentum-ui/core": "^19.9.2",
+    "@momentum-ui/icons": "^7.45.0",
+    "@momentum-ui/utils": "^6.2.7",
+    "@momentum-ui/web-components": "^2.1.1"
   },
   "eslintConfig": {
     "extends": "react-app"
