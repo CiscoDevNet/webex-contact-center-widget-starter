@@ -17,14 +17,26 @@ import {
 import styles from "./Visits.scss";
 import "./VisitBadge";
 import { VisitTypeNames } from "./VisitBadge";
+import { data } from "../customer-data/mock-customer-blob";
 import { nothing } from "lit-html";
 @customElement("customer-visits")
 export default class CustomerVisits extends LitElement {
   @property({ type: Array, attribute: false }) visits:
-    | Array<CustomerVisit>
+    | Array<Object>
     | undefined;
 
+  @property({ type: Object, attribute: false }) customerData?:
+  | typeof data
+  | undefined;
+
   @internalProperty() filterSelection: string | undefined = undefined;
+
+  connectedCallback() {
+    super.connectedCallback()
+    let visits = this.customerData?.filter(i => i.type === "visits")[0] as unknown
+    // @ts-ignore
+    this.visits = visits.value
+  }
 
   updated(changedProperties: PropertyValues) {
     super.updated(changedProperties);
@@ -119,12 +131,11 @@ export default class CustomerVisits extends LitElement {
           </div>
           <div class="matrix-wrapper">
             <div class="visits-matrix">
-              ${this.visits?.map(visit => {
+              ${this.visits?.map((visit : any) => {
                 if (this.filterSelection === undefined) {
                   return html`
                     <visit-badge
                       .visit=${visit}
-                      visit-type=${visit.title}
                     ></visit-badge>
                   `;
                 } else {
@@ -132,7 +143,6 @@ export default class CustomerVisits extends LitElement {
                     ? html`
                         <visit-badge
                           .visit=${visit}
-                          visit-type=${visit.title}
                         ></visit-badge>
                       `
                     : nothing;

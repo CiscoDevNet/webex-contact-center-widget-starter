@@ -44,6 +44,11 @@ export default class VisitBadge extends LitElement {
     "Medical Tests": { icon: "icon-document_12", color: "green" }
   };
 
+  connectedCallback() {
+    super.connectedCallback()
+    this.visit?.type ? this.visitType = this.visit?.title : null
+  }
+
   fixOverlayPosition = () => {
     const yCoord = this.menu!.getBoundingClientRect().top;
     const xCoord = this.menu!.getBoundingClientRect().left;
@@ -94,8 +99,7 @@ export default class VisitBadge extends LitElement {
 
   handleKeydown = (e: KeyboardEvent) => {
     if (e.code === "Space" || e.code === "Enter") {
-      console.log(e.code);
-      // e.preventDefault();
+      e.preventDefault();
       this.fixOverlayPosition();
     }
   };
