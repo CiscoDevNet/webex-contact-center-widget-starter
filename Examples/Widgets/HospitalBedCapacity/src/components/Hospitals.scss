@@ -1,3 +1,5 @@
+@import "./mixins";
+
 $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
 .hospital-widget {
@@ -12,14 +14,27 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
     border-right: $main-border;
     height: 100%;
     overflow: auto;
+    padding: 4px;
 
-    md-list {
-      padding: 1px;
-    }
-
-    .hospital-item {
-      height: 151px;
+    .hospital-item-wrapper {
       width: 100%;
+      margin-bottom: 1px;
+      position: relative;
+      z-index: 0;
+      border-bottom: $main-border;
+
+      &:focus {
+        box-shadow: none;
+        outline: none;
+
+        &::after {
+          @include item-focus-boxshadow;
+        }
+      }
+
+      &::after {
+        @include item-after-focus;
+      }
     }
   }
 

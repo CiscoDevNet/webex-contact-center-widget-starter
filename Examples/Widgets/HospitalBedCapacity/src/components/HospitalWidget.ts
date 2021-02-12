@@ -302,17 +302,18 @@ export default class HospitalWidget extends LitElement {
                         const { name, place_id, vicinity } = hospitalData;
                         ids.push(place_id);
                         return html`
-                          <my-hospital-item
-                            slot="list-item"
-                            name=${name}
-                            placeId=${place_id}
-                            vicinity=${vicinity}
-                            county=${this.county}
-                            statePostal=${this.statePostal}
-                            bedCapacity=${this.bedCapacity}
-                            ?selected=${this.selectedHospitalId === place_id}
-                            ?expanded=${this.expanded}
-                          ></my-hospital-item>
+                          <div class="hospital-item-wrapper" slot="list-item">
+                            <my-hospital-item
+                              name=${name}
+                              placeId=${place_id}
+                              vicinity=${vicinity}
+                              county=${this.county}
+                              statePostal=${this.statePostal}
+                              bedCapacity=${this.bedCapacity}
+                              ?selected=${this.selectedHospitalId === place_id}
+                              ?expanded=${this.expanded}
+                            ></my-hospital-item>
+                          </div>
                         `;
                       }
                       this.hospitalIds = ids;
