@@ -44,3 +44,10 @@
 }
 
 @include table
+
+.compact {
+    table {
+      flex-grow: 1;
+      overflow: auto;
+    }
+  }
