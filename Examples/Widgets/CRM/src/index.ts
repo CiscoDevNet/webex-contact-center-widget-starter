@@ -75,10 +75,8 @@ export default class MyCustomComponent extends LitElement {
   }
 
   getValue(x: any) {
-    let result = ``;
-    console.log(x)
     if (Array.isArray(x)) {
-      result = x.join(", ")
+      return x.join(", ")
     }
     else if (typeof x === 'object' && x !== null) {
       const values = Object.values(x)
@@ -89,8 +87,6 @@ export default class MyCustomComponent extends LitElement {
       `
       return dataString
     } else return x
-
-    return result;
   }
 
   static get styles() {
@@ -128,82 +124,11 @@ export default class MyCustomComponent extends LitElement {
               </tr>`;
               })}
           </table>
-          </customer-summary
-        >
+          </customer-summary>
+          <customer-visits
+            .customerData=${this.customerData}
+          ></customer-visits>
       </div>
       `;
   }
 }
-
-// <customer-visits
-//   .visits=${this.customerData.visits
-//     ? this.customerData.visits
-//     : undefined}
-//   >test</customer-visits
-// >
-
-// <tr>
-//             <td class="title">
-//               Date of Birth
-//             </td>
-//             <td class="value">
-//               ${this.customerData?.DOB}
-//             </td>
-//           </tr>
-//           <tr>
-//             <td class="title">
-//               Address
-//             </td>
-//             <td class="value">
-//               ${this.customerData?.address}
-//             </td>
-//           </tr>
-//           <tr>
-//             <td class="title">
-//               Insurance
-//             </td>
-//             <td class="value">
-//               <span>${this.customerData?.insurance.provider}</span><br />
-//               <span>${this.customerData?.insurance.planName}</span><br />
-//               <span>${this.customerData?.insurance.planNumber}</span><br />
-//               <span>${this.customerData?.insurance.groupNumber}</span><br />
-//               <span>${this.customerData?.insurance.memberID}</span>
-//             </td>
-//           </tr>
-//           <tr>
-//             <td class="title">
-//               Next of Kin
-//             </td>
-//             <td class="value">
-//               <span
-//                 >${this.customerData?.nextToKin.name}
-//                 ${this.customerData?.nextToKin["phone number"]}</span
-//               >
-//             </td>
-//           </tr>
-//           <tr>
-//             <td class="title">
-//               Conditions
-//             </td>
-//             <td class="value">
-//               ${this.customerData?.conditions.map(
-//                 condition =>
-//                   html`
-//                     <span>${condition}</span><br />
-//                   `
-//               )}
-//             </td>
-//           </tr>
-//           <tr>
-//             <td class="title">
-//               Allergies
-//             </td>
-//             <td class="value">
-//               ${this.customerData?.allergies.map((allergy, i, arr) => {
-//                 return html`
-//                   <span>${allergy}</span>${i < arr.length - 1 ? " | " : nothing}
-//                 `;
-//               })}
-//             </td>
-//           </tr>
-//         </table>

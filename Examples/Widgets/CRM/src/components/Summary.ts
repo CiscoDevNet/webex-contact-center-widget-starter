@@ -10,7 +10,6 @@ import { html, LitElement, customElement, property } from "lit-element";
 import { ifDefined } from "lit-html/directives/if-defined";
 import styles from "./Summary.scss";
 import { data } from "../customer-data/mock-customer-blob";
-import { nothing } from "lit-html";
 import { classMap } from "lit-html/directives/class-map";
 @customElement("customer-summary")
 export default class CustomerSummary extends LitElement {
