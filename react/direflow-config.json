@@ -1,0 +1,8 @@
+{
+    "build": {
+      "componentPath": "direflow-component",
+      "filename": "react-widget-starter.js",
+      "emitSourceMap": true,
+      "emitAll": true
+    }
+  }
