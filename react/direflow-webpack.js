@@ -5,7 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const pModules = path.resolve('node_modules');
-const hoistedModules = path.resolve('../../node_modules');
+const hoistedModules = path.resolve('./node_modules');
 const pPublic = path.resolve('public');
 
 module.exports = {
