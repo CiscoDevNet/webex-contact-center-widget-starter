@@ -48,7 +48,7 @@
 md-avatar::part(avatar) {
   width: 3.75rem;
   height: 3.75rem;
-  border: 2px solid #07c1e4;
+  border: 2px solid var(--avatar-border-color, #07c1e4);
   border-radius: 100%;
 }
 

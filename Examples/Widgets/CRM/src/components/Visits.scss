@@ -129,7 +129,7 @@
 }
 
 div.month-line {
-  background: #dedede;
+  background: var(--visits-line-color, #dedede);
   content: " ";
   display: flex;
   flex-grow: 1;
@@ -139,8 +139,8 @@ div.month-line {
 }
 
 div.month-line::before {
-  background: white;
-  border: 2px solid #dedede;
+  background: var(--md-primary-bg-color, #f7f7f7);
+  border: 2px solid var(--visits-line-color, #dedede);
   content: " ";
   border-radius: 50%;
   height: 0.625rem;
