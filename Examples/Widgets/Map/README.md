@@ -1,4 +1,4 @@
-# WCC Widget Starter: Lit Element
+# WCC Widget Starter: Google Maps
 ## Development
 
 Setting up your development environment:

@@ -3,7 +3,7 @@
 **This started is work-in-progress. Once the widget is complete, this disclaimer will be removed. Thank you for your patience.**
 
 ---
-# WCC Widget Starter: Lit Element
+# WCC Widget Starter: Angular
 ## Development
 
 Setting up your development environment:
