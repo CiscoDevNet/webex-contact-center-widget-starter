@@ -13,3 +13,7 @@ This widget is configured for demonstration purposes. For production usage, make
 The `./customer-data/mock-customer` file represents a demo customer info object that is imported directly into the widget.
 
 As it currently exists, no additional API keys are needed to demonstrate this widget.
+
+the `<customer-summary>` component's table is composable, simple add the table or table generating code needed between the tags and it will render within. Please note that the class names for "label" and "value" help the styles render correctly, like so: `<td class="title">`.
+
+![Widget Example Screenshot](./static/crm.png)
