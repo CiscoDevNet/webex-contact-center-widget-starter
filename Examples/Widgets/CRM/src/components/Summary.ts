@@ -9,7 +9,7 @@
 import { html, LitElement, customElement, property } from "lit-element";
 import { ifDefined } from "lit-html/directives/if-defined";
 import styles from "./Summary.scss";
-import { data } from "../customer-data/mock-customer";
+import { data } from "../customer-data/mock-customer-blob";
 import { nothing } from "lit-html";
 import { classMap } from "lit-html/directives/class-map";
 @customElement("customer-summary")
@@ -25,6 +25,13 @@ export default class CustomerSummary extends LitElement {
     };
   }
 
+  getValue(search: string): string {
+    let value:any;
+    const result : any = this.customerData?.filter(x => x.label === search)
+    value = result[0].value;
+    return value
+  }
+
   static get styles() {
     return styles;
   }
@@ -33,23 +40,18 @@ export default class CustomerSummary extends LitElement {
     return html`
       <div class="summary-container" part="summary">
         <section class="cust-info-header">
-          <md-avatar
-            src=${ifDefined(this.customerData?.picture)}
-            size="56"
-          ></md-avatar>
-          <h1>${this.customerData?.name}</h1>
+          <md-avatar src=${ifDefined(this.getValue("Picture"))} size="56"></md-avatar>
+          <h1>${ifDefined(this.getValue("Name"))}</h1>
           <div class="age-gender">
-            ${this.customerData?.age} years old, ${this.customerData?.gender}
+            ${ifDefined(this.getValue("Age"))} years old, ${ifDefined(this.getValue("Gender"))}
           </div>
           <div class="phone">
             <md-icon name="icon-audio-call_14" size="10"></md-icon>
-            ${this.customerData?.phone}
+            ${ifDefined(this.getValue("Phone"))}
           </div>
         </section>
-
-        <md-badge small color="green" pill="false"
-          >MRN# ${this.customerData?.MRN}</md-badge
-        >
+      
+        <md-badge small color="green" pill="false">MRN# ${ifDefined(this.getValue("MRN"))}</md-badge>
         <slot class="${classMap(this.resizeClassMap)}"></slot>
       </div>
     `;
