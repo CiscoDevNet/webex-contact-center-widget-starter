@@ -75,19 +75,20 @@ export default class MyCustomComponent extends LitElement {
   }
 
   getValue(x: any) {
-    let result;
-
-    if (x.query.formatValue) {
-      try {
-        result = x.result.map(x.query.formatValue).join(', ');
-      } catch (err) {
-        console.log('Unable to format value', err);
-      }
+    let result = ``;
+    console.log(x)
+    if (Array.isArray(x)) {
+      result = x.join(", ")
     }
-
-    if (result === null) {
-      result = x.result.join(', ') || '-';
-    }
+    else if (typeof x === 'object' && x !== null) {
+      const values = Object.values(x)
+      let dataString = html`
+        ${values.map((item)=>{
+          return html`<span>${item}</span><br>`
+        })}
+      `
+      return dataString
+    } else return x
 
     return result;
   }
@@ -123,7 +124,7 @@ export default class MyCustomComponent extends LitElement {
                 console.log(x.result);
                 return html`<tr>
                   <td class="title">${x.label}</td>
-                  <td class="value">${x.value}</td>
+                  <td class="value">${this.getValue(x.value)}</td>
               </tr>`;
               })}
           </table>
