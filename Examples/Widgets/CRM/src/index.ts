@@ -17,13 +17,13 @@ import {
   query
 } from "lit-element";
 import { classMap } from "lit-html/directives/class-map";
-// import { Service } from "@wxcc-desktop/sdk-types";
-// import { Desktop } from "@wxcc-desktop/sdk";
+import { Service } from "@wxcc-desktop/sdk-types";
+import { Desktop } from "@wxcc-desktop/sdk";
 import "./components/Summary";
 import "./components/Visits";
 import { data } from "./customer-data/mock-customer-blob";
 import style from "./components/App.scss";
-import { nothing } from "lit-html";
+import { ifDefined } from "lit-html/directives/if-defined";
 
 @customElement("crm-widget")
 export default class MyCustomComponent extends LitElement {
@@ -35,21 +35,24 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() customerData!: typeof data;
   @query(".container") container!: HTMLElement;
 
-  // @internalProperty() assignedContacts: { 
-  //   interaction: Service.Aqm.Contact.Interaction
-  // }[] = [];
+  @internalProperty() assignedContacts: {
+    interaction: Service.Aqm.Contact.Interaction;
+  }[] = [];
 
   connectedCallback() {
     super.connectedCallback();
     this.customerData = data;
+    this.getTaskMap();
   }
 
-  // async getTaskMap() {
-  //   const taskMap: Map<string, any> = await Desktop.actions.getTaskMap();
-  //   console.log(taskMap);
-  //   this.assignedContacts = Array.from(taskMap.values());
-  //   console.log(this.assignedContacts[0])
-  // }
+  async getTaskMap() {
+    const taskMap:
+      | Map<string, any>
+      | undefined = await Desktop.actions.getTaskMap();
+    console.log(taskMap);
+    this.assignedContacts = Array.from(taskMap!.values());
+    console.log(this.assignedContacts[0]);
+  }
 
   firstUpdated(changedProperties: PropertyValues) {
     super.firstUpdated(changedProperties);
@@ -76,17 +79,18 @@ export default class MyCustomComponent extends LitElement {
 
   getValue(x: any) {
     if (Array.isArray(x)) {
-      return x.join(", ")
-    }
-    else if (typeof x === 'object' && x !== null) {
-      const values = Object.values(x)
-      let dataString = html`
-        ${values.map((item)=>{
-          return html`<span>${item}</span><br>`
+      return x.join(", ");
+    } else if (typeof x === "object" && x !== null) {
+      const values = Object.values(x);
+      const dataString = html`
+        ${values.map(item => {
+          return html`
+            <span>${item}</span><br />
+          `;
         })}
-      `
-      return dataString
-    } else return x
+      `;
+      return dataString;
+    } else return x;
   }
 
   static get styles() {
@@ -103,7 +107,7 @@ export default class MyCustomComponent extends LitElement {
     ];
   }
 
-  // re-wire the SDK to find the phone number and pipe that into the Summary 
+  // re-wire the SDK to find the phone number and pipe that into the Summary
 
   render() {
     return html`
@@ -111,24 +115,24 @@ export default class MyCustomComponent extends LitElement {
         <customer-summary
           .customerData=${this.customerData ? this.customerData : undefined}
           ?compact=${this.compact}
-          phone-number=${"whatever"}
-          >
+          phone-number=${ifDefined(this.phoneNumber)}
+        >
           <table>
-          ${this.customerData
-              .filter((x: any) => x.type === 'summary')
+            ${this.customerData
+              .filter((x: any) => x.type === "summary")
               .map((x: any) => {
                 console.log(x.result);
-                return html`<tr>
-                  <td class="title">${x.label}</td>
-                  <td class="value">${this.getValue(x.value)}</td>
-              </tr>`;
+                return html`
+                  <tr>
+                    <td class="title">${x.label}</td>
+                    <td class="value">${this.getValue(x.value)}</td>
+                  </tr>
+                `;
               })}
           </table>
-          </customer-summary>
-          <customer-visits
-            .customerData=${this.customerData}
-          ></customer-visits>
+        </customer-summary>
+        <customer-visits .customerData=${this.customerData}></customer-visits>
       </div>
-      `;
+    `;
   }
 }
