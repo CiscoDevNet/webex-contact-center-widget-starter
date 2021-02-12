@@ -22,7 +22,8 @@
         "test": "jest"
     },
     "dependencies": {
-        "@wxcc-desktop/sdk": "^1.2.5"
+        "@wxcc-desktop/sdk": "^1.2.5",
+        "@wxcc-desktop/sdk-types": "^1.0.3"
     },
     "resolutions": {
         "jest": "^26.4.2",
@@ -37,8 +38,6 @@
         "lit-html": "^1.2.1"
     },
     "devDependencies": {
-        "@agentx/agentx-services": "npm:@wxcc-desktop/sdk-types@^1.0.3",
-        "@agentx/agentx": "npm:@wxcc-desktop/sdk-types@^1.0.3",
         "@babel/core": "^7.9.0",
         "@babel/preset-env": "^7.9.0",
         "@momentum-ui/core": "19.9.2",
