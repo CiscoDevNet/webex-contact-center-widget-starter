@@ -43,6 +43,7 @@ export default class MyCustomComponent extends LitElement {
     super.connectedCallback();
     this.customerData = data;
     this.getTaskMap();
+    this.phoneNumber = this.assignedContacts[0].interaction.callAssociatedData && this.assignedContacts[0].interaction.callAssociatedData["ani"]["value"];
   }
 
   async getTaskMap() {
