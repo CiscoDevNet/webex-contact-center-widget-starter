@@ -26,6 +26,12 @@ declare global {
   interface Window { gm_authFailure: any; }
 }
 
+type HospitalData = {
+  place_id: string;
+  name: string;
+  vicinity: string;
+}
+
 @customElement("my-hospital-widget")
 export default class HospitalWidget extends LitElement {
   /**
@@ -42,8 +48,8 @@ export default class HospitalWidget extends LitElement {
    */
   @property({ type: String, reflect: true, attribute: "covi-api-key" })
   covidApiKey = "";
-  @property({ type: Number, reflect: true }) latitude = 0;
-  @property({ type: Number, reflect: true }) longitude = 0;
+  @property({ type: Number, reflect: true }) latitude = 37.369350;
+  @property({ type: Number, reflect: true }) longitude = -122.079552;
 
   @internalProperty() expanded = false;
   @internalProperty() statePostal = "";
@@ -58,7 +64,7 @@ export default class HospitalWidget extends LitElement {
 
   @internalProperty() map?: google.maps.Map;
   @internalProperty() hospitalIds: Array<string> = [];
-  @internalProperty() allNearbyHospitals?: Array<string> = [];
+  @internalProperty() allNearbyHospitals?: Array<HospitalData> = [];
   @internalProperty() nearestHospitalData?: any;
   @internalProperty() allUSACounties?: any;
   @internalProperty() countyData?: any;
@@ -217,6 +223,7 @@ export default class HospitalWidget extends LitElement {
         (results: any, status: google.maps.places.PlacesServiceStatus) => {
           if (status === "OK") {
             this.allNearbyHospitals = results;
+            this.hospitalIds = this.allNearbyHospitals ? this.allNearbyHospitals?.map(hospital => hospital.place_id) : [];
             this.nearestHospitalData = results[0];
             this.hospitalName = this.nearestHospitalData?.name;
 
@@ -286,7 +293,6 @@ export default class HospitalWidget extends LitElement {
   };
 
   renderHospitalList = () => {
-    const ids: Array<string> = [];
     return this.allNearbyHospitals && this.expanded && !this.loading
       ? html`
           <div class=${`hospital-list ${this.expanded ? "expanded" : ""}`}>
@@ -297,10 +303,9 @@ export default class HospitalWidget extends LitElement {
             >
               ${this.allNearbyHospitals
                 ? this.allNearbyHospitals?.map(
-                    (hospitalData: any, index: number) => {
+                    (hospitalData: HospitalData, index: number) => {
                       if (index < 6) {
                         const { name, place_id, vicinity } = hospitalData;
-                        ids.push(place_id);
                         return html`
                           <div class="hospital-item-wrapper" slot="list-item">
                             <my-hospital-item
@@ -316,7 +321,6 @@ export default class HospitalWidget extends LitElement {
                           </div>
                         `;
                       }
-                      this.hospitalIds = ids;
                     }
                   )
                 : nothing}
