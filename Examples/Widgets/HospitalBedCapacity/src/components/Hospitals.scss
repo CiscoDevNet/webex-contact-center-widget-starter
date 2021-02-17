@@ -1,3 +1,5 @@
+@import "./mixins";
+
 $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
 .hospital-widget {
@@ -8,28 +10,48 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 
   .hospital-list {
     width: 396px;
+    min-width: 274px;
     flex: 0 1 auto;
     border-right: $main-border;
     height: 100%;
     overflow: auto;
 
     md-list {
-      padding: 1px;
+      padding: 4px;
     }
 
-    .hospital-item {
-      height: 151px;
+    .hospital-item-wrapper {
       width: 100%;
+      margin-bottom: 1px;
+      position: relative;
+      z-index: 0;
+      border-bottom: $main-border;
+
+      &:focus {
+        box-shadow: none;
+        outline: none;
+
+        &::after {
+          @include item-focus-boxshadow;
+        }
+      }
+
+      &::after {
+        @include item-after-focus;
+        border-radius: 4px;
+      }
     }
   }
 
   .right-side {
     flex: 1;
+    min-width: 450px;
   }
 }
 
-.loading-wrapper {
-  height: 100%;
+.loading-wrapper,
+.error-wrapper {
+  height: 100px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -37,6 +59,8 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
 }
 
 .hospital-details {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 
   .hospital-image {
@@ -116,6 +140,7 @@ $main-border: 1px solid var(--md-primary-seperator-color, #ccc);
     padding: 1rem;
     font-size: 14px;
     line-height: 21px;
+    overflow: scroll;
 
     .warning-block {
       background-color: var(--md-secondary-bg-color, #f7f7f7);
