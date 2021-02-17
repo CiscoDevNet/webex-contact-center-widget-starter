@@ -14,6 +14,9 @@ import { classMap } from "lit-html/directives/class-map";
 @customElement("customer-summary")
 export default class CustomerSummary extends LitElement {
   @property({ type: Boolean }) compact = false;
+  @property({ type: String, attribute: "phone-number" }) phoneNumber:
+    | string
+    | undefined;
   @property({ type: Object, attribute: false }) customerData?:
     | typeof data
     | undefined;
@@ -25,10 +28,10 @@ export default class CustomerSummary extends LitElement {
   }
 
   getValue(search: string): string {
-    let value:any;
-    const result : any = this.customerData?.filter(x => x.label === search)
+    let value: any;
+    const result: any = this.customerData?.filter(x => x.label === search);
     value = result[0].value;
-    return value
+    return value;
   }
 
   static get styles() {
@@ -39,18 +42,24 @@ export default class CustomerSummary extends LitElement {
     return html`
       <div class="summary-container" part="summary">
         <section class="cust-info-header">
-          <md-avatar src=${ifDefined(this.getValue("Picture"))} size="56"></md-avatar>
+          <md-avatar
+            src=${ifDefined(this.getValue("Picture"))}
+            size="56"
+          ></md-avatar>
           <h1>${ifDefined(this.getValue("Name"))}</h1>
           <div class="age-gender">
-            ${ifDefined(this.getValue("Age"))} years old, ${ifDefined(this.getValue("Gender"))}
+            ${ifDefined(this.getValue("Age"))} years old,
+            ${ifDefined(this.getValue("Gender"))}
           </div>
           <div class="phone">
             <md-icon name="icon-audio-call_14" size="10"></md-icon>
-            ${ifDefined(this.getValue("Phone"))}
+            ${this.phoneNumber || ifDefined(this.getValue("Phone"))}
           </div>
         </section>
-      
-        <md-badge small color="green" pill="false">MRN# ${ifDefined(this.getValue("MRN"))}</md-badge>
+
+        <md-badge small color="green" pill="false"
+          >MRN# ${ifDefined(this.getValue("MRN"))}</md-badge
+        >
         <slot class="${classMap(this.resizeClassMap)}"></slot>
       </div>
     `;
