@@ -1,12 +1,6 @@
-$main-border: 1px solid var(--md-primary-seperator-color, #ccc);
-
-:host {
-  padding: 2px;
-  border-bottom: $main-border;
-}
-
 .hospital-item {
   padding: 16px;
+  border-radius: 4px;
 
   &.selected {
     background-color: var(--md-secondary-bg-color, #f7f7f7);

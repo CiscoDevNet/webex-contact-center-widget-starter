@@ -1,0 +1,17 @@
+@mixin item-after-focus {
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: -1;
+  }
+
+
+  @mixin item-focus-boxshadow {
+    // box-shadow: 0 0 0 rem-calc(2) var(--md-default-focus-outline-color, #007AA3);
+    // box-shadow: 0 0 0 2px var(--md-default-focus-outline-color, #007AA3);
+    box-shadow: 0 0 0 2px var(--md-default-focus-outline-color,purple);
+  }
