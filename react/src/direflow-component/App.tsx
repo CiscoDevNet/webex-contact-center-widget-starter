@@ -13,17 +13,151 @@ const App: FC<IProps> = (props) => {
   const [agentSessionId, setSessionId] = useState("");
   const [agentProfileId, setProfileId] = useState("");
   const [contacts, setContacts] = useState([]);
-  const [acceptedContacts, setAcceptedCOntacts] = useState([]);
+  const [acceptedContacts, setAcceptedContacts] = useState([]);
   const [sampleInteractionId, setSampleIntId] = useState("58f76ca3-409f-11eb-8606-f1b296a9b969");
   const [buddyAgents, setBuddyAgents] = useState(null as Service.Aqm.Contact.BuddyAgentsSuccess | null);
   const [vTeam, setVTeam] = useState(null as Service.Aqm.Contact.VTeamSuccess | null);
 
   useEffect(() => {
     init();
+
+    getCurrentInteractionId();
+    subscribeAgentContactDataEvents()
+    subscribeDialerEvents();
+    subscribeScreenpopEvent();
+
+    return() => {
+      Desktop.agentContact.removeAllEventListeners();
+    Desktop.dialer.removeAllEventListeners();
+    Desktop.screenpop.removeAllEventListeners()
+    }
   }, []);
 
   async function init() {
     await Desktop.config.init();
+  }
+
+  const subscribeScreenpopEvent = () => {
+    Desktop.screenpop.addEventListener("eScreenPop", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
+  }
+
+  const subscribeDialerEvents = () => {
+    Desktop.dialer.addEventListener("eOutdialFailed", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
+  }
+
+  const subscribeAgentContactDataEvents = () => {
+    Desktop.agentContact.addEventListener("eAgentContact", (msg: Service.Aqm.Contact.AgentContact) =>
+      logger.info("AgentContact eAgentContact: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentContactAssigned",
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentContactAssigned: ", msg);
+        setAcceptedContacts([...acceptedContacts, msg.data.interactionId]);
+        logger.info(acceptedContacts);
+      }
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentContactEnded",
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentContactEnded: ", msg);
+        const idx = acceptedContacts.indexOf(msg.data.interactionId);
+        if (idx != -1) {
+          setAcceptedContacts(acceptedContacts.slice(idx, 1));
+          logger.info(acceptedContacts);
+        }
+      }
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentContactWrappedUp",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactWrappedUp: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentOfferContact",
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentOfferContact: ", msg.data.interactionId);
+        // AUX Sandbox Contact
+        setContacts([...contacts, msg.data.interactionId]);
+        logger.info("AgentContact eAgentOfferContact: ", contacts);
+      }
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentOfferContactRona",
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentOfferContactRona: ", msg.data.interactionId);
+        // AUX Sandbox Contact
+        const idx = contacts.indexOf(msg.data.interactionId);
+        if (idx != -1) {
+          setContacts([...this.contacts.filter(interactionId => interactionId !== msg.data.interactionId)]);
+          logger.info("AgentContact eAgentOfferContactRona: ", contacts);
+        }
+      }
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentOfferConsult",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentOfferConsult: ", msg)
+    );
+    Desktop.agentContact.addEventListener("eAgentWrapup", (msg: Service.Aqm.Contact.AgentContact) =>
+      logger.info("AgentContact eAgentWrapup: ", msg)
+    );
+    Desktop.agentContact.addEventListener("eAgentContactHeld", (msg: Service.Aqm.Contact.AgentContact) =>
+      logger.info("AgentContact eAgentContactHeld: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentContactUnHeld",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactUnHeld: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eCallRecordingStarted",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eCallRecordingStarted: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentConsultCreated",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultCreated: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentConsultConferenced",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultConferenced: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentConsultEnded",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEnded: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentCtqCancelled",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelled: ", msg)
+    );
+    Desktop.agentContact.addEventListener("eAgentConsulting", (msg: any) =>
+      logger.info("AgentContact eAgentConsulting: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentConsultFailed",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultFailed: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentConsultEndFailed",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEndFailed: ", msg)
+    );
+    Desktop.agentContact.addEventListener("eAgentCtqFailed", (msg: any) =>
+      logger.info("AgentContact eAgentCtqFailed: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentCtqCancelFailed",
+      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
+    );
+    Desktop.agentContact.addEventListener(
+      "eAgentConsultConferenceEndFailed",
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
+    );
+  }
+
+  const getCurrentInteractionId = () => {
+    let path = window.location.pathname;
+    if (path.indexOf("task") >= 0 && path.replace("task/", "").length > 0) {
+      setSampleIntId(path.replace("/task/", ""));
+      logger.info("Current interactionID: ", sampleInteractionId);
+    }
   }
 
   const getAgentInfo = () => {
