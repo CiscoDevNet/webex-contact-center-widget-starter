@@ -12,8 +12,8 @@ interface IProps {
 const App: FC<IProps> = (props) => {
   const [agentSessionId, setSessionId] = useState("");
   const [agentProfileId, setProfileId] = useState("");
-  const [contacts, setContacts] = useState([]);
-  const [acceptedContacts, setAcceptedContacts] = useState([]);
+  const [contacts, setContacts] = useState([] as String[]);
+  const [acceptedContacts, setAcceptedContacts] = useState([] as String[]);
   const [sampleInteractionId, setSampleIntId] = useState("58f76ca3-409f-11eb-8606-f1b296a9b969");
   const [buddyAgents, setBuddyAgents] = useState(null as Service.Aqm.Contact.BuddyAgentsSuccess | null);
   const [vTeam, setVTeam] = useState(null as Service.Aqm.Contact.VTeamSuccess | null);
@@ -38,15 +38,15 @@ const App: FC<IProps> = (props) => {
   }
 
   const subscribeScreenpopEvent = () => {
-    Desktop.screenpop.addEventListener("eScreenPop", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
+    Desktop.screenpop.addEventListener("eScreenPop", (msg) => logger.info(msg));
   }
 
   const subscribeDialerEvents = () => {
-    Desktop.dialer.addEventListener("eOutdialFailed", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
+    Desktop.dialer.addEventListener("eOutdialFailed", (msg) => logger.info(msg));
   }
 
   const subscribeAgentContactDataEvents = () => {
-    Desktop.agentContact.addEventListener("eAgentContact", (msg: Service.Aqm.Contact.AgentContact) =>
+    Desktop.agentContact.addEventListener("eAgentContact", (msg) =>
       logger.info("AgentContact eAgentContact: ", msg)
     );
     Desktop.agentContact.addEventListener(
@@ -88,7 +88,7 @@ const App: FC<IProps> = (props) => {
         // AUX Sandbox Contact
         const idx = contacts.indexOf(msg.data.interactionId);
         if (idx != -1) {
-          setContacts([...this.contacts.filter(interactionId => interactionId !== msg.data.interactionId)]);
+          setContacts([...contacts.filter(interactionId => interactionId !== msg.data.interactionId)]);
           logger.info("AgentContact eAgentOfferContactRona: ", contacts);
         }
       }
@@ -194,7 +194,7 @@ const App: FC<IProps> = (props) => {
 
   }
 
-  const acceptInteraction = (interactionId: string) => {
+  const acceptInteraction = (interactionId: String) => {
 
   }
 

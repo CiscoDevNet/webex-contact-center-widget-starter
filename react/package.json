@@ -12,7 +12,7 @@
     "@types/node": "12.7.8",
     "@types/react": "16.9.3",
     "@types/react-dom": "16.9.1",
-    "@wxcc-desktop/sdk": "^1.2.5",
+    "@wxcc-desktop/sdk": "^1.2.7",
     "@wxcc-desktop/sdk-types": "^1.0.3",
     "copy-webpack-plugin": "^5.0.2",
     "direflow-component": "3.2.4",
