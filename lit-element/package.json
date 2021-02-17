@@ -22,7 +22,8 @@
         "test": "jest"
     },
     "dependencies": {
-        "@wxcc-desktop/sdk": "^1.2.5"
+        "@wxcc-desktop/sdk": "^1.2.7",
+        "@wxcc-desktop/sdk-types": "^1.0.3"
     },
     "resolutions": {
         "jest": "^26.4.2",
@@ -55,7 +56,6 @@
         "@types/webpack-node-externals": "^1.7.1",
         "@typescript-eslint/eslint-plugin": "^2.22.0",
         "@typescript-eslint/parser": "^2.22.0",
-        "@wxcc-desktop/sdk-types": "^1.0.2",
         "alias-resolve-loader": "^2.0.4",
         "babel-jest": "26.3.0",
         "check-peer-dependencies": "2.0.1",

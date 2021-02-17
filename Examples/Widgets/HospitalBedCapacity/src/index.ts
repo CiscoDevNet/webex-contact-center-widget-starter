@@ -26,8 +26,8 @@ export default class HospitalBedCapacity extends LitElement {
     * https://apidocs.covidactnow.org/access
     */
     @property({ type: String, reflect: true, attribute: "covid-api-key" }) covidApiKey = "";
-    @property({ type: Number, reflect: true }) latitude = 37.405270;
-    @property({ type: Number, reflect: true }) longitude = -122.012210;
+    @property({ type: Number, reflect: true }) latitude = 37.369350;
+    @property({ type: Number, reflect: true }) longitude = -122.079552;
   
   @internalProperty() private contacts: string[] = [];
   

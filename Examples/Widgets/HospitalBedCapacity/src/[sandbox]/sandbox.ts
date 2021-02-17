@@ -75,6 +75,9 @@ export class Sandbox extends LitElement {
     */
     const covidApiKey = "";
 
+    const latitude = 37.369350;
+    const longitude = -122.079552;
+
     return html`
       <div class="toggle">
         ${this.themeToggle()}
@@ -85,8 +88,8 @@ export class Sandbox extends LitElement {
             <hospital-bed-capacity
               google-api-key=${googleApiKey}
               covid-api-key=${covidApiKey}
-              latitude=${37.369350}
-              longitude=${-122.079552}>
+              latitude=${latitude}
+              longitude=${longitude}>
             </hospital-bed-capacity>
           </div>
         </div>

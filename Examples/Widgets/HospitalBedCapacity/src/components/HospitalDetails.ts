@@ -80,7 +80,7 @@ export default class HospitalDetails extends LitElement {
           } else {
             console.error("PlacesService failed due to " + status);
             setTimeout(() => (this.loading = false), 150);
-            this.errorMessage = "Unable to find a nearby hospital details";
+            this.errorMessage = "Unable to find the details of the selected hospital";
           }
         }
       );
@@ -95,9 +95,9 @@ export default class HospitalDetails extends LitElement {
     `;
   };
 
-  renderNoHospital = () => {
+  renderErrorMessage = () => {
     return html`
-      <div class="loading-wrapper">
+      <div class="error-wrapper">
         <h3>${this.errorMessage}</h3>
       </div>
     `;
@@ -236,7 +236,7 @@ export default class HospitalDetails extends LitElement {
 
   renderContent = () => {
     return this.errorMessage
-      ? this.renderNoHospital()
+      ? this.renderErrorMessage()
       : html`
           ${this.renderImage()} ${this.renderSubHeader()}
           ${this.renderHospitalDetails()}

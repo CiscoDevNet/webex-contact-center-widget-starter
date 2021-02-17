@@ -7,44 +7,60 @@
  */
 
 import { Desktop } from "@wxcc-desktop/sdk";
-import { html, LitElement, customElement, internalProperty, property } from "lit-element";
+import {
+  html,
+  LitElement,
+  customElement,
+  internalProperty,
+  property
+} from "lit-element";
 import styles from "./App.scss";
 import { logger } from "./sdk";
 import { Service } from "@wxcc-desktop/sdk-types";
 import { Notifications } from "@uuip/unified-ui-platform-sdk";
+
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
   /**
    * These values will be replaced with STORE values through Data provider
    * in JSON layout configuration file
-   * Data provider documentation: 
+   * Data provider documentation:
    * https://apim-dev-portal.appstaging.ciscoccservice.com/documentation/guides/desktop#data-provider%E2%80%94widget-properties-and-attributes
    */
 
-  @property({ type: String, attribute: "agent-id", reflect: true }) agentId = "7d12d9ea-e8e0-41ee-81bf-c11a685b64ed";
-  @property({ type: String, attribute: "agent-profile-id", reflect: true }) agentProfileId = "AXCLfZhH9S1oTdqE1OFw";
-  @property({ type: String, attribute: "agent-session-id", reflect: true }) agentSessionId = "5a84d32c-691b-4500-b163-d6cdba2a3163";
-  
+  @property({ type: String, attribute: "agent-id", reflect: true }) agentId =
+    "7d12d9ea-e8e0-41ee-81bf-c11a685b64ed";
+  @property({ type: String, attribute: "agent-profile-id", reflect: true })
+  agentProfileId = "AXCLfZhH9S1oTdqE1OFw";
+  @property({ type: String, attribute: "agent-session-id", reflect: true })
+  agentSessionId = "5a84d32c-691b-4500-b163-d6cdba2a3163";
+
   /**
    * Replace this with the logic to obtain interaction ID you need
    * through Desktop.actions sub-module or through external props
    */
 
-  @internalProperty() sampleInteractionId: Service.Aqm.Contact.Interaction["interactionId"] =
+  @internalProperty()
+  sampleInteractionId: Service.Aqm.Contact.Interaction["interactionId"] =
     "58f76ca3-409f-11eb-8606-f1b296a9b969";
-    
+
   /**
    * Replace this with the logic to obtain mediaResourceId you need
    * through Desktop.actions sub-module or through external props
    */
 
-  @internalProperty() mediaResourceId: Service.Aqm.Contact.consultTransferPayLoad["mediaResourceId"] = "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8";
-  @internalProperty() buddyAgents: Service.Aqm.Contact.BuddyAgentsSuccess | null = null;
+  @internalProperty()
+  mediaResourceId: Service.Aqm.Contact.consultTransferPayLoad["mediaResourceId"] =
+    "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8";
+  @internalProperty()
+  buddyAgents: Service.Aqm.Contact.BuddyAgentsSuccess | null = null;
   @internalProperty() vTeam: Service.Aqm.Contact.VTeamSuccess | null = null;
-  @internalProperty() contacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
-  @internalProperty() acceptedContacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
-  @internalProperty() assignedContacts: { 
-    interaction: Service.Aqm.Contact.Interaction
+  @internalProperty()
+  contacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
+  @internalProperty()
+  acceptedContacts: Service.Aqm.Contact.Interaction["interactionId"][] = [];
+  @internalProperty() assignedContacts: {
+    interaction: Service.Aqm.Contact.Interaction;
   }[] = [];
 
   static get styles() {
@@ -52,137 +68,127 @@ export default class MyCustomComponent extends LitElement {
   }
   async connectedCallback() {
     super.connectedCallback();
+
     await Desktop.config.init();
+
     this.getCurrentInteractionId();
-    this.subscribeAgentContactDataEvents()
+    this.subscribeAgentContactDataEvents();
     this.subscribeDialerEvents();
     this.subscribeScreenpopEvent();
   }
 
   disconnectedCallback() {
-    super. disconnectedCallback();
+    super.disconnectedCallback();
     Desktop.agentContact.removeAllEventListeners();
     Desktop.dialer.removeAllEventListeners();
-    Desktop.screenpop.removeAllEventListeners()
+    Desktop.screenpop.removeAllEventListeners();
   }
 
   subscribeScreenpopEvent() {
-    Desktop.screenpop.addEventListener("eScreenPop", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
+    Desktop.screenpop.addEventListener("eScreenPop", msg => logger.info(msg));
   }
 
   subscribeDialerEvents() {
-    Desktop.dialer.addEventListener("eOutdialFailed", (msg: Service.Aqm.Contact.AgentContact) => logger.info(msg));
+    Desktop.dialer.addEventListener("eOutdialFailed", msg => logger.info(msg));
   }
 
   subscribeAgentContactDataEvents() {
-    Desktop.agentContact.addEventListener("eAgentContact", (msg: Service.Aqm.Contact.AgentContact) =>
+    Desktop.agentContact.addEventListener("eAgentContact", msg =>
       logger.info("AgentContact eAgentContact: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentContactAssigned",
-      (msg: Service.Aqm.Contact.AgentContact) => {
-        logger.info("AgentContact eAgentContactAssigned: ", msg);
-        this.acceptedContacts = [...this.acceptedContacts, msg.data.interactionId];
+    Desktop.agentContact.addEventListener("eAgentContactAssigned", msg => {
+      logger.info("AgentContact eAgentContactAssigned: ", msg);
+
+      this.acceptedContacts = [
+        ...this.acceptedContacts,
+        msg.data.interactionId
+      ];
+
+      logger.info(this.acceptedContacts);
+    });
+    Desktop.agentContact.addEventListener("eAgentContactEnded", msg => {
+      logger.info("AgentContact eAgentContactEnded: ", msg);
+      const idx = this.acceptedContacts.indexOf(msg.data.interactionId);
+      if (idx != -1) {
+        this.acceptedContacts = this.acceptedContacts.slice(idx, 1);
         logger.info(this.acceptedContacts);
       }
+    });
+    Desktop.agentContact.addEventListener("eAgentContactWrappedUp", msg =>
+      logger.info("AgentContact eAgentContactWrappedUp: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentContactEnded",
-      (msg: Service.Aqm.Contact.AgentContact) => {
-        logger.info("AgentContact eAgentContactEnded: ", msg);
-        const idx = this.acceptedContacts.indexOf(msg.data.interactionId);
-        if (idx != -1) {
-          this.acceptedContacts = this.acceptedContacts.slice(idx, 1);
-          logger.info(this.acceptedContacts);
-        }
+    Desktop.agentContact.addEventListener("eAgentOfferContact", msg => {
+      logger.info("AgentContact eAgentOfferContact: ", msg.data.interactionId);
+      // AUX Sandbox Contact
+      this.contacts = [...this.contacts, msg.data.interactionId];
+      logger.info("AgentContact eAgentOfferContact: ", this.contacts);
+    });
+    Desktop.agentContact.addEventListener("eAgentOfferContactRona", msg => {
+      logger.info(
+        "AgentContact eAgentOfferContactRona: ",
+        msg.data.interactionId
+      );
+      // AUX Sandbox Contact
+      const idx = this.contacts.indexOf(msg.data.interactionId);
+      if (idx != -1) {
+        this.contacts = [
+          ...this.contacts.filter(
+            interactionId => interactionId !== msg.data.interactionId
+          )
+        ];
+        logger.info("AgentContact eAgentOfferContactRona: ", this.contacts);
       }
+    });
+    Desktop.agentContact.addEventListener("eAgentOfferConsult", msg =>
+      logger.info("AgentContact eAgentOfferConsult: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentContactWrappedUp",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactWrappedUp: ", msg)
-    );
-    Desktop.agentContact.addEventListener(
-      "eAgentOfferContact",
-      (msg: Service.Aqm.Contact.AgentContact) => {
-        logger.info("AgentContact eAgentOfferContact: ", msg.data.interactionId);
-        // AUX Sandbox Contact
-        this.contacts = [...this.contacts, msg.data.interactionId];
-        logger.info("AgentContact eAgentOfferContact: ", this.contacts);
-      }
-    );
-    Desktop.agentContact.addEventListener(
-      "eAgentOfferContactRona",
-      (msg: Service.Aqm.Contact.AgentContact) => {
-        logger.info("AgentContact eAgentOfferContactRona: ", msg.data.interactionId);
-        // AUX Sandbox Contact
-        const idx = this.contacts.indexOf(msg.data.interactionId);
-        if (idx != -1) {
-          this.contacts = [...this.contacts.filter(interactionId => interactionId !== msg.data.interactionId)]
-          logger.info("AgentContact eAgentOfferContactRona: ", this.contacts);
-        }
-      }
-    );
-    Desktop.agentContact.addEventListener(
-      "eAgentOfferConsult",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentOfferConsult: ", msg)
-    );
-    Desktop.agentContact.addEventListener("eAgentWrapup", (msg: Service.Aqm.Contact.AgentContact) =>
+    Desktop.agentContact.addEventListener("eAgentWrapup", msg =>
       logger.info("AgentContact eAgentWrapup: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentContactHeld", (msg: Service.Aqm.Contact.AgentContact) =>
+    Desktop.agentContact.addEventListener("eAgentContactHeld", msg =>
       logger.info("AgentContact eAgentContactHeld: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentContactUnHeld",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactUnHeld: ", msg)
+    Desktop.agentContact.addEventListener("eAgentContactUnHeld", msg =>
+      logger.info("AgentContact eAgentContactUnHeld: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eCallRecordingStarted",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eCallRecordingStarted: ", msg)
+    Desktop.agentContact.addEventListener("eCallRecordingStarted", msg =>
+      logger.info("AgentContact eCallRecordingStarted: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentConsultCreated",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultCreated: ", msg)
+    Desktop.agentContact.addEventListener("eAgentConsultCreated", msg =>
+      logger.info("AgentContact eAgentConsultCreated: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentConsultConferenced",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultConferenced: ", msg)
+    Desktop.agentContact.addEventListener("eAgentConsultConferenced", msg =>
+      logger.info("AgentContact eAgentConsultConferenced: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentConsultEnded",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEnded: ", msg)
+    Desktop.agentContact.addEventListener("eAgentConsultEnded", msg =>
+      logger.info("AgentContact eAgentConsultEnded: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentCtqCancelled",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelled: ", msg)
+    Desktop.agentContact.addEventListener("eAgentCtqCancelled", msg =>
+      logger.info("AgentContact eAgentCtqCancelled: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentConsulting", (msg: any) =>
+    Desktop.agentContact.addEventListener("eAgentConsulting", msg =>
       logger.info("AgentContact eAgentConsulting: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentConsultFailed",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultFailed: ", msg)
+    Desktop.agentContact.addEventListener("eAgentConsultFailed", msg =>
+      logger.info("AgentContact eAgentConsultFailed: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentConsultEndFailed",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEndFailed: ", msg)
+    Desktop.agentContact.addEventListener("eAgentConsultEndFailed", msg =>
+      logger.info("AgentContact eAgentConsultEndFailed: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentCtqFailed", (msg: any) =>
+    Desktop.agentContact.addEventListener("eAgentCtqFailed", msg =>
       logger.info("AgentContact eAgentCtqFailed: ", msg)
     );
-    Desktop.agentContact.addEventListener(
-      "eAgentCtqCancelFailed",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
+    Desktop.agentContact.addEventListener("eAgentCtqCancelFailed", msg =>
+      logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultConferenceEndFailed",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
+      msg => logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
   }
 
   getCurrentInteractionId() {
-    let path = window.location.pathname;
+    const path = window.location.pathname;
     if (path.indexOf("task") >= 0 && path.replace("task/", "").length > 0) {
       this.sampleInteractionId = path.replace("/task/", "");
       logger.info("Current interactionID: ", this.sampleInteractionId);
@@ -192,7 +198,7 @@ export default class MyCustomComponent extends LitElement {
   async changeState(s: "Available" | "Idle") {
     const agentState = await Desktop.agentStateInfo.stateChange({
       state: s,
-      auxCodeIdArray: "0",
+      auxCodeIdArray: "0"
     });
     logger.info("State Changed", agentState);
   }
@@ -239,27 +245,35 @@ export default class MyCustomComponent extends LitElement {
         data: "Lorem Ipsum Dolor"
       }
     };
-    const [ status, reason, mode ]: [ Notifications.ItemMeta.Status, Notifications.ItemMeta.StatusChangeEventReason, Notifications.ItemMeta.Mode ] = await Desktop.actions.fireGeneralAutoDismissNotification(raw as Notifications.ItemMeta.Raw & { data: { mode: Notifications.ItemMeta.Mode.AutoDismiss; }; })
-    logger.info(status, reason, mode);
+    const res = await Desktop.actions.fireGeneralAutoDismissNotification(
+      raw as Notifications.ItemMeta.Raw & {
+        data: { mode: Notifications.ItemMeta.Mode.AutoDismiss };
+      }
+    );
+    if (res) {
+      const [status, reason, mode] = res;
+      logger.info(status, reason, mode);
+    }
   }
 
   async getTaskMap() {
-    const taskMap: Map<string, any> = await Desktop.actions.getTaskMap();
+    const taskMap = await Desktop.actions.getTaskMap();
     console.log(taskMap);
-    this.assignedContacts = Array.from(taskMap.values());
-    console.log(this.assignedContacts[0])
+    this.assignedContacts = Array.from(taskMap?.values() || []);
+    console.log(this.assignedContacts[0]);
   }
 
   async getBuddyAgents() {
     const buddyAgentPayload = {
       agentProfileId: this.agentProfileId,
       channelName: "chat",
-      state: "Available",
+      state: "Available"
     };
 
-    this.buddyAgents = await Desktop.agentContact.buddyAgents({
-      data: buddyAgentPayload,
-    });
+    this.buddyAgents =
+      (await Desktop.agentContact.buddyAgents({
+        data: buddyAgentPayload
+      })) || null;
     logger.info(this.buddyAgents);
   }
 
@@ -268,104 +282,121 @@ export default class MyCustomComponent extends LitElement {
       agentProfileId: this.agentProfileId,
       agentSessionId: this.agentSessionId,
       channelType: "chat",
-      type: "inboundqueue",
+      type: "inboundqueue"
     };
 
-    this.vTeam = await Desktop.agentContact.vteamList({
-      data: vTeamPayload,
-    });
+    this.vTeam =
+      (await Desktop.agentContact.vteamList({
+        data: vTeamPayload
+      })) || null;
     logger.info(this.vTeam, this.vTeam!.data.data.vteamList);
   }
 
   async acceptInteraction(interactionId: string) {
-    let acceptInteraction = await Desktop.agentContact.accept({
-      interactionId: interactionId,
+    const acceptInteraction = await Desktop.agentContact.accept({
+      interactionId: interactionId
     });
     logger.info(acceptInteraction);
   }
 
   async endInteraction() {
-    let endedInteraction = await Desktop.agentContact.end({
-      interactionId: this.sampleInteractionId,
+    const endedInteraction = await Desktop.agentContact.end({
+      interactionId: this.sampleInteractionId
     });
     logger.info(endedInteraction);
   }
 
   async wrapUpInteraction() {
-    let wrappedUpInteraction = await Desktop.agentContact.wrapup({
+    const wrappedUpInteraction = await Desktop.agentContact.wrapup({
       interactionId: this.sampleInteractionId,
       data: {
         wrapUpReason: "Example reason here",
         auxCodeId: "0",
-        isAutoWrapup: "false",
-      },
+        isAutoWrapup: "false"
+      }
     });
     logger.info(wrappedUpInteraction);
   }
 
   async consultWithAgent() {
-    let consult = await Desktop.agentContact.consult({
+    const consult = await Desktop.agentContact.consult({
       interactionId: this.sampleInteractionId,
       data: {
         agentId: this.agentId,
         destAgentId: this.buddyAgents?.data.agentList[0].agentId,
-        mediaType: "chat",
+        mediaType: "chat"
       },
-      url: "consult",
+      url: "consult"
     });
     logger.info(consult);
   }
 
   async consultConferenceWithAgent() {
-    let consult = await Desktop.agentContact.consultConference({
+    const consult = await Desktop.agentContact.consultConference({
       interactionId: this.sampleInteractionId,
       data: {
         agentId: this.agentId,
         destAgentId: this.buddyAgents?.data.agentList[0].agentId,
-        mediaType: "chat",
-      },
+        mediaType: "chat"
+      }
     });
     logger.info(consult);
   }
 
   async endConferenceWithAgent() {
-    let consult = await Desktop.agentContact.consultEnd({
+    const consult = await Desktop.agentContact.consultEnd({
       interactionId: this.sampleInteractionId,
-      isConsult: false,
+      isConsult: false
     });
     logger.info(consult);
   }
 
   async endConsultConferenceWithAgent() {
-    let consult = await Desktop.agentContact.consultEnd({
+    const consult = await Desktop.agentContact.consultEnd({
       interactionId: this.sampleInteractionId,
-      isConsult: true,
+      isConsult: true
     });
     logger.info(consult);
   }
 
   async consultTransferToAgent() {
-    let consult = await Desktop.agentContact.consultTransfer({
-      interactionId: this.sampleInteractionId,
-      data: {
-        agentId: this.agentId,
-        destAgentId: this.buddyAgents?.data.agentList[0].agentId,
-        mediaType: "chat",
-        mediaResourceId: "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8",
-      },
-    });
-    logger.info(consult);
+    if (this.buddyAgents?.data.agentList[0].agentId) {
+      const consult = await Desktop.agentContact.consultTransfer({
+        interactionId: this.sampleInteractionId,
+        data: {
+          agentId: this.agentId,
+          destAgentId: this.buddyAgents?.data.agentList[0].agentId,
+          mediaType: "chat",
+          mediaResourceId: "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8"
+        }
+      });
+      logger.info(consult);
+    } else {
+      logger.info("consultTransferToAgent(): agentId is not defined");
+    }
   }
 
   async vTeamTransfer() {
-    let consult = await Desktop.agentContact.vteamTransfer({
-      interactionId: this.sampleInteractionId,
-      data: {
-        vteamId: this.vTeam?.data.data.vteamList[0].analyzerId,
-        vteamType: this.vTeam?.data.data.vteamList[0].type,
-      },
-    });
-    logger.info(consult);
+    if (
+      this.vTeam?.data.data.vteamList[0].analyzerId &&
+      this.vTeam?.data.data.vteamList[0].type
+    ) {
+      const consult = await Desktop.agentContact.vteamTransfer({
+        interactionId: this.sampleInteractionId,
+        data: {
+          vteamId: this.vTeam?.data.data.vteamList[0].analyzerId,
+          vteamType: this.vTeam?.data.data.vteamList[0].type
+        }
+      });
+      logger.info(consult);
+    } else {
+      if (!this.vTeam?.data.data.vteamList[0].analyzerId) {
+        logger.info("vTeamTransfer(): analyzerId is not defined");
+      }
+      if (!this.vTeam?.data.data.vteamList[0].type) {
+        logger.info("vTeamTransfer(): type is not defined");
+      }
+    }
   }
 
   render() {
@@ -401,30 +432,36 @@ export default class MyCustomComponent extends LitElement {
             <div class="action-container">
               <h2>Desktop.agentContact sub-module</h2>
               <h3>Get Available Agents</h3>
-              <p>Make sure to fetch latest agent info first before invoking this method</p>
+              <p>
+                Make sure to fetch latest agent info first before invoking this
+                method
+              </p>
               <md-button @button-click=${() => this.getBuddyAgents()}
                 >Get Available Agents</md-button
               >
 
               <h3>Get channel specific team list</h3>
-              <p>Make sure to fetch latest agent info first before invoking this method</p>
+              <p>
+                Make sure to fetch latest agent info first before invoking this
+                method
+              </p>
               <md-button @button-click=${() => this.getVTeamList()}
                 >Get Team list</md-button
               >
 
               <h3>Accept interactions</h3>
               <span>New incoming interactions will appear here</span>
-              ${
-                this.contacts.map(interactionId => {
-                  if (this.acceptedContacts.indexOf(interactionId) == -1) {
-                    return html`
-                      <md-button @button-click=${() => this.acceptInteraction(interactionId)}
-                        >Accept interaction for ${interactionId}</md-button
-                      >
-                    `
-                  }
-                })
-              }
+              ${this.contacts.map(interactionId => {
+                if (this.acceptedContacts.indexOf(interactionId) == -1) {
+                  return html`
+                    <md-button
+                      @button-click=${() =>
+                        this.acceptInteraction(interactionId)}
+                      >Accept interaction for ${interactionId}</md-button
+                    >
+                  `;
+                }
+              })}
 
               <h3>End interaction</h3>
               <md-button @button-click=${() => this.endInteraction()}
@@ -442,7 +479,8 @@ export default class MyCustomComponent extends LitElement {
               >
               <md-button @button-click=${() => this.consultWithAgent()}
                 >Consult with
-                ${this.buddyAgents && this.buddyAgents?.data.agentList.length > 0
+                ${this.buddyAgents &&
+                this.buddyAgents?.data.agentList.length > 0
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
@@ -452,7 +490,8 @@ export default class MyCustomComponent extends LitElement {
               >
               <md-button @button-click=${() => this.endConferenceWithAgent()}
                 >End Consult with
-                ${this.buddyAgents && this.buddyAgents?.data.agentList.length > 0
+                ${this.buddyAgents &&
+                this.buddyAgents?.data.agentList.length > 0
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
@@ -462,7 +501,8 @@ export default class MyCustomComponent extends LitElement {
               <md-button
                 @button-click=${() => this.consultConferenceWithAgent()}
                 >Consult Conference with
-                ${this.buddyAgents && this.buddyAgents?.data.agentList.length > 0
+                ${this.buddyAgents &&
+                this.buddyAgents?.data.agentList.length > 0
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
@@ -472,7 +512,8 @@ export default class MyCustomComponent extends LitElement {
               <md-button
                 @button-click=${() => this.endConsultConferenceWithAgent()}
                 >End Consult Conference with
-                ${this.buddyAgents && this.buddyAgents?.data.agentList.length > 0
+                ${this.buddyAgents &&
+                this.buddyAgents?.data.agentList.length > 0
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
@@ -480,7 +521,8 @@ export default class MyCustomComponent extends LitElement {
               <h3>Consult Transfer</h3>
               <md-button @button-click=${() => this.consultTransferToAgent()}
                 >Consult Transfer to
-                ${this.buddyAgents && this.buddyAgents?.data.agentList.length > 0
+                ${this.buddyAgents &&
+                this.buddyAgents?.data.agentList.length > 0
                   ? this.buddyAgents?.data.agentList[0].agentId
                   : "No Agents available"}</md-button
               >
@@ -496,23 +538,31 @@ export default class MyCustomComponent extends LitElement {
 
           <md-tab slot="tab">Desktop.shortcutKey</md-tab>
           <md-tab-panel slot="panel">
-            <div class=“action-container”>
+            <div class="“action-container”">
               <h2>Monitor data output in console log</h2>
-              <md-button @button-click=${() => logger.info(Desktop.shortcutKey.DEFAULT_SHORTCUT_KEYS)}
-                  >Get Default Shortcut Keys</md-button
-                >
+              <md-button
+                @button-click=${() =>
+                  logger.info(Desktop.shortcutKey.DEFAULT_SHORTCUT_KEYS)}
+                >Get Default Shortcut Keys</md-button
+              >
 
-                <md-button @button-click=${() => logger.info(Desktop.shortcutKey.MODIFIERS)}
-                  >Get Shortcut Keys Modifiers</md-button
-                >
+              <md-button
+                @button-click=${() =>
+                  logger.info(Desktop.shortcutKey.MODIFIERS)}
+                >Get Shortcut Keys Modifiers</md-button
+              >
 
-                <md-button @button-click=${() => logger.info(Desktop.shortcutKey.REGISTERED_KEYS)}
-                  >Get all registered Shortcut Keys</md-button
-                >
+              <md-button
+                @button-click=${() =>
+                  logger.info(Desktop.shortcutKey.REGISTERED_KEYS)}
+                >Get all registered Shortcut Keys</md-button
+              >
 
-                <md-button @button-click=${() => logger.info(Desktop.shortcutKey.getRegisteredKeys())}
-                  >Get all registered Shortcut Keys</md-button
-                >
+              <md-button
+                @button-click=${() =>
+                  logger.info(Desktop.shortcutKey.getRegisteredKeys())}
+                >Get all registered Shortcut Keys</md-button
+              >
             </div>
           </md-tab-panel>
 
@@ -537,17 +587,23 @@ export default class MyCustomComponent extends LitElement {
               >
 
               <md-button @button-click=${() => this.getTaskMap()}
-                >Get full ist of assigned tasks including CAD variables</md-button
+                >Get full ist of assigned tasks including CAD
+                variables</md-button
               >
               <span>
-                  ${this.assignedContacts.length > 0 ? html`
-                    ${this.assignedContacts[0].interaction.callAssociatedData &&
-                    this.assignedContacts[0].interaction.callAssociatedData["ani"]["value"] + " " + 
-                    this.assignedContacts[0].interaction.callAssociatedData["customerName"]["value"]}
-                  `: 
-                `First assigned task CAD variables will appear here.`}
+                ${this.assignedContacts.length > 0
+                  ? html`
+                      ${this.assignedContacts[0].interaction
+                        .callAssociatedData &&
+                        this.assignedContacts[0].interaction.callAssociatedData[
+                          "ani"
+                        ]["value"] +
+                          " " +
+                          this.assignedContacts[0].interaction
+                            .callAssociatedData["customerName"]["value"]}
+                    `
+                  : `First assigned task CAD variables will appear here.`}
               </span>
-              
             </div>
           </md-tab-panel>
 
@@ -598,7 +654,6 @@ export default class MyCustomComponent extends LitElement {
               Etiam orci quam, vestibulum egestas rutrum non, dapibus a justo.
             </p>
           </md-tab-panel>
-
         </md-tabs>
         <slot></slot>
       </div>
