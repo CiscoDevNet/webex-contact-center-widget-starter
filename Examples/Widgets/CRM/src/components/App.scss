@@ -1,0 +1,53 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+@import "./TableStyles";
+
+:host {
+    display: block;
+    background-color: var(--md-primary-bg-color);
+    color: var(--md-primary-text-color);
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    > customer-summary {
+        height: 100%;
+        margin-right: 1rem;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.16);
+    }
+    
+    &.compact {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        > customer-summary {
+            margin: 1rem;
+            border-radius: 8px;
+            height: 20rem;
+            width: 90%;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.18);
+        }
+
+        > customer-visits {
+            width: auto;
+        }
+    }
+}
+
+@include table
+
+.compact {
+    table {
+      flex-grow: 1;
+      overflow: auto;
+    }
+  }

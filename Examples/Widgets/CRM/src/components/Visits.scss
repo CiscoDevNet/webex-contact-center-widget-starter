@@ -1,0 +1,159 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+:host {
+  width: 100vw;
+}
+
+.visits-container {
+  padding: 1rem;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  md-combobox {
+    flex-grow: 1;
+    z-index: 100;
+  }
+
+  md-badge {
+    margin-left: 0.75rem;
+    flex-grow: 2;
+
+    &::part(badge) {
+      border-radius: 0.25rem;
+    }
+  }
+
+  .more-actions {
+    width: 3rem;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.matrix-wrapper {
+  position: relative;
+  border-radius: 0.5rem;
+  width: 100%;
+  height: 25rem;
+  overflow: auto;
+}
+
+.visits-grid {
+  font-size: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr 16fr;
+  grid-template-rows: 10fr auto;
+  gap: 0.6rem;
+  grid-template-areas:
+    "time grid"
+    "year month";
+  margin-top: 1rem;
+}
+
+.visits-matrix {
+  background-color: var(--md-secondary-bg-color, #f7f7f7);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  grid-area: grid;
+}
+
+.visits-matrix::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: repeating-linear-gradient(
+      to right,
+      transparent,
+      transparent 3px,
+      var(--md-secondary-bg-color, #f7f7f7) 3px,
+      var(--md-secondary-bg-color, #f7f7f7) 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 5.37%,
+      var(--md-quaternary-bg-color, #dedede) 5.57%,
+      var(--md-quaternary-bg-color, #dedede) 5.57%
+    );
+    z-index: 0;
+}
+
+.visits-matrix::after {
+  content: "";
+  position: absolute;
+  background-color: var(--md-secondary-bg-color, #f7f7f7);
+  top: 0px;
+  left: 100%;
+  height: 100%;
+  width: 50%;
+}
+
+.time {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-around;
+  grid-area: time;
+}
+
+.months {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  grid-area: month;
+}
+
+.year {
+  grid-area: year;
+}
+
+.months-line {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-right: 1rem;
+  margin: 1rem 0;
+}
+
+div.month-line {
+  background: var(--visits-line-color, #dedede);
+  content: " ";
+  display: flex;
+  flex-grow: 1;
+  height: 0.125rem;
+  margin: 0;
+  position: relative;
+}
+
+div.month-line::before {
+  background: var(--md-primary-bg-color, #f7f7f7);
+  border: 2px solid var(--visits-line-color, #dedede);
+  content: " ";
+  border-radius: 50%;
+  height: 0.625rem;
+  width: 0.625rem;
+  align-self: center;
+  position: absolute;
+}
+
+div.month-line:last-child {
+  flex: 0 1 0;
+}
+
+.month-names {
+  display: flex;
+  justify-content: space-between;
+}
