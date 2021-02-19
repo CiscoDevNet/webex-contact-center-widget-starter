@@ -1,0 +1,91 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+@import "../assets/styles/variables";
+
+@import "./TableStyles";
+
+:host {
+  width: 100vw;
+}
+
+.menu-trigger::part(button) {
+  padding: 0;
+  height: 100%;
+}
+
+.mock-badge {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: var(--md-primary-text-color, #777);
+  background-color: var(--md-primary-bg-color, #fff);
+  border-radius: 1.5rem;
+  padding: 0.25rem 1rem 0.25rem 0;
+  height: 1rem;
+  white-space: nowrap;
+  font-size: 0.625rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.18);
+  z-index: 1;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--badge-cyan-bg-color, #e6fbff);
+  }
+  span {
+    display: inline-flex;
+    align-items: center;
+  }
+  .split-separator {
+    margin: 0 0.25rem;
+  }
+}
+
+md-menu-overlay::part(overlay-content) {
+  width: 16.5rem;
+}
+
+.visit-overlay-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.visit-details-header {
+  border-bottom: 1px solid var(--color-gray-border, #cccccc);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+
+  &:nth-child(2) {
+    width: 80%;
+    text-align: start;
+  }
+
+  h2,
+  h3 {
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 0.875rem;
+  }
+
+  h3 {
+    font-size: 0.625rem;
+    font-weight: lighter;
+    color: var(--primary-text-color, #777);
+  }
+}
+
+.visit-details-content {
+  padding: 1rem;
+}
+
+@include table;

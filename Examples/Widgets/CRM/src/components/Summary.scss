@@ -1,0 +1,62 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+@import "../assets/styles/variables";
+@import "./TableStyles";
+
+.summary-container {
+  box-sizing: border-box;
+  padding: 1rem;
+  height: 100%;
+  font-size: 0.75rem;
+  min-width: 19.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.cust-info-header {
+  display: grid;
+  gap: 0px 1rem;
+  grid-auto-columns: max-content;
+  grid-template-areas:
+    "avatar h1 h1 h1"
+    "avatar age age age"
+    "avatar phone phone phone";
+  md-avatar {
+    grid-area: avatar;
+    align-self: center;
+  }
+  h1 {
+    font-size: 0.875rem;
+    grid-area: h1;
+    margin: 0;
+  }
+  div.age-gender {
+    grid-area: age;
+    color: var(--md-secondary-text-color, #545454);
+  }
+  div.phone {
+    grid-area: phone;
+    color: var(--md-secondary-text-color, #545454);
+  }
+}
+
+md-avatar::part(avatar) {
+  width: 3.75rem;
+  height: 3.75rem;
+  border: 2px solid var(--avatar-border-color, #07c1e4);
+  border-radius: 100%;
+}
+
+md-badge::part(badge) {
+  margin: 1rem 0;
+  border-radius: 0.25rem;
+}
+
+md-button {
+  margin: 0.5rem 0;
+}
