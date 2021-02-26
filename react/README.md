@@ -5,7 +5,7 @@
 ---
 # WCC Widget Starter: React
 
-[![Generic badge](https://img.shields.io/badge/Completion-70-yellow)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/Completion-95-geen)](https://shields.io/)
 
 This component was bootstrapped with [Direflow](https://direflow.io).
 
