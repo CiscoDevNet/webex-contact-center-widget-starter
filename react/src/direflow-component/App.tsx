@@ -6,31 +6,54 @@ import { Service } from "@wxcc-desktop/sdk-types";
 import { Notifications } from "@uuip/unified-ui-platform-sdk";
 import { Desktop } from "@wxcc-desktop/sdk";
 interface IProps {
-  sampleProp: string;
+  agentId: string;
 }
 
 const App: FC<IProps> = (props) => {
+  /**
+   * These values will be replaced with STORE values through Data provider
+   * in JSON layout configuration file
+   * Data provider documentation:
+   * https://apim-dev-portal.appstaging.ciscoccservice.com/documentation/guides/desktop#data-provider%E2%80%94widget-properties-and-attributes
+   */
+
+  const [agentId, setAgentId] = useState(
+    "7d12d9ea-e8e0-41ee-81bf-c11a685b64ed"
+  );
   const [agentSessionId, setSessionId] = useState("");
   const [agentProfileId, setProfileId] = useState("");
-  const [contacts, setContacts] = useState([] as String[]);
-  const [acceptedContacts, setAcceptedContacts] = useState([] as String[]);
-  const [sampleInteractionId, setSampleIntId] = useState("58f76ca3-409f-11eb-8606-f1b296a9b969");
-  const [buddyAgents, setBuddyAgents] = useState(null as Service.Aqm.Contact.BuddyAgentsSuccess | null);
-  const [vTeam, setVTeam] = useState(null as Service.Aqm.Contact.VTeamSuccess | null);
+  const [contacts, setContacts] = useState([] as string[]);
+  const [acceptedContacts, setAcceptedContacts] = useState([] as string[]);
+  const [sampleInteractionId, setSampleIntId] = useState(
+    "58f76ca3-409f-11eb-8606-f1b296a9b969"
+  );
+  const [buddyAgents, setBuddyAgents] = useState(
+    null as Service.Aqm.Contact.BuddyAgentsSuccess | null
+  );
+  const [vTeam, setVTeam] = useState(
+    null as Service.Aqm.Contact.VTeamSuccess | null
+  );
+  const [assignedContacts, setAssignedContacts] = useState(
+    [] as {
+      interaction: Service.Aqm.Contact.Interaction;
+    }[]
+  );
 
   useEffect(() => {
     init();
 
     getCurrentInteractionId();
-    subscribeAgentContactDataEvents()
+    subscribeAgentContactDataEvents();
     subscribeDialerEvents();
     subscribeScreenpopEvent();
 
-    return() => {
+    setAgentId(props.agentId);
+
+    return () => {
       Desktop.agentContact.removeAllEventListeners();
-    Desktop.dialer.removeAllEventListeners();
-    Desktop.screenpop.removeAllEventListeners()
-    }
+      Desktop.dialer.removeAllEventListeners();
+      Desktop.screenpop.removeAllEventListeners();
+    };
   }, []);
 
   async function init() {
@@ -39,11 +62,13 @@ const App: FC<IProps> = (props) => {
 
   const subscribeScreenpopEvent = () => {
     Desktop.screenpop.addEventListener("eScreenPop", (msg) => logger.info(msg));
-  }
+  };
 
   const subscribeDialerEvents = () => {
-    Desktop.dialer.addEventListener("eOutdialFailed", (msg) => logger.info(msg));
-  }
+    Desktop.dialer.addEventListener("eOutdialFailed", (msg) =>
+      logger.info(msg)
+    );
+  };
 
   const subscribeAgentContactDataEvents = () => {
     Desktop.agentContact.addEventListener("eAgentContact", (msg) =>
@@ -70,12 +95,16 @@ const App: FC<IProps> = (props) => {
     );
     Desktop.agentContact.addEventListener(
       "eAgentContactWrappedUp",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactWrappedUp: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentContactWrappedUp: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentOfferContact",
       (msg: Service.Aqm.Contact.AgentContact) => {
-        logger.info("AgentContact eAgentOfferContact: ", msg.data.interactionId);
+        logger.info(
+          "AgentContact eAgentOfferContact: ",
+          msg.data.interactionId
+        );
         // AUX Sandbox Contact
         setContacts([...contacts, msg.data.interactionId]);
         logger.info("AgentContact eAgentOfferContact: ", contacts);
@@ -84,73 +113,94 @@ const App: FC<IProps> = (props) => {
     Desktop.agentContact.addEventListener(
       "eAgentOfferContactRona",
       (msg: Service.Aqm.Contact.AgentContact) => {
-        logger.info("AgentContact eAgentOfferContactRona: ", msg.data.interactionId);
+        logger.info(
+          "AgentContact eAgentOfferContactRona: ",
+          msg.data.interactionId
+        );
         // AUX Sandbox Contact
         const idx = contacts.indexOf(msg.data.interactionId);
         if (idx != -1) {
-          setContacts([...contacts.filter(interactionId => interactionId !== msg.data.interactionId)]);
+          setContacts([
+            ...contacts.filter(
+              (interactionId) => interactionId !== msg.data.interactionId
+            ),
+          ]);
           logger.info("AgentContact eAgentOfferContactRona: ", contacts);
         }
       }
     );
     Desktop.agentContact.addEventListener(
       "eAgentOfferConsult",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentOfferConsult: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentOfferConsult: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentWrapup", (msg: Service.Aqm.Contact.AgentContact) =>
-      logger.info("AgentContact eAgentWrapup: ", msg)
+    Desktop.agentContact.addEventListener(
+      "eAgentWrapup",
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentWrapup: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentContactHeld", (msg: Service.Aqm.Contact.AgentContact) =>
-      logger.info("AgentContact eAgentContactHeld: ", msg)
+    Desktop.agentContact.addEventListener(
+      "eAgentContactHeld",
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentContactHeld: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentContactUnHeld",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentContactUnHeld: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentContactUnHeld: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eCallRecordingStarted",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eCallRecordingStarted: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eCallRecordingStarted: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultCreated",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultCreated: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentConsultCreated: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultConferenced",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultConferenced: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentConsultConferenced: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultEnded",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEnded: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentConsultEnded: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentCtqCancelled",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelled: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentCtqCancelled: ", msg)
     );
     Desktop.agentContact.addEventListener("eAgentConsulting", (msg: any) =>
       logger.info("AgentContact eAgentConsulting: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultFailed",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultFailed: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentConsultFailed: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultEndFailed",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentConsultEndFailed: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentConsultEndFailed: ", msg)
     );
     Desktop.agentContact.addEventListener("eAgentCtqFailed", (msg: any) =>
       logger.info("AgentContact eAgentCtqFailed: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentCtqCancelFailed",
-      (msg: Service.Aqm.Contact.AgentContact) => logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) =>
+        logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultConferenceEndFailed",
       (msg: Service.Aqm.Contact.AgentContact) =>
         logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
-  }
+  };
 
   const getCurrentInteractionId = () => {
     let path = window.location.pathname;
@@ -158,7 +208,7 @@ const App: FC<IProps> = (props) => {
       setSampleIntId(path.replace("/task/", ""));
       logger.info("Current interactionID: ", sampleInteractionId);
     }
-  }
+  };
 
   const getAgentInfo = () => {
     const latestData = Desktop.agentStateInfo.latestData;
@@ -186,48 +236,187 @@ const App: FC<IProps> = (props) => {
     logger.info("Address books: ", books);
   }
 
-  const getBuddyAgents = () => {
+  async function getBuddyAgents() {
+    const buddyAgentPayload = {
+      agentProfileId: agentProfileId,
+      channelName: "chat",
+      state: "Available",
+    };
 
+    const myBuddyAgents =
+      (await Desktop.agentContact.buddyAgents({
+        data: buddyAgentPayload,
+      })) || null;
+
+    setBuddyAgents(myBuddyAgents);
+    logger.info(buddyAgents);
   }
 
-  const getVTeamList = () => {
+  async function getVTeamList() {
+    const vTeamPayload = {
+      agentProfileId: agentProfileId,
+      agentSessionId: agentSessionId,
+      channelType: "chat",
+      type: "inboundqueue",
+    };
 
+    const myvTeam =
+      (await Desktop.agentContact.vteamList({
+        data: vTeamPayload,
+      })) || null;
+
+    setVTeam(myvTeam);
+    logger.info(vTeam, vTeam!.data.data.vteamList);
   }
 
-  const acceptInteraction = (interactionId: String) => {
-
+  async function acceptInteraction(interactionId: string) {
+    const acceptInteraction = await Desktop.agentContact.accept({
+      interactionId: interactionId,
+    });
+    logger.info(acceptInteraction);
   }
 
-  const endInteraction = () => {
-
+  async function endInteraction() {
+    const endedInteraction = await Desktop.agentContact.end({
+      interactionId: sampleInteractionId,
+    });
+    logger.info(endedInteraction);
   }
 
-  const wrapUpInteraction = () => {
-
+  async function wrapUpInteraction() {
+    const wrappedUpInteraction = await Desktop.agentContact.wrapup({
+      interactionId: sampleInteractionId,
+      data: {
+        wrapUpReason: "Example reason here",
+        auxCodeId: "0",
+        isAutoWrapup: "false",
+      },
+    });
+    logger.info(wrappedUpInteraction);
   }
 
-  const consultWithAgent = () => {
-
+  async function consultWithAgent() {
+    const consult = await Desktop.agentContact.consult({
+      interactionId: sampleInteractionId,
+      data: {
+        agentId: agentId,
+        destAgentId: buddyAgents?.data.agentList[0].agentId,
+        mediaType: "chat",
+      },
+      url: "consult",
+    });
+    logger.info(consult);
   }
 
-  const endConferenceWithAgent = () => {
-
+  async function endConferenceWithAgent() {
+    const consult = await Desktop.agentContact.consultEnd({
+      interactionId: sampleInteractionId,
+      isConsult: false,
+    });
+    logger.info(consult);
   }
 
-  const consultConferenceWithAgent = () => {
-
+  async function consultConferenceWithAgent() {
+    const consult = await Desktop.agentContact.consultConference({
+      interactionId: sampleInteractionId,
+      data: {
+        agentId: agentId,
+        destAgentId: buddyAgents?.data.agentList[0].agentId,
+        mediaType: "chat",
+      },
+    });
+    logger.info(consult);
   }
 
-  const endConsultConferenceWithAgent = () => {
-
+  async function endConsultConferenceWithAgent() {
+    const consult = await Desktop.agentContact.consultEnd({
+      interactionId: sampleInteractionId,
+      isConsult: true,
+    });
+    logger.info(consult);
   }
 
-  const consultTransferToAgent = () => {
-
+  async function consultTransferToAgent() {
+    if (buddyAgents?.data.agentList[0].agentId) {
+      const consult = await Desktop.agentContact.consultTransfer({
+        interactionId: sampleInteractionId,
+        data: {
+          agentId: agentId,
+          destAgentId: buddyAgents?.data.agentList[0].agentId,
+          mediaType: "chat",
+          mediaResourceId: "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8",
+        },
+      });
+      logger.info(consult);
+    } else {
+      logger.info("consultTransferToAgent(): agentId is not defined");
+    }
   }
 
-  const vTeamTransfer = () => {
+  async function vTeamTransfer() {
+    if (
+      vTeam?.data.data.vteamList[0].analyzerId &&
+      vTeam?.data.data.vteamList[0].type
+    ) {
+      const consult = await Desktop.agentContact.vteamTransfer({
+        interactionId: sampleInteractionId,
+        data: {
+          vteamId: vTeam?.data.data.vteamList[0].analyzerId,
+          vteamType: vTeam?.data.data.vteamList[0].type,
+        },
+      });
+      logger.info(consult);
+    } else {
+      if (!vTeam?.data.data.vteamList[0].analyzerId) {
+        logger.info("vTeamTransfer(): analyzerId is not defined");
+      }
+      if (!vTeam?.data.data.vteamList[0].type) {
+        logger.info("vTeamTransfer(): type is not defined");
+      }
+    }
+  }
 
+  async function getToken() {
+    const token = await Desktop.actions.getToken();
+    logger.info(token);
+  }
+
+  async function getIdleCodes() {
+    const idle = await Desktop.actions.getIdleCodes();
+    logger.info(idle);
+  }
+
+  async function getwrapupCodes() {
+    const wrapup = await Desktop.actions.getWrapUpCodes();
+    logger.info(wrapup);
+  }
+
+  async function fireNotification() {
+    const raw: Notifications.ItemMeta.Raw = {
+      data: {
+        type: Notifications.ItemMeta.Type.Info,
+        mode: Notifications.ItemMeta.Mode.AutoDismiss,
+        title: "Info - Acknowledge",
+        data: "Lorem Ipsum Dolor",
+      },
+    };
+    const res = await Desktop.actions.fireGeneralAutoDismissNotification(
+      raw as Notifications.ItemMeta.Raw & {
+        data: { mode: Notifications.ItemMeta.Mode.AutoDismiss };
+      }
+    );
+    if (res) {
+      const [status, reason, mode] = res;
+      logger.info(status, reason, mode);
+    }
+  }
+
+  async function getTaskMap() {
+    const taskMap = await Desktop.actions.getTaskMap();
+    console.log(taskMap);
+    const myAssignedContacts = Array.from(taskMap?.values() || []);
+    setAssignedContacts(myAssignedContacts);
+    console.log(assignedContacts[0]);
   }
 
   return (
@@ -262,96 +451,170 @@ const App: FC<IProps> = (props) => {
             <div className="action-container">
               <h2>Desktop.agentContact sub-module</h2>
               <h3>Get Available Agents</h3>
-              <p>Make sure to fetch latest agent info first before invoking this method</p>
-              <md-button onClick={() => getBuddyAgents()}
-                >Get Available Agents</md-button
-              >
+              <p>
+                Make sure to fetch latest agent info first before invoking this
+                method
+              </p>
+              <md-button onClick={() => getBuddyAgents()}>
+                Get Available Agents
+              </md-button>
 
               <h3>Get channel specific team list</h3>
-              <p>Make sure to fetch latest agent info first before invoking this method</p>
-              <md-button onClick={() => getVTeamList()}
-                >Get Team list</md-button
-              >
+              <p>
+                Make sure to fetch latest agent info first before invoking this
+                method
+              </p>
+              <md-button onClick={() => getVTeamList()}>
+                Get Team list
+              </md-button>
 
               <h3>Accept interactions</h3>
               <span>New incoming interactions will appear here</span>
-              {
-                contacts.map(interactionId => {
-                  if (acceptedContacts.indexOf(interactionId) == -1) {
-                    return (
-                      <md-button onClick={() => acceptInteraction(interactionId)}
-                        >Accept interaction for {interactionId}</md-button
-                      >
-                    )
-                  }
-                })
-              }
+              {contacts.map((interactionId) => {
+                if (acceptedContacts.indexOf(interactionId) == -1) {
+                  return (
+                    <md-button onClick={() => acceptInteraction(interactionId)}>
+                      Accept interaction for {interactionId}
+                    </md-button>
+                  );
+                }
+              })}
 
               <h3>End interaction</h3>
-              <md-button onClick={() => endInteraction()}
-                >End interaction for {sampleInteractionId}</md-button
-              >
+              <md-button onClick={() => endInteraction()}>
+                End interaction for {sampleInteractionId}
+              </md-button>
 
               <h3>Wrap Up interaction</h3>
-              <md-button onClick={() => wrapUpInteraction()}
-                >Wrap Up interaction for {sampleInteractionId}</md-button
-              >
+              <md-button onClick={() => wrapUpInteraction()}>
+                Wrap Up interaction for {sampleInteractionId}
+              </md-button>
 
               <h3>Consult</h3>
-              <md-label
-                >Fetch buddy agents before initiating a consult</md-label
-              >
-              <md-button onClick={() => consultWithAgent()}
-                >Consult with
+              <md-label>
+                Fetch buddy agents before initiating a consult
+              </md-label>
+              <md-button onClick={() => consultWithAgent()}>
+                Consult with
                 {buddyAgents && buddyAgents?.data.agentList.length > 0
                   ? buddyAgents?.data.agentList[0].agentId
-                  : "No Agents available"}</md-button
-              >
+                  : "No Agents available"}
+              </md-button>
 
-              <md-label
-                >Make sure to have active conference before ending</md-label
-              >
-              <md-button onClick={() => endConferenceWithAgent()}
-                >End Consult with
+              <md-label>
+                Make sure to have active conference before ending
+              </md-label>
+              <md-button onClick={() => endConferenceWithAgent()}>
+                End Consult with
                 {buddyAgents && buddyAgents?.data.agentList.length > 0
                   ? buddyAgents?.data.agentList[0].agentId
-                  : "No Agents available"}</md-button
-              >
+                  : "No Agents available"}
+              </md-button>
 
               <h3>Consult Conference</h3>
 
-              <md-button
-                onClick={() => consultConferenceWithAgent()}
-                >Consult Conference with
+              <md-button onClick={() => consultConferenceWithAgent()}>
+                Consult Conference with
                 {buddyAgents && buddyAgents?.data.agentList.length > 0
                   ? buddyAgents?.data.agentList[0].agentId
-                  : "No Agents available"}</md-button
-              >
-              <md-label
-                >Make sure to have active conference before ending</md-label
-              >
-              <md-button
-                onClick={() => endConsultConferenceWithAgent()}
-                >End Consult Conference with
+                  : "No Agents available"}
+              </md-button>
+              <md-label>
+                Make sure to have active conference before ending
+              </md-label>
+              <md-button onClick={() => endConsultConferenceWithAgent()}>
+                End Consult Conference with
                 {buddyAgents && buddyAgents?.data.agentList.length > 0
                   ? buddyAgents?.data.agentList[0].agentId
-                  : "No Agents available"}</md-button
-              >
+                  : "No Agents available"}
+              </md-button>
 
               <h3>Consult Transfer</h3>
-              <md-button onClick={() => consultTransferToAgent()}
-                >Consult Transfer to
+              <md-button onClick={() => consultTransferToAgent()}>
+                Consult Transfer to
                 {buddyAgents && buddyAgents?.data.agentList.length > 0
                   ? buddyAgents?.data.agentList[0].agentId
-                  : "No Agents available"}</md-button
-              >
+                  : "No Agents available"}
+              </md-button>
 
               <h3>vTeam Transfer</h3>
               <md-label>Fetch vTeam before initiating a transfer</md-label>
-              <md-button onClick={() => vTeamTransfer()}
-                >Consult Transfer to
-                {vTeam?.data.data.vteamList[0].analyzerId}</md-button
+              <md-button onClick={() => vTeamTransfer()}>
+                Consult Transfer to
+                {vTeam?.data.data.vteamList[0].analyzerId}
+              </md-button>
+            </div>
+          </md-tab-panel>
+
+          <md-tab slot="tab">Desktop.shortcutKey</md-tab>
+          <md-tab-panel slot="panel">
+            <div className="“action-container”">
+              <h2>Monitor data output in console log</h2>
+              <md-button
+                onClick={() =>
+                  logger.info(Desktop.shortcutKey.DEFAULT_SHORTCUT_KEYS)
+                }
               >
+                Get Default Shortcut Keys
+              </md-button>
+
+              <md-button
+                onClick={() => logger.info(Desktop.shortcutKey.MODIFIERS)}
+              >
+                Get Shortcut Keys Modifiers
+              </md-button>
+
+              <md-button
+                onClick={() => logger.info(Desktop.shortcutKey.REGISTERED_KEYS)}
+              >
+                Get all registered Shortcut Keys
+              </md-button>
+
+              <md-button
+                onClick={() =>
+                  logger.info(Desktop.shortcutKey.getRegisteredKeys())
+                }
+              >
+                Get all registered Shortcut Keys
+              </md-button>
+            </div>
+          </md-tab-panel>
+
+          <md-tab slot="tab">Desktop.actions</md-tab>
+          <md-tab-panel slot="panel">
+            <div className="action-container">
+              <h2>Monitor data output in console log</h2>
+              <md-button onClick={() => getToken()}>
+                Get Agent Desktop auth token
+              </md-button>
+
+              <md-button onClick={() => getIdleCodes()}>
+                Get idle codes
+              </md-button>
+
+              <md-button onClick={() => getwrapupCodes()}>
+                Get wrap up codes
+              </md-button>
+
+              <md-button onClick={() => fireNotification()}>
+                Fire notification
+              </md-button>
+
+              <md-button onClick={() => getTaskMap()}>
+                Get full ist of assigned tasks including CAD variables
+              </md-button>
+              <span>
+                {assignedContacts.length > 0
+                  ? assignedContacts[0].interaction.callAssociatedData &&
+                    assignedContacts[0].interaction.callAssociatedData["ani"][
+                      "value"
+                    ] +
+                      " " +
+                      assignedContacts[0].interaction.callAssociatedData[
+                        "customerName"
+                      ]["value"]
+                  : `First assigned task CAD variables will appear here.`}
+              </span>
             </div>
           </md-tab-panel>
 
