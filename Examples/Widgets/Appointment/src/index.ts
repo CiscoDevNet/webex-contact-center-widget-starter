@@ -6,32 +6,13 @@
  *
  */
 
-import { html, LitElement, customElement, css, internalProperty } from "lit-element";
-import { Desktop } from "@wxcc-desktop/sdk";
-import "./components/App";
-/**
- * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
- */
-@customElement("my-custom-widget")
-export default class MyCustomComponent extends LitElement {
-  @internalProperty() private contacts: string[] = [];
-  
-  private readonly logger = Desktop.logger.createLogger("[Widget-Using-JSAPI]");
-
-  static get styles() {
-    return css`
-      :host {
-        display: block;
-        height: 100%;
-        position: relative;
-        overflow: auto;
-      }
-    `;
-  }
- 
+import { html, LitElement, customElement } from "lit-element";
+import "@/components/App";
+@customElement("appointment-widget")
+export default class AppointmentWidget extends LitElement {
   render() {
     return html`
-      <my-custom-component></my-custom-component>
+      <app-component></app-component>
     `;
   }
 }
