@@ -7,18 +7,12 @@
  */
 import "@momentum-ui/web-components";
 import { customElement, html, internalProperty, LitElement } from "lit-element";
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
-import "../index";
-import marked from "marked";
+import "@/index";
 import styles from "./sandbox.scss";
-const readmePath = require("./DISCLAIMER.md");
 
 @customElement("wcc-widget-starter-lit")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
-  @internalProperty() containerWidth = "500px";
-  @internalProperty() containerHeight = "80vh";
-  @internalProperty() disclaimer = "";
 
   static get styles() {
     return styles;
@@ -37,45 +31,17 @@ export class Sandbox extends LitElement {
           ?checked=${this.darkTheme}
           >Dark Mode</md-checkbox
         >
-        <div class="switch-container">
-          <md-label class="switch" text="Responsive">
-            Widget Boundary
-          </md-label>
-          <md-input
-            type="text"
-            id="width-switch"
-            class="theme-switch"
-            data-aspect="responsive-width"
-            @click=${(e: MouseEvent) => this.toggleSetting(e)}
-            @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
-            value=${this.containerWidth}
-          ></md-input>
-          <md-label>x</md-label>
-          <md-input
-            type="text"
-            id="height-switch"
-            class="theme-switch"
-            data-aspect="responsive-height"
-            @click=${(e: MouseEvent) => this.toggleSetting(e)}
-            @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
-            value=${this.containerHeight}
-          ></md-input>
-        </div>
       </div>
     `;
   }
 
-  toggleSetting(e: MouseEvent) {
-    const composedPath = e.composedPath();
-    const target = (composedPath[0] as unknown) as HTMLInputElement;
-    const aspect: string = target.dataset.aspect!;
-    if (aspect === "responsive-width") {
-      this.containerWidth = target.value;
-    } else if (aspect === "responsive-height") {
-      this.containerHeight = target.value;
-    } else if (aspect === "darkTheme") {
+  toggleSetting(event: MouseEvent) {
+    const {
+      dataset: { aspect }
+    } = event.composedPath()[0] as HTMLInputElement;
+    if (aspect === "darkTheme") {
       this.darkTheme = !this.darkTheme;
-    } else return console.error("Invalid data-aspect input");
+    }
   }
 
   render() {
@@ -84,12 +50,9 @@ export class Sandbox extends LitElement {
       ${this.themeToggle()}
     </div>
     <md-theme lumos ?darkTheme=${this.darkTheme}>
-      <div class="disclaimer">
-        <p>${unsafeHTML(marked(readmePath))}</p>
-      </div>
       <div class="container">
-        <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <my-custom-widget></my-custom-widget>
+        <div class="appointment-widget-container">
+          <appointment-widget></appointment-widget>
         </div>
       </div>
     </md-theme>
