@@ -9,6 +9,7 @@ import "@momentum-ui/web-components";
 import { customElement, html, internalProperty, LitElement } from "lit-element";
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import "../index";
+import "../components/NoteItem";
 import marked from "marked";
 import styles from "./sandbox.scss";
 const readmePath = require("./DISCLAIMER.md");
@@ -89,7 +90,7 @@ export class Sandbox extends LitElement {
       </div>
       <div class="container">
         <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <my-custom-widget></my-custom-widget>
+          <notes-header-widget></notes-header-widget>
         </div>
       </div>
     </md-theme>

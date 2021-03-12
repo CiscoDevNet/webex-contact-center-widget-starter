@@ -1,0 +1,57 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+@import "../../assets/styles/variables";
+
+$note-item-border: 4px;
+$note-item-main-padding: 12px;
+
+:host {
+  display: block;
+  margin-top: 4px;
+}
+
+.note-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: var(--md-primary-bg-color);
+  color: var(--md-primary-text-color);
+  padding: $note-item-main-padding;
+  font-family: var(--font-family);
+  border-radius: $note-item-border;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.18);
+  max-width: 336px;
+
+  &--cyan {
+    border-left: 3px solid #22c7d6;
+  }
+
+  &-top {
+    display: inline-flex;
+    flex: 1 1 auto;
+  }
+  &-title {
+    font-size: 14px;
+    line-height: 19px;
+    font-weight: 500;
+  }
+  &-actions {
+    display: inline-flex;
+    flex: 0 1 auto;
+
+    md-favorite {
+      margin-left: 12px;
+    }
+  }
+  &-bottom {
+    flex: 0 1 100%;
+    font-weight: 400;
+    padding-left: 2.25rem;
+  }
+}

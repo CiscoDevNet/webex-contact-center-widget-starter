@@ -6,17 +6,18 @@
  *
  */
 
-import { html, LitElement, customElement, css, internalProperty } from "lit-element";
-import { Desktop } from "@wxcc-desktop/sdk";
-import "./components/App";
-/**
- * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
- */
-@customElement("my-custom-widget")
-export default class MyCustomComponent extends LitElement {
+import {
+  html,
+  LitElement,
+  customElement,
+  css,
+  internalProperty,
+} from "lit-element";
+import "./components/NoteItem";
+
+@customElement("notes-header-widget")
+export default class NotesHeaderComponent extends LitElement {
   @internalProperty() private contacts: string[] = [];
-  
-  private readonly logger = Desktop.logger.createLogger("[Widget-Using-JSAPI]");
 
   static get styles() {
     return css`
@@ -28,10 +29,15 @@ export default class MyCustomComponent extends LitElement {
       }
     `;
   }
- 
+
   render() {
     return html`
-      <my-custom-component></my-custom-component>
+      <note-item-component
+        title="Appointment Confirmation"
+        content="Confirm Dr. Lee’s Availability on appointment on Monday"
+        time="12:01 PM"
+        color="cyan"
+      ></note-item-component>
     `;
   }
 }
