@@ -9,6 +9,15 @@
 
 $note-item-border: 4px;
 $note-item-main-padding: 12px;
+$note-item-indent: 4px;
+$note-item-cyan: #22c7d6;
+$note-item-mint: #30c9b0;
+$note-item-slate: #b0b4d9;
+$note-item-violet: #c7a5fa;
+$note-item-purple: #f294f1;
+$note-item-pink: #fc97aa;
+$note-item-orange: #ff9d52;
+$note-item-gold: #d6b220;
 
 :host {
   display: block;
@@ -29,7 +38,35 @@ $note-item-main-padding: 12px;
   max-width: 336px;
 
   &--cyan {
-    border-left: 3px solid #22c7d6;
+    border-left: 3px solid $note-item-cyan;
+  }
+
+  &--mint {
+    border-left: 3px solid $note-item-mint;
+  }
+
+  &--slate {
+    border-left: 3px solid $note-item-slate;
+  }
+
+  &--violet {
+    border-left: 3px solid $note-item-violet;
+  }
+
+  &--purple {
+    border-left: 3px solid $note-item-purple;
+  }
+
+  &--pink {
+    border-left: 3px solid $note-item-pink;
+  }
+
+  &--orange {
+    border-left: 3px solid $note-item-orange;
+  }
+
+  &--gold {
+    border-left: 3px solid $note-item-gold;
   }
 
   &-top {
@@ -39,7 +76,7 @@ $note-item-main-padding: 12px;
   &-title {
     font-size: 14px;
     line-height: 19px;
-    font-weight: 500;
+    font-weight: bold;
   }
   &-actions {
     display: inline-flex;
@@ -48,10 +85,39 @@ $note-item-main-padding: 12px;
     md-favorite {
       margin-left: 12px;
     }
+
+    .note-edit-mode,
+    .note-item-favor {
+      visibility: hidden;
+    }
   }
   &-bottom {
     flex: 0 1 100%;
+    display: flex;
+    justify-content: space-between;
     font-weight: 400;
     padding-left: 2.25rem;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    .note-item-content {
+      display: inline-block;
+      flex: 1 1 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: calc(100% - #{$note-item-indent});
+    }
+  }
+
+  &:hover {
+    background-color: var(--md-secondary-bg-color);
+
+    .note-item-actions {
+      .note-edit-mode,
+      .note-item-favor {
+        visibility: visible;
+      }
+    }
   }
 }

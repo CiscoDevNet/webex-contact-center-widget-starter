@@ -12,8 +12,36 @@ import {
   customElement,
   css,
   internalProperty,
+  property,
 } from "lit-element";
-import "./components/NoteItem";
+import "./components/NotesList";
+
+export const noteList = [
+  {
+    title: "Test title 1",
+    content: "Test content message 1",
+    color: "mint",
+    time: "",
+    priority: false,
+    complete: false,
+  },
+  {
+    title: "Test title 2",
+    content: "Test content message 2",
+    color: "gold",
+    time: "",
+    priority: false,
+    complete: false,
+  },
+  {
+    title: "TAppointment Confirmation",
+    content: "Confirm Dr. Lee’s Availability on appointment on Monday",
+    color: "cyan",
+    time: "12:01",
+    priority: true,
+    complete: false,
+  },
+];
 
 @customElement("notes-header-widget")
 export default class NotesHeaderComponent extends LitElement {
@@ -30,14 +58,13 @@ export default class NotesHeaderComponent extends LitElement {
     `;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
   render() {
     return html`
-      <note-item-component
-        title="Appointment Confirmation"
-        content="Confirm Dr. Lee’s Availability on appointment on Monday"
-        time="12:01 PM"
-        color="cyan"
-      ></note-item-component>
+      <notes-list-component .notesList=${noteList}></notes-list-component>
     `;
   }
 }
