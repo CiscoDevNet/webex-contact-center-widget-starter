@@ -13,12 +13,14 @@ import {
   property,
   PropertyValues,
   query,
+  internalProperty,
 } from "lit-element";
 import { classMap } from "lit-html/directives/class-map";
 import styles from "./scss/NotesList.scss";
 import "@momentum-ui/web-components";
 import { repeat } from "lit-html/directives/repeat";
 import { color } from "./NoteItem";
+import { nothing } from "lit-html";
 
 export type Note = {
   title: string;
@@ -29,10 +31,24 @@ export type Note = {
   complete?: boolean;
 };
 
+export type Localization = {
+  addNoteBtn: string;
+  addNoteBtnLabel: string;
+  listLabel: string;
+};
+
 @customElement("notes-list-component")
 export default class NotesListComponent extends LitElement {
   @property({ type: Array }) notesList: (any | Note)[] = [];
 
+  @internalProperty() addNew: Boolean = false;
+  @internalProperty() t: Localization = {
+    addNoteBtn: "Add a Note",
+    addNoteBtnLabel: "Add Note button",
+    listLabel: "List Notes",
+  };
+
+  @query("md-button.note-add-new") addBtn!: HTMLButtonElement;
   static get styles() {
     return styles;
   }
@@ -42,9 +58,39 @@ export default class NotesListComponent extends LitElement {
     //this.addEventListener("checkbox-change", this.handleComplete);
   }
 
+  createNewItem() {
+    this.addNew = true;
+    this.addBtn.setAttribute("disabled", "true");
+  }
+
+  handleResetNew() {
+    this.addNew = false;
+    this.addBtn.removeAttribute("disabled");
+  }
+
   render() {
     return html`
-      <md-list>
+      <div class="note-additional">
+        <md-button
+          color="color-none"
+          size="size-none"
+          class="note-add-new"
+          ariaLabel="${this.t.addNoteBtnLabel}"
+          @button-click=${() => this.createNewItem()}
+        >
+          <span slot="text">${this.t.addNoteBtn}</span>
+        </md-button>
+        ${this.addNew
+          ? html`
+              <note-item-component
+                edit-mode
+                @note-item-reset=${() => this.handleResetNew()}
+              >
+              </note-item-component>
+            `
+          : nothing}
+      </div>
+      <md-list class="notes-lest" label="${this.t.listLabel}">
         ${repeat(
           this.notesList,
           (i) => i.title,

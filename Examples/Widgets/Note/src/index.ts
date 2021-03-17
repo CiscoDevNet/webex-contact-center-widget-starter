@@ -14,7 +14,16 @@ import {
   internalProperty,
   property,
 } from "lit-element";
+import styles from "./components/scss/main-style.scss";
+import "@momentum-ui/web-components";
 import "./components/NotesList";
+
+export type Localization = {
+  wrapTitle: string;
+  timeText: string;
+  clearButtonText: string;
+  emptyStateText: string;
+};
 
 export const noteList = [
   {
@@ -46,16 +55,15 @@ export const noteList = [
 @customElement("notes-header-widget")
 export default class NotesHeaderComponent extends LitElement {
   @internalProperty() private contacts: string[] = [];
+  @internalProperty() t: Localization = {
+    wrapTitle: "Notes",
+    timeText: "min",
+    clearButtonText: "Mark All as Read",
+    emptyStateText: "No Note Items",
+  };
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        height: 100%;
-        position: relative;
-        overflow: auto;
-      }
-    `;
+    return styles;
   }
 
   connectedCallback() {
@@ -64,7 +72,24 @@ export default class NotesHeaderComponent extends LitElement {
 
   render() {
     return html`
-      <notes-list-component .notesList=${noteList}></notes-list-component>
+      <md-menu-overlay placement="bottom-start">
+        <md-button slot="menu-trigger" color="white" size="40" circle
+          ><md-icon slot="icon" name="note_20"></md-icon
+        ></md-button>
+        <div class="notes-menu-wrap">
+          <div class="notes-menu-wrap_title">
+            ${this.t.wrapTitle}
+            <span>(${noteList.length})</span>
+          </div>
+          <notes-list-component .notesList=${noteList}></notes-list-component>
+          <div class="notes-menu-cleaner">
+            <md-button color="color-none" ariaLabel="Clear Notes button">
+              <md-icon slot="icon" name="check_16"></md-icon>
+              <span slot="text">${this.t.clearButtonText}</span>
+            </md-button>
+          </div>
+        </div>
+      </md-menu-overlay>
     `;
   }
 }

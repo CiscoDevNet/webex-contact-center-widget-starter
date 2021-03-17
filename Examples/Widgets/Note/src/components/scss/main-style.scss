@@ -1,0 +1,38 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+@import "../../assets/styles/variables";
+
+$notes-wrap-width: 368px;
+$notes-wrap-height: 456px;
+$notes-wrap-pain-padding: 16px;
+
+:host {
+  display: block;
+  height: 100%;
+  position: relative;
+  overflow: auto;
+}
+
+md-menu-overlay::part(overlay) {
+  width: $notes-wrap-width;
+  overflow: hidden;
+}
+
+.notes-menu-wrap {
+  display: flex;
+  flex-direction: column;
+  height: $notes-wrap-height;
+
+  &_title {
+    padding: $notes-wrap-pain-padding 0;
+    font-family: var(--font-family);
+    font-size: 14px;
+    line-height: 19px;
+    font-weight: bold;
+  }
+}
