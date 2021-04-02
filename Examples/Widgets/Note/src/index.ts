@@ -83,7 +83,7 @@ export default class NotesHeaderComponent extends LitElement {
           </div>
           <notes-list-component .notesList=${noteList}></notes-list-component>
           <div class="notes-menu-cleaner">
-            <md-button color="color-none" ariaLabel="Clear Notes button">
+            <md-button color="color-none" ariaLabel="${this.t.clearButtonText}">
               <md-icon slot="icon" name="check_16"></md-icon>
               <span slot="text">${this.t.clearButtonText}</span>
             </md-button>

@@ -41,7 +41,7 @@ export type Localization = {
 export default class NotesListComponent extends LitElement {
   @property({ type: Array }) notesList: (any | Note)[] = [];
 
-  @internalProperty() addNew: Boolean = false;
+  @internalProperty() addNew: boolean = false;
   @internalProperty() t: Localization = {
     addNoteBtn: "Add a Note",
     addNoteBtnLabel: "Add Note button",
@@ -90,7 +90,7 @@ export default class NotesListComponent extends LitElement {
             `
           : nothing}
       </div>
-      <md-list class="notes-lest" label="${this.t.listLabel}">
+      <ul class="notes-list" label="${this.t.listLabel}">
         ${repeat(
           this.notesList,
           (i) => i.title,
@@ -108,7 +108,7 @@ export default class NotesListComponent extends LitElement {
             </li>
           `
         )}
-      </md-list>
+      </ul>
     `;
   }
 }

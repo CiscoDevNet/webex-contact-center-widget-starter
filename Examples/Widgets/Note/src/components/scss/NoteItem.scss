@@ -38,6 +38,7 @@ $note-item-gold: #d6b220;
   box-sizing: border-box;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.18);
   max-width: 336px;
+  min-height: 63px;
 
   &--cyan {
     border-left: 3px solid $note-item-cyan;
@@ -121,5 +122,34 @@ $note-item-gold: #d6b220;
         visibility: visible;
       }
     }
+  }
+}
+
+.note-item-save {
+  display: inline-block;
+  margin: 8px 0;
+}
+
+.note-item-editable-title,
+.note-item-editable-message {
+  padding: 2px 0;
+  background: transparent;
+  font-size: 14px;
+  line-height: 19px;
+  border: none;
+}
+
+.note-item-color_wrap {
+  margin-top: 14px;
+
+  .note-color-alert {
+    padding: 2px 10px 2px 2px;
+    border-right: 1px solid #cccccc;
+    margin-right: 5px;
+  }
+
+  md-icon[color] {
+    margin: 0 5px;
+    cursor: pointer;
   }
 }
