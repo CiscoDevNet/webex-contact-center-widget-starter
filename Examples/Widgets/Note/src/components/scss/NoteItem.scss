@@ -1,0 +1,155 @@
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+@import "../../assets/styles/variables";
+
+$note-item-border: 4px;
+$note-item-main-padding: 12px;
+$note-item-indent: 4px;
+$note-item-cyan: #22c7d6;
+$note-item-mint: #30c9b0;
+$note-item-slate: #b0b4d9;
+$note-item-violet: #c7a5fa;
+$note-item-purple: #f294f1;
+$note-item-pink: #fc97aa;
+$note-item-orange: #ff9d52;
+$note-item-gold: #d6b220;
+
+:host {
+  display: block;
+  margin-top: 4px;
+}
+
+.note-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: var(--md-primary-bg-color);
+  color: var(--md-primary-text-color);
+  padding: $note-item-main-padding;
+  font-family: var(--font-family);
+  border-radius: $note-item-border;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.18);
+  max-width: 336px;
+  min-height: 63px;
+
+  &--cyan {
+    border-left: 3px solid $note-item-cyan;
+  }
+
+  &--mint {
+    border-left: 3px solid $note-item-mint;
+  }
+
+  &--slate {
+    border-left: 3px solid $note-item-slate;
+  }
+
+  &--violet {
+    border-left: 3px solid $note-item-violet;
+  }
+
+  &--purple {
+    border-left: 3px solid $note-item-purple;
+  }
+
+  &--pink {
+    border-left: 3px solid $note-item-pink;
+  }
+
+  &--orange {
+    border-left: 3px solid $note-item-orange;
+  }
+
+  &--gold {
+    border-left: 3px solid $note-item-gold;
+  }
+
+  &-top {
+    display: inline-flex;
+    flex: 1 1 auto;
+  }
+  &-title {
+    font-size: 14px;
+    line-height: 19px;
+    font-weight: bold;
+  }
+  &-actions {
+    display: inline-flex;
+    flex: 0 1 auto;
+
+    md-favorite {
+      margin-left: 12px;
+    }
+
+    .note-edit-mode,
+    .note-item-favor {
+      visibility: hidden;
+    }
+  }
+  &-bottom {
+    flex: 0 1 100%;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 400;
+    padding-left: 2.25rem;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    .note-item-content {
+      display: inline-block;
+      flex: 1 1 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: calc(100% - #{$note-item-indent});
+    }
+  }
+
+  &:hover {
+    background-color: var(--md-secondary-bg-color);
+
+    .note-item-actions {
+      .note-edit-mode,
+      .note-item-favor {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+.note-item-save {
+  display: inline-block;
+  margin: 8px 0;
+}
+
+.note-item-editable-title,
+.note-item-editable-message {
+  padding: 2px 0;
+  background: transparent;
+  font-size: 14px;
+  line-height: 19px;
+  border: none;
+}
+
+.note-item-color_wrap {
+  margin-top: 14px;
+
+  .note-color-alert {
+    padding: 2px 10px 2px 2px;
+    border-right: 1px solid #cccccc;
+    margin-right: 5px;
+  }
+
+  md-icon[color] {
+    margin: 0 5px;
+    cursor: pointer;
+  }
+}
