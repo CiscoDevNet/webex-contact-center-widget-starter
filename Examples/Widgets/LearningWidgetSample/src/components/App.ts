@@ -36,6 +36,7 @@ export default class MyCustomComponent extends LitElement {
   @internalProperty() toAddress: any;
   @internalProperty() mediaType = "";
   @internalProperty() contactState = "";
+  @internalProperty() responseData: any;
 
   static get styles() {
     return styles;
@@ -71,13 +72,11 @@ export default class MyCustomComponent extends LitElement {
 
   async init() {
     // Initiating desktop config
-
     await Desktop.config.init();
     logger.info(
       "Desktop.agentStateInfo.latestData ",
       Desktop.agentStateInfo.latestData
     );
-    // fetching the latest for the Agent and mappibg it to corresponding label
     this.agentName = Desktop.agentStateInfo.latestData.agentName;
     this.userState = Desktop.agentStateInfo.latestData.status;
     this.teamName = Desktop.agentStateInfo.latestData.teamName;
@@ -142,8 +141,10 @@ export default class MyCustomComponent extends LitElement {
   subscribeAgentContactDataEvents() {
     Desktop.agentContact.addEventListener(
       "eAgentContact",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentContact: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentContact: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentContactAssigned",
@@ -151,18 +152,22 @@ export default class MyCustomComponent extends LitElement {
         logger.info("AgentContact eAgentContactAssigned: ", msg);
         this.interactionId = msg.data.interactionId;
         this.mediaType = msg.data.interaction.mediaType;
+        this.responseData = msg.data;
       }
     );
     Desktop.agentContact.addEventListener(
       "eAgentContactEnded",
       (msg: Service.Aqm.Contact.AgentContact) => {
         logger.info("AgentContact eAgentContactEnded: ", msg);
+        this.responseData = msg.data;
       }
     );
     Desktop.agentContact.addEventListener(
       "eAgentContactWrappedUp",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentContactWrappedUp: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentContactWrappedUp: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentOfferContact",
@@ -175,6 +180,7 @@ export default class MyCustomComponent extends LitElement {
         this.toAddress =
           msg.data.interaction.callProcessingDetails.virtualTeamName;
         this.contactState = "Contact Offered";
+        this.responseData = msg.data;
       }
     );
 
@@ -189,56 +195,76 @@ export default class MyCustomComponent extends LitElement {
         this.toAddress = "";
         this.mediaType = "";
         this.contactState = "";
+        this.responseData = msg.data;
       }
     );
     Desktop.agentContact.addEventListener(
       "eAgentOfferConsult",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentOfferConsult: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentOfferConsult: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentWrapup",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentWrapup: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentWrapup: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentContactHeld",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentContactHeld: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentContactHeld: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentContactUnHeld",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentContactUnHeld: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentContactUnHeld: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eCallRecordingStarted",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eCallRecordingStarted: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eCallRecordingStarted: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultCreated",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentConsultCreated: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentConsultCreated: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultConferenced",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentConsultConferenced: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentConsultConferenced: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultEnded",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentConsultEnded: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentConsultEnded: ", msg);
+        this.responseData = msg.data;
+      }
     );
     Desktop.agentContact.addEventListener(
       "eAgentCtqCancelled",
-      (msg: Service.Aqm.Contact.AgentContact) =>
-        logger.info("AgentContact eAgentCtqCancelled: ", msg)
+      (msg: Service.Aqm.Contact.AgentContact) => {
+        logger.info("AgentContact eAgentCtqCancelled: ", msg);
+        this.responseData = msg.data;
+      }
     );
-    Desktop.agentContact.addEventListener("eAgentConsulting", (msg: any) =>
-      logger.info("AgentContact eAgentConsulting: ", msg)
-    );
+    Desktop.agentContact.addEventListener("eAgentConsulting", (msg: any) => {
+      logger.info("AgentContact eAgentConsulting: ", msg);
+      this.responseData = msg.data;
+    });
     Desktop.agentContact.addEventListener(
       "eAgentConsultFailed",
       (msg: Service.Aqm.Contact.AgentContact) =>
@@ -309,93 +335,108 @@ export default class MyCustomComponent extends LitElement {
 
   render() {
     return html`
-      <div
-        class="container"
-        style="padding: 12px; display: flex; flex-direction: row; width: 100%;"
-      >
-        <div style="flex: 1; padding: 10px">
-          <h3>Agent State</h3>
-          <hr />
+      <div>
+        <div
+          class="container"
+          style="padding: 12px; display: flex; flex-direction: row; width: 100%;"
+        >
+          <div style="flex: 1; padding: 10px">
+            <h3>Agent State</h3>
+            <hr />
 
-          <div>
-            <b> Agent Name: </b><span id="userId">${this.agentName}</span>
-          </div>
-          <div>
-            <b> Team Name: </b><span id="teamName">${this.teamName}</span>
-          </div>
-          <div><b> Extension: </b><span id="extension">${this.dn}</span></div>
-          <div>
-            <b> Current User State: </b
-            ><span id="userState">${this.userState}</span>
-          </div>
-          <md-button
-            .disabled=${this.userState === "Available"}
-            color="green"
-            @click=${() => {
-              this.changeState("Available");
-            }}
-            >Go Available</md-button
-          >
-          <md-button
-            .disabled=${this.userState !== "Available"}
-            @click=${() => {
-              this.changeState("Idle");
-            }}
-            >Go Idle</md-button
-          >
-        </div>
-        <div style="flex: 1;padding: 10px">
-          <h3>Interaction</h3>
-          <hr />
-
-          <div>
-            <b> Interaction Id: </b
-            ><span id="interactionId">${this.interactionId}</span>
-          </div>
-          <div>
-            <b> Channel Type: </b
-            ><span id="interactionType">${this.mediaType}</span>
-          </div>
-          <div><b> DNIS: </b><span id="dnis">${this.dnis}</span></div>
-          <div>
-            <b> From Address: </b
-            ><span id="fromAddress">${this.fromAddress}</span>
-          </div>
-          <div>
-            <b> To Address: </b><span id="toAddress">${this.toAddress}</span>
-          </div>
-          <div>
-            <b> Call State: </b><span id="callState">${this.contactState}</span>
-          </div>
-        </div>
-        <div style="flex: 1;padding: 10px">
-          <h3>Outdial</h3>
-          <hr />
-
-          <div id="makeCallButtondiv">
-            <b> EntryPoint Id </b>
-            <md-input
-              type="text"
-              value=${this.entryPointId}
-              @input-change=${this.inputHandler}
-              id="entryPointId"
-            ></md-input>
-            <b> Destination no. </b>
-            <md-input
-              value=${this.destinationNumber}
-              @input-change=${this.inputHandler}
-              type="text"
-              id="destination"
-            ></md-input>
+            <div>
+              <b> Agent Name: </b><span id="userId">${this.agentName}</span>
+            </div>
+            <div>
+              <b> Team Name: </b><span id="teamName">${this.teamName}</span>
+            </div>
+            <div><b> Extension: </b><span id="extension">${this.dn}</span></div>
+            <div>
+              <b> Current User State: </b
+              ><span id="userState">${this.userState}</span>
+            </div>
             <md-button
+              .disabled=${this.userState === "Available"}
+              color="green"
               @click=${() => {
-                this.makeCall();
+                this.changeState("Available");
               }}
-              id="makeCallButton"
-              >Make Call</md-button
+              >Go Available</md-button
+            >
+            <md-button
+              .disabled=${this.userState !== "Available"}
+              @click=${() => {
+                this.changeState("Idle");
+              }}
+              >Go Idle</md-button
             >
           </div>
+          <div style="flex: 1;padding: 10px">
+            <h3>Interaction</h3>
+            <hr />
+
+            <div>
+              <b> Interaction Id: </b
+              ><span id="interactionId">${this.interactionId}</span>
+            </div>
+            <div>
+              <b> Channel Type: </b
+              ><span id="interactionType">${this.mediaType}</span>
+            </div>
+            <div><b> DNIS: </b><span id="dnis">${this.dnis}</span></div>
+            <div>
+              <b> From Address: </b
+              ><span id="fromAddress">${this.fromAddress}</span>
+            </div>
+            <div>
+              <b> To Address: </b><span id="toAddress">${this.toAddress}</span>
+            </div>
+            <div>
+              <b> Call State: </b
+              ><span id="callState">${this.contactState}</span>
+            </div>
+          </div>
+          <div style="flex: 1;padding: 10px">
+            <h3>Outdial</h3>
+            <hr />
+
+            <div id="makeCallButtondiv">
+              <b> EntryPoint Id </b>
+              <md-input
+                type="text"
+                value=${this.entryPointId}
+                @input-change=${this.inputHandler}
+                id="entryPointId"
+              ></md-input>
+              <b> Destination no. </b>
+              <md-input
+                value=${this.destinationNumber}
+                @input-change=${this.inputHandler}
+                type="text"
+                id="destination"
+              ></md-input>
+              <md-button
+                @click=${() => {
+                  this.makeCall();
+                }}
+                id="makeCallButton"
+                >Make Call</md-button
+              >
+            </div>
+          </div>
         </div>
+        <md-accordion>
+          <md-accordion-item slot="accordion-item" label="Event Response">
+            <div>Event Response</div>
+
+            <pre
+              style="height:40vh; overflow: auto; border: 1px solid grey;white-space: pre; font-family: monospace;"
+            >
+            ${JSON.stringify(this.responseData, null, 4)}
+          </pre
+            >
+          </md-accordion-item>
+        </md-accordion>
       </div>
     `;
   }
