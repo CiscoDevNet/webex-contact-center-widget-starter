@@ -34,11 +34,7 @@ export default class CovidByLocation extends LitElement {
 
   render() {
     return html`
-      <my-custom-component
-        style="height: 100%"
-        api-key=${this.apiKey}
-        selectedCountyState=${this.selectedCountyState}
-      ></my-custom-component>
+      <my-custom-component style="height: 100%"></my-custom-component>
     `;
   }
 }
