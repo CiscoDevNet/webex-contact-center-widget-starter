@@ -6,6 +6,8 @@
         "email": "yanaha@cisco.com"
     },
     "license": "MIT",
-    "repository": "git@github.com:CiscoDevNet/webex-contact-center-widget-starter.git"
-  }
-  
+    "repository": "git@github.com:CiscoDevNet/webex-contact-center-widget-starter.git",
+    "devDependencies": {
+        "lerna": "^4.0.0"
+    }
+}
