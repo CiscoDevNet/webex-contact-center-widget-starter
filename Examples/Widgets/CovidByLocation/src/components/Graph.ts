@@ -189,14 +189,6 @@ export default class MyCustomComponent extends LitElement {
 
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    // // @ts-ignore
-    // var ro = new ResizeObserver((entries: any) => {
-    //   for (let entry of entries) {
-    //     this.renderChart();
-    //   }
-    // });
-    // ro.observe(this.chartContainer);
-
     this.radioGroup.addEventListener(
       "radio-change",
       this.handleRadioChange as EventListener
@@ -252,10 +244,6 @@ export default class MyCustomComponent extends LitElement {
 
   protected async updated(changeProperties: PropertyValues) {
     super.updated(changeProperties);
-
-    // if (changeProperties.has("darkTheme")) {
-    //   this.renderChart();
-    // }
 
     if (this.selectedCountyFIPS && changeProperties.has("specificity")) {
       await this.collectChartData();
