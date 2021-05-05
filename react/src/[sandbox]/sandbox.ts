@@ -18,8 +18,8 @@ import "../index";
 @customElement("wcc-widget-starter-react")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
-  @internalProperty() containerWidth = "500px";
-  @internalProperty() containerHeight = "80vh";
+  @internalProperty() containerWidth = "100%";
+  @internalProperty() containerHeight = "90vh";
 
   static get styles() {
     return css`
@@ -61,6 +61,9 @@ export class Sandbox extends LitElement {
         align-items: center;
         justify-content: space-evenly;
         width: 100%;
+        border-bottom: 1px solid gray;
+        height: 65px;
+        background-color: var(--md-secondary-bg-color);
       }
 
       .switch-container {
@@ -78,9 +81,8 @@ export class Sandbox extends LitElement {
       }
 
       .widget-container {
-        width: 500px;
-        height: 80vh;
-        border: 1px solid var(--md-primary-seperator-color, #000);
+        width: 100%;
+        height: 90vh;
       }
     `;
   }
@@ -94,12 +96,12 @@ export class Sandbox extends LitElement {
           class="theme-switch"
           data-aspect="darkTheme"
           label="Dark Mode"
-          @checkbox-change=${(e: MouseEvent) => this.toggleSetting(e, 'darkTheme')}
+          @checkbox-change=${(e: MouseEvent) =>
+            this.toggleSetting(e, "darkTheme")}
           ?checked=${this.darkTheme}
-          >
-          <md-label>Dark Mode</md-label>
-          </md-checkbox
         >
+          <md-label>Dark Mode</md-label>
+        </md-checkbox>
         <div class="switch-container">
           <md-label class="switch" text="Responsive">
             Widget Boundary
@@ -109,8 +111,10 @@ export class Sandbox extends LitElement {
             id="width-switch"
             class="theme-switch"
             data-aspect="responsive-width"
-            @click=${(e: MouseEvent) => this.toggleSetting(e, 'responsive-width')}
-            @input-change=${(e: MouseEvent) => this.toggleSetting(e, 'responsive-width')}
+            @click=${(e: MouseEvent) =>
+              this.toggleSetting(e, "responsive-width")}
+            @input-change=${(e: MouseEvent) =>
+              this.toggleSetting(e, "responsive-width")}
             value=${this.containerWidth}
           ></md-input>
           <md-label>x</md-label>
@@ -119,8 +123,10 @@ export class Sandbox extends LitElement {
             id="height-switch"
             class="theme-switch"
             data-aspect="responsive-height"
-            @click=${(e: MouseEvent) => this.toggleSetting(e, 'responsive-height')}
-            @input-change=${(e: MouseEvent) => this.toggleSetting(e, 'responsive-height')}
+            @click=${(e: MouseEvent) =>
+              this.toggleSetting(e, "responsive-height")}
+            @input-change=${(e: MouseEvent) =>
+              this.toggleSetting(e, "responsive-height")}
             value=${this.containerHeight}
           ></md-input>
         </div>
@@ -133,25 +139,33 @@ export class Sandbox extends LitElement {
     const target = (composedPath[0] as unknown) as HTMLInputElement;
     if (aspect === "responsive-width") {
       this.containerWidth = target.value;
+      this.requestUpdate();
     } else if (aspect === "responsive-height") {
       this.containerHeight = target.value;
+      this.requestUpdate();
     } else if (aspect === "darkTheme") {
       this.darkTheme = !this.darkTheme;
+      this.requestUpdate();
     } else return console.error("Invalid data-aspect input");
   }
 
   render() {
     return html`
+    <md-theme style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`}  lumos .darkTheme=${
+      this.darkTheme
+    }>
     <div class="toggle">
         ${this.themeToggle()}
+       
       </div>
-      <md-theme lumos ?darkTheme=${this.darkTheme}>
         <div class="container">
-          <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <my-react-widget></my-react-widget>
+          <div class="widget-container">
+           <my-react-widget agentId="Test id" .darkTheme=${
+             this.darkTheme
+           }></my-react-widget>
+         
           </div>
           </div>
-        </md-theme>
         </div>
       </md-theme>
     `;

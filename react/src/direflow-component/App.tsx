@@ -7,6 +7,7 @@ import { Notifications } from "@uuip/unified-ui-platform-sdk";
 import { Desktop } from "@wxcc-desktop/sdk";
 interface IProps {
   agentId: string;
+  darkTheme: boolean;
 }
 
 const App: FC<IProps> = (props) => {
@@ -20,6 +21,7 @@ const App: FC<IProps> = (props) => {
   const [agentId, setAgentId] = useState(
     "7d12d9ea-e8e0-41ee-81bf-c11a685b64ed"
   );
+
   const [agentSessionId, setSessionId] = useState("");
   const [agentProfileId, setProfileId] = useState("");
   const [contacts, setContacts] = useState([] as string[]);
@@ -56,6 +58,8 @@ const App: FC<IProps> = (props) => {
     };
   }, []);
 
+  useEffect(() => {}, [props.agentId, props.darkTheme]);
+
   async function init() {
     await Desktop.config.init();
   }
@@ -87,7 +91,7 @@ const App: FC<IProps> = (props) => {
       (msg: Service.Aqm.Contact.AgentContact) => {
         logger.info("AgentContact eAgentContactEnded: ", msg);
         const idx = acceptedContacts.indexOf(msg.data.interactionId);
-        if (idx != -1) {
+        if (idx !== -1) {
           setAcceptedContacts(acceptedContacts.slice(idx, 1));
           logger.info(acceptedContacts);
         }
@@ -119,7 +123,7 @@ const App: FC<IProps> = (props) => {
         );
         // AUX Sandbox Contact
         const idx = contacts.indexOf(msg.data.interactionId);
-        if (idx != -1) {
+        if (idx !== -1) {
           setContacts([
             ...contacts.filter(
               (interactionId) => interactionId !== msg.data.interactionId
@@ -422,6 +426,10 @@ const App: FC<IProps> = (props) => {
   return (
     <Styled styles={styles}>
       <div className="app">
+        <strong>MFE Props: </strong>
+
+        <pre>{JSON.stringify(props)}</pre>
+        <hr />
         <md-tabs>
           <md-tab slot="tab">Desktop.agentStateInfo</md-tab>
           <md-tab-panel slot="panel">
@@ -471,13 +479,14 @@ const App: FC<IProps> = (props) => {
               <h3>Accept interactions</h3>
               <span>New incoming interactions will appear here</span>
               {contacts.map((interactionId) => {
-                if (acceptedContacts.indexOf(interactionId) == -1) {
+                if (acceptedContacts.indexOf(interactionId) === -1) {
                   return (
                     <md-button onClick={() => acceptInteraction(interactionId)}>
                       Accept interaction for {interactionId}
                     </md-button>
                   );
                 }
+                return <></>;
               })}
 
               <h3>End interaction</h3>

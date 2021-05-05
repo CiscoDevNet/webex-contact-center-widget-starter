@@ -1,7 +1,7 @@
 declare namespace JSX {
   interface IntrinsicElements {
     slot: HTMLProps<HTMLSlotElement>;
-    'agentx-react-interaction-popover': React.DetailedHTMLProps<
+    "agentx-react-interaction-popover": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -9,7 +9,7 @@ declare namespace JSX {
         taskMap: Map;
       }
     >;
-    'md-tooltip': React.DetailedHTMLProps<
+    "md-tooltip": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -18,7 +18,7 @@ declare namespace JSX {
         disabled: boolean;
       }
     >;
-    'md-alert-banner': React.DetailedHTMLProps<
+    "md-alert-banner": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -28,7 +28,7 @@ declare namespace JSX {
         show: boolean;
       }
     >;
-    'md-toggle-switch': React.DetailedHTMLProps<
+    "md-toggle-switch": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -42,7 +42,7 @@ declare namespace JSX {
         smaller: boolean;
       }
     >;
-    'md-label': React.DetailedHTMLProps<
+    "md-label": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -52,7 +52,7 @@ declare namespace JSX {
         disabled: boolean;
       }
     >;
-    'md-button': React.DetailedHTMLProps<
+    "md-button": React.DetailedHTMLProps<
       React.ButtonHTMLAttributes<HTMLButtonElement>,
       HTMLElement,
       {
@@ -61,21 +61,21 @@ declare namespace JSX {
         ariaPressed: boolean;
         circle: boolean;
         color:
-        'blue'
-        | 'red'
-        | 'green'
-        | 'orange'
-        | 'yellow'
-        | 'mint'
-        | 'purple'
-        | 'pink'
-        | 'cyan'
-        | 'white'
-        | 'dark-gray'
-        | 'duck-egg'
-        | 'violet'
-        | 'color-none'
-        | '';
+          | "blue"
+          | "red"
+          | "green"
+          | "orange"
+          | "yellow"
+          | "mint"
+          | "purple"
+          | "pink"
+          | "cyan"
+          | "white"
+          | "dark-gray"
+          | "duck-egg"
+          | "violet"
+          | "color-none"
+          | "";
         containerLarge: boolean;
         href: string;
         id: string;
@@ -85,13 +85,19 @@ declare namespace JSX {
         loading: boolean;
         hasRemoveStyle: boolean;
         size: Button.Size;
-        tag: 'button' | 'input' | 'a';
-        variant: 'primary' | 'secondary' | 'red' | 'green' | 'white' | 'darkGrey';
+        tag: "button" | "input" | "a";
+        variant:
+          | "primary"
+          | "secondary"
+          | "red"
+          | "green"
+          | "white"
+          | "darkGrey";
         activityType: string;
         iconActive: boolean;
       }
     >;
-    'md-icon': React.DetailedHTMLProps<
+    "md-icon": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -107,7 +113,7 @@ declare namespace JSX {
         isComboBoxIcon: boolean;
       }
     >;
-    'md-badge': React.DetailedHTMLProps<
+    "md-badge": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -121,7 +127,7 @@ declare namespace JSX {
         split: boolean;
       }
     >;
-    'md-combobox': React.DetailedHTMLProps<
+    "md-combobox": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -143,17 +149,17 @@ declare namespace JSX {
         customContent: Element[];
       }
     >;
-    'md-editable-field': React.DetailedHTMLProps<
+    "md-editable-field": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
-        alignment: string,
-        disabled: boolean,
-        isEditing: boolean,
-        messageArr: Array<string>
+        alignment: string;
+        disabled: boolean;
+        isEditing: boolean;
+        messageArr: Array<string>;
       }
     >;
-    'md-avatar': React.DetailedHTMLProps<
+    "md-avatar": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -173,7 +179,7 @@ declare namespace JSX {
         type: stirng;
       }
     >;
-    'md-link': React.DetailedHTMLProps<
+    "md-link": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -183,7 +189,7 @@ declare namespace JSX {
         tag: stirng;
       }
     >;
-    'md-menu-overlay': React.DetailedHTMLProps<
+    "md-menu-overlay": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -193,21 +199,21 @@ declare namespace JSX {
         customWidth: string;
         showArrow: boolean;
         position:
-        "left-start"
-        | "left"
-        | "left-end"
-        | "right-start"
-        | "right"
-        | "right-end"
-        | "top-start"
-        | "top"
-        | "top-end"
-        | "bottom-start"
-        | "bottom"
-        | "bottom-end"
+          | "left-start"
+          | "left"
+          | "left-end"
+          | "right-start"
+          | "right"
+          | "right-end"
+          | "top-start"
+          | "top"
+          | "top-end"
+          | "bottom-start"
+          | "bottom"
+          | "bottom-end";
       }
     >;
-    'md-spinner': React.DetailedHTMLProps<
+    "md-spinner": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -215,7 +221,7 @@ declare namespace JSX {
         color: string;
       }
     >;
-    'md-chip': React.DetailedHTMLProps<
+    "md-chip": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -234,14 +240,14 @@ declare namespace JSX {
         value: string;
       }
     >;
-    'md-tabs': React.DetailedHTMLProps<
+    "md-tabs": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
         selected: number;
       }
     >;
-    'md-tab': React.DetailedHTMLProps<
+    "md-tab": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -249,14 +255,14 @@ declare namespace JSX {
         disabled: boolean;
       }
     >;
-    'md-tab-panel': React.DetailedHTMLProps<
+    "md-tab-panel": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
         selected: boolean;
       }
     >;
-    'md-radio': React.DetailedHTMLProps<
+    "md-radio": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -265,7 +271,7 @@ declare namespace JSX {
         value: string;
       }
     >;
-    'md-radiogroup': React.DetailedHTMLProps<
+    "md-radiogroup": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -274,7 +280,7 @@ declare namespace JSX {
         label: string;
       }
     >;
-    'md-checkbox': React.DetailedHTMLProps<
+    "md-checkbox": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -284,7 +290,7 @@ declare namespace JSX {
         tabIndex: number;
       }
     >;
-    'md-checkboxgroup': React.DetailedHTMLProps<
+    "md-checkboxgroup": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -292,7 +298,7 @@ declare namespace JSX {
         label: string;
       }
     >;
-    'md-input': React.DetailedHTMLProps<
+    "md-input": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -324,7 +330,7 @@ declare namespace JSX {
         messageArr: [];
       }
     >;
-    'md-task-item': React.DetailedHTMLProps<
+    "md-task-item": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -336,7 +342,7 @@ declare namespace JSX {
         selected: boolean;
       }
     >;
-    'md-list': React.DetailedHTMLProps<
+    "md-list": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -348,7 +354,7 @@ declare namespace JSX {
         focused: number;
       }
     >;
-    'md-modal': React.DetailedHTMLProps<
+    "md-modal": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
@@ -368,21 +374,21 @@ declare namespace JSX {
         backDrop?: HTMLElement;
       }
     >;
-    'md-list-item': React.DetailedHTMLProps<
+    "md-list-item": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
         active: boolean;
         type:
-        "small"
-        | "large"
-        | "xlarge"
-        | "space"
-        | "auto"
-        | "header"
-        | "36"
-        | "52"
-        | "60";
+          | "small"
+          | "large"
+          | "xlarge"
+          | "space"
+          | "auto"
+          | "header"
+          | "36"
+          | "52"
+          | "60";
         disabled: boolean;
         selected: boolean;
         isReadOnly: boolean;
@@ -398,23 +404,32 @@ declare namespace JSX {
         tabindex: number;
       }
     >;
-    'md-combobox': React.DetailedHTMLProps<
+    "md-combobox": React.DetailedHTMLProps<
       React.HTMLAttributes<HTMLElement>,
       HTMLElement,
       {
         label: string;
-        options: string[] | [{ [key: string]: string }],
+        options: string[] | [{ [key: string]: string }];
         placeholder: string;
         isMulti: boolean;
         disabled: boolean;
         ordered: boolean;
         expanded: boolean;
-        selectedOptions: string[] | [{ [key: string]: string }],
+        selectedOptions: string[] | [{ [key: string]: string }];
         visibleOptions: number;
         optionId: string;
         optionValue: string;
         isCustomContent: boolean;
-        value: string[] | [{ [key: string]: string }]
+        value: string[] | [{ [key: string]: string }];
+      }
+    >;
+
+    "md-theme": React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement,
+      {
+        lumos: boolean;
+        darkMode: boolean;
       }
     >;
   }
