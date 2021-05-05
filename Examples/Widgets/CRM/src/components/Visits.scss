@@ -45,6 +45,9 @@
   border-radius: 0.5rem;
   width: 100%;
   height: 25rem;
+}
+
+.matrix-scroll {
   overflow: auto;
 }
 
@@ -58,6 +61,11 @@
     "time grid"
     "year month";
   margin-top: 1rem;
+}
+
+.visits-align {
+  display: flex;
+  flex-direction: column;
 }
 
 .visits-matrix {
@@ -105,6 +113,7 @@
   flex-direction: column-reverse;
   justify-content: space-around;
   grid-area: time;
+  height: 25rem;
 }
 
 .months {
@@ -115,7 +124,9 @@
 }
 
 .year {
+  display: flex;
   grid-area: year;
+  align-items: flex-end;
 }
 
 .months-line {

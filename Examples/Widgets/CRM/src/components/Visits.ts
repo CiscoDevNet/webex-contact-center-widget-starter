@@ -117,38 +117,47 @@ export default class CustomerVisits extends LitElement {
           </div>
         </div>
         <div class="visits-grid">
-          <div class="time">
-            ${hours.map(i => this.generateTime(i))}
+          <div class="visit-align">
+            <div class="time">
+              ${hours.map(i => this.generateTime(i))}
+            </div>
+            <div class="year">2020</div>
           </div>
-          <div class="year">2020</div>
-          <div class="months">
-            <div class="months-line">
-              ${months.map(i => this.generateTime(undefined))}
+          
+          <div class="matrix-scroll">
+          
+            <div class="matrix-wrapper">
+              <div class="visits-matrix">
+                ${this.visits?.map((visit : any) => {
+                  if (this.filterSelection === undefined) {
+                    return html`
+                      <visit-badge
+                        .visit=${visit}
+                      ></visit-badge>
+                    `;
+                  } else {
+                    return visit.title === this.filterSelection
+                      ? html`
+                          <visit-badge
+                            .visit=${visit}
+                          ></visit-badge>
+                        `
+                      : nothing;
+                  }
+                })}
+              </div>
             </div>
-            <div class="month-names">
-              ${months.map(i => this.generateTime(i))}
+            <div class="months">
+            <div>
+              <div class="months-line">
+                ${months.map(i => this.generateTime(undefined))}
+              </div>
+              <div class="month-names">
+                ${months.map(i => this.generateTime(i))}
+              </div>
             </div>
+            <div></div>
           </div>
-          <div class="matrix-wrapper">
-            <div class="visits-matrix">
-              ${this.visits?.map((visit : any) => {
-                if (this.filterSelection === undefined) {
-                  return html`
-                    <visit-badge
-                      .visit=${visit}
-                    ></visit-badge>
-                  `;
-                } else {
-                  return visit.title === this.filterSelection
-                    ? html`
-                        <visit-badge
-                          .visit=${visit}
-                        ></visit-badge>
-                      `
-                    : nothing;
-                }
-              })}
-            </div>
           </div>
           <div class="date"></div>
         </div>
