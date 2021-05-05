@@ -10,7 +10,7 @@ import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
 import styles from "./sandbox.scss";
 
-@customElement("wcc-widget-starter-lit")
+@customElement("wcc-crm-sandbox")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
   @internalProperty() containerWidth = "80vw";
