@@ -1,0 +1,25 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "bootstrap": "npx lerna bootstrap",
+    "build": "npx lerna run --stream dist:dev && npx lerna run --stream dev:build && yarn clean && yarn copy:all:widgets",
+    "copy:all:widgets": "run-p copy:*",
+    "copy:covid-by-location": "npx ncp ./Widgets/CovidByLocation/dist ./docs/CovidByLocation",
+    "copy:crm": "npx ncp ./Widgets/CRM/dist ./docs/CRM",
+    "copy:hospital-bed-capacity": "npx ncp ./Widgets/HospitalBedCapacity/dist ./docs/HospitalBedCapacity",
+    "copy:learning-widget-sample": "npx ncp ./Widgets/LearningWidgetSample/dist ./docs/LearningWidgetSample",
+    "copy:map": "npx ncp ./Widgets/Map/dist ./docs/Map",
+    "copy:rss": "npx ncp ./Widgets/RSS/dist ./docs/RSS",
+    "copy:timer": "npx ncp ./Widgets/Timer/dist ./docs/Timer",
+    "clean": "rimraf ./docs/CovidByLocation ./docs/CRM ./docs/HospitalBedCapacity ./docs/LearningWidgetSample ./docs/Map ./docs/RSS ./docs/Timer"
+  },
+  "devDependencies": {
+    "copy-dir": "^1.3.0",
+    "copyfiles": "^2.4.1",
+    "lerna": "^4.0.0",
+    "ncp": "^2.0.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2"
+  }
+}
