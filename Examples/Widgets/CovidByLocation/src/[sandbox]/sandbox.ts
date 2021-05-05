@@ -10,7 +10,7 @@ import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
 import styles from "./sandbox.scss";
 
-@customElement("wcc-widget-starter-lit")
+@customElement("wcc-covid-by-location-sandbox")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
   @internalProperty() containerWidth = "591px";
@@ -80,11 +80,11 @@ export class Sandbox extends LitElement {
   }
 
   render() {
-   /**
-    * Property: apiKey
-    * Access API Key: Covid Act Now Website
-    * https://apidocs.covidactnow.org/access
-    */
+    /**
+     * Property: apiKey
+     * Access API Key: Covid Act Now Website
+     * https://apidocs.covidactnow.org/access
+     */
     const key = "";
 
     return html`

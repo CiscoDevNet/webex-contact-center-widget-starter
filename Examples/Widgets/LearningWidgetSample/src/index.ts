@@ -34,7 +34,7 @@ export default class CovidByLocation extends LitElement {
 
   render() {
     return html`
-      <my-custom-component style="height: 100%"></my-custom-component>
+      <learning-sample-app style="height: 100%"></learning-sample-app>
     `;
   }
 }

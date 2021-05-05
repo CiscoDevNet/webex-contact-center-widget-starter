@@ -19,7 +19,7 @@ import { Service } from "@wxcc-desktop/sdk-types";
 
 const logger = Desktop.logger.createLogger("learning-sample");
 
-@customElement("my-custom-component")
+@customElement("learning-sample-app")
 export default class MyCustomComponent extends LitElement {
   @internalProperty() entryPointId = "";
   @internalProperty() destinationNumber = "";

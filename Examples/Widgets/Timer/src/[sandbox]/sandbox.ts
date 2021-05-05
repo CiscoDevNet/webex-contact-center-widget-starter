@@ -10,7 +10,7 @@ import { customElement, html, internalProperty, LitElement } from "lit-element";
 import "../index";
 import styles from "./sandbox.scss";
 
-@customElement("wcc-widget-starter-lit")
+@customElement("wcc-timer-sandbox")
 export class Sandbox extends LitElement {
   @internalProperty() darkTheme = false;
   @internalProperty() containerWidth = "500px";
@@ -23,25 +23,39 @@ export class Sandbox extends LitElement {
   themeToggle() {
     return html`
       <div class="toggle-container">
-        <md-checkbox type="checkbox" id="theme-switch" class="theme-switch" data-aspect="darkTheme" label="Dark Mode"
-          @checkbox-change=${(e: MouseEvent)=> this.toggleSetting(e)}
+        <md-checkbox
+          type="checkbox"
+          id="theme-switch"
+          class="theme-switch"
+          data-aspect="darkTheme"
+          label="Dark Mode"
+          @checkbox-change=${(e: MouseEvent) => this.toggleSetting(e)}
           ?checked=${this.darkTheme}
-          >Dark Mode</md-checkbox>
+          >Dark Mode</md-checkbox
+        >
         <div class="switch-container">
           <md-label class="switch" text="Responsive">
             Widget Boundary
           </md-label>
-          <md-input type="text" id="width-switch" class="theme-switch" data-aspect="responsive-width" @click=${(e:
-            MouseEvent)=> this.toggleSetting(e)}
+          <md-input
+            type="text"
+            id="width-switch"
+            class="theme-switch"
+            data-aspect="responsive-width"
+            @click=${(e: MouseEvent) => this.toggleSetting(e)}
             @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
             value=${this.containerWidth}
-            ></md-input>
+          ></md-input>
           <md-label>x</md-label>
-          <md-input type="text" id="height-switch" class="theme-switch" data-aspect="responsive-height" @click=${(e:
-            MouseEvent)=> this.toggleSetting(e)}
+          <md-input
+            type="text"
+            id="height-switch"
+            class="theme-switch"
+            data-aspect="responsive-height"
+            @click=${(e: MouseEvent) => this.toggleSetting(e)}
             @input-change=${(e: MouseEvent) => this.toggleSetting(e)}
             value=${this.containerHeight}
-            ></md-input>
+          ></md-input>
         </div>
       </div>
     `;
