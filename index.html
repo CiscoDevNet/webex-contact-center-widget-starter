@@ -5,55 +5,278 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>webex-contact-center-widget-starter</title>
+
+    <link
+      href="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/css/momentum-ui.min.css"
+      type="text/css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/css/momentum-ui-icons.min.css"
+      type="text/css"
+      rel="stylesheet"
+    />
+
+    <script>
+      let AGENTX_SERVICE = {};
+    </script>
   </head>
   <body>
-    <h1>Demo Widget Hosted JavaScripts Bundles</h1>
-    <hr />
-    <ul>
-      <li>
-        <a
-          href="/webex-contact-center-widget-starter/Examples/docs/CovidByLocation/index.js"
-          >CovidByLocation</a
+    <md-theme lumos>
+      <div>
+        <header
+          style="
+            display: flex;
+            align-items: center;
+            height: 35px;
+            padding: 12px;
+            background-color: var(--md-primary-bg-color);
+            color: var(--md-primary-text-color);
+            border-bottom: 1px solid var(--md-primary-seperator-color);
+            width: 100%;
+          "
         >
-      </li>
-      <li>
-        <a
-          type="text/javascript"
-          href="/webex-contact-center-widget-starter/Examples/docs/HospitalBedCapacity/index.js"
-          >HospitalBedCapacity</a
+          <img src="./webex_cc_logo.png" style="padding-right: 12px" />
+          <span style="font-size: 14px; font-weight: bold; padding-right: 12px"
+            >Demo Widgets Hosted JavaScripts Bundles</span
+          >
+          <md-alert-banner style="flex: 1" show type="warning" closable>
+            Some of the demo widgets cannot be previewed, because it needs
+            additional props like google api key etc.
+          </md-alert-banner>
+          <md-toggle-switch click="handleThemeToggle" style="padding: 0 12px"
+            >Dark Mode</md-toggle-switch
+          >
+        </header>
+        <main
+          style="padding: 12px; background-color: var(--md-secondary-bg-color)"
         >
-      </li>
-      <li>
-        <a
-          href="/webex-contact-center-widget-starter/Examples/docs/CRM/index.js"
-          >CRM</a
-        >
-      </li>
-      <li>
-        <a
-          href="/webex-contact-center-widget-starter/Examples/docs/RSS/index.js"
-          >RSS</a
-        >
-      </li>
-      <li>
-        <a
-          href="/webex-contact-center-widget-starter/Examples/docs/Timer/index.js"
-          >Timer</a
-        >
-      </li>
-      <li>
-        <a
-          href="/webex-contact-center-widget-starter/Examples/docs/Map/index.js"
-          >Map</a
-        >
-      </li>
-      <li>
-        <a
-          type="text/javascript"
-          href="/webex-contact-center-widget-starter/Examples/docs/LearningWidgetSample/index.js"
-          >LearningWidgetSample</a
-        >
-      </li>
-    </ul>
+          <demo-widget-preview></demo-widget-preview>
+        </main>
+      </div>
+    </md-theme>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/covid-by-location.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/timer.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/rss-feed-widget.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/crm.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/hospital-bed-capacity.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/map-widget.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/learning-widget-sample.js"></script>
+
+    <script>
+      const widgets = [
+        {
+          label: "CRM",
+          comp: `<crm-widget phone-number="+1 (800) 471-2389"></crm-widget>`,
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/crm.js",
+          layoutConfig: {
+            comp: "crm-widget",
+            attributes: { "phone-number": "+1 (800) 471-2389" },
+            script:
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/crm.js",
+          },
+          style: "grid-column: span 3;",
+        },
+
+        {
+          label: "Timer",
+          comp: `<timer-widget duration="08:00:00" style="margin-top: 10px"></timer-widget>`,
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/timer.js",
+          layoutConfig: {
+            comp: "timer-widget",
+            attributes: {
+              duration: "08:00:00",
+            },
+            script:
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/timer.js",
+          },
+          style: "grid-column: span 1;",
+        },
+        {
+          label: "RSS",
+          comp: `<rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml"
+                update-delay="5000"></rss-feed-widget>`,
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/rss-feed-widget.js",
+          layoutConfig: {
+            comp: "rss-feed-widget",
+            attributes: {
+              "rss-feed": "https://w1.weather.gov/xml/current_obs/PHNL.rss",
+            },
+            script:
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/rss-feed-widget.js",
+          },
+          style: "grid-column: span 1;",
+        },
+        {
+          label: "Map",
+          comp: `<map-widget api-key="" search-enabled></map-widget>`,
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/map-widget.js",
+          layoutConfig: {
+            comp: "map-widget",
+            attributes: {
+              "api-key": "google api key here",
+              "search-enabled": true,
+            },
+            script:
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/map-widget.js",
+          },
+          style: "grid-column: span 2;",
+        },
+        {
+          label: "Covid By Location",
+          comp:
+            '<covid-by-location api-key="1318b408f01c4aa3b5f79dedc6c90848" selectedCountyState="SantaClara County, CA"></covid-by-location>',
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/covid-by-location.js",
+          style: "grid-column: span 3;",
+          layoutConfig: {
+            comp: "covid-by-location",
+            script:
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/covid-by-location.js",
+            attributes: {
+              "api-key": "1318b408f01c4aa3b5f79dedc6c90848",
+            },
+            wrapper: {
+              title: "Covid by location",
+              maximizeAreaName: "app-maximize-area",
+            },
+          },
+        },
+
+        {
+          label: "Hospital Bed Capacity",
+          comp: `<hospital-bed-capacity google-api-key="googleApiKey" covid-api-key="covidApiKey"
+              latitude="latitude" longitude="longitude">`,
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/hospital-bed-capacity.js",
+          layoutConfig: {
+            comp: "hospital-bed-capacity",
+            attributes: {
+              "google-api-key": "googleApiKey",
+              "covid-api-key": "covidApiKey",
+              latitude: "latitude",
+              longitude: "longitude",
+            },
+            script:
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/hospital-bed-capacity.js",
+          },
+          style: "grid-column: span 5;",
+        },
+        {
+          label: "Learning Sample",
+          comp: `<learning-sample></learning-sample>`,
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/learning-widget-sample.js",
+          layoutConfig: {
+            comp: "learning-sample",
+            script:
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/learning-widget-sample.js",
+          },
+          style: "grid-column: span 5;",
+        },
+      ];
+      class DemoWidgetPreview extends HTMLElement {
+        connectedCallback() {
+          let comps = "";
+          widgets.forEach((w) => {
+            comps += `
+                  <div style="${w.style}">
+                    <div class="widget-card">
+                      <div class="widget-card-container">
+                        <h4 style="display:flex; width: 100%">
+                          <b style="flex:1;">${w.label}</b>
+                          <div>
+                          <md-menu-overlay
+                          size="large"
+                          placement="left-start"
+                          custom-width="700px"
+                          isOpen="false">
+                            <md-button outline slot="menu-trigger" variant="white" style="display:flex; justify-content: center;"">Code</md-button>
+                            <div style="width: 100%;height: 450px;overflow: hidden;display: flex;flex-direction: column;  background-color: var(--md-secondary-bg-color); white-space: break-spaces;color: var(--md-primary-text-color);">
+                              <div style="    display: flex; flex-direction: column; padding:15px;color: var(--md-primary-text-color);">
+
+                                <div style="display:flex; flex-direction: row;color: var(--md-primary-text-color);"><span>Script Url for </span>
+                                  <span style="background-color: #ccc;border-radius: 16px;padding: 8px 16px;font-size: 12px;font-weight: bold;color: var(--md-primary-text-color);">${
+                                    w.label
+                                  }</span>
+                                </div>
+                                <a href="${w.script}" target="_blank">${
+              w.script
+            }</a>
+                                <strong>Layout Config Example</strong>
+                                <pre style="color: var(--md-primary-text-color); border: 1px dashed var(--md-primary-seperator-color); padding: 5px;">${
+                                  w.layoutConfig
+                                    ? JSON.stringify(w.layoutConfig, null, 4)
+                                    : ""
+                                }
+                                </pre>
+                              </div>
+                            </div>
+                          </md-menu-overlay>
+                          </div>
+                        </h4>
+
+                      </div>
+                        ${w.comp}
+                    </div>
+                  </div>
+            `;
+          });
+          this.innerHTML = ` <style>
+            .widget-card {
+              box-shadow: 0 4px 4px 0 var(--md-primary-seperator-color);
+              transition: 0.3s;
+              background-color: var(--md-primary-bg-color);
+              color: var(--md-primary-text-color);
+              width: 100%;
+            }
+
+            .widget-card:hover {
+              box-shadow: 0 8px 8px 0 var(--md-primary-text-color);
+            }
+
+            .widget-card-container {
+              border-bottom: 1px solid var(--md-primary-seperator-color);
+              background-color: var(--md-primary-bg-color);
+              color: var(--md-primary-text-color);
+              padding: 12px;
+            }
+
+            .grid-container {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+              grid-gap: 12px 12px;
+              background-color: var(--md-secondary-bg-color);
+              color: var(--md-primary-text-color);
+            }
+
+            .widget-card-container + * {
+              padding: 12px;
+            }
+          </style>
+          <div class="grid-container">
+            ${comps}
+          </div>`;
+        }
+      }
+
+      customElements.define("demo-widget-preview", DemoWidgetPreview);
+
+      document
+        .querySelector("md-toggle-switch")
+        .addEventListener("click", (e) => {
+          const themeElm = document.querySelector("md-theme");
+          console.log("e.target.checked", e.target.checked);
+          if (e.target.checked) {
+            themeElm.setAttribute("darkTheme", true);
+          } else {
+            themeElm.removeAttribute("darkTheme");
+          }
+        });
+    </script>
   </body>
 </html>
