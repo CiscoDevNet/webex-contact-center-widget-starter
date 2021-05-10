@@ -3,16 +3,25 @@
   "private": true,
   "scripts": {
     "bootstrap": "npx lerna bootstrap",
-    "build": "npx lerna run --stream dist:dev && npx lerna run --stream dev:build && yarn clean && yarn copy:all:widgets",
+    "build": "npx lerna run --stream dev:build && yarn clean && yarn copy:all:widgets",
     "copy:all:widgets": "run-p copy:*",
-    "copy:covid-by-location": "npx ncp ./Widgets/CovidByLocation/dist ../docs/CovidByLocation",
-    "copy:crm": "npx ncp ./Widgets/CRM/dist ../docs/CRM",
-    "copy:hospital-bed-capacity": "npx ncp ./Widgets/HospitalBedCapacity/dist ../docs/HospitalBedCapacity",
-    "copy:learning-widget-sample": "npx ncp ./Widgets/LearningWidgetSample/dist ../docs/LearningWidgetSample",
-    "copy:map": "npx ncp ./Widgets/Map/dist ../docs/Map",
-    "copy:rss": "npx ncp ./Widgets/RSS/dist ../docs/RSS",
-    "copy:timer": "npx ncp ./Widgets/Timer/dist ../docs/Timer",
-    "clean": "rimraf ../docs/CovidByLocation ../docs/CRM ../docs/HospitalBedCapacity ../docs/LearningWidgetSample ../docs/Map ../docs/RSS ../docs/Timer"
+    "copy:covid-by-location": "copyfiles Widgets/CovidByLocation/build/main*.* docs",
+    "copy:crm": "copyfiles ./Widgets/CRM/build/main*.* docs",
+    "copy:hospital-bed-capacity": "copyfiles Widgets/HospitalBedCapacity/build/main*.* docs",
+    "copy:learning-widget-sample": "copyfiles Widgets/LearningWidgetSample/build/main*.* docs",
+    "copy:map": "copyfiles Widgets/Map/build/main*.* docs",
+    "copy:rss": "copyfiles Widgets/RSS/build/main*.* docs",
+    "copy:styles": "npx ncp Widgets/LearningWidgetSample/build/css docs/css && npx ncp Widgets/LearningWidgetSample/build/fonts docs/fonts",
+    "copy:timer": "copyfiles Widgets/Timer/build/main*.* docs",
+    "clean": "rimraf ./docs/CovidByLocation ./docs/CRM ./docs/HospitalBedCapacity ./docs/LearningWidgetSample ./docs/Map ./docs/RSS ./docs/Timer"
+  },
+  "dependencies": {
+    "@momentum-ui/core": "19.10.3",
+    "@momentum-ui/icons": "8.8.3",
+    "@momentum-ui/utils": "6.2.13",
+    "@momentum-ui/web-components": "^2.1.0",
+    "lit-element": "^2.3.1",
+    "lit-html": "^1.2.1"
   },
   "devDependencies": {
     "copy-dir": "^1.3.0",
