@@ -4,10 +4,9 @@
   "scripts": {
     "bootstrap": "npx lerna bootstrap",
     "build": "npx lerna run --stream dev:build && yarn clean && yarn copy:all:widgets",
-    "copy:all:widgets": "copyfiles -f ./Widgets/**/build/*.js* docs/widgets && yarn copy:styles",
-    "copy:styles": "npx ncp Widgets/LearningWidgetSample/build/css docs/css && npx ncp Widgets/LearningWidgetSample/build/fonts docs/fonts",
-    "copy:timer": "copyfiles Widgets/Timer/build/*.js* docs",
-    "clean": "rimraf ./docs/CovidByLocation ./docs/CRM ./docs/HospitalBedCapacity ./docs/LearningWidgetSample ./docs/Map ./docs/RSS ./docs/Timer"
+    "copy:all:widgets": "copyfiles -f ./Widgets/**/build/*.js* ../widgets && yarn copy:styles",
+    "copy:styles": "npx ncp Widgets/LearningWidgetSample/build/css ../css && npx ncp Widgets/LearningWidgetSample/build/fonts ../fonts",
+    "clean": "rimraf ../widgets"
   },
   "dependencies": {
     "@momentum-ui/core": "19.10.3",
