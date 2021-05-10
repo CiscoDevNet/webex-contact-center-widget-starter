@@ -50077,7 +50077,7 @@ let TimerComponent = class TimerComponent extends lit_element__WEBPACK_IMPORTED_
     }
     render() {
         return lit_element__WEBPACK_IMPORTED_MODULE_1__["html"] `
-      <md-tooltip message="Timer expires at ${this.endTime}">
+      <md-tooltip message="Your shift ends at ${this.endTime}">
         <div class="container" role="timer"
           aria-label="${this.remainingHours} hours, ${this.remainingMinutes} minutes, ${this.remainingSeconds} seconds remaining">
           <time-circle time-limit=8 time-left=${Number(this.remainingHours)} color=${this.hoursColor}>

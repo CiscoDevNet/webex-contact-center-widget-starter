@@ -66675,13 +66675,6 @@ let MyCustomComponent = class MyCustomComponent extends lit_element__WEBPACK_IMP
             _super.firstUpdated.call(this, changeProperties);
             document.addEventListener("theme-changed", this.refreshTokenData);
             yield new Promise((resolve) => setTimeout(resolve, 0));
-            // @ts-ignore
-            var ro = new ResizeObserver((entries) => {
-                for (let entry of entries) {
-                    this.renderChart();
-                }
-            });
-            ro.observe(this.chartContainer);
             this.radioGroup.addEventListener("radio-change", this.handleRadioChange);
         });
     }
@@ -66691,9 +66684,6 @@ let MyCustomComponent = class MyCustomComponent extends lit_element__WEBPACK_IMP
         });
         return __awaiter(this, void 0, void 0, function* () {
             _super.updated.call(this, changeProperties);
-            if (changeProperties.has("darkTheme")) {
-                this.renderChart();
-            }
             if (this.selectedCountyFIPS && changeProperties.has("specificity")) {
                 yield this.collectChartData();
             }
