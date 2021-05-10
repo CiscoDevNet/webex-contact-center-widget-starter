@@ -4,15 +4,9 @@
   "scripts": {
     "bootstrap": "npx lerna bootstrap",
     "build": "npx lerna run --stream dev:build && yarn clean && yarn copy:all:widgets",
-    "copy:all:widgets": "run-p copy:*",
-    "copy:covid-by-location": "copyfiles Widgets/CovidByLocation/build/main*.* docs",
-    "copy:crm": "copyfiles ./Widgets/CRM/build/main*.* docs",
-    "copy:hospital-bed-capacity": "copyfiles Widgets/HospitalBedCapacity/build/main*.* docs",
-    "copy:learning-widget-sample": "copyfiles Widgets/LearningWidgetSample/build/main*.* docs",
-    "copy:map": "copyfiles Widgets/Map/build/main*.* docs",
-    "copy:rss": "copyfiles Widgets/RSS/build/main*.* docs",
+    "copy:all:widgets": "copyfiles -f ./Widgets/**/build/*.js* docs/widgets && yarn copy:styles",
     "copy:styles": "npx ncp Widgets/LearningWidgetSample/build/css docs/css && npx ncp Widgets/LearningWidgetSample/build/fonts docs/fonts",
-    "copy:timer": "copyfiles Widgets/Timer/build/main*.* docs",
+    "copy:timer": "copyfiles Widgets/Timer/build/*.js* docs",
     "clean": "rimraf ./docs/CovidByLocation ./docs/CRM ./docs/HospitalBedCapacity ./docs/LearningWidgetSample ./docs/Map ./docs/RSS ./docs/Timer"
   },
   "dependencies": {

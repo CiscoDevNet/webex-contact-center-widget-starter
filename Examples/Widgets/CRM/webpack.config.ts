@@ -28,6 +28,7 @@ const pModules = path.resolve("node_modules");
 const common: webpack.Configuration = {
   output: {
     publicPath: "/",
+    filename: "crm.js",
   },
   resolve: {
     extensions: [".ts", ".js", ".scss"],
