@@ -50820,4 +50820,4 @@ MyCustomComponent = __decorate([
 /***/ })
 
 /******/ });
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=map-widget.js.map

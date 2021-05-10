@@ -86,6 +86,313 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/@googlemaps/js-api-loader/dist/index.esm.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@googlemaps/js-api-loader/dist/index.esm.js ***!
+  \******************************************************************/
+/*! exports provided: DEFAULT_ID, Loader */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_ID", function() { return DEFAULT_ID; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Loader", function() { return Loader; });
+// do not edit .js files directly - edit src/index.jst
+
+
+
+var fastDeepEqual = function equal(a, b) {
+  if (a === b) return true;
+
+  if (a && b && typeof a == 'object' && typeof b == 'object') {
+    if (a.constructor !== b.constructor) return false;
+
+    var length, i, keys;
+    if (Array.isArray(a)) {
+      length = a.length;
+      if (length != b.length) return false;
+      for (i = length; i-- !== 0;)
+        if (!equal(a[i], b[i])) return false;
+      return true;
+    }
+
+
+
+    if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
+    if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
+    if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
+
+    keys = Object.keys(a);
+    length = keys.length;
+    if (length !== Object.keys(b).length) return false;
+
+    for (i = length; i-- !== 0;)
+      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+
+    for (i = length; i-- !== 0;) {
+      var key = keys[i];
+
+      if (!equal(a[key], b[key])) return false;
+    }
+
+    return true;
+  }
+
+  // true if both NaN, false otherwise
+  return a!==a && b!==b;
+};
+
+/**
+ * Copyright 2019 Google LLC. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at.
+ *
+ *      Http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+const DEFAULT_ID = "__googleMapsScriptId";
+/**
+ * [[Loader]] makes it easier to add Google Maps JavaScript API to your application
+ * dynamically using
+ * [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+ * It works by dynamically creating and appending a script node to the the
+ * document head and wrapping the callback function so as to return a promise.
+ *
+ * ```
+ * const loader = new Loader({
+ *   apiKey: "",
+ *   version: "weekly",
+ *   libraries: ["places"]
+ * });
+ *
+ * loader.load().then(() => {
+ *   const map = new google.maps.Map(...)
+ * })
+ * ```
+ */
+class Loader {
+    /**
+     * Creates an instance of Loader using [[LoaderOptions]]. No defaults are set
+     * using this library, instead the defaults are set by the Google Maps
+     * JavaScript API server.
+     *
+     * ```
+     * const loader = Loader({apiKey, version: 'weekly', libraries: ['places']});
+     * ```
+     */
+    constructor({ apiKey, channel, client, id = DEFAULT_ID, libraries = [], language, region, version, mapIds, nonce, retries = 3, url = "https://maps.googleapis.com/maps/api/js", }) {
+        this.CALLBACK = "__googleMapsCallback";
+        this.callbacks = [];
+        this.done = false;
+        this.loading = false;
+        this.errors = [];
+        this.version = version;
+        this.apiKey = apiKey;
+        this.channel = channel;
+        this.client = client;
+        this.id = id || DEFAULT_ID; // Do not allow empty string
+        this.libraries = libraries;
+        this.language = language;
+        this.region = region;
+        this.mapIds = mapIds;
+        this.nonce = nonce;
+        this.retries = retries;
+        this.url = url;
+        if (Loader.instance) {
+            if (!fastDeepEqual(this.options, Loader.instance.options)) {
+                throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(Loader.instance.options)}`);
+            }
+            return Loader.instance;
+        }
+        Loader.instance = this;
+    }
+    get options() {
+        return {
+            version: this.version,
+            apiKey: this.apiKey,
+            channel: this.channel,
+            client: this.client,
+            id: this.id,
+            libraries: this.libraries,
+            language: this.language,
+            region: this.region,
+            mapIds: this.mapIds,
+            nonce: this.nonce,
+            url: this.url,
+        };
+    }
+    get failed() {
+        return this.done && !this.loading && this.errors.length >= this.retries + 1;
+    }
+    /**
+     * CreateUrl returns the Google Maps JavaScript API script url given the [[LoaderOptions]].
+     *
+     * @ignore
+     */
+    createUrl() {
+        let url = this.url;
+        url += `?callback=${this.CALLBACK}`;
+        if (this.apiKey) {
+            url += `&key=${this.apiKey}`;
+        }
+        if (this.channel) {
+            url += `&channel=${this.channel}`;
+        }
+        if (this.client) {
+            url += `&client=${this.client}`;
+        }
+        if (this.libraries.length > 0) {
+            url += `&libraries=${this.libraries.join(",")}`;
+        }
+        if (this.language) {
+            url += `&language=${this.language}`;
+        }
+        if (this.region) {
+            url += `&region=${this.region}`;
+        }
+        if (this.version) {
+            url += `&v=${this.version}`;
+        }
+        if (this.mapIds) {
+            url += `&map_ids=${this.mapIds.join(",")}`;
+        }
+        return url;
+    }
+    /**
+     * Load the Google Maps JavaScript API script and return a Promise.
+     */
+    load() {
+        return this.loadPromise();
+    }
+    /**
+     * Load the Google Maps JavaScript API script and return a Promise.
+     *
+     * @ignore
+     */
+    loadPromise() {
+        return new Promise((resolve, reject) => {
+            this.loadCallback((err) => {
+                if (!err) {
+                    resolve();
+                }
+                else {
+                    reject(err);
+                }
+            });
+        });
+    }
+    /**
+     * Load the Google Maps JavaScript API script with a callback.
+     */
+    loadCallback(fn) {
+        this.callbacks.push(fn);
+        this.execute();
+    }
+    /**
+     * Set the script on document.
+     */
+    setScript() {
+        if (document.getElementById(this.id)) {
+            // TODO wrap onerror callback for cases where the script was loaded elsewhere
+            this.callback();
+            return;
+        }
+        const url = this.createUrl();
+        const script = document.createElement("script");
+        script.id = this.id;
+        script.type = "text/javascript";
+        script.src = url;
+        script.onerror = this.loadErrorCallback.bind(this);
+        script.defer = true;
+        script.async = true;
+        if (this.nonce) {
+            script.nonce = this.nonce;
+        }
+        document.head.appendChild(script);
+    }
+    deleteScript() {
+        const script = document.getElementById(this.id);
+        if (script) {
+            script.remove();
+        }
+    }
+    /**
+     * Reset the loader state.
+     */
+    reset() {
+        this.deleteScript();
+        this.done = false;
+        this.loading = false;
+        this.errors = [];
+        this.onerrorEvent = null;
+    }
+    resetIfRetryingFailed() {
+        if (this.failed) {
+            this.reset();
+        }
+    }
+    loadErrorCallback(e) {
+        this.errors.push(e);
+        if (this.errors.length <= this.retries) {
+            const delay = this.errors.length * Math.pow(2, this.errors.length);
+            console.log(`Failed to load Google Maps script, retrying in ${delay} ms.`);
+            setTimeout(() => {
+                this.deleteScript();
+                this.setScript();
+            }, delay);
+        }
+        else {
+            this.onerrorEvent = e;
+            this.callback();
+        }
+    }
+    setCallback() {
+        window.__googleMapsCallback = this.callback.bind(this);
+    }
+    callback() {
+        this.done = true;
+        this.loading = false;
+        this.callbacks.forEach((cb) => {
+            cb(this.onerrorEvent);
+        });
+        this.callbacks = [];
+    }
+    execute() {
+        this.resetIfRetryingFailed();
+        if (this.done) {
+            this.callback();
+        }
+        else {
+            // short circuit and warn if google.maps is already loaded
+            if (window.google && window.google.maps && window.google.maps.version) {
+                console.warn("Google Maps already loaded outside @googlemaps/js-api-loader." +
+                    "This may result in undesirable behavior as options and script parameters may not match.");
+                this.callback();
+                return;
+            }
+            if (this.loading) ;
+            else {
+                this.loading = true;
+                this.setCallback();
+                this.setScript();
+            }
+        }
+    }
+}
+
+
+//# sourceMappingURL=index.esm.js.map
+
+
+/***/ }),
+
 /***/ "./node_modules/@interactjs/actions/drag/index.js":
 /*!********************************************************!*\
   !*** ./node_modules/@interactjs/actions/drag/index.js ***!
@@ -45824,6 +46131,948 @@ License: MIT
 
 /***/ }),
 
+/***/ "./node_modules/resize-observer-polyfill/dist/ResizeObserver.es.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/resize-observer-polyfill/dist/ResizeObserver.es.js ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/**
+ * A collection of shims that provide minimal functionality of the ES6 collections.
+ *
+ * These implementations are not meant to be used outside of the ResizeObserver
+ * modules as they cover only a limited range of use cases.
+ */
+/* eslint-disable require-jsdoc, valid-jsdoc */
+var MapShim = (function () {
+    if (typeof Map !== 'undefined') {
+        return Map;
+    }
+    /**
+     * Returns index in provided array that matches the specified key.
+     *
+     * @param {Array<Array>} arr
+     * @param {*} key
+     * @returns {number}
+     */
+    function getIndex(arr, key) {
+        var result = -1;
+        arr.some(function (entry, index) {
+            if (entry[0] === key) {
+                result = index;
+                return true;
+            }
+            return false;
+        });
+        return result;
+    }
+    return /** @class */ (function () {
+        function class_1() {
+            this.__entries__ = [];
+        }
+        Object.defineProperty(class_1.prototype, "size", {
+            /**
+             * @returns {boolean}
+             */
+            get: function () {
+                return this.__entries__.length;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @param {*} key
+         * @returns {*}
+         */
+        class_1.prototype.get = function (key) {
+            var index = getIndex(this.__entries__, key);
+            var entry = this.__entries__[index];
+            return entry && entry[1];
+        };
+        /**
+         * @param {*} key
+         * @param {*} value
+         * @returns {void}
+         */
+        class_1.prototype.set = function (key, value) {
+            var index = getIndex(this.__entries__, key);
+            if (~index) {
+                this.__entries__[index][1] = value;
+            }
+            else {
+                this.__entries__.push([key, value]);
+            }
+        };
+        /**
+         * @param {*} key
+         * @returns {void}
+         */
+        class_1.prototype.delete = function (key) {
+            var entries = this.__entries__;
+            var index = getIndex(entries, key);
+            if (~index) {
+                entries.splice(index, 1);
+            }
+        };
+        /**
+         * @param {*} key
+         * @returns {void}
+         */
+        class_1.prototype.has = function (key) {
+            return !!~getIndex(this.__entries__, key);
+        };
+        /**
+         * @returns {void}
+         */
+        class_1.prototype.clear = function () {
+            this.__entries__.splice(0);
+        };
+        /**
+         * @param {Function} callback
+         * @param {*} [ctx=null]
+         * @returns {void}
+         */
+        class_1.prototype.forEach = function (callback, ctx) {
+            if (ctx === void 0) { ctx = null; }
+            for (var _i = 0, _a = this.__entries__; _i < _a.length; _i++) {
+                var entry = _a[_i];
+                callback.call(ctx, entry[1], entry[0]);
+            }
+        };
+        return class_1;
+    }());
+})();
+
+/**
+ * Detects whether window and document objects are available in current environment.
+ */
+var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined' && window.document === document;
+
+// Returns global object of a current environment.
+var global$1 = (function () {
+    if (typeof global !== 'undefined' && global.Math === Math) {
+        return global;
+    }
+    if (typeof self !== 'undefined' && self.Math === Math) {
+        return self;
+    }
+    if (typeof window !== 'undefined' && window.Math === Math) {
+        return window;
+    }
+    // eslint-disable-next-line no-new-func
+    return Function('return this')();
+})();
+
+/**
+ * A shim for the requestAnimationFrame which falls back to the setTimeout if
+ * first one is not supported.
+ *
+ * @returns {number} Requests' identifier.
+ */
+var requestAnimationFrame$1 = (function () {
+    if (typeof requestAnimationFrame === 'function') {
+        // It's required to use a bounded function because IE sometimes throws
+        // an "Invalid calling object" error if rAF is invoked without the global
+        // object on the left hand side.
+        return requestAnimationFrame.bind(global$1);
+    }
+    return function (callback) { return setTimeout(function () { return callback(Date.now()); }, 1000 / 60); };
+})();
+
+// Defines minimum timeout before adding a trailing call.
+var trailingTimeout = 2;
+/**
+ * Creates a wrapper function which ensures that provided callback will be
+ * invoked only once during the specified delay period.
+ *
+ * @param {Function} callback - Function to be invoked after the delay period.
+ * @param {number} delay - Delay after which to invoke callback.
+ * @returns {Function}
+ */
+function throttle (callback, delay) {
+    var leadingCall = false, trailingCall = false, lastCallTime = 0;
+    /**
+     * Invokes the original callback function and schedules new invocation if
+     * the "proxy" was called during current request.
+     *
+     * @returns {void}
+     */
+    function resolvePending() {
+        if (leadingCall) {
+            leadingCall = false;
+            callback();
+        }
+        if (trailingCall) {
+            proxy();
+        }
+    }
+    /**
+     * Callback invoked after the specified delay. It will further postpone
+     * invocation of the original function delegating it to the
+     * requestAnimationFrame.
+     *
+     * @returns {void}
+     */
+    function timeoutCallback() {
+        requestAnimationFrame$1(resolvePending);
+    }
+    /**
+     * Schedules invocation of the original function.
+     *
+     * @returns {void}
+     */
+    function proxy() {
+        var timeStamp = Date.now();
+        if (leadingCall) {
+            // Reject immediately following calls.
+            if (timeStamp - lastCallTime < trailingTimeout) {
+                return;
+            }
+            // Schedule new call to be in invoked when the pending one is resolved.
+            // This is important for "transitions" which never actually start
+            // immediately so there is a chance that we might miss one if change
+            // happens amids the pending invocation.
+            trailingCall = true;
+        }
+        else {
+            leadingCall = true;
+            trailingCall = false;
+            setTimeout(timeoutCallback, delay);
+        }
+        lastCallTime = timeStamp;
+    }
+    return proxy;
+}
+
+// Minimum delay before invoking the update of observers.
+var REFRESH_DELAY = 20;
+// A list of substrings of CSS properties used to find transition events that
+// might affect dimensions of observed elements.
+var transitionKeys = ['top', 'right', 'bottom', 'left', 'width', 'height', 'size', 'weight'];
+// Check if MutationObserver is available.
+var mutationObserverSupported = typeof MutationObserver !== 'undefined';
+/**
+ * Singleton controller class which handles updates of ResizeObserver instances.
+ */
+var ResizeObserverController = /** @class */ (function () {
+    /**
+     * Creates a new instance of ResizeObserverController.
+     *
+     * @private
+     */
+    function ResizeObserverController() {
+        /**
+         * Indicates whether DOM listeners have been added.
+         *
+         * @private {boolean}
+         */
+        this.connected_ = false;
+        /**
+         * Tells that controller has subscribed for Mutation Events.
+         *
+         * @private {boolean}
+         */
+        this.mutationEventsAdded_ = false;
+        /**
+         * Keeps reference to the instance of MutationObserver.
+         *
+         * @private {MutationObserver}
+         */
+        this.mutationsObserver_ = null;
+        /**
+         * A list of connected observers.
+         *
+         * @private {Array<ResizeObserverSPI>}
+         */
+        this.observers_ = [];
+        this.onTransitionEnd_ = this.onTransitionEnd_.bind(this);
+        this.refresh = throttle(this.refresh.bind(this), REFRESH_DELAY);
+    }
+    /**
+     * Adds observer to observers list.
+     *
+     * @param {ResizeObserverSPI} observer - Observer to be added.
+     * @returns {void}
+     */
+    ResizeObserverController.prototype.addObserver = function (observer) {
+        if (!~this.observers_.indexOf(observer)) {
+            this.observers_.push(observer);
+        }
+        // Add listeners if they haven't been added yet.
+        if (!this.connected_) {
+            this.connect_();
+        }
+    };
+    /**
+     * Removes observer from observers list.
+     *
+     * @param {ResizeObserverSPI} observer - Observer to be removed.
+     * @returns {void}
+     */
+    ResizeObserverController.prototype.removeObserver = function (observer) {
+        var observers = this.observers_;
+        var index = observers.indexOf(observer);
+        // Remove observer if it's present in registry.
+        if (~index) {
+            observers.splice(index, 1);
+        }
+        // Remove listeners if controller has no connected observers.
+        if (!observers.length && this.connected_) {
+            this.disconnect_();
+        }
+    };
+    /**
+     * Invokes the update of observers. It will continue running updates insofar
+     * it detects changes.
+     *
+     * @returns {void}
+     */
+    ResizeObserverController.prototype.refresh = function () {
+        var changesDetected = this.updateObservers_();
+        // Continue running updates if changes have been detected as there might
+        // be future ones caused by CSS transitions.
+        if (changesDetected) {
+            this.refresh();
+        }
+    };
+    /**
+     * Updates every observer from observers list and notifies them of queued
+     * entries.
+     *
+     * @private
+     * @returns {boolean} Returns "true" if any observer has detected changes in
+     *      dimensions of it's elements.
+     */
+    ResizeObserverController.prototype.updateObservers_ = function () {
+        // Collect observers that have active observations.
+        var activeObservers = this.observers_.filter(function (observer) {
+            return observer.gatherActive(), observer.hasActive();
+        });
+        // Deliver notifications in a separate cycle in order to avoid any
+        // collisions between observers, e.g. when multiple instances of
+        // ResizeObserver are tracking the same element and the callback of one
+        // of them changes content dimensions of the observed target. Sometimes
+        // this may result in notifications being blocked for the rest of observers.
+        activeObservers.forEach(function (observer) { return observer.broadcastActive(); });
+        return activeObservers.length > 0;
+    };
+    /**
+     * Initializes DOM listeners.
+     *
+     * @private
+     * @returns {void}
+     */
+    ResizeObserverController.prototype.connect_ = function () {
+        // Do nothing if running in a non-browser environment or if listeners
+        // have been already added.
+        if (!isBrowser || this.connected_) {
+            return;
+        }
+        // Subscription to the "Transitionend" event is used as a workaround for
+        // delayed transitions. This way it's possible to capture at least the
+        // final state of an element.
+        document.addEventListener('transitionend', this.onTransitionEnd_);
+        window.addEventListener('resize', this.refresh);
+        if (mutationObserverSupported) {
+            this.mutationsObserver_ = new MutationObserver(this.refresh);
+            this.mutationsObserver_.observe(document, {
+                attributes: true,
+                childList: true,
+                characterData: true,
+                subtree: true
+            });
+        }
+        else {
+            document.addEventListener('DOMSubtreeModified', this.refresh);
+            this.mutationEventsAdded_ = true;
+        }
+        this.connected_ = true;
+    };
+    /**
+     * Removes DOM listeners.
+     *
+     * @private
+     * @returns {void}
+     */
+    ResizeObserverController.prototype.disconnect_ = function () {
+        // Do nothing if running in a non-browser environment or if listeners
+        // have been already removed.
+        if (!isBrowser || !this.connected_) {
+            return;
+        }
+        document.removeEventListener('transitionend', this.onTransitionEnd_);
+        window.removeEventListener('resize', this.refresh);
+        if (this.mutationsObserver_) {
+            this.mutationsObserver_.disconnect();
+        }
+        if (this.mutationEventsAdded_) {
+            document.removeEventListener('DOMSubtreeModified', this.refresh);
+        }
+        this.mutationsObserver_ = null;
+        this.mutationEventsAdded_ = false;
+        this.connected_ = false;
+    };
+    /**
+     * "Transitionend" event handler.
+     *
+     * @private
+     * @param {TransitionEvent} event
+     * @returns {void}
+     */
+    ResizeObserverController.prototype.onTransitionEnd_ = function (_a) {
+        var _b = _a.propertyName, propertyName = _b === void 0 ? '' : _b;
+        // Detect whether transition may affect dimensions of an element.
+        var isReflowProperty = transitionKeys.some(function (key) {
+            return !!~propertyName.indexOf(key);
+        });
+        if (isReflowProperty) {
+            this.refresh();
+        }
+    };
+    /**
+     * Returns instance of the ResizeObserverController.
+     *
+     * @returns {ResizeObserverController}
+     */
+    ResizeObserverController.getInstance = function () {
+        if (!this.instance_) {
+            this.instance_ = new ResizeObserverController();
+        }
+        return this.instance_;
+    };
+    /**
+     * Holds reference to the controller's instance.
+     *
+     * @private {ResizeObserverController}
+     */
+    ResizeObserverController.instance_ = null;
+    return ResizeObserverController;
+}());
+
+/**
+ * Defines non-writable/enumerable properties of the provided target object.
+ *
+ * @param {Object} target - Object for which to define properties.
+ * @param {Object} props - Properties to be defined.
+ * @returns {Object} Target object.
+ */
+var defineConfigurable = (function (target, props) {
+    for (var _i = 0, _a = Object.keys(props); _i < _a.length; _i++) {
+        var key = _a[_i];
+        Object.defineProperty(target, key, {
+            value: props[key],
+            enumerable: false,
+            writable: false,
+            configurable: true
+        });
+    }
+    return target;
+});
+
+/**
+ * Returns the global object associated with provided element.
+ *
+ * @param {Object} target
+ * @returns {Object}
+ */
+var getWindowOf = (function (target) {
+    // Assume that the element is an instance of Node, which means that it
+    // has the "ownerDocument" property from which we can retrieve a
+    // corresponding global object.
+    var ownerGlobal = target && target.ownerDocument && target.ownerDocument.defaultView;
+    // Return the local global object if it's not possible extract one from
+    // provided element.
+    return ownerGlobal || global$1;
+});
+
+// Placeholder of an empty content rectangle.
+var emptyRect = createRectInit(0, 0, 0, 0);
+/**
+ * Converts provided string to a number.
+ *
+ * @param {number|string} value
+ * @returns {number}
+ */
+function toFloat(value) {
+    return parseFloat(value) || 0;
+}
+/**
+ * Extracts borders size from provided styles.
+ *
+ * @param {CSSStyleDeclaration} styles
+ * @param {...string} positions - Borders positions (top, right, ...)
+ * @returns {number}
+ */
+function getBordersSize(styles) {
+    var positions = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        positions[_i - 1] = arguments[_i];
+    }
+    return positions.reduce(function (size, position) {
+        var value = styles['border-' + position + '-width'];
+        return size + toFloat(value);
+    }, 0);
+}
+/**
+ * Extracts paddings sizes from provided styles.
+ *
+ * @param {CSSStyleDeclaration} styles
+ * @returns {Object} Paddings box.
+ */
+function getPaddings(styles) {
+    var positions = ['top', 'right', 'bottom', 'left'];
+    var paddings = {};
+    for (var _i = 0, positions_1 = positions; _i < positions_1.length; _i++) {
+        var position = positions_1[_i];
+        var value = styles['padding-' + position];
+        paddings[position] = toFloat(value);
+    }
+    return paddings;
+}
+/**
+ * Calculates content rectangle of provided SVG element.
+ *
+ * @param {SVGGraphicsElement} target - Element content rectangle of which needs
+ *      to be calculated.
+ * @returns {DOMRectInit}
+ */
+function getSVGContentRect(target) {
+    var bbox = target.getBBox();
+    return createRectInit(0, 0, bbox.width, bbox.height);
+}
+/**
+ * Calculates content rectangle of provided HTMLElement.
+ *
+ * @param {HTMLElement} target - Element for which to calculate the content rectangle.
+ * @returns {DOMRectInit}
+ */
+function getHTMLElementContentRect(target) {
+    // Client width & height properties can't be
+    // used exclusively as they provide rounded values.
+    var clientWidth = target.clientWidth, clientHeight = target.clientHeight;
+    // By this condition we can catch all non-replaced inline, hidden and
+    // detached elements. Though elements with width & height properties less
+    // than 0.5 will be discarded as well.
+    //
+    // Without it we would need to implement separate methods for each of
+    // those cases and it's not possible to perform a precise and performance
+    // effective test for hidden elements. E.g. even jQuery's ':visible' filter
+    // gives wrong results for elements with width & height less than 0.5.
+    if (!clientWidth && !clientHeight) {
+        return emptyRect;
+    }
+    var styles = getWindowOf(target).getComputedStyle(target);
+    var paddings = getPaddings(styles);
+    var horizPad = paddings.left + paddings.right;
+    var vertPad = paddings.top + paddings.bottom;
+    // Computed styles of width & height are being used because they are the
+    // only dimensions available to JS that contain non-rounded values. It could
+    // be possible to utilize the getBoundingClientRect if only it's data wasn't
+    // affected by CSS transformations let alone paddings, borders and scroll bars.
+    var width = toFloat(styles.width), height = toFloat(styles.height);
+    // Width & height include paddings and borders when the 'border-box' box
+    // model is applied (except for IE).
+    if (styles.boxSizing === 'border-box') {
+        // Following conditions are required to handle Internet Explorer which
+        // doesn't include paddings and borders to computed CSS dimensions.
+        //
+        // We can say that if CSS dimensions + paddings are equal to the "client"
+        // properties then it's either IE, and thus we don't need to subtract
+        // anything, or an element merely doesn't have paddings/borders styles.
+        if (Math.round(width + horizPad) !== clientWidth) {
+            width -= getBordersSize(styles, 'left', 'right') + horizPad;
+        }
+        if (Math.round(height + vertPad) !== clientHeight) {
+            height -= getBordersSize(styles, 'top', 'bottom') + vertPad;
+        }
+    }
+    // Following steps can't be applied to the document's root element as its
+    // client[Width/Height] properties represent viewport area of the window.
+    // Besides, it's as well not necessary as the <html> itself neither has
+    // rendered scroll bars nor it can be clipped.
+    if (!isDocumentElement(target)) {
+        // In some browsers (only in Firefox, actually) CSS width & height
+        // include scroll bars size which can be removed at this step as scroll
+        // bars are the only difference between rounded dimensions + paddings
+        // and "client" properties, though that is not always true in Chrome.
+        var vertScrollbar = Math.round(width + horizPad) - clientWidth;
+        var horizScrollbar = Math.round(height + vertPad) - clientHeight;
+        // Chrome has a rather weird rounding of "client" properties.
+        // E.g. for an element with content width of 314.2px it sometimes gives
+        // the client width of 315px and for the width of 314.7px it may give
+        // 314px. And it doesn't happen all the time. So just ignore this delta
+        // as a non-relevant.
+        if (Math.abs(vertScrollbar) !== 1) {
+            width -= vertScrollbar;
+        }
+        if (Math.abs(horizScrollbar) !== 1) {
+            height -= horizScrollbar;
+        }
+    }
+    return createRectInit(paddings.left, paddings.top, width, height);
+}
+/**
+ * Checks whether provided element is an instance of the SVGGraphicsElement.
+ *
+ * @param {Element} target - Element to be checked.
+ * @returns {boolean}
+ */
+var isSVGGraphicsElement = (function () {
+    // Some browsers, namely IE and Edge, don't have the SVGGraphicsElement
+    // interface.
+    if (typeof SVGGraphicsElement !== 'undefined') {
+        return function (target) { return target instanceof getWindowOf(target).SVGGraphicsElement; };
+    }
+    // If it's so, then check that element is at least an instance of the
+    // SVGElement and that it has the "getBBox" method.
+    // eslint-disable-next-line no-extra-parens
+    return function (target) { return (target instanceof getWindowOf(target).SVGElement &&
+        typeof target.getBBox === 'function'); };
+})();
+/**
+ * Checks whether provided element is a document element (<html>).
+ *
+ * @param {Element} target - Element to be checked.
+ * @returns {boolean}
+ */
+function isDocumentElement(target) {
+    return target === getWindowOf(target).document.documentElement;
+}
+/**
+ * Calculates an appropriate content rectangle for provided html or svg element.
+ *
+ * @param {Element} target - Element content rectangle of which needs to be calculated.
+ * @returns {DOMRectInit}
+ */
+function getContentRect(target) {
+    if (!isBrowser) {
+        return emptyRect;
+    }
+    if (isSVGGraphicsElement(target)) {
+        return getSVGContentRect(target);
+    }
+    return getHTMLElementContentRect(target);
+}
+/**
+ * Creates rectangle with an interface of the DOMRectReadOnly.
+ * Spec: https://drafts.fxtf.org/geometry/#domrectreadonly
+ *
+ * @param {DOMRectInit} rectInit - Object with rectangle's x/y coordinates and dimensions.
+ * @returns {DOMRectReadOnly}
+ */
+function createReadOnlyRect(_a) {
+    var x = _a.x, y = _a.y, width = _a.width, height = _a.height;
+    // If DOMRectReadOnly is available use it as a prototype for the rectangle.
+    var Constr = typeof DOMRectReadOnly !== 'undefined' ? DOMRectReadOnly : Object;
+    var rect = Object.create(Constr.prototype);
+    // Rectangle's properties are not writable and non-enumerable.
+    defineConfigurable(rect, {
+        x: x, y: y, width: width, height: height,
+        top: y,
+        right: x + width,
+        bottom: height + y,
+        left: x
+    });
+    return rect;
+}
+/**
+ * Creates DOMRectInit object based on the provided dimensions and the x/y coordinates.
+ * Spec: https://drafts.fxtf.org/geometry/#dictdef-domrectinit
+ *
+ * @param {number} x - X coordinate.
+ * @param {number} y - Y coordinate.
+ * @param {number} width - Rectangle's width.
+ * @param {number} height - Rectangle's height.
+ * @returns {DOMRectInit}
+ */
+function createRectInit(x, y, width, height) {
+    return { x: x, y: y, width: width, height: height };
+}
+
+/**
+ * Class that is responsible for computations of the content rectangle of
+ * provided DOM element and for keeping track of it's changes.
+ */
+var ResizeObservation = /** @class */ (function () {
+    /**
+     * Creates an instance of ResizeObservation.
+     *
+     * @param {Element} target - Element to be observed.
+     */
+    function ResizeObservation(target) {
+        /**
+         * Broadcasted width of content rectangle.
+         *
+         * @type {number}
+         */
+        this.broadcastWidth = 0;
+        /**
+         * Broadcasted height of content rectangle.
+         *
+         * @type {number}
+         */
+        this.broadcastHeight = 0;
+        /**
+         * Reference to the last observed content rectangle.
+         *
+         * @private {DOMRectInit}
+         */
+        this.contentRect_ = createRectInit(0, 0, 0, 0);
+        this.target = target;
+    }
+    /**
+     * Updates content rectangle and tells whether it's width or height properties
+     * have changed since the last broadcast.
+     *
+     * @returns {boolean}
+     */
+    ResizeObservation.prototype.isActive = function () {
+        var rect = getContentRect(this.target);
+        this.contentRect_ = rect;
+        return (rect.width !== this.broadcastWidth ||
+            rect.height !== this.broadcastHeight);
+    };
+    /**
+     * Updates 'broadcastWidth' and 'broadcastHeight' properties with a data
+     * from the corresponding properties of the last observed content rectangle.
+     *
+     * @returns {DOMRectInit} Last observed content rectangle.
+     */
+    ResizeObservation.prototype.broadcastRect = function () {
+        var rect = this.contentRect_;
+        this.broadcastWidth = rect.width;
+        this.broadcastHeight = rect.height;
+        return rect;
+    };
+    return ResizeObservation;
+}());
+
+var ResizeObserverEntry = /** @class */ (function () {
+    /**
+     * Creates an instance of ResizeObserverEntry.
+     *
+     * @param {Element} target - Element that is being observed.
+     * @param {DOMRectInit} rectInit - Data of the element's content rectangle.
+     */
+    function ResizeObserverEntry(target, rectInit) {
+        var contentRect = createReadOnlyRect(rectInit);
+        // According to the specification following properties are not writable
+        // and are also not enumerable in the native implementation.
+        //
+        // Property accessors are not being used as they'd require to define a
+        // private WeakMap storage which may cause memory leaks in browsers that
+        // don't support this type of collections.
+        defineConfigurable(this, { target: target, contentRect: contentRect });
+    }
+    return ResizeObserverEntry;
+}());
+
+var ResizeObserverSPI = /** @class */ (function () {
+    /**
+     * Creates a new instance of ResizeObserver.
+     *
+     * @param {ResizeObserverCallback} callback - Callback function that is invoked
+     *      when one of the observed elements changes it's content dimensions.
+     * @param {ResizeObserverController} controller - Controller instance which
+     *      is responsible for the updates of observer.
+     * @param {ResizeObserver} callbackCtx - Reference to the public
+     *      ResizeObserver instance which will be passed to callback function.
+     */
+    function ResizeObserverSPI(callback, controller, callbackCtx) {
+        /**
+         * Collection of resize observations that have detected changes in dimensions
+         * of elements.
+         *
+         * @private {Array<ResizeObservation>}
+         */
+        this.activeObservations_ = [];
+        /**
+         * Registry of the ResizeObservation instances.
+         *
+         * @private {Map<Element, ResizeObservation>}
+         */
+        this.observations_ = new MapShim();
+        if (typeof callback !== 'function') {
+            throw new TypeError('The callback provided as parameter 1 is not a function.');
+        }
+        this.callback_ = callback;
+        this.controller_ = controller;
+        this.callbackCtx_ = callbackCtx;
+    }
+    /**
+     * Starts observing provided element.
+     *
+     * @param {Element} target - Element to be observed.
+     * @returns {void}
+     */
+    ResizeObserverSPI.prototype.observe = function (target) {
+        if (!arguments.length) {
+            throw new TypeError('1 argument required, but only 0 present.');
+        }
+        // Do nothing if current environment doesn't have the Element interface.
+        if (typeof Element === 'undefined' || !(Element instanceof Object)) {
+            return;
+        }
+        if (!(target instanceof getWindowOf(target).Element)) {
+            throw new TypeError('parameter 1 is not of type "Element".');
+        }
+        var observations = this.observations_;
+        // Do nothing if element is already being observed.
+        if (observations.has(target)) {
+            return;
+        }
+        observations.set(target, new ResizeObservation(target));
+        this.controller_.addObserver(this);
+        // Force the update of observations.
+        this.controller_.refresh();
+    };
+    /**
+     * Stops observing provided element.
+     *
+     * @param {Element} target - Element to stop observing.
+     * @returns {void}
+     */
+    ResizeObserverSPI.prototype.unobserve = function (target) {
+        if (!arguments.length) {
+            throw new TypeError('1 argument required, but only 0 present.');
+        }
+        // Do nothing if current environment doesn't have the Element interface.
+        if (typeof Element === 'undefined' || !(Element instanceof Object)) {
+            return;
+        }
+        if (!(target instanceof getWindowOf(target).Element)) {
+            throw new TypeError('parameter 1 is not of type "Element".');
+        }
+        var observations = this.observations_;
+        // Do nothing if element is not being observed.
+        if (!observations.has(target)) {
+            return;
+        }
+        observations.delete(target);
+        if (!observations.size) {
+            this.controller_.removeObserver(this);
+        }
+    };
+    /**
+     * Stops observing all elements.
+     *
+     * @returns {void}
+     */
+    ResizeObserverSPI.prototype.disconnect = function () {
+        this.clearActive();
+        this.observations_.clear();
+        this.controller_.removeObserver(this);
+    };
+    /**
+     * Collects observation instances the associated element of which has changed
+     * it's content rectangle.
+     *
+     * @returns {void}
+     */
+    ResizeObserverSPI.prototype.gatherActive = function () {
+        var _this = this;
+        this.clearActive();
+        this.observations_.forEach(function (observation) {
+            if (observation.isActive()) {
+                _this.activeObservations_.push(observation);
+            }
+        });
+    };
+    /**
+     * Invokes initial callback function with a list of ResizeObserverEntry
+     * instances collected from active resize observations.
+     *
+     * @returns {void}
+     */
+    ResizeObserverSPI.prototype.broadcastActive = function () {
+        // Do nothing if observer doesn't have active observations.
+        if (!this.hasActive()) {
+            return;
+        }
+        var ctx = this.callbackCtx_;
+        // Create ResizeObserverEntry instance for every active observation.
+        var entries = this.activeObservations_.map(function (observation) {
+            return new ResizeObserverEntry(observation.target, observation.broadcastRect());
+        });
+        this.callback_.call(ctx, entries, ctx);
+        this.clearActive();
+    };
+    /**
+     * Clears the collection of active observations.
+     *
+     * @returns {void}
+     */
+    ResizeObserverSPI.prototype.clearActive = function () {
+        this.activeObservations_.splice(0);
+    };
+    /**
+     * Tells whether observer has active observations.
+     *
+     * @returns {boolean}
+     */
+    ResizeObserverSPI.prototype.hasActive = function () {
+        return this.activeObservations_.length > 0;
+    };
+    return ResizeObserverSPI;
+}());
+
+// Registry of internal observers. If WeakMap is not available use current shim
+// for the Map collection as it has all required methods and because WeakMap
+// can't be fully polyfilled anyway.
+var observers = typeof WeakMap !== 'undefined' ? new WeakMap() : new MapShim();
+/**
+ * ResizeObserver API. Encapsulates the ResizeObserver SPI implementation
+ * exposing only those methods and properties that are defined in the spec.
+ */
+var ResizeObserver = /** @class */ (function () {
+    /**
+     * Creates a new instance of ResizeObserver.
+     *
+     * @param {ResizeObserverCallback} callback - Callback that is invoked when
+     *      dimensions of the observed elements change.
+     */
+    function ResizeObserver(callback) {
+        if (!(this instanceof ResizeObserver)) {
+            throw new TypeError('Cannot call a class as a function.');
+        }
+        if (!arguments.length) {
+            throw new TypeError('1 argument required, but only 0 present.');
+        }
+        var controller = ResizeObserverController.getInstance();
+        var observer = new ResizeObserverSPI(callback, controller, this);
+        observers.set(this, observer);
+    }
+    return ResizeObserver;
+}());
+// Expose public methods of ResizeObserver.
+[
+    'observe',
+    'unobserve',
+    'disconnect'
+].forEach(function (method) {
+    ResizeObserver.prototype[method] = function () {
+        var _a;
+        return (_a = observers.get(this))[method].apply(_a, arguments);
+    };
+});
+
+var index = (function () {
+    // Export existing implementation if available.
+    if (typeof global$1.ResizeObserver !== 'undefined') {
+        return global$1.ResizeObserver;
+    }
+    return ResizeObserver;
+})();
+
+/* harmony default export */ __webpack_exports__["default"] = (index);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
 /***/ "./node_modules/sortablejs/modular/sortable.esm.js":
 /*!*********************************************************!*\
   !*** ./node_modules/sortablejs/modular/sortable.esm.js ***!
@@ -49687,9 +50936,9 @@ md-input.theme-switch::part(input) {
   height: 80vh;
   border: 1px solid var(--md-primary-seperator-color, #000); }
 
-/*# sourceURL=/Users/momeraj/Documents/cisco/webex-cc/sourcecode/webex-contact-center-widget-starter/Examples/Widgets/RSS/src/[sandbox]/sandbox.scss */
+/*# sourceURL=/Users/momeraj/Documents/cisco/webex-cc/sourcecode/webex-contact-center-widget-starter/Examples/Widgets/HospitalBedCapacity/src/[sandbox]/sandbox.scss */
 /*# sourceURL=sandbox.scss */
-/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tb21lcmFqL0RvY3VtZW50cy9jaXNjby93ZWJleC1jYy9zb3VyY2Vjb2RlL3dlYmV4LWNvbnRhY3QtY2VudGVyLXdpZGdldC1zdGFydGVyL0V4YW1wbGVzL1dpZGdldHMvUlNTL3NyYy9bc2FuZGJveF0vc2FuZGJveC5zY3NzIiwic2FuZGJveC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7RUNNRTtBREVGO0VBQ0ksc0JBQXNCO0VBQ3RCLGFBQWE7RUFDYiw4QkFBOEI7RUFDOUIsOENBQThDO0VBQzlDLGFBQWE7RUFDYix1QkFBdUI7RUFDdkIsdUJBQXVCO0VBQ3ZCLFlBQVksRUFBQTs7QUFFZDtFQUNFLE1BQU07RUFDTixRQUFRO0VBQ1IsU0FBUztFQUNULE9BQU87RUFDUCxrQkFBa0IsRUFBQTs7QUFFcEI7RUFDRSxhQUFhO0VBQ2IsZ0RBQWdEO0VBRWhELDhCQUE4QjtFQUM5QiwyQkFBMkI7RUFDM0IsWUFBWTtFQUNaLHNCQUFzQjtFQUN0QixzQkFBc0I7RUFDdEIsYUFBYSxFQUFBOztBQUVmO0VBQ0UsYUFBYTtFQUNiLFlBQVksRUFBQTs7QUFHZDtFQUNFLGFBQWE7RUFDYixtQkFBbUI7RUFDbkIsNkJBQTZCO0VBQzdCLFdBQVcsRUFBQTs7QUFHYjtFQUNFLGFBQWE7RUFDYixtQkFBbUI7RUFDbkIsbUJBQW1CLEVBQUE7O0FBR3JCO0VBQ0UsYUFBYSxFQUFBOztBQUdmO0VBQ0Usb0JBQW9CLEVBQUE7O0FBR3RCO0VBQ0UsWUFBWTtFQUNaLFlBQVk7RUFDWix5REFBeUQsRUFBQSIsImZpbGUiOiJzYW5kYm94LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIENvcHlyaWdodCAoYykgQ2lzY28gU3lzdGVtcywgSW5jLiBhbmQgaXRzIGFmZmlsaWF0ZXMuXG4gKlxuICogVGhpcyBzb3VyY2UgY29kZSBpcyBsaWNlbnNlZCB1bmRlciB0aGUgTUlUIGxpY2Vuc2UgZm91bmQgaW4gdGhlXG4gKiBMSUNFTlNFIGZpbGUgaW4gdGhlIHJvb3QgZGlyZWN0b3J5IG9mIHRoaXMgc291cmNlIHRyZWUuXG4gKlxuICovXG4gXG4uY29udGFpbmVyIHtcbiAgICBib3gtc2l6aW5nOiBib3JkZXItYm94O1xuICAgIHBhZGRpbmc6IDIwcHg7XG4gICAgbWluLWhlaWdodDogY2FsYygxMDB2aCAtIDI3cHgpO1xuICAgIGJhY2tncm91bmQtY29sb3I6IHZhcigtLW1kLXNlY29uZGFyeS1iZy1jb2xvcik7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgICBhbGlnbi1pdGVtczogZmxleC1zdGFydDtcbiAgICB3aWR0aDogMTAwdnc7XG4gIH1cbiAgLmRlZmF1bHQtbWF4aW1pemUtYXJlYSB7XG4gICAgdG9wOiAwO1xuICAgIHJpZ2h0OiAwO1xuICAgIGJvdHRvbTogMDtcbiAgICBsZWZ0OiAwO1xuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgfVxuICAuZ3JpZCB7XG4gICAgZGlzcGxheTogZ3JpZDtcbiAgICBncmlkLXRlbXBsYXRlLWFyZWFzOiBcImlmcmFtZXMgY3NzXCIgXCJhc3luYyBhc3luY1wiO1xuXG4gICAgZ3JpZC10ZW1wbGF0ZS1jb2x1bW5zOiAxZnIgMWZyO1xuICAgIGdyaWQtdGVtcGxhdGUtcm93czogNTAlIDUwJTtcbiAgICBoZWlnaHQ6IDgwdmg7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2VlZTtcbiAgICBib3JkZXI6IDFweCBzb2xpZCAjY2NjO1xuICAgIGdyaWQtZ2FwOiAxcHg7XG4gIH1cbiAgLnRvZ2dsZSB7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBoZWlnaHQ6IDUwcHg7XG4gIH1cblxuICAudG9nZ2xlLWNvbnRhaW5lciB7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtZXZlbmx5O1xuICAgIHdpZHRoOiAxMDAlO1xuICB9XG5cbiAgLnN3aXRjaC1jb250YWluZXIge1xuICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgZmxleC1kaXJlY3Rpb246IHJvdztcbiAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICB9XG5cbiAgLnN3aXRjaC1jb250YWluZXIgbWQtbGFiZWwge1xuICAgIG1hcmdpbjogMCAxZW07XG4gIH1cblxuICBtZC1pbnB1dC50aGVtZS1zd2l0Y2g6OnBhcnQoaW5wdXQpIHtcbiAgICBtYXJnaW4tYm90dG9tOiAtMXJlbTtcbiAgfVxuXG4gIC53aWRnZXQtY29udGFpbmVyIHtcbiAgICB3aWR0aDogNTAwcHg7XG4gICAgaGVpZ2h0OiA4MHZoO1xuICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLW1kLXByaW1hcnktc2VwZXJhdG9yLWNvbG9yLCAjMDAwKTtcbiAgfSIsIi8qKlxuICogQ29weXJpZ2h0IChjKSBDaXNjbyBTeXN0ZW1zLCBJbmMuIGFuZCBpdHMgYWZmaWxpYXRlcy5cbiAqXG4gKiBUaGlzIHNvdXJjZSBjb2RlIGlzIGxpY2Vuc2VkIHVuZGVyIHRoZSBNSVQgbGljZW5zZSBmb3VuZCBpbiB0aGVcbiAqIExJQ0VOU0UgZmlsZSBpbiB0aGUgcm9vdCBkaXJlY3Rvcnkgb2YgdGhpcyBzb3VyY2UgdHJlZS5cbiAqXG4gKi9cbi5jb250YWluZXIge1xuICBib3gtc2l6aW5nOiBib3JkZXItYm94O1xuICBwYWRkaW5nOiAyMHB4O1xuICBtaW4taGVpZ2h0OiBjYWxjKDEwMHZoIC0gMjdweCk7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLW1kLXNlY29uZGFyeS1iZy1jb2xvcik7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICBhbGlnbi1pdGVtczogZmxleC1zdGFydDtcbiAgd2lkdGg6IDEwMHZ3OyB9XG5cbi5kZWZhdWx0LW1heGltaXplLWFyZWEge1xuICB0b3A6IDA7XG4gIHJpZ2h0OiAwO1xuICBib3R0b206IDA7XG4gIGxlZnQ6IDA7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTsgfVxuXG4uZ3JpZCB7XG4gIGRpc3BsYXk6IGdyaWQ7XG4gIGdyaWQtdGVtcGxhdGUtYXJlYXM6IFwiaWZyYW1lcyBjc3NcIiBcImFzeW5jIGFzeW5jXCI7XG4gIGdyaWQtdGVtcGxhdGUtY29sdW1uczogMWZyIDFmcjtcbiAgZ3JpZC10ZW1wbGF0ZS1yb3dzOiA1MCUgNTAlO1xuICBoZWlnaHQ6IDgwdmg7XG4gIGJhY2tncm91bmQtY29sb3I6ICNlZWU7XG4gIGJvcmRlcjogMXB4IHNvbGlkICNjY2M7XG4gIGdyaWQtZ2FwOiAxcHg7IH1cblxuLnRvZ2dsZSB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGhlaWdodDogNTBweDsgfVxuXG4udG9nZ2xlLWNvbnRhaW5lciB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtZXZlbmx5O1xuICB3aWR0aDogMTAwJTsgfVxuXG4uc3dpdGNoLWNvbnRhaW5lciB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZGlyZWN0aW9uOiByb3c7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7IH1cblxuLnN3aXRjaC1jb250YWluZXIgbWQtbGFiZWwge1xuICBtYXJnaW46IDAgMWVtOyB9XG5cbm1kLWlucHV0LnRoZW1lLXN3aXRjaDo6cGFydChpbnB1dCkge1xuICBtYXJnaW4tYm90dG9tOiAtMXJlbTsgfVxuXG4ud2lkZ2V0LWNvbnRhaW5lciB7XG4gIHdpZHRoOiA1MDBweDtcbiAgaGVpZ2h0OiA4MHZoO1xuICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1tZC1wcmltYXJ5LXNlcGVyYXRvci1jb2xvciwgIzAwMCk7IH1cbiJdfQ== */`);
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tb21lcmFqL0RvY3VtZW50cy9jaXNjby93ZWJleC1jYy9zb3VyY2Vjb2RlL3dlYmV4LWNvbnRhY3QtY2VudGVyLXdpZGdldC1zdGFydGVyL0V4YW1wbGVzL1dpZGdldHMvSG9zcGl0YWxCZWRDYXBhY2l0eS9zcmMvW3NhbmRib3hdL3NhbmRib3guc2NzcyIsInNhbmRib3guc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0VDTUU7QURFRjtFQUNJLHNCQUFzQjtFQUN0QixhQUFhO0VBQ2IsOEJBQThCO0VBQzlCLDhDQUE4QztFQUM5QyxhQUFhO0VBQ2IsdUJBQXVCO0VBQ3ZCLHVCQUF1QjtFQUN2QixZQUFZLEVBQUE7O0FBRWQ7RUFDRSxNQUFNO0VBQ04sUUFBUTtFQUNSLFNBQVM7RUFDVCxPQUFPO0VBQ1Asa0JBQWtCLEVBQUE7O0FBRXBCO0VBQ0UsYUFBYTtFQUNiLGdEQUFnRDtFQUVoRCw4QkFBOEI7RUFDOUIsMkJBQTJCO0VBQzNCLFlBQVk7RUFDWixzQkFBc0I7RUFDdEIsc0JBQXNCO0VBQ3RCLGFBQWEsRUFBQTs7QUFFZjtFQUNFLGFBQWE7RUFDYixZQUFZLEVBQUE7O0FBR2Q7RUFDRSxhQUFhO0VBQ2IsbUJBQW1CO0VBQ25CLDZCQUE2QjtFQUM3QixXQUFXLEVBQUE7O0FBR2I7RUFDRSxhQUFhO0VBQ2IsbUJBQW1CO0VBQ25CLG1CQUFtQixFQUFBOztBQUdyQjtFQUNFLGFBQWEsRUFBQTs7QUFHZjtFQUNFLG9CQUFvQixFQUFBOztBQUd0QjtFQUNFLFlBQVk7RUFDWixZQUFZO0VBQ1oseURBQXlELEVBQUEiLCJmaWxlIjoic2FuZGJveC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBDb3B5cmlnaHQgKGMpIENpc2NvIFN5c3RlbXMsIEluYy4gYW5kIGl0cyBhZmZpbGlhdGVzLlxuICpcbiAqIFRoaXMgc291cmNlIGNvZGUgaXMgbGljZW5zZWQgdW5kZXIgdGhlIE1JVCBsaWNlbnNlIGZvdW5kIGluIHRoZVxuICogTElDRU5TRSBmaWxlIGluIHRoZSByb290IGRpcmVjdG9yeSBvZiB0aGlzIHNvdXJjZSB0cmVlLlxuICpcbiAqL1xuIFxuLmNvbnRhaW5lciB7XG4gICAgYm94LXNpemluZzogYm9yZGVyLWJveDtcbiAgICBwYWRkaW5nOiAyMHB4O1xuICAgIG1pbi1oZWlnaHQ6IGNhbGMoMTAwdmggLSAyN3B4KTtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1tZC1zZWNvbmRhcnktYmctY29sb3IpO1xuICAgIGRpc3BsYXk6IGZsZXg7XG4gICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gICAgYWxpZ24taXRlbXM6IGZsZXgtc3RhcnQ7XG4gICAgd2lkdGg6IDEwMHZ3O1xuICB9XG4gIC5kZWZhdWx0LW1heGltaXplLWFyZWEge1xuICAgIHRvcDogMDtcbiAgICByaWdodDogMDtcbiAgICBib3R0b206IDA7XG4gICAgbGVmdDogMDtcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIH1cbiAgLmdyaWQge1xuICAgIGRpc3BsYXk6IGdyaWQ7XG4gICAgZ3JpZC10ZW1wbGF0ZS1hcmVhczogXCJpZnJhbWVzIGNzc1wiIFwiYXN5bmMgYXN5bmNcIjtcblxuICAgIGdyaWQtdGVtcGxhdGUtY29sdW1uczogMWZyIDFmcjtcbiAgICBncmlkLXRlbXBsYXRlLXJvd3M6IDUwJSA1MCU7XG4gICAgaGVpZ2h0OiA4MHZoO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNlZWU7XG4gICAgYm9yZGVyOiAxcHggc29saWQgI2NjYztcbiAgICBncmlkLWdhcDogMXB4O1xuICB9XG4gIC50b2dnbGUge1xuICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgaGVpZ2h0OiA1MHB4O1xuICB9XG5cbiAgLnRvZ2dsZS1jb250YWluZXIge1xuICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWV2ZW5seTtcbiAgICB3aWR0aDogMTAwJTtcbiAgfVxuXG4gIC5zd2l0Y2gtY29udGFpbmVyIHtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGZsZXgtZGlyZWN0aW9uOiByb3c7XG4gICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgfVxuXG4gIC5zd2l0Y2gtY29udGFpbmVyIG1kLWxhYmVsIHtcbiAgICBtYXJnaW46IDAgMWVtO1xuICB9XG5cbiAgbWQtaW5wdXQudGhlbWUtc3dpdGNoOjpwYXJ0KGlucHV0KSB7XG4gICAgbWFyZ2luLWJvdHRvbTogLTFyZW07XG4gIH1cblxuICAud2lkZ2V0LWNvbnRhaW5lciB7XG4gICAgd2lkdGg6IDUwMHB4O1xuICAgIGhlaWdodDogODB2aDtcbiAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1tZC1wcmltYXJ5LXNlcGVyYXRvci1jb2xvciwgIzAwMCk7XG4gIH0iLCIvKipcbiAqIENvcHlyaWdodCAoYykgQ2lzY28gU3lzdGVtcywgSW5jLiBhbmQgaXRzIGFmZmlsaWF0ZXMuXG4gKlxuICogVGhpcyBzb3VyY2UgY29kZSBpcyBsaWNlbnNlZCB1bmRlciB0aGUgTUlUIGxpY2Vuc2UgZm91bmQgaW4gdGhlXG4gKiBMSUNFTlNFIGZpbGUgaW4gdGhlIHJvb3QgZGlyZWN0b3J5IG9mIHRoaXMgc291cmNlIHRyZWUuXG4gKlxuICovXG4uY29udGFpbmVyIHtcbiAgYm94LXNpemluZzogYm9yZGVyLWJveDtcbiAgcGFkZGluZzogMjBweDtcbiAgbWluLWhlaWdodDogY2FsYygxMDB2aCAtIDI3cHgpO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1tZC1zZWNvbmRhcnktYmctY29sb3IpO1xuICBkaXNwbGF5OiBmbGV4O1xuICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgYWxpZ24taXRlbXM6IGZsZXgtc3RhcnQ7XG4gIHdpZHRoOiAxMDB2dzsgfVxuXG4uZGVmYXVsdC1tYXhpbWl6ZS1hcmVhIHtcbiAgdG9wOiAwO1xuICByaWdodDogMDtcbiAgYm90dG9tOiAwO1xuICBsZWZ0OiAwO1xuICBwb3NpdGlvbjogYWJzb2x1dGU7IH1cblxuLmdyaWQge1xuICBkaXNwbGF5OiBncmlkO1xuICBncmlkLXRlbXBsYXRlLWFyZWFzOiBcImlmcmFtZXMgY3NzXCIgXCJhc3luYyBhc3luY1wiO1xuICBncmlkLXRlbXBsYXRlLWNvbHVtbnM6IDFmciAxZnI7XG4gIGdyaWQtdGVtcGxhdGUtcm93czogNTAlIDUwJTtcbiAgaGVpZ2h0OiA4MHZoO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWVlO1xuICBib3JkZXI6IDFweCBzb2xpZCAjY2NjO1xuICBncmlkLWdhcDogMXB4OyB9XG5cbi50b2dnbGUge1xuICBkaXNwbGF5OiBmbGV4O1xuICBoZWlnaHQ6IDUwcHg7IH1cblxuLnRvZ2dsZS1jb250YWluZXIge1xuICBkaXNwbGF5OiBmbGV4O1xuICBhbGlnbi1pdGVtczogY2VudGVyO1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWV2ZW5seTtcbiAgd2lkdGg6IDEwMCU7IH1cblxuLnN3aXRjaC1jb250YWluZXIge1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbGV4LWRpcmVjdGlvbjogcm93O1xuICBhbGlnbi1pdGVtczogY2VudGVyOyB9XG5cbi5zd2l0Y2gtY29udGFpbmVyIG1kLWxhYmVsIHtcbiAgbWFyZ2luOiAwIDFlbTsgfVxuXG5tZC1pbnB1dC50aGVtZS1zd2l0Y2g6OnBhcnQoaW5wdXQpIHtcbiAgbWFyZ2luLWJvdHRvbTogLTFyZW07IH1cblxuLndpZGdldC1jb250YWluZXIge1xuICB3aWR0aDogNTAwcHg7XG4gIGhlaWdodDogODB2aDtcbiAgYm9yZGVyOiAxcHggc29saWQgdmFyKC0tbWQtcHJpbWFyeS1zZXBlcmF0b3ItY29sb3IsICMwMDApOyB9XG4iXX0= */`);
     
 
 /***/ }),
@@ -49730,7 +50979,7 @@ let Sandbox = class Sandbox extends lit_element__WEBPACK_IMPORTED_MODULE_1__["Li
     constructor() {
         super(...arguments);
         this.darkTheme = false;
-        this.containerWidth = "500px";
+        this.containerWidth = "1040px";
         this.containerHeight = "80vh";
     }
     static get styles() {
@@ -49793,19 +51042,40 @@ let Sandbox = class Sandbox extends lit_element__WEBPACK_IMPORTED_MODULE_1__["Li
             return console.error("Invalid data-aspect input");
     }
     render() {
+        /**
+         * Property googleApiKey
+         * Access your API key from Google Maps Platform
+         * https://cloud.google.com/maps-platform
+         */
+        const googleApiKey = "";
+        /**
+         * Property: covidApiKey
+         * Access API Key: Covid Act Now Website
+         * https://apidocs.covidactnow.org/access
+         */
+        const covidApiKey = "";
+        const latitude = 37.36935;
+        const longitude = -122.079552;
         return lit_element__WEBPACK_IMPORTED_MODULE_1__["html"] `
-    <div class="toggle">
-      ${this.themeToggle()}
-    </div>
-    <md-theme lumos ?darkTheme=${this.darkTheme}>
-      <div class="container">
-        <div style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`} class="widget-container">
-          <rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml" update-delay=5000></rss-feed-widget>
-        </div>
+      <div class="toggle">
+        ${this.themeToggle()}
       </div>
-    </md-theme>
-    </div>
-    </md-theme>
+      <md-theme lumos ?darkTheme=${this.darkTheme}>
+        <div class="container">
+          <div
+            style=${`width: ${this.containerWidth}; height: ${this.containerHeight};`}
+            class="widget-container"
+          >
+            <hospital-bed-capacity
+              google-api-key=${googleApiKey}
+              covid-api-key=${covidApiKey}
+              latitude=${latitude}
+              longitude=${longitude}
+            >
+            </hospital-bed-capacity>
+          </div>
+        </div>
+      </md-theme>
     `;
     }
 };
@@ -49819,93 +51089,26 @@ __decorate([
     Object(lit_element__WEBPACK_IMPORTED_MODULE_1__["internalProperty"])()
 ], Sandbox.prototype, "containerHeight", void 0);
 Sandbox = __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_1__["customElement"])("wcc-rss-sandbox")
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_1__["customElement"])("wcc-hospital-bed-capacity-sandbox")
 ], Sandbox);
 
 
 
 /***/ }),
 
-/***/ "./src/components/App.scss":
-/*!*********************************!*\
-  !*** ./src/components/App.scss ***!
-  \*********************************/
+/***/ "./src/components/HospitalDetails.ts":
+/*!*******************************************!*\
+  !*** ./src/components/HospitalDetails.ts ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lit_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit-element */ "./node_modules/lit-element/lit-element.js");
-
-           
-        /* harmony default export */ __webpack_exports__["default"] = (lit_element__WEBPACK_IMPORTED_MODULE_0__["css"]`/**
- * Copyright (c) Cisco Systems, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-:host {
-  display: block;
-  background-color: transparent;
-  color: var(--md-primary-text-color); }
-
-.container {
-  padding: 16px; }
-
-md-badge::part(badge) {
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0.25rem 0.5rem; }
-
-.link-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis; }
-
-.feed-nav-arrows {
-  line-height: normal; }
-
-.action-container {
-  padding: 10px 2px;
-  display: flex;
-  flex-direction: column; }
-  .action-container md-button {
-    margin: 10px 0; }
-
-md-link {
-  text-align: left;
-  width: 100%; }
-
-md-link::part(link) {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 100%;
-  display: block;
-  overflow: hidden; }
-
-/*# sourceURL=/Users/momeraj/Documents/cisco/webex-cc/sourcecode/webex-contact-center-widget-starter/Examples/Widgets/RSS/src/components/App.scss */
-/*# sourceURL=App.scss */
-/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tb21lcmFqL0RvY3VtZW50cy9jaXNjby93ZWJleC1jYy9zb3VyY2Vjb2RlL3dlYmV4LWNvbnRhY3QtY2VudGVyLXdpZGdldC1zdGFydGVyL0V4YW1wbGVzL1dpZGdldHMvUlNTL3NyYy9jb21wb25lbnRzL0FwcC5zY3NzIiwiQXBwLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztFQ01FO0FERUY7RUFDRSxjQUFjO0VBQ2QsNkJBQTZCO0VBQzdCLG1DQUFtQyxFQUFBOztBQUdyQztFQUNFLGFBQWEsRUFBQTs7QUFHZjtFQUNFLGtCQUFrQjtFQUNsQixhQUFhO0VBQ2IsOEJBQThCO0VBQzlCLHVCQUF1QixFQUFBOztBQUd6QjtFQUNFLFdBQVc7RUFDWCxhQUFhO0VBQ2IsMkJBQTJCO0VBQzNCLGdCQUFnQjtFQUNoQixtQkFBbUI7RUFDbkIsdUJBQXVCLEVBQUE7O0FBR3pCO0VBQ0UsbUJBQW1CLEVBQUE7O0FBR3JCO0VBQ0UsaUJBQWlCO0VBQ2pCLGFBQWE7RUFDYixzQkFBc0IsRUFBQTtFQUh4QjtJQUtJLGNBQWMsRUFBQTs7QUFJbEI7RUFDRSxnQkFBZ0I7RUFDaEIsV0FBVyxFQUFBOztBQUViO0VBQ0UsbUJBQW1CO0VBQ25CLHVCQUF1QjtFQUN2QixXQUFXO0VBQ1gsY0FBYztFQUNkLGdCQUFnQixFQUFBIiwiZmlsZSI6IkFwcC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBDb3B5cmlnaHQgKGMpIENpc2NvIFN5c3RlbXMsIEluYy4gYW5kIGl0cyBhZmZpbGlhdGVzLlxuICpcbiAqIFRoaXMgc291cmNlIGNvZGUgaXMgbGljZW5zZWQgdW5kZXIgdGhlIE1JVCBsaWNlbnNlIGZvdW5kIGluIHRoZVxuICogTElDRU5TRSBmaWxlIGluIHRoZSByb290IGRpcmVjdG9yeSBvZiB0aGlzIHNvdXJjZSB0cmVlLlxuICpcbiAqL1xuXG46aG9zdCB7XG4gIGRpc3BsYXk6IGJsb2NrO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB0cmFuc3BhcmVudDtcbiAgY29sb3I6IHZhcigtLW1kLXByaW1hcnktdGV4dC1jb2xvcik7XG59XG5cbi5jb250YWluZXIge1xuICBwYWRkaW5nOiAxNnB4O1xufVxuXG5tZC1iYWRnZTo6cGFydChiYWRnZSkge1xuICBib3JkZXItcmFkaXVzOiA2cHg7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgcGFkZGluZzogMC4yNXJlbSAwLjVyZW07XG59XG5cbi5saW5rLXdyYXBwZXIge1xuICB3aWR0aDogMTAwJTtcbiAgZGlzcGxheTogZmxleDtcbiAganVzdGlmeS1jb250ZW50OiBmbGV4LXN0YXJ0O1xuICBvdmVyZmxvdzogaGlkZGVuO1xuICB3aGl0ZS1zcGFjZTogbm93cmFwO1xuICB0ZXh0LW92ZXJmbG93OiBlbGxpcHNpcztcbn1cblxuLmZlZWQtbmF2LWFycm93cyB7XG4gIGxpbmUtaGVpZ2h0OiBub3JtYWw7XG59XG5cbi5hY3Rpb24tY29udGFpbmVyIHtcbiAgcGFkZGluZzogMTBweCAycHg7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gIG1kLWJ1dHRvbiB7XG4gICAgbWFyZ2luOiAxMHB4IDA7XG4gIH1cbn1cblxubWQtbGluayB7XG4gIHRleHQtYWxpZ246IGxlZnQ7XG4gIHdpZHRoOiAxMDAlO1xufVxubWQtbGluazo6cGFydChsaW5rKSB7XG4gIHdoaXRlLXNwYWNlOiBub3dyYXA7XG4gIHRleHQtb3ZlcmZsb3c6IGVsbGlwc2lzO1xuICB3aWR0aDogMTAwJTtcbiAgZGlzcGxheTogYmxvY2s7XG4gIG92ZXJmbG93OiBoaWRkZW47XG59XG4iLCIvKipcbiAqIENvcHlyaWdodCAoYykgQ2lzY28gU3lzdGVtcywgSW5jLiBhbmQgaXRzIGFmZmlsaWF0ZXMuXG4gKlxuICogVGhpcyBzb3VyY2UgY29kZSBpcyBsaWNlbnNlZCB1bmRlciB0aGUgTUlUIGxpY2Vuc2UgZm91bmQgaW4gdGhlXG4gKiBMSUNFTlNFIGZpbGUgaW4gdGhlIHJvb3QgZGlyZWN0b3J5IG9mIHRoaXMgc291cmNlIHRyZWUuXG4gKlxuICovXG46aG9zdCB7XG4gIGRpc3BsYXk6IGJsb2NrO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB0cmFuc3BhcmVudDtcbiAgY29sb3I6IHZhcigtLW1kLXByaW1hcnktdGV4dC1jb2xvcik7IH1cblxuLmNvbnRhaW5lciB7XG4gIHBhZGRpbmc6IDE2cHg7IH1cblxubWQtYmFkZ2U6OnBhcnQoYmFkZ2UpIHtcbiAgYm9yZGVyLXJhZGl1czogNnB4O1xuICBkaXNwbGF5OiBmbGV4O1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIHBhZGRpbmc6IDAuMjVyZW0gMC41cmVtOyB9XG5cbi5saW5rLXdyYXBwZXIge1xuICB3aWR0aDogMTAwJTtcbiAgZGlzcGxheTogZmxleDtcbiAganVzdGlmeS1jb250ZW50OiBmbGV4LXN0YXJ0O1xuICBvdmVyZmxvdzogaGlkZGVuO1xuICB3aGl0ZS1zcGFjZTogbm93cmFwO1xuICB0ZXh0LW92ZXJmbG93OiBlbGxpcHNpczsgfVxuXG4uZmVlZC1uYXYtYXJyb3dzIHtcbiAgbGluZS1oZWlnaHQ6IG5vcm1hbDsgfVxuXG4uYWN0aW9uLWNvbnRhaW5lciB7XG4gIHBhZGRpbmc6IDEwcHggMnB4O1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbGV4LWRpcmVjdGlvbjogY29sdW1uOyB9XG4gIC5hY3Rpb24tY29udGFpbmVyIG1kLWJ1dHRvbiB7XG4gICAgbWFyZ2luOiAxMHB4IDA7IH1cblxubWQtbGluayB7XG4gIHRleHQtYWxpZ246IGxlZnQ7XG4gIHdpZHRoOiAxMDAlOyB9XG5cbm1kLWxpbms6OnBhcnQobGluaykge1xuICB3aGl0ZS1zcGFjZTogbm93cmFwO1xuICB0ZXh0LW92ZXJmbG93OiBlbGxpcHNpcztcbiAgd2lkdGg6IDEwMCU7XG4gIGRpc3BsYXk6IGJsb2NrO1xuICBvdmVyZmxvdzogaGlkZGVuOyB9XG4iXX0= */`);
-    
-
-/***/ }),
-
-/***/ "./src/components/App.ts":
-/*!*******************************!*\
-  !*** ./src/components/App.ts ***!
-  \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var lit_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit-element */ "./node_modules/lit-element/lit-element.js");
-/* harmony import */ var _App_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.scss */ "./src/components/App.scss");
+/* harmony import */ var _Hospitals_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Hospitals.scss */ "./src/components/Hospitals.scss");
+/* harmony import */ var lit_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lit-html */ "./node_modules/lit-html/lit-html.js");
+/* harmony import */ var _HospitalItem__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./HospitalItem */ "./src/components/HospitalItem.ts");
 /**
  * Copyright (c) Cisco Systems, Inc. and its affiliates.
  *
@@ -49930,188 +51133,334 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 };
 
 
-let MyCustomComponent = class MyCustomComponent extends lit_element__WEBPACK_IMPORTED_MODULE_0__["LitElement"] {
+
+
+let HospitalDetails = class HospitalDetails extends lit_element__WEBPACK_IMPORTED_MODULE_0__["LitElement"] {
     constructor() {
         super(...arguments);
-        this.rssFeedAddress = "";
-        this.updateDelay = 5000;
+        this.placeId = "";
+        this.county = "";
+        this.statePostal = "";
+        this.bedCapacity = "";
+        this.expanded = false;
+        this.name = "NA";
+        this.address = "NA";
+        this.phone = "NA";
+        this.rating = undefined;
+        this.website = "NA";
+        this.url = "NA";
+        this.user_ratings_total = undefined;
+        this.isOpen = false;
+        this.image = "";
         this.loading = true;
-        this.totalPage = 1;
-        this.hasPreviousPage = true;
-        this.hasNextPage = true;
-        this.currentPage = 0;
+        this.errorMessage = "";
+        this.fetchPlaceDetails = () => {
+            this.loading = true;
+            if (this.map) {
+                const service = new google.maps.places.PlacesService(this.map);
+                service.getDetails({ placeId: this.placeId }, (results, status) => {
+                    if (status === "OK") {
+                        const { name, formatted_address, formatted_phone_number, rating, website, url, user_ratings_total, opening_hours, photos, } = results;
+                        this.name = name || "NA";
+                        this.address = formatted_address || "NA";
+                        this.phone = formatted_phone_number || "NA";
+                        this.rating = rating;
+                        this.website = website || "NA";
+                        this.url = url || "NA";
+                        this.user_ratings_total = user_ratings_total;
+                        this.isOpen = opening_hours === null || opening_hours === void 0 ? void 0 : opening_hours.isOpen();
+                        this.image = (photos === null || photos === void 0 ? void 0 : photos.length) ? photos[0].getUrl() : undefined;
+                        setTimeout(() => (this.loading = false), 150);
+                    }
+                    else {
+                        console.error("PlacesService failed due to " + status);
+                        setTimeout(() => (this.loading = false), 150);
+                        this.errorMessage = "Unable to find the details of the selected hospital";
+                    }
+                });
+            }
+        };
+        this.renderLoading = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="loading-wrapper">
+        <md-spinner></md-spinner>
+      </div>
+    `;
+        };
+        this.renderErrorMessage = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="error-wrapper">
+        <h3>${this.errorMessage}</h3>
+      </div>
+    `;
+        };
+        this.renderSubHeader = () => {
+            return this.expanded
+                ? lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+          <div class="hospital-header expanded flex-parent">
+            <div class="left-section">
+              <span class="header-text flex-child long-and-truncated"
+                >${this.name}</span
+              >
+              <md-badge small class="bed-capacity-badge" color="mint"
+                >${this.bedCapacity || "NA"}</md-badge
+              >
+            </div>
+            <div class="icons right-align flex-child short-and-fixed">
+              <md-button circle hasRemoveStyle size="28">
+                <md-icon slot="icon" name="location_16"></md-icon>
+              </md-button>
+              <md-button circle hasRemoveStyle size="28">
+                <md-icon slot="icon" name="info_16"></md-icon>
+              </md-button>
+              <md-button circle hasRemoveStyle size="28">
+                <md-icon slot="icon" name="share-c-native-adr_16"></md-icon>
+              </md-button>
+              <md-button circle hasRemoveStyle size="28">
+                <md-icon slot="icon" name="language_16"></md-icon>
+              </md-button>
+            </div>
+          </div>
+        `
+                : lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+          <div class="hospital-header">
+            <md-badge class="hospital-badge" color="mint" split>
+              <span slot="split-left">
+                ${`${this.county}, ${this.statePostal}`}
+              </span>
+              <span slot="split-right">${this.bedCapacity}</span>
+            </md-badge>
+          </div>
+        `;
+        };
+        this.expandedHospitalDetails = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="row">
+        <div class="title">Hours</div>
+        <div class=${`value ${this.isOpen ? "open" : "closed"}`}>
+          ${this.isOpen ? "Open" : "Closed"}
+        </div>
+      </div>
+      <div class="row">
+        <div class="title">Contact Info</div>
+        <div class="value">${this.phone}</div>
+      </div>
+      <div class="row">
+        <div class="title">Website</div>
+        <div class="value">
+          <md-link href=${this.website} target="_blank"
+            >${this.website}</md-link
+          >
+        </div>
+      </div>
+      <div class="row">
+        <div class="title">Ratings</div>
+        <div class="value">
+          ${this.rating && this.user_ratings_total
+                ? `${this.rating} (${this.user_ratings_total})`
+                : "NA"}
+        </div>
+      </div>
+      <div class="row">
+        <div class="title">Directions</div>
+        <div class="value">
+          <md-link href=${this.url} target="_blank"
+            >Get Directions<md-icon
+              class="pop-out-icon"
+              name="pop-out_12"
+            ></md-icon
+          ></md-link>
+        </div>
+      </div>
+    `;
+        };
+        this.renderWarningBlock = () => {
+            return this.expanded
+                ? lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+          <div class="warning-block">
+            <md-icon name="warning_12"></md-icon>
+            <span class="warning-text"
+              >COVID-19 testing lab | Referral required | Tests limited to
+              certain patients</span
+            >
+          </div>
+        `
+                : lit_html__WEBPACK_IMPORTED_MODULE_2__["nothing"];
+        };
+        this.renderHospitalDetails = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class=${`hospital-data ${this.expanded ? "expanded" : ""}`}>
+        ${this.renderWarningBlock()}
+        <div class="details">
+          <div class="row">
+            <div class="title">Hospital</div>
+            <div class="value">${this.name}</div>
+          </div>
+          <div class="row">
+            <div class="title">Address</div>
+            <div class="value">${this.address}</div>
+          </div>
+          ${this.expanded ? this.expandedHospitalDetails() : lit_html__WEBPACK_IMPORTED_MODULE_2__["nothing"]}
+        </div>
+      </div>
+    `;
+        };
+        this.renderImage = () => {
+            return this.expanded
+                ? lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+          ${this.image
+                    ? lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+                <img class="hospital-image" src=${this.image} />
+              `
+                    : lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+                <div class="hospital-image void">
+                  <span>No Image Found</span>
+                </div>
+              `}
+        `
+                : lit_html__WEBPACK_IMPORTED_MODULE_2__["nothing"];
+        };
+        this.renderContent = () => {
+            return this.errorMessage
+                ? this.renderErrorMessage()
+                : lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+          ${this.renderImage()} ${this.renderSubHeader()}
+          ${this.renderHospitalDetails()}
+        `;
+        };
+    }
+    update(changeProperties) {
+        const _super = Object.create(null, {
+            update: { get: () => super.update }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            _super.update.call(this, changeProperties);
+            if (this.placeId && changeProperties.has("placeId")) {
+                this.fetchPlaceDetails();
+            }
+        });
     }
     static get styles() {
-        return _App_scss__WEBPACK_IMPORTED_MODULE_1__["default"];
-    }
-    firstUpdated(changedProperties) {
-        super.firstUpdated(changedProperties);
-        this.getFeed();
-    }
-    updated(changedProperties) {
-        super.updated(changedProperties);
-        if (this.link.clientWidth > this.link.parentElement.clientWidth) {
-            this.link.className = "overflow";
-        }
-    }
-    connectedCallback() {
-        super.connectedCallback();
-        setInterval(() => {
-            this.computeNext(this.currentPage + 1);
-        }, this.updateDelay);
-    }
-    disconnectedCallback() {
-        super.disconnectedCallback();
-    }
-    getFeed() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield fetch(this.rssFeedAddress)
-                .then(response => response.text())
-                .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-                .then(data => {
-                this.rawFeedData = data.querySelectorAll("item");
-                this.totalPage = this.rawFeedData.length;
-            });
-            this.parseFeedItems();
-            setTimeout(() => {
-                this.loading = false;
-            }, 1000);
-        });
-    }
-    parseFeedItems() {
-        var _a;
-        const feedData = [];
-        (_a = this.rawFeedData) === null || _a === void 0 ? void 0 : _a.forEach(item => {
-            var _a, _b;
-            feedData.push({
-                title: (_a = item.querySelector("title")) === null || _a === void 0 ? void 0 : _a.innerHTML,
-                link: (_b = item.querySelector("link")) === null || _b === void 0 ? void 0 : _b.innerHTML
-            });
-        });
-        this.renderFeedData = feedData;
-    }
-    getCurrentItem(currentPage) {
-        const item = this.renderFeedData && this.renderFeedData[currentPage];
-        const title = item && item.title;
-        const link = item && item.link;
-        // add text overflow ellipses
-        return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
-      <div class="link-wrapper">
-        <md-link href=${link} target="blank">
-          ${this.currentPage + 1} - ${title}
-        </md-link>
-      </div>
-    `;
-    }
-    computePrevious(page) {
-        if (page >= 0 && page !== this.currentPage) {
-            this.currentPage -= 1;
-        }
-        else {
-            this.currentPage = this.totalPage - 1;
-        }
-    }
-    computeNext(page) {
-        if (page <= this.totalPage - 1 && page !== this.currentPage) {
-            this.currentPage += 1;
-        }
-        else {
-            this.currentPage = 0;
-        }
-    }
-    getPageArrows() {
-        return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
-      <div class="feed-nav-arrows">
-        <md-button
-          hasRemoveStyle
-          class="md-pagination-nav"
-          aria-label="Next Page"
-          ?disabled=${!this.hasPreviousPage}
-          aria-disabled=${this.hasPreviousPage}
-          @click=${() => this.computePrevious(this.currentPage - 1)}
-          part="pagination-prev"
-        >
-          <md-icon name="icon-arrow-left_12"></md-icon>
-        </md-button>
-        <md-button
-          hasRemoveStyle
-          class="md-pagination-nav"
-          aria-label="Previous Page"
-          ?disabled=${!this.hasNextPage}
-          aria-disabled=${this.hasNextPage}
-          @click=${() => this.computeNext(this.currentPage + 1)}
-          part="pagination-next"
-        >
-          <md-icon name="icon-arrow-right_12"></md-icon>
-        </md-button>
-      </div>
-    `;
+        return _Hospitals_scss__WEBPACK_IMPORTED_MODULE_1__["default"];
     }
     render() {
         return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
-      <div class="container">
-        <md-badge color="blue" width="240px">
-          <md-icon name="icon-rss-circle_24" color="blue" size="16"></md-icon>
-          ${this.loading
-            ? lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
-                <md-loading></md-loading>
-              `
-            : this.getCurrentItem(this.currentPage)}
-          ${this.getPageArrows()}
-        </md-badge>
+      <div class="hospital-details">
+        ${this.loading ? this.renderLoading() : this.renderContent()}
       </div>
     `;
     }
 };
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String, attribute: "rss-feed" })
-], MyCustomComponent.prototype, "rssFeedAddress", void 0);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Object })
+], HospitalDetails.prototype, "map", void 0);
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Number, attribute: "update-delay" })
-], MyCustomComponent.prototype, "updateDelay", void 0);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String, reflect: true, attribute: "place-id" })
+], HospitalDetails.prototype, "placeId", void 0);
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
-], MyCustomComponent.prototype, "rawFeedData", void 0);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalDetails.prototype, "county", void 0);
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
-], MyCustomComponent.prototype, "renderFeedData", void 0);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalDetails.prototype, "statePostal", void 0);
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
-], MyCustomComponent.prototype, "loading", void 0);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalDetails.prototype, "bedCapacity", void 0);
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
-], MyCustomComponent.prototype, "totalPage", void 0);
-__decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
-], MyCustomComponent.prototype, "hasPreviousPage", void 0);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Boolean })
+], HospitalDetails.prototype, "expanded", void 0);
 __decorate([
     Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
-], MyCustomComponent.prototype, "hasNextPage", void 0);
+], HospitalDetails.prototype, "name", void 0);
 __decorate([
     Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
-], MyCustomComponent.prototype, "currentPage", void 0);
+], HospitalDetails.prototype, "address", void 0);
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["query"])("md-link")
-], MyCustomComponent.prototype, "link", void 0);
-MyCustomComponent = __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["customElement"])("rss-component")
-], MyCustomComponent);
-/* harmony default export */ __webpack_exports__["default"] = (MyCustomComponent);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "phone", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "rating", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "website", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "url", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "user_ratings_total", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "isOpen", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "image", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "loading", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalDetails.prototype, "errorMessage", void 0);
+HospitalDetails = __decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["customElement"])("my-hospital-details")
+], HospitalDetails);
+/* harmony default export */ __webpack_exports__["default"] = (HospitalDetails);
 
 
 /***/ }),
 
-/***/ "./src/index.ts":
-/*!**********************!*\
-  !*** ./src/index.ts ***!
-  \**********************/
+/***/ "./src/components/HospitalItem.scss":
+/*!******************************************!*\
+  !*** ./src/components/HospitalItem.scss ***!
+  \******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lit_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit-element */ "./node_modules/lit-element/lit-element.js");
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/App */ "./src/components/App.ts");
+
+           
+        /* harmony default export */ __webpack_exports__["default"] = (lit_element__WEBPACK_IMPORTED_MODULE_0__["css"]`.hospital-item {
+  padding: 16px;
+  border-radius: 4px; }
+  .hospital-item.selected {
+    background-color: var(--md-secondary-bg-color, #f7f7f7); }
+
+.hospital-badge::part(badge) {
+  padding: 0.25rem 1rem; }
+
+.details {
+  display: block; }
+  .details .row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 8px; }
+    .details .row .title {
+      width: 7rem;
+      color: var(--md-secondary-text-color, #545454); }
+    .details .row .value {
+      flex: 1;
+      color: var(--md-primary-text-color, #121212); }
+
+/*# sourceURL=/Users/momeraj/Documents/cisco/webex-cc/sourcecode/webex-contact-center-widget-starter/Examples/Widgets/HospitalBedCapacity/src/components/HospitalItem.scss */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tb21lcmFqL0RvY3VtZW50cy9jaXNjby93ZWJleC1jYy9zb3VyY2Vjb2RlL3dlYmV4LWNvbnRhY3QtY2VudGVyLXdpZGdldC1zdGFydGVyL0V4YW1wbGVzL1dpZGdldHMvSG9zcGl0YWxCZWRDYXBhY2l0eS9zcmMvY29tcG9uZW50cy9Ib3NwaXRhbEl0ZW0uc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGFBQWE7RUFDYixrQkFBa0IsRUFBQTtFQUZwQjtJQUtJLHVEQUF1RCxFQUFBOztBQUkzRDtFQUNFLHFCQUFxQixFQUFBOztBQUd2QjtFQUNFLGNBQWMsRUFBQTtFQURoQjtJQUlJLGFBQWE7SUFDYixtQkFBbUI7SUFDbkIsZUFBZSxFQUFBO0lBTm5CO01BU00sV0FBVztNQUNYLDhDQUE4QyxFQUFBO0lBVnBEO01BY00sT0FBTztNQUNQLDRDQUE0QyxFQUFBIiwiZmlsZSI6Ikhvc3BpdGFsSXRlbS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmhvc3BpdGFsLWl0ZW0ge1xuICBwYWRkaW5nOiAxNnB4O1xuICBib3JkZXItcmFkaXVzOiA0cHg7XG5cbiAgJi5zZWxlY3RlZCB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0tbWQtc2Vjb25kYXJ5LWJnLWNvbG9yLCAjZjdmN2Y3KTtcbiAgfVxufVxuXG4uaG9zcGl0YWwtYmFkZ2U6OnBhcnQoYmFkZ2UpIHtcbiAgcGFkZGluZzogMC4yNXJlbSAxcmVtO1xufVxuXG4uZGV0YWlscyB7XG4gIGRpc3BsYXk6IGJsb2NrO1xuXG4gIC5yb3cge1xuICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgZmxleC1kaXJlY3Rpb246IHJvdztcbiAgICBtYXJnaW4tdG9wOiA4cHg7XG5cbiAgICAudGl0bGUge1xuICAgICAgd2lkdGg6IDdyZW07XG4gICAgICBjb2xvcjogdmFyKC0tbWQtc2Vjb25kYXJ5LXRleHQtY29sb3IsICM1NDU0NTQpO1xuICAgIH1cblxuICAgIC52YWx1ZSB7XG4gICAgICBmbGV4OiAxO1xuICAgICAgY29sb3I6IHZhcigtLW1kLXByaW1hcnktdGV4dC1jb2xvciwgIzEyMTIxMik7XG4gICAgfVxuICB9XG59XG4iXX0= */`);
+    
+
+/***/ }),
+
+/***/ "./src/components/HospitalItem.ts":
+/*!****************************************!*\
+  !*** ./src/components/HospitalItem.ts ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lit_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit-element */ "./node_modules/lit-element/lit-element.js");
+/* harmony import */ var _HospitalItem_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./HospitalItem.scss */ "./src/components/HospitalItem.scss");
 /**
  * Copyright (c) Cisco Systems, Inc. and its affiliates.
  *
@@ -50127,12 +51476,730 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 };
 
 
-let MyCustomComponent = class MyCustomComponent extends lit_element__WEBPACK_IMPORTED_MODULE_0__["LitElement"] {
+let HospitalItem = class HospitalItem extends lit_element__WEBPACK_IMPORTED_MODULE_0__["LitElement"] {
     constructor() {
         super(...arguments);
-        this.rssFeedAddress = "";
-        // Insert your desired RSS Feed address in the config.json settings for your AgentX environment
-        this.updateDelay = 5000;
+        this.name = "";
+        this.placeId = "";
+        this.vicinity = "";
+        this.selected = false;
+        this.expanded = false;
+        this.county = "NA";
+        this.statePostal = "NA";
+        this.bedCapacity = "NA";
+        this.renderLoading = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="loading-wrapper">
+        <md-spinner></md-spinner>
+      </div>
+    `;
+        };
+        this.renderDetails = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="details">
+        <div class="row">
+          <div class="title">Hospital</div>
+          <div class="value">${this.name}</div>
+        </div>
+        <div class="row">
+          <div class="title">Address</div>
+          <div class="value">${this.vicinity}</div>
+        </div>
+      </div>
+    `;
+        };
+        this.renderContent = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="hospital-header">
+        <md-badge class="hospital-badge" color="mint" split>
+          <span slot="split-left">
+            ${`${this.county}, ${this.statePostal}`}
+          </span>
+          <span slot="split-right">${this.bedCapacity || "NA"}</span>
+        </md-badge>
+      </div>
+      ${this.renderDetails()}
+    `;
+        };
+    }
+    static get styles() {
+        return _HospitalItem_scss__WEBPACK_IMPORTED_MODULE_1__["default"];
+    }
+    render() {
+        return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <li
+        role="listitem"
+        class=${`hospital-item ${this.expanded ? "expanded" : ""} ${this.selected ? "selected" : ""}`}
+      >
+        ${this.renderContent()}
+      </li>
+    `;
+    }
+};
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])()
+], HospitalItem.prototype, "map", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalItem.prototype, "name", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalItem.prototype, "placeId", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalItem.prototype, "vicinity", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Boolean })
+], HospitalItem.prototype, "selected", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Boolean })
+], HospitalItem.prototype, "expanded", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalItem.prototype, "county", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalItem.prototype, "statePostal", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String })
+], HospitalItem.prototype, "bedCapacity", void 0);
+HospitalItem = __decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["customElement"])("my-hospital-item")
+], HospitalItem);
+/* harmony default export */ __webpack_exports__["default"] = (HospitalItem);
+
+
+/***/ }),
+
+/***/ "./src/components/HospitalWidget.ts":
+/*!******************************************!*\
+  !*** ./src/components/HospitalWidget.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lit_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit-element */ "./node_modules/lit-element/lit-element.js");
+/* harmony import */ var resize_observer_polyfill__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! resize-observer-polyfill */ "./node_modules/resize-observer-polyfill/dist/ResizeObserver.es.js");
+/* harmony import */ var _googlemaps_js_api_loader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @googlemaps/js-api-loader */ "./node_modules/@googlemaps/js-api-loader/dist/index.esm.js");
+/* harmony import */ var _Hospitals_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Hospitals.scss */ "./src/components/Hospitals.scss");
+/* harmony import */ var lit_html__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lit-html */ "./node_modules/lit-html/lit-html.js");
+/* harmony import */ var _HospitalItem__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./HospitalItem */ "./src/components/HospitalItem.ts");
+/* harmony import */ var _HospitalDetails__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./HospitalDetails */ "./src/components/HospitalDetails.ts");
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+let HospitalWidget = class HospitalWidget extends lit_element__WEBPACK_IMPORTED_MODULE_0__["LitElement"] {
+    constructor() {
+        super(...arguments);
+        /**
+         * Property googleApiKey
+         * Access your API key from Google Maps Platform
+         * https://cloud.google.com/maps-platform
+         */
+        this.googleApiKey = "";
+        /**
+         * Property: covidApiKey
+         * Access API Key: Covid Act Now Website
+         * https://apidocs.covidactnow.org/access
+         */
+        this.covidApiKey = "";
+        this.latitude = 37.369350;
+        this.longitude = -122.079552;
+        this.expanded = false;
+        this.statePostal = "";
+        this.county = "";
+        this.bedCapacity = "";
+        this.hospitalName = "";
+        this.hospitalAddress = "";
+        this.hospitalImage = "";
+        this.selectedHospitalId = "";
+        this.hospitalIds = [];
+        this.allNearbyHospitals = [];
+        this.loading = true;
+        this.errorMessage = "";
+        this.covidAPIError = false;
+        this.loader = new _googlemaps_js_api_loader__WEBPACK_IMPORTED_MODULE_2__["Loader"]({
+            apiKey: this.googleApiKey,
+            version: "weekly",
+            libraries: ["places"],
+        });
+        this.setErrorMsg = (message, error) => {
+            this.loading = false;
+            this.errorMessage = message;
+            error ? console.error(message, error) : console.error(message);
+        };
+        this.initMap = (latitude, longitude) => __awaiter(this, void 0, void 0, function* () {
+            return yield this.loader
+                .load()
+                .then(() => {
+                if (this.mapDiv) {
+                    this.map = new google.maps.Map(this.mapDiv, {
+                        center: { lat: latitude, lng: longitude },
+                        mapTypeControl: false,
+                    });
+                }
+            })
+                .catch((err) => {
+                this.setErrorMsg('Failed to initialize google map', err);
+            });
+        });
+        this.getFormattedAddress = (lat, lng) => {
+            return new google.maps.Geocoder().geocode({
+                location: { lat, lng }
+            }, (results, status) => {
+                if (status === "OK") {
+                    this.hospitalAddress = results[0].formatted_address;
+                    const componentForm = {
+                        administrative_area_level_1: 'short_name',
+                        administrative_area_level_2: 'short_name',
+                        country: 'short_name'
+                    };
+                    let addressDetails = {};
+                    const place = results[0];
+                    for (let i = 0; i < place.address_components.length; i++) {
+                        const addressType = place.address_components[i].types[0];
+                        if (componentForm[addressType]) {
+                            addressDetails[addressType] = place.address_components[i]["short_name"];
+                        }
+                    }
+                    if (addressDetails.country && addressDetails.country === "US") {
+                        this.county = addressDetails.administrative_area_level_2;
+                        this.statePostal = addressDetails.administrative_area_level_1;
+                        this.fetchCountyData(this.statePostal, this.county);
+                    }
+                    else {
+                        this.setErrorMsg("Latitude and Longitude is located outside of the US");
+                    }
+                }
+                else {
+                    this.setErrorMsg("Geocoder failed to fetch address details", status);
+                }
+            });
+        };
+        this.nearestHospitals = (map, latitude, longitude) => {
+            this.hospitalIds = [];
+            if (map) {
+                const places = new google.maps.places.PlacesService(map);
+                return places.nearbySearch({
+                    location: { lat: latitude, lng: longitude },
+                    rankBy: google.maps.places.RankBy.DISTANCE,
+                    type: "hospital",
+                    keyword: "(emergency) AND (establishment) AND ((medical centre) OR hospital)"
+                }, (results, status) => {
+                    var _a, _b, _c, _d, _e, _f;
+                    if (status === "OK") {
+                        this.allNearbyHospitals = results;
+                        this.hospitalIds = this.allNearbyHospitals ? (_a = this.allNearbyHospitals) === null || _a === void 0 ? void 0 : _a.map(hospital => hospital.place_id) : [];
+                        this.nearestHospitalData = results[0];
+                        this.hospitalName = (_b = this.nearestHospitalData) === null || _b === void 0 ? void 0 : _b.name;
+                        if ((_d = (_c = this.nearestHospitalData) === null || _c === void 0 ? void 0 : _c.photos) === null || _d === void 0 ? void 0 : _d.length) {
+                            const hospitalImageInfo = (_e = this.nearestHospitalData) === null || _e === void 0 ? void 0 : _e.photos[0];
+                            this.hospitalImage = hospitalImageInfo.getUrl();
+                        }
+                        this.selectedHospitalId = (_f = this.nearestHospitalData) === null || _f === void 0 ? void 0 : _f.place_id;
+                        this.errorMessage = "";
+                        this.loading = false;
+                    }
+                    else {
+                        this.setErrorMsg("google maps placeService nearbySearch failed", status);
+                    }
+                });
+            }
+        };
+        this.fetchAllCounties = () => __awaiter(this, void 0, void 0, function* () {
+            if (!this.allUSACounties) {
+                return yield fetch(`https://api.covidactnow.org/v2/counties.json?apiKey=${this.covidApiKey}`)
+                    .then((response) => {
+                    return response.json();
+                })
+                    .then((allCounties) => {
+                    this.allUSACounties = allCounties;
+                }).catch((err) => {
+                    this.setErrorMsg('Covid Act Now API call failed', err);
+                    this.covidAPIError = true;
+                });
+            }
+        });
+        this.fetchCountyData = (statePostal, county) => {
+            const countyResults = this.allUSACounties.filter((countyData) => {
+                return (statePostal.toLowerCase() === countyData.state.toLowerCase() && county.toLowerCase() === countyData.county.toLowerCase());
+            });
+            if (countyResults.length === 0) {
+                this.setErrorMsg("Unrecognizable statePostal & County", status);
+            }
+            else {
+                this.countyData = countyResults[0];
+            }
+        };
+        this.fetchCountyBedCapacity = (countyData) => {
+            var _a;
+            if (countyData) {
+                const { currentUsageTotal, capacity } = (_a = countyData === null || countyData === void 0 ? void 0 : countyData.actuals) === null || _a === void 0 ? void 0 : _a.icuBeds;
+                const percentage = `${((currentUsageTotal / capacity) * 100).toFixed(0)}%`;
+                this.bedCapacity = percentage;
+            }
+            else {
+                this.bedCapacity = "NA";
+            }
+            this.loading = false;
+        };
+        this.handleSelection = (event) => {
+            const selectedIndex = event.detail.selected;
+            this.selectedHospitalId = this.hospitalIds[selectedIndex];
+        };
+        this.renderHospitalList = () => {
+            var _a;
+            return this.allNearbyHospitals && this.expanded && !this.loading
+                ? lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+          <div class=${`hospital-list ${this.expanded ? "expanded" : ""}`}>
+            <md-list
+              @list-item-change=${(event) => this.handleSelection(event)}
+              activated=${0}
+            >
+              ${this.allNearbyHospitals
+                    ? (_a = this.allNearbyHospitals) === null || _a === void 0 ? void 0 : _a.map((hospitalData, index) => {
+                        if (index < 6) {
+                            const { name, place_id, vicinity } = hospitalData;
+                            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+                          <div class="hospital-item-wrapper" slot="list-item">
+                            <my-hospital-item
+                              name=${name}
+                              placeId=${place_id}
+                              vicinity=${vicinity}
+                              county=${this.county}
+                              statePostal=${this.statePostal}
+                              bedCapacity=${this.bedCapacity}
+                              ?selected=${this.selectedHospitalId === place_id}
+                              ?expanded=${this.expanded}
+                            ></my-hospital-item>
+                          </div>
+                        `;
+                        }
+                    }) : lit_html__WEBPACK_IMPORTED_MODULE_4__["nothing"]}
+            </md-list>
+          </div>
+        `
+                : lit_html__WEBPACK_IMPORTED_MODULE_4__["nothing"];
+        };
+        this.renderLoading = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="loading-wrapper">
+        <md-spinner></md-spinner>
+      </div>
+    `;
+        };
+        this.renderErrorMessage = () => {
+            return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="error-wrapper">
+        <h3>${this.errorMessage}</h3>
+      </div>
+    `;
+        };
+        this.renderContent = () => {
+            return this.errorMessage && !this.loading
+                ? this.renderErrorMessage()
+                : lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+        ${this.renderHospitalList()}
+        <div class="right-side">
+          <my-hospital-details
+            googleApiKey=${this.googleApiKey}
+            .map=${this.map}
+            place-id=${this.selectedHospitalId}
+            county=${this.county}
+            statePostal=${this.statePostal}
+            bedCapacity=${this.bedCapacity}
+            ?expanded=${this.expanded}
+          ></my-hospital-details>
+        </div>
+        `;
+        };
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        this.loader.apiKey = this.googleApiKey;
+    }
+    firstUpdated(changeProperties) {
+        const _super = Object.create(null, {
+            firstUpdated: { get: () => super.firstUpdated }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            _super.firstUpdated.call(this, changeProperties);
+            const ro = new resize_observer_polyfill__WEBPACK_IMPORTED_MODULE_1__["default"]((entries) => {
+                for (let entry of entries) {
+                    const cr = entry.contentRect;
+                    if (cr.width > 750) {
+                        if (!this.expanded) {
+                            this.expanded = true;
+                        }
+                    }
+                    else {
+                        if (this.expanded) {
+                            this.expanded = false;
+                        }
+                    }
+                }
+            });
+            ro.observe(this.hospitalWidget);
+            window.gm_authFailure = (err) => {
+                this.setErrorMsg('googleApiKey is invalid', err);
+            };
+        });
+    }
+    update(changeProperties) {
+        const _super = Object.create(null, {
+            update: { get: () => super.update }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            _super.update.call(this, changeProperties);
+            if (changeProperties.has('googleApiKey') || changeProperties.has('covidApiKey')) {
+                if (!this.googleApiKey) {
+                    this.setErrorMsg("googleApiKey is not defined");
+                }
+                else if (!this.covidApiKey) {
+                    this.setErrorMsg("covidApiKey is not defined");
+                }
+            }
+            if (this.googleApiKey && this.covidApiKey && (changeProperties.has('longitude') || changeProperties.has('latitude'))) {
+                if (!this.latitude || this.latitude === 0) {
+                    this.setErrorMsg("latitude is not defined");
+                }
+                else if (!this.longitude || this.longitude === 0) {
+                    this.setErrorMsg("longitude is not defined");
+                }
+                else {
+                    this.loading = true;
+                    yield this.fetchAllCounties()
+                        .then(() => {
+                        if (!this.covidAPIError) {
+                            return this.initMap(this.latitude, this.longitude)
+                                .then(() => {
+                                this.getFormattedAddress(this.latitude, this.longitude);
+                                this.nearestHospitals(this.map, this.latitude, this.longitude);
+                            });
+                        }
+                    });
+                }
+            }
+            if (changeProperties.has("countyData")) {
+                this.fetchCountyBedCapacity(this.countyData);
+            }
+        });
+    }
+    static get styles() {
+        return _Hospitals_scss__WEBPACK_IMPORTED_MODULE_3__["default"];
+    }
+    render() {
+        return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
+      <div class="hospital-widget">
+        ${this.loading ? this.renderLoading() : this.renderContent()}
+        <div id="map"></div>
+      </div>
+    `;
+    }
+};
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String, reflect: true, attribute: "google-api-key" })
+], HospitalWidget.prototype, "googleApiKey", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String, reflect: true, attribute: "covi-api-key" })
+], HospitalWidget.prototype, "covidApiKey", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Number, reflect: true })
+], HospitalWidget.prototype, "latitude", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Number, reflect: true })
+], HospitalWidget.prototype, "longitude", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "expanded", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "statePostal", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "county", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "bedCapacity", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "hospitalName", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "hospitalAddress", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "hospitalImage", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "selectedHospitalId", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "map", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "hospitalIds", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "allNearbyHospitals", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "nearestHospitalData", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "allUSACounties", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "countyData", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "loading", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "errorMessage", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["query"])(".hospital-widget")
+], HospitalWidget.prototype, "hospitalWidget", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["query"])("#map")
+], HospitalWidget.prototype, "mapDiv", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
+], HospitalWidget.prototype, "loader", void 0);
+HospitalWidget = __decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["customElement"])("my-hospital-widget")
+], HospitalWidget);
+/* harmony default export */ __webpack_exports__["default"] = (HospitalWidget);
+
+
+/***/ }),
+
+/***/ "./src/components/Hospitals.scss":
+/*!***************************************!*\
+  !*** ./src/components/Hospitals.scss ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lit_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit-element */ "./node_modules/lit-element/lit-element.js");
+
+           
+        /* harmony default export */ __webpack_exports__["default"] = (lit_element__WEBPACK_IMPORTED_MODULE_0__["css"]`.hospital-widget {
+  display: flex;
+  height: 100%;
+  background-color: var(--md-primary-bg-color);
+  color: var(--md-primary-text-color); }
+  .hospital-widget .hospital-list {
+    width: 396px;
+    min-width: 274px;
+    flex: 0 1 auto;
+    border-right: 1px solid var(--md-primary-seperator-color, #ccc);
+    height: 100%;
+    overflow: auto; }
+    .hospital-widget .hospital-list md-list {
+      padding: 4px; }
+    .hospital-widget .hospital-list .hospital-item-wrapper {
+      width: 100%;
+      margin-bottom: 1px;
+      position: relative;
+      z-index: 0;
+      border-bottom: 1px solid var(--md-primary-seperator-color, #ccc); }
+      .hospital-widget .hospital-list .hospital-item-wrapper:focus {
+        box-shadow: none;
+        outline: none; }
+        .hospital-widget .hospital-list .hospital-item-wrapper:focus::after {
+          box-shadow: 0 0 0 2px var(--md-default-focus-outline-color, purple); }
+      .hospital-widget .hospital-list .hospital-item-wrapper::after {
+        bottom: 0;
+        content: "";
+        display: block;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: -1;
+        border-radius: 4px; }
+  .hospital-widget .right-side {
+    flex: 1;
+    min-width: 450px; }
+
+.loading-wrapper,
+.error-wrapper {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 10rem; }
+
+.hospital-details {
+  display: flex;
+  flex-direction: column;
+  height: 100%; }
+  .hospital-details .hospital-image {
+    display: block;
+    height: 204px;
+    object-fit: cover;
+    width: 100%; }
+    .hospital-details .hospital-image.void {
+      display: flex;
+      justify-content: center; }
+      .hospital-details .hospital-image.void span {
+        padding-top: 6rem; }
+  .hospital-details .flex-parent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
+    .hospital-details .flex-parent .left-section {
+      min-width: 0;
+      display: inline-flex; }
+  .hospital-details .long-and-truncated {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .hospital-details .short-and-fixed {
+    flex: 0 0 auto; }
+  .hospital-details .hospital-header {
+    padding: 1rem 1rem 0 1rem; }
+    .hospital-details .hospital-header .left-header-portion {
+      display: flex;
+      flex: 1 1 0%; }
+    .hospital-details .hospital-header .hospital-badge::part(badge) {
+      padding: 0.25rem 1rem; }
+    .hospital-details .hospital-header.expanded {
+      border-bottom: 1px solid var(--md-primary-seperator-color, #ccc);
+      padding: 0.875rem 1.5rem 0.875rem 0.875rem; }
+      .hospital-details .hospital-header.expanded .header-text {
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 150%;
+        margin-right: 16px; }
+      .hospital-details .hospital-header.expanded .icons {
+        float: right;
+        margin-top: 4px;
+        height: 24px; }
+        .hospital-details .hospital-header.expanded .icons md-button {
+          margin-left: 1rem; }
+  .hospital-details .hospital-data {
+    padding: 1rem;
+    font-size: 14px;
+    line-height: 21px;
+    overflow: scroll; }
+    .hospital-details .hospital-data .warning-block {
+      background-color: var(--md-secondary-bg-color, #f7f7f7);
+      border-radius: 4px;
+      padding: 8px;
+      margin-bottom: 8px; }
+      .hospital-details .hospital-data .warning-block md-icon {
+        color: var(--md-alert-warning-text-color, #7d4705);
+        margin: 0 8px; }
+      .hospital-details .hospital-data .warning-block .warning-text {
+        font-size: 12px;
+        line-height: 150%;
+        color: var(--md-secondary-text-color, #545454); }
+    .hospital-details .hospital-data .details {
+      display: block;
+      margin-top: 1rem; }
+      .hospital-details .hospital-data .details .row {
+        display: flex;
+        flex-direction: row;
+        margin-top: 8px; }
+        .hospital-details .hospital-data .details .row .title {
+          width: 7rem;
+          color: var(--md-secondary-text-color, #545454); }
+        .hospital-details .hospital-data .details .row .value {
+          flex: 1;
+          color: var(--md-primary-text-color, #121212); }
+          .hospital-details .hospital-data .details .row .value.open {
+            color: var(--md-alert-success-text-color, #12615a); }
+          .hospital-details .hospital-data .details .row .value.closed {
+            color: var(--md-alert-error-text-color, #a12512); }
+          .hospital-details .hospital-data .details .row .value .pop-out-icon {
+            margin-left: 0.5rem; }
+
+/*# sourceURL=/Users/momeraj/Documents/cisco/webex-cc/sourcecode/webex-contact-center-widget-starter/Examples/Widgets/HospitalBedCapacity/src/components/Hospitals.scss */
+/*# sourceURL=/Users/momeraj/Documents/cisco/webex-cc/sourcecode/webex-contact-center-widget-starter/Examples/Widgets/HospitalBedCapacity/src/components/mixins.scss */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9tb21lcmFqL0RvY3VtZW50cy9jaXNjby93ZWJleC1jYy9zb3VyY2Vjb2RlL3dlYmV4LWNvbnRhY3QtY2VudGVyLXdpZGdldC1zdGFydGVyL0V4YW1wbGVzL1dpZGdldHMvSG9zcGl0YWxCZWRDYXBhY2l0eS9zcmMvY29tcG9uZW50cy9Ib3NwaXRhbHMuc2NzcyIsIi9Vc2Vycy9tb21lcmFqL0RvY3VtZW50cy9jaXNjby93ZWJleC1jYy9zb3VyY2Vjb2RlL3dlYmV4LWNvbnRhY3QtY2VudGVyLXdpZGdldC1zdGFydGVyL0V4YW1wbGVzL1dpZGdldHMvSG9zcGl0YWxCZWRDYXBhY2l0eS9zcmMvY29tcG9uZW50cy9taXhpbnMuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFJQTtFQUNFLGFBQWE7RUFDYixZQUFZO0VBQ1osNENBQTRDO0VBQzVDLG1DQUFtQyxFQUFBO0VBSnJDO0lBT0ksWUFBWTtJQUNaLGdCQUFnQjtJQUNoQixjQUFjO0lBQ2QsK0RBWjJEO0lBYTNELFlBQVk7SUFDWixjQUFjLEVBQUE7SUFabEI7TUFlTSxZQUFZLEVBQUE7SUFmbEI7TUFtQk0sV0FBVztNQUNYLGtCQUFrQjtNQUNsQixrQkFBa0I7TUFDbEIsVUFBVTtNQUNWLGdFQXpCeUQsRUFBQTtNQUUvRDtRQTBCUSxnQkFBZ0I7UUFDaEIsYUFBYSxFQUFBO1FBM0JyQjtVQ1dJLG1FQUFrRSxFQUFBO01EWHRFO1FDSEksU0FBUztRQUNULFdBQVc7UUFDWCxjQUFjO1FBQ2QsT0FBTztRQUNQLGtCQUFrQjtRQUNsQixRQUFRO1FBQ1IsTUFBTTtRQUNOLFdBQVc7UURnQ1Asa0JBQWtCLEVBQUE7RUFwQzFCO0lBMENJLE9BQU87SUFDUCxnQkFBZ0IsRUFBQTs7QUFJcEI7O0VBRUUsYUFBYTtFQUNiLFdBQVc7RUFDWCxhQUFhO0VBQ2IsdUJBQXVCO0VBQ3ZCLGtCQUFrQixFQUFBOztBQUdwQjtFQUNFLGFBQWE7RUFDYixzQkFBc0I7RUFDdEIsWUFBWSxFQUFBO0VBSGQ7SUFNSSxjQUFjO0lBQ2QsYUFBYTtJQUNiLGlCQUFpQjtJQUNqQixXQUFXLEVBQUE7SUFUZjtNQVlNLGFBQWE7TUFDYix1QkFBdUIsRUFBQTtNQWI3QjtRQWdCUSxpQkFBaUIsRUFBQTtFQWhCekI7SUFzQkksYUFBYTtJQUNiLG1CQUFtQjtJQUNuQiw4QkFBOEIsRUFBQTtJQXhCbEM7TUEyQk0sWUFBWTtNQUNaLG9CQUFvQixFQUFBO0VBNUIxQjtJQWlDSSxPQUFPO0lBQ1AsbUJBQW1CO0lBQ25CLGdCQUFnQjtJQUNoQix1QkFBdUIsRUFBQTtFQXBDM0I7SUF3Q0ksY0FBYyxFQUFBO0VBeENsQjtJQTRDSSx5QkFBeUIsRUFBQTtJQTVDN0I7TUErQ00sYUFBYTtNQUNiLFlBQVksRUFBQTtJQWhEbEI7TUFvRE0scUJBQXFCLEVBQUE7SUFwRDNCO01Bd0RNLGdFQWxIeUQ7TUFtSHpELDBDQUEwQyxFQUFBO01BekRoRDtRQTREUSxlQUFlO1FBQ2YsaUJBQWlCO1FBQ2pCLGlCQUFpQjtRQUNqQixrQkFBa0IsRUFBQTtNQS9EMUI7UUFtRVEsWUFBWTtRQUNaLGVBQWU7UUFDZixZQUFZLEVBQUE7UUFyRXBCO1VBd0VVLGlCQUFpQixFQUFBO0VBeEUzQjtJQStFSSxhQUFhO0lBQ2IsZUFBZTtJQUNmLGlCQUFpQjtJQUNqQixnQkFBZ0IsRUFBQTtJQWxGcEI7TUFxRk0sdURBQXVEO01BQ3ZELGtCQUFrQjtNQUNsQixZQUFZO01BQ1osa0JBQWtCLEVBQUE7TUF4RnhCO1FBMkZRLGtEQUFrRDtRQUNsRCxhQUFhLEVBQUE7TUE1RnJCO1FBZ0dRLGVBQWU7UUFDZixpQkFBaUI7UUFDakIsOENBQThDLEVBQUE7SUFsR3REO01BdUdNLGNBQWM7TUFDZCxnQkFBZ0IsRUFBQTtNQXhHdEI7UUEyR1EsYUFBYTtRQUNiLG1CQUFtQjtRQUNuQixlQUFlLEVBQUE7UUE3R3ZCO1VBZ0hVLFdBQVc7VUFDWCw4Q0FBOEMsRUFBQTtRQWpIeEQ7VUFxSFUsT0FBTztVQUNQLDRDQUE0QyxFQUFBO1VBdEh0RDtZQXlIWSxrREFBa0QsRUFBQTtVQXpIOUQ7WUE2SFksZ0RBQWdELEVBQUE7VUE3SDVEO1lBaUlZLG1CQUFtQixFQUFBIiwiZmlsZSI6Ikhvc3BpdGFscy5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQGltcG9ydCBcIi4vbWl4aW5zXCI7XG5cbiRtYWluLWJvcmRlcjogMXB4IHNvbGlkIHZhcigtLW1kLXByaW1hcnktc2VwZXJhdG9yLWNvbG9yLCAjY2NjKTtcblxuLmhvc3BpdGFsLXdpZGdldCB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGhlaWdodDogMTAwJTtcbiAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0tbWQtcHJpbWFyeS1iZy1jb2xvcik7XG4gIGNvbG9yOiB2YXIoLS1tZC1wcmltYXJ5LXRleHQtY29sb3IpO1xuXG4gIC5ob3NwaXRhbC1saXN0IHtcbiAgICB3aWR0aDogMzk2cHg7XG4gICAgbWluLXdpZHRoOiAyNzRweDtcbiAgICBmbGV4OiAwIDEgYXV0bztcbiAgICBib3JkZXItcmlnaHQ6ICRtYWluLWJvcmRlcjtcbiAgICBoZWlnaHQ6IDEwMCU7XG4gICAgb3ZlcmZsb3c6IGF1dG87XG5cbiAgICBtZC1saXN0IHtcbiAgICAgIHBhZGRpbmc6IDRweDtcbiAgICB9XG5cbiAgICAuaG9zcGl0YWwtaXRlbS13cmFwcGVyIHtcbiAgICAgIHdpZHRoOiAxMDAlO1xuICAgICAgbWFyZ2luLWJvdHRvbTogMXB4O1xuICAgICAgcG9zaXRpb246IHJlbGF0aXZlO1xuICAgICAgei1pbmRleDogMDtcbiAgICAgIGJvcmRlci1ib3R0b206ICRtYWluLWJvcmRlcjtcblxuICAgICAgJjpmb2N1cyB7XG4gICAgICAgIGJveC1zaGFkb3c6IG5vbmU7XG4gICAgICAgIG91dGxpbmU6IG5vbmU7XG5cbiAgICAgICAgJjo6YWZ0ZXIge1xuICAgICAgICAgIEBpbmNsdWRlIGl0ZW0tZm9jdXMtYm94c2hhZG93O1xuICAgICAgICB9XG4gICAgICB9XG5cbiAgICAgICY6OmFmdGVyIHtcbiAgICAgICAgQGluY2x1ZGUgaXRlbS1hZnRlci1mb2N1cztcbiAgICAgICAgYm9yZGVyLXJhZGl1czogNHB4O1xuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIC5yaWdodC1zaWRlIHtcbiAgICBmbGV4OiAxO1xuICAgIG1pbi13aWR0aDogNDUwcHg7XG4gIH1cbn1cblxuLmxvYWRpbmctd3JhcHBlcixcbi5lcnJvci13cmFwcGVyIHtcbiAgaGVpZ2h0OiAxMDBweDtcbiAgd2lkdGg6IDEwMCU7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICBwYWRkaW5nLXRvcDogMTByZW07XG59XG5cbi5ob3NwaXRhbC1kZXRhaWxzIHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbiAgaGVpZ2h0OiAxMDAlO1xuXG4gIC5ob3NwaXRhbC1pbWFnZSB7XG4gICAgZGlzcGxheTogYmxvY2s7XG4gICAgaGVpZ2h0OiAyMDRweDtcbiAgICBvYmplY3QtZml0OiBjb3ZlcjtcbiAgICB3aWR0aDogMTAwJTtcblxuICAgICYudm9pZCB7XG4gICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG5cbiAgICAgIHNwYW4ge1xuICAgICAgICBwYWRkaW5nLXRvcDogNnJlbTtcbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICAuZmxleC1wYXJlbnQge1xuICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG5cbiAgICAubGVmdC1zZWN0aW9uIHtcbiAgICAgIG1pbi13aWR0aDogMDtcbiAgICAgIGRpc3BsYXk6IGlubGluZS1mbGV4O1xuICAgIH1cbiAgfVxuXG4gIC5sb25nLWFuZC10cnVuY2F0ZWQge1xuICAgIGZsZXg6IDE7XG4gICAgd2hpdGUtc3BhY2U6IG5vd3JhcDtcbiAgICBvdmVyZmxvdzogaGlkZGVuO1xuICAgIHRleHQtb3ZlcmZsb3c6IGVsbGlwc2lzO1xuICB9XG5cbiAgLnNob3J0LWFuZC1maXhlZCB7XG4gICAgZmxleDogMCAwIGF1dG87XG4gIH1cblxuICAuaG9zcGl0YWwtaGVhZGVyIHtcbiAgICBwYWRkaW5nOiAxcmVtIDFyZW0gMCAxcmVtO1xuXG4gICAgLmxlZnQtaGVhZGVyLXBvcnRpb24ge1xuICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgIGZsZXg6IDEgMSAwJTtcbiAgICB9XG5cbiAgICAuaG9zcGl0YWwtYmFkZ2U6OnBhcnQoYmFkZ2UpIHtcbiAgICAgIHBhZGRpbmc6IDAuMjVyZW0gMXJlbTtcbiAgICB9XG5cbiAgICAmLmV4cGFuZGVkIHtcbiAgICAgIGJvcmRlci1ib3R0b206ICRtYWluLWJvcmRlcjtcbiAgICAgIHBhZGRpbmc6IDAuODc1cmVtIDEuNXJlbSAwLjg3NXJlbSAwLjg3NXJlbTtcblxuICAgICAgLmhlYWRlci10ZXh0IHtcbiAgICAgICAgZm9udC1zaXplOiAxNnB4O1xuICAgICAgICBmb250LXdlaWdodDogYm9sZDtcbiAgICAgICAgbGluZS1oZWlnaHQ6IDE1MCU7XG4gICAgICAgIG1hcmdpbi1yaWdodDogMTZweDtcbiAgICAgIH1cblxuICAgICAgLmljb25zIHtcbiAgICAgICAgZmxvYXQ6IHJpZ2h0O1xuICAgICAgICBtYXJnaW4tdG9wOiA0cHg7XG4gICAgICAgIGhlaWdodDogMjRweDtcblxuICAgICAgICBtZC1idXR0b24ge1xuICAgICAgICAgIG1hcmdpbi1sZWZ0OiAxcmVtO1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICB9XG5cbiAgLmhvc3BpdGFsLWRhdGEge1xuICAgIHBhZGRpbmc6IDFyZW07XG4gICAgZm9udC1zaXplOiAxNHB4O1xuICAgIGxpbmUtaGVpZ2h0OiAyMXB4O1xuICAgIG92ZXJmbG93OiBzY3JvbGw7XG5cbiAgICAud2FybmluZy1ibG9jayB7XG4gICAgICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1tZC1zZWNvbmRhcnktYmctY29sb3IsICNmN2Y3ZjcpO1xuICAgICAgYm9yZGVyLXJhZGl1czogNHB4O1xuICAgICAgcGFkZGluZzogOHB4O1xuICAgICAgbWFyZ2luLWJvdHRvbTogOHB4O1xuXG4gICAgICBtZC1pY29uIHtcbiAgICAgICAgY29sb3I6IHZhcigtLW1kLWFsZXJ0LXdhcm5pbmctdGV4dC1jb2xvciwgIzdkNDcwNSk7XG4gICAgICAgIG1hcmdpbjogMCA4cHg7XG4gICAgICB9XG5cbiAgICAgIC53YXJuaW5nLXRleHQge1xuICAgICAgICBmb250LXNpemU6IDEycHg7XG4gICAgICAgIGxpbmUtaGVpZ2h0OiAxNTAlO1xuICAgICAgICBjb2xvcjogdmFyKC0tbWQtc2Vjb25kYXJ5LXRleHQtY29sb3IsICM1NDU0NTQpO1xuICAgICAgfVxuICAgIH1cblxuICAgIC5kZXRhaWxzIHtcbiAgICAgIGRpc3BsYXk6IGJsb2NrO1xuICAgICAgbWFyZ2luLXRvcDogMXJlbTtcblxuICAgICAgLnJvdyB7XG4gICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgIGZsZXgtZGlyZWN0aW9uOiByb3c7XG4gICAgICAgIG1hcmdpbi10b3A6IDhweDtcblxuICAgICAgICAudGl0bGUge1xuICAgICAgICAgIHdpZHRoOiA3cmVtO1xuICAgICAgICAgIGNvbG9yOiB2YXIoLS1tZC1zZWNvbmRhcnktdGV4dC1jb2xvciwgIzU0NTQ1NCk7XG4gICAgICAgIH1cblxuICAgICAgICAudmFsdWUge1xuICAgICAgICAgIGZsZXg6IDE7XG4gICAgICAgICAgY29sb3I6IHZhcigtLW1kLXByaW1hcnktdGV4dC1jb2xvciwgIzEyMTIxMik7XG5cbiAgICAgICAgICAmLm9wZW4ge1xuICAgICAgICAgICAgY29sb3I6IHZhcigtLW1kLWFsZXJ0LXN1Y2Nlc3MtdGV4dC1jb2xvciwgIzEyNjE1YSk7XG4gICAgICAgICAgfVxuXG4gICAgICAgICAgJi5jbG9zZWQge1xuICAgICAgICAgICAgY29sb3I6IHZhcigtLW1kLWFsZXJ0LWVycm9yLXRleHQtY29sb3IsICNhMTI1MTIpO1xuICAgICAgICAgIH1cblxuICAgICAgICAgIC5wb3Atb3V0LWljb24ge1xuICAgICAgICAgICAgbWFyZ2luLWxlZnQ6IDAuNXJlbTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9XG4gIH1cbn1cbiIsIkBtaXhpbiBpdGVtLWFmdGVyLWZvY3VzIHtcbiAgICBib3R0b206IDA7XG4gICAgY29udGVudDogXCJcIjtcbiAgICBkaXNwbGF5OiBibG9jaztcbiAgICBsZWZ0OiAwO1xuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICByaWdodDogMDtcbiAgICB0b3A6IDA7XG4gICAgei1pbmRleDogLTE7XG4gIH1cblxuXG4gIEBtaXhpbiBpdGVtLWZvY3VzLWJveHNoYWRvdyB7XG4gICAgLy8gYm94LXNoYWRvdzogMCAwIDAgcmVtLWNhbGMoMikgdmFyKC0tbWQtZGVmYXVsdC1mb2N1cy1vdXRsaW5lLWNvbG9yLCAjMDA3QUEzKTtcbiAgICAvLyBib3gtc2hhZG93OiAwIDAgMCAycHggdmFyKC0tbWQtZGVmYXVsdC1mb2N1cy1vdXRsaW5lLWNvbG9yLCAjMDA3QUEzKTtcbiAgICBib3gtc2hhZG93OiAwIDAgMCAycHggdmFyKC0tbWQtZGVmYXVsdC1mb2N1cy1vdXRsaW5lLWNvbG9yLHB1cnBsZSk7XG4gIH0iXX0= */`);
+    
+
+/***/ }),
+
+/***/ "./src/index.ts":
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lit_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit-element */ "./node_modules/lit-element/lit-element.js");
+/* harmony import */ var _components_HospitalWidget__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/HospitalWidget */ "./src/components/HospitalWidget.ts");
+/**
+ * Copyright (c) Cisco Systems, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+/**
+ * Please give your widget a unique name. We recommend using prefix to identify the author and help avoid naming conflict. e.g. "2ring-timer-widget"
+ */
+let HospitalBedCapacity = class HospitalBedCapacity extends lit_element__WEBPACK_IMPORTED_MODULE_0__["LitElement"] {
+    constructor() {
+        super(...arguments);
+        /**
+         * Property googleApiKey
+         * Access your API key from Google Maps Platform
+         * https://cloud.google.com/maps-platform
+         */
+        this.googleApiKey = "";
+        /**
+        * Property: covidApiKey
+        * Access API Key: Covid Act Now Website
+        * https://apidocs.covidactnow.org/access
+        */
+        this.covidApiKey = "";
+        this.latitude = 37.369350;
+        this.longitude = -122.079552;
         this.contacts = [];
     }
     static get styles() {
@@ -50147,26 +52214,37 @@ let MyCustomComponent = class MyCustomComponent extends lit_element__WEBPACK_IMP
     }
     render() {
         return lit_element__WEBPACK_IMPORTED_MODULE_0__["html"] `
-      <rss-component rss-feed=${this.rssFeedAddress} update-delay=${this.updateDelay}></rss-component>
+      <my-hospital-widget
+        covi-api-key=${this.covidApiKey}
+        google-api-key=${this.googleApiKey}
+        latitude=${this.latitude}
+        longitude=${this.longitude}>
+      </my-hospital-widget>
     `;
     }
 };
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String, attribute: "rss-feed" })
-], MyCustomComponent.prototype, "rssFeedAddress", void 0);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String, reflect: true, attribute: "google-api-key" })
+], HospitalBedCapacity.prototype, "googleApiKey", void 0);
 __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Number, attribute: "update-delay" })
-], MyCustomComponent.prototype, "updateDelay", void 0);
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: String, reflect: true, attribute: "covid-api-key" })
+], HospitalBedCapacity.prototype, "covidApiKey", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Number, reflect: true })
+], HospitalBedCapacity.prototype, "latitude", void 0);
+__decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["property"])({ type: Number, reflect: true })
+], HospitalBedCapacity.prototype, "longitude", void 0);
 __decorate([
     Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["internalProperty"])()
-], MyCustomComponent.prototype, "contacts", void 0);
-MyCustomComponent = __decorate([
-    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["customElement"])("rss-feed-widget")
-], MyCustomComponent);
-/* harmony default export */ __webpack_exports__["default"] = (MyCustomComponent);
+], HospitalBedCapacity.prototype, "contacts", void 0);
+HospitalBedCapacity = __decorate([
+    Object(lit_element__WEBPACK_IMPORTED_MODULE_0__["customElement"])("hospital-bed-capacity")
+], HospitalBedCapacity);
+/* harmony default export */ __webpack_exports__["default"] = (HospitalBedCapacity);
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=hospital-bed-capacity.js.map

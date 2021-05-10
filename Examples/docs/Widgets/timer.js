@@ -50274,4 +50274,4 @@ MyCustomComponent = __decorate([
 /***/ })
 
 /******/ });
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=timer.js.map

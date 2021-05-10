@@ -36,6 +36,7 @@
             width: 100%;
           "
         >
+          <img src="./webex_cc_logo.png" style="padding-right: 12px" />
           <span style="font-size: 14px; font-weight: bold; padding-right: 12px"
             >Demo Widgets Hosted JavaScripts Bundles</span
           >
@@ -54,13 +55,13 @@
         </main>
       </div>
     </md-theme>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/CovidByLocation/build/main.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/Timer/build/main.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/RSS/build/main.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/CRM/build/main.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/HospitalBedCapacity/build/main.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/Map/build/main.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/LearningWidgetSample/build/main.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/covid-by-location.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/timer.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/rss-feed-widget.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/crm.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/hospital-bed-capacity.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/map-widget.js"></script>
+    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/learning-widget-sample.js"></script>
 
     <script>
       const widgets = [
@@ -68,12 +69,12 @@
           label: "CRM",
           comp: `<crm-widget phone-number="+1 (800) 471-2389"></crm-widget>`,
           script:
-            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/CRM/build/main.js",
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/crm.js",
           layoutConfig: {
             comp: "crm-widget",
             attributes: { "phone-number": "+1 (800) 471-2389" },
             script:
-              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/CRM/build/main.js",
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/crm.js",
           },
           style: "grid-column: span 3;",
         },
@@ -82,14 +83,14 @@
           label: "Timer",
           comp: `<timer-widget duration="08:00:00" style="margin-top: 10px"></timer-widget>`,
           script:
-            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/Timer/build/main.js",
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/timer.js",
           layoutConfig: {
             comp: "timer-widget",
             attributes: {
               duration: "08:00:00",
             },
             script:
-              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/Timer/build/main.js",
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/timer.js",
           },
           style: "grid-column: span 1;",
         },
@@ -98,14 +99,14 @@
           comp: `<rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml"
                 update-delay="5000"></rss-feed-widget>`,
           script:
-            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/RSS/build/main.js",
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/rss-feed-widget.js",
           layoutConfig: {
             comp: "rss-feed-widget",
             attributes: {
               "rss-feed": "https://w1.weather.gov/xml/current_obs/PHNL.rss",
             },
             script:
-              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/RSS/build/main.js",
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/rss-feed-widget.js",
           },
           style: "grid-column: span 1;",
         },
@@ -113,7 +114,7 @@
           label: "Map",
           comp: `<map-widget api-key="" search-enabled></map-widget>`,
           script:
-            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/Map/build/main.js",
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/map-widget.js",
           layoutConfig: {
             comp: "map-widget",
             attributes: {
@@ -121,7 +122,7 @@
               "search-enabled": true,
             },
             script:
-              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/Map/build/main.js",
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/map-widget.js",
           },
           style: "grid-column: span 2;",
         },
@@ -130,12 +131,12 @@
           comp:
             '<covid-by-location api-key="1318b408f01c4aa3b5f79dedc6c90848" selectedCountyState="SantaClara County, CA"></covid-by-location>',
           script:
-            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/CovidByLocation/build/main.js",
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/covid-by-location.js",
           style: "grid-column: span 3;",
           layoutConfig: {
             comp: "covid-by-location",
             script:
-              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/CovidByLocation/build/main.js",
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/covid-by-location.js",
             attributes: {
               "api-key": "1318b408f01c4aa3b5f79dedc6c90848",
             },
@@ -151,7 +152,7 @@
           comp: `<hospital-bed-capacity google-api-key="googleApiKey" covid-api-key="covidApiKey"
               latitude="latitude" longitude="longitude">`,
           script:
-            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/HospitalBedCapacity/build/main.js",
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/hospital-bed-capacity.js",
           layoutConfig: {
             comp: "hospital-bed-capacity",
             attributes: {
@@ -161,7 +162,7 @@
               longitude: "longitude",
             },
             script:
-              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/HospitalBedCapacity/build/main.js",
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/hospital-bed-capacity.js",
           },
           style: "grid-column: span 5;",
         },
@@ -169,11 +170,11 @@
           label: "Learning Sample",
           comp: `<learning-sample></learning-sample>`,
           script:
-            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/LearningWidgetSample/build/main.js",
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/learning-widget-sample.js",
           layoutConfig: {
             comp: "learning-sample",
             script:
-              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/LearningWidgetSample/build/main.js",
+              "https://ciscodevnet.github.io/webex-contact-center-widget-starter/Examples/docs/widgets/learning-widget-sample.js",
           },
           style: "grid-column: span 5;",
         },
