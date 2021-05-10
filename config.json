@@ -1,0 +1,96 @@
+[
+  {
+    "label": "Covid By Location",
+    "comp": "<covid-by-location api-key=\"1318b408f01c4aa3b5f79dedc6c90848\" selectedCountyState=\"SantaClara County, CA\"></covid-by-location>",
+    "script": "http://localhost:3000/Examples/docs/CovidByLocation/main.js",
+    "style": "grid-column: span 3;",
+    "layoutConfig": {
+      "comp": "covid-by-location",
+      "script": "http://localhost:3000/Examples/docs/CovidByLocation/main.js",
+      "attributes": {
+        "api-key": "1318b408f01c4aa3b5f79dedc6c90848"
+      },
+      "wrapper": {
+        "title": "Covid by location",
+        "maximizeAreaName": "app-maximize-area"
+      }
+    }
+  },
+  {
+    "label": "Timer",
+    "comp": "<timer-widget duration=\"08:00:00\" style=\"margin-top: 10px\"></timer-widget>",
+    "script": "http://localhost:3000/Examples/docs/Timer/main.js",
+    "layoutConfig": {
+      "comp": "timer-widget",
+      "attributes": {
+        "duration": "08:00:00"
+      },
+      "script": "http://localhost:3000/Examples/docs/Timer/main.js"
+    },
+    "style": "grid-column: span 1;"
+  },
+  {
+    "label": "RSS",
+    "comp": "<rss-feed-widget rss-feed=\"https://www.who.int/feeds/entity/csr/don/en/rss.xml\" update-delay=\"5000\"></rss-feed-widget>",
+    "script": "http://localhost:3000/Examples/docs/RSS/main.js",
+    "layoutConfig": {
+      "comp": "rss-feed-widget",
+      "attributes": {
+        "rss-feed": "https://w1.weather.gov/xml/current_obs/PHNL.rss"
+      },
+      "script": "http://localhost:3000/Examples/docs/RSS/main.js"
+    },
+    "style": "grid-column: span 1;"
+  },
+  {
+    "label": "Map",
+    "comp": "<map-widget api-key=\"\" search-enabled></map-widget>",
+    "script": "http://localhost:3000/Examples/docs/Map/main.js",
+    "layoutConfig": {
+      "comp": "map-widget",
+      "attributes": {
+        "api-key": "google api key here",
+        "search-enabled": true
+      },
+      "script": "http://localhost:3000/Examples/docs/Map/main.js"
+    },
+    "style": "grid-column: span 2;"
+  },
+  {
+    "label": "CRM",
+    "comp": "<crm-widget phone-number=\"+1 (800) 471-2389\"></crm-widget>",
+    "script": "http://localhost:3000/Examples/docs/CRM/main.js",
+    "layoutConfig": {
+      "comp": "crm-widget",
+      "attributes": { "phone-number": "+1 (800) 471-2389" },
+      "script": "http://localhost:3000/Examples/docs/CRM/main.js"
+    },
+    "style": "grid-column: span 3;"
+  },
+  {
+    "label": "Hospital Bed Capacity",
+    "comp": "<hospital-bed-capacity google-api-key=\"googleApiKey\" covid-api-key=\"covidApiKey\" latitude=\"latitude\" longitude=\"longitude\">",
+    "script": "http://localhost:3000/Examples/docs/HospitalBedCapacity/main.js",
+    "layoutConfig": {
+      "comp": "hospital-bed-capacity",
+      "attributes": {
+        "google-api-key": "googleApiKey",
+        "covid-api-key": "covidApiKey",
+        "latitude": "latitude",
+        "longitude": "longitude"
+      },
+      "script": "http://localhost:3000/Examples/docs/HospitalBedCapacity/main.js"
+    },
+    "style": "grid-column: span 5;"
+  },
+  {
+    "label": "Learning Sample",
+    "comp": "<learning-sample></learning-sample>",
+    "script": "http://localhost:3000/Examples/docs/LearningWidgetSample/main.js",
+    "layoutConfig": {
+      "comp": "learning-sample",
+      "script": "http://localhost:3000/Examples/docs/LearningWidgetSample/main.js"
+    },
+    "style": "grid-column: span 5;"
+  }
+]
