@@ -37,8 +37,8 @@
           "
         >
           <img src="./webex_cc_logo.png" style="padding-right: 12px" />
-          <span style="font-size: 14px; font-weight: bold; padding-right: 12px"
-            >Demo Widgets Hosted JavaScripts Bundles</span
+          <span style="font-size: 16px; font-weight: bold; padding-right: 12px"
+            >Demo Widgets</span
           >
           <md-alert-banner style="flex: 1" show type="warning" closable>
             Some of the demo widgets cannot be previewed, because it needs
@@ -76,7 +76,7 @@
             script:
               "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/crm.js",
           },
-          style: "grid-column: span 3;",
+          style: "grid-column: span 3",
         },
 
         {
@@ -125,11 +125,20 @@
               "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/map-widget.js",
           },
           style: "grid-column: span 2;",
+          externalProps:
+            '<div style="display:grid; grid-template-columns: 1fr auto; gap: 4px"><md-input id="google-api-key-map" placeholder="Please enter Google api key"></md-input> <md-button id="map-widget-btn">Apply</md-button> </div>',
+          handler: `document.querySelector('#map-widget-btn').addEventListener('click', () => {
+              const gkey = document.querySelector('#google-api-key-map').value;
+             
+              //console.log('covid-api-key', val);
+              document.querySelector('map-widget').setAttribute('api-key', gkey);
+
+            });`,
         },
         {
           label: "Covid By Location",
           comp:
-            '<covid-by-location api-key="1318b408f01c4aa3b5f79dedc6c90848" selectedCountyState="SantaClara County, CA"></covid-by-location>',
+            '<covid-by-location api-key="1318b408f01c4aa3b5f79dedc6c90848" selectedCountyState="New York County, NY"></covid-by-location>',
           script:
             "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/covid-by-location.js",
           style: "grid-column: span 3;",
@@ -139,6 +148,7 @@
               "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/covid-by-location.js",
             attributes: {
               "api-key": "1318b408f01c4aa3b5f79dedc6c90848",
+              selectedCountyState: "New York County, NY",
             },
             wrapper: {
               title: "Covid by location",
@@ -149,8 +159,8 @@
 
         {
           label: "Hospital Bed Capacity",
-          comp: `<hospital-bed-capacity google-api-key="googleApiKey" covid-api-key="covidApiKey"
-              latitude="latitude" longitude="longitude">`,
+          comp: `<hospital-bed-capacity google-api-key="googleApiKey" covid-api-key="1318b408f01c4aa3b5f79dedc6c90848"
+              latitude="88.363892" longitude="-74.005974">`,
           script:
             "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/hospital-bed-capacity.js",
           layoutConfig: {
@@ -158,13 +168,32 @@
             attributes: {
               "google-api-key": "googleApiKey",
               "covid-api-key": "covidApiKey",
-              latitude: "latitude",
-              longitude: "longitude",
+              latitude: "88.363892",
+              longitude: "-74.005974",
             },
             script:
               "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/hospital-bed-capacity.js",
           },
           style: "grid-column: span 5;",
+          externalProps: `<div style="display:grid; grid-template-columns: repeat(4, 1fr) auto; gap: 4px">
+              <md-input id="google-api-key" placeholder="google-api-key"></md-input>
+              <md-input id="covid-api-key" value="1318b408f01c4aa3b5f79dedc6c90848"  placeholder="covid-api-key"></md-input>
+              <md-input value="88.363892" id="latitude" placeholder="latitude"></md-input>
+              <md-input value="-74.005974"  id="longitude"  placeholder="longitude"></md-input>
+              <md-button id="hospital-bed-capacity-btn">Apply</md-button>
+            </div>`,
+          handler: `document.querySelector('#hospital-bed-capacity-btn').addEventListener('click', () => {
+              const gkey = document.querySelector('#google-api-key').value;
+              const ckey = document.querySelector('#covid-api-key').value;
+              const lad = document.querySelector('#latitude').value;
+              const lon = document.querySelector('#longitude').value;
+              //console.log('covid-api-key', val);
+              document.querySelector('hospital-bed-capacity').setAttribute('google-api-key', gkey);
+              document.querySelector('hospital-bed-capacity').setAttribute('covid-api-key', ckey)
+              document.querySelector('hospital-bed-capacity').setAttribute('latitude', lat)
+              document.querySelector('hospital-bed-capacity').setAttribute('longitude', lon)
+
+            });`,
         },
         {
           label: "Learning Sample",
@@ -184,11 +213,14 @@
           let comps = "";
           widgets.forEach((w) => {
             comps += `
+           
                   <div style="${w.style}">
                     <div class="widget-card">
                       <div class="widget-card-container">
-                        <h4 style="display:flex; width: 100%">
+                        <div style="display:grid; grid-template-columns: auto 1fr auto; gap:12px ">
                           <b style="flex:1;">${w.label}</b>
+                          <span>${w.externalProps ? w.externalProps : ""}</span>
+
                           <div>
                           <md-menu-overlay
                           size="large"
@@ -218,13 +250,18 @@
                             </div>
                           </md-menu-overlay>
                           </div>
-                        </h4>
-
+                        </div>
                       </div>
+
                         ${w.comp}
                     </div>
+
                   </div>
+                 
             `;
+            setTimeout(() => {
+              w.handler ? eval(w.handler) : "";
+            }, 1000);
           });
           this.innerHTML = ` <style>
             .widget-card {
@@ -233,6 +270,8 @@
               background-color: var(--md-primary-bg-color);
               color: var(--md-primary-text-color);
               width: 100%;
+              resize: both;
+              overflow:auto;
             }
 
             .widget-card:hover {
@@ -259,7 +298,7 @@
             }
           </style>
           <div class="grid-container">
-            ${comps}
+              ${comps}
           </div>`;
         }
       }
