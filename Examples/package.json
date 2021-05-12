@@ -13,6 +13,7 @@
     "@momentum-ui/icons": "8.8.3",
     "@momentum-ui/utils": "6.2.13",
     "@momentum-ui/web-components": "^2.1.0",
+    "gridstack": "^4.2.3",
     "lit-element": "^2.3.1",
     "lit-html": "^1.2.1"
   },
