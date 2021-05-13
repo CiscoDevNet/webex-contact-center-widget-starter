@@ -7,25 +7,24 @@
     <title>webex-contact-center-widget-starter</title>
 
     <link
-      href="https://ciscodevnet.github.io/webex-contact-center-widget-starter/css/momentum-ui.min.css"
+      href="css/momentum-ui.min.css"
       type="text/css"
       rel="stylesheet"
     />
     <link
-      href="https://ciscodevnet.github.io/webex-contact-center-widget-starter/css/momentum-ui-icons.min.css"
+      href="css/momentum-ui-icons.min.css"
       type="text/css"
       rel="stylesheet"
     />
-    <script src="gridstack-h5.js"></script>
+    
     <link href="gridstack.min.css" type="text/css" rel="stylesheet" />
     <link href="style.css" type="text/css" rel="stylesheet" />
     <script>
       let AGENTX_SERVICE = {};
     </script>
   </head>
-  <body style="width: 99vw; overflow-x: hidden">
+  <body style="width: 100vw; height: 100vh; overflow: hidden">
     <md-theme lumos style="width: 100%">
-      <div>
         <header
           style="
             display: flex;
@@ -35,39 +34,51 @@
             background-color: var(--md-primary-bg-color);
             color: var(--md-primary-text-color);
             border-bottom: 1px solid var(--md-primary-seperator-color);
-            width: 100%;
           "
         >
           <img src="./webex_cc_logo.png" style="padding-right: 12px" />
           <span style="font-size: 16px; font-weight: bold; padding-right: 12px"
             >Demo Widgets</span
           >
-          <md-alert-banner style="flex: 1" show type="warning" closable>
+          <md-alert-banner style="flex: 1;" show type="warning" closable>
             Some of the demo widgets cannot be previewed, because it needs
             additional props like google api key etc.
           </md-alert-banner>
-          <md-toggle-switch click="handleThemeToggle" style="padding: 0 12px"
-            >Dark Mode</md-toggle-switch
-          >
+          <div style="display: flex; padding: 12px;" >
+            <md-menu-overlay>
+              <md-button slot="menu-trigger" color="green" outline>Resources <md-icon style="padding-left: 5px;" name="icon-arrow-down-optical_14"></md-icon></md-button>
+              <md-list style="width: 100%;" label="mmmmmmeeee">
+                <md-list-item aria-label="Neptunium" slot="list-item"><md-icon style="padding-right: 12px;;" name="icon-document_24"></md-icon><a href="https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/webexcc/developer_20/webexcc_b_20-desktop-developer-guide-/webexcc_m_30-build-a-custom-widget.html" target="_blank">Desktop Developer Guide</a></md-list-item>
+                <md-list-item aria-label="Neptunium" slot="list-item"><md-icon style="padding-right: 12px;;" name="icon-document_24"></md-icon><a href="https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/webexcc/developer_20/webexcc_b_20-desktop-developer-guide-/webexcc_m_30-javascript-sdk.html" target="_blank">Desktop SDK</a></md-list-item>
+                <md-list-item aria-label="Neptunium" slot="list-item" style="display: flex;justify-content: center; align-items: center;"><md-icon style="padding-right: 12px;;" name="icon-github-circle_24"></md-icon><a href="https://github.com/CiscoDevNet/webex-contact-center-widget-starter" target="_blank">Desktop Starter Widgets</a></md-list-item>
+                <md-list-item aria-label="Neptunium" slot="list-item" style="display: flex;justify-content: center; align-items: center;"><md-icon style="padding-right: 12px;;" name="icon-apps_24"></md-icon><a href="https://momentum.design/ " target="_blank">Momentum Design</a></md-list-item>
+                <md-list-item aria-label="Neptunium" slot="list-item" style="display: flex;justify-content: center; align-items: center;"><md-icon style="padding-right: 12px;;" name="icon-apps_24"></md-icon><a href="https://momentum-design.github.io/momentum-ui/?path=/story/accordion--default" target="_blank">Momentum Web Component Storybook</a></md-list-item>
+                <md-list-item aria-label="Neptunium" slot="list-item" style="display: flex;justify-content: center; align-items: center;"><md-icon style="padding-right: 12px;;" name="icon-github-circle_24"></md-icon><a href="https://github.com/momentum-design/momentum-ui/tree/master/web-components" target="_blank">Momentum Web Component</a></md-list-item>
+               
+              </md-list>
+            </md-menu-overlay>
+            <md-toggle-switch click="handleThemeToggle" style="padding-left:12px"></md-toggle-switch>
+              Switch Theme</md-toggle-switch
+            >
+        </div>
         </header>
         <main
-          style="padding: 12px; background-color: var(--md-secondary-bg-color)"
-        >
+          style="background-color: var(--md-secondary-bg-color); height: calc(100vh - 60px); overflow-x: hidden; overflow-y: auto">
           <div
             class="grid-stack grid-stack-animate ui-droppable"
             id="simple-grid"
           ></div>
           <demo-widget-preview></demo-widget-preview>
         </main>
-      </div>
     </md-theme>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/covid-by-location.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/timer.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/rss-feed-widget.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/crm.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/hospital-bed-capacity.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/map-widget.js"></script>
-    <script src="https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/learning-widget-sample.js"></script>
+    <script src="gridstack-h5.js"></script>
+    <script src="widgets/covid-by-location.js"></script>
+    <script src="widgets/timer.js"></script>
+    <script src="widgets/rss-feed-widget.js"></script>
+    <script src="widgets/crm.js"></script>
+    <script src="widgets/hospital-bed-capacity.js"></script>
+    <script src="widgets/map-widget.js"></script>
+    <script src="widgets/learning-widget-sample.js"></script>
 
     <script src="demo.js"></script>
   </body>
