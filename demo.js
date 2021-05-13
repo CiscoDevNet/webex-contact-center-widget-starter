@@ -236,7 +236,7 @@
 
     st.appendChild(
       document.createTextNode(
-        `.float-modal::part(floating) { overflow: hidden;height: 400px;width: 700px;left: calc(${
+        `.float-modal::part(floating) { overflow: hidden;height: 350px;width: 700px;left: calc(${
           e.detail.cb.x
         }px - 700px );top: ${
           document.documentElement.scrollTop + e.detail.cb.y
@@ -246,37 +246,16 @@
 
     document.head.appendChild(st);
     fm.setAttribute("heading", w.label);
-    fm.innerHTML = `
-        
-        <div
-          style="
-            width: 700px;
-            overflow: auto;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--md-primary-bg-color);
-            white-space: break-spaces;
-            color: var(--md-primary-text-color);
-          "><div
-            style="
-              display: flex;
-              flex-direction: column;
-              padding: 5px;
-              color: var(--md-primary-text-color);
-            "
-          ><strong>Layout Config Example</strong>
-            <pre style="
-                color: var(--md-primary-text-color);
-                border: 1px dashed var(--md-primary-seperator-color);
-                padding: 5px;
-                overflow-y: auto;
-                overflow-x: hidden;
-                white-space: break-spaces;
-                user-select: all;
-              "
-            >${JSON.stringify(w.layoutConfig, null, 2)}</pre>
-          </div>
-        </div>`;
-    //
+    fm.innerHTML = `<i>Layout Config Example</i>
+    <pre style="color: var(--md-primary-text-color);
+    border: 1px dashed grey;
+    padding: 5px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    white-space: break-spaces;
+    user-select: all;
+    font-size: 14px;
+    font-family: "Lucida Console", "Courier New", monospace;
+">${JSON.stringify(w.layoutConfig, null, 2)}</pre>`;
   });
 })();

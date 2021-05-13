@@ -26,7 +26,6 @@
 
 .grid-stack-item-content {
   box-shadow: 0 4px 4px 0 var(--md-primary-seperator-color);
-  inset: 2px;
   margin: 0;
   position: absolute;
   width: auto;
