@@ -24,8 +24,8 @@
     {
       x: 0,
       y: 0,
-      w: 6,
-      h: 5,
+      w: 4,
+      h: 4,
       content: `<crm-widget phone-number="+1 (800) 471-2389"></crm-widget>`,
       label: "CRM",
       comp: `<crm-widget phone-number="+1 (800) 471-2389"></crm-widget>`,
@@ -41,51 +41,9 @@
     },
 
     {
-      x: 6,
+      x: 4,
       y: 0,
-      w: 3,
-      h: 1,
-      content: `<timer-widget duration="08:00:00" style="margin-top: 10px"></timer-widget>`,
-      label: "Timer",
-      comp: `<timer-widget duration="08:00:00" style="margin-top: 10px"></timer-widget>`,
-      script:
-        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/timer.js",
-      layoutConfig: {
-        comp: "timer-widget",
-        attributes: {
-          duration: "08:00:00",
-        },
-        script:
-          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/timer.js",
-      },
-      style: "grid-column: span 1;",
-    },
-    {
-      x: 9,
-      y: 0,
-      w: 3,
-      h: 1,
-      content: `<rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml"
-                update-delay="5000"></rss-feed-widget>`,
-      label: "RSS",
-      comp: `<rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml"
-                update-delay="5000"></rss-feed-widget>`,
-      script:
-        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/rss-feed-widget.js",
-      layoutConfig: {
-        comp: "rss-feed-widget",
-        attributes: {
-          "rss-feed": "https://w1.weather.gov/xml/current_obs/PHNL.rss",
-        },
-        script:
-          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/rss-feed-widget.js",
-      },
-      style: "grid-column: span 1;",
-    },
-    {
-      x: 6,
-      y: 0,
-      w: 6,
+      w: 4,
       h: 4,
       content: `<map-widget api-key="" search-enabled></map-widget>`,
       label: "Map",
@@ -111,9 +69,51 @@
             });`,
     },
     {
+      x: 8,
+      y: 0,
+      w: 4,
+      h: 2,
+      content: `<timer-widget duration="08:00:00" style="margin-top: 10px"></timer-widget>`,
+      label: "Timer",
+      comp: `<timer-widget duration="08:00:00" style="margin-top: 10px"></timer-widget>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/timer.js",
+      layoutConfig: {
+        comp: "timer-widget",
+        attributes: {
+          duration: "08:00:00",
+        },
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/timer.js",
+      },
+      style: "grid-column: span 1;",
+    },
+    {
+      x: 12,
+      y: 0,
+      w: 4,
+      h: 2,
+      content: `<rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml"
+                update-delay="5000"></rss-feed-widget>`,
+      label: "RSS",
+      comp: `<rss-feed-widget rss-feed="https://www.who.int/feeds/entity/csr/don/en/rss.xml"
+                update-delay="5000"></rss-feed-widget>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/rss-feed-widget.js",
+      layoutConfig: {
+        comp: "rss-feed-widget",
+        attributes: {
+          "rss-feed": "https://w1.weather.gov/xml/current_obs/PHNL.rss",
+        },
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/rss-feed-widget.js",
+      },
+      style: "grid-column: span 1;",
+    },
+    {
       x: 0,
       y: 1,
-      w: 6,
+      w: 4,
       h: 4,
       content: `<covid-by-location api-key="1318b408f01c4aa3b5f79dedc6c90848" selectedCountyState="New York County, NY"></covid-by-location>`,
       label: "Covid By Location",
@@ -136,8 +136,24 @@
       },
     },
     {
-      x: 6,
+      x: 4,
       y: 1,
+      w: 8,
+      h: 4,
+      content: `<iframe style="width: 100%; height:100%" src="https://www.foxnews.com/"></iframe>`,
+      label: "News",
+      comp: `<iframe style="width: 100%; height:100%" src="https://www.foxnews.com/"></iframe>`,
+      
+      layoutConfig: {
+        "comp": "agentx-wc-iframe",
+        "attributes": { "src": "https://www.foxnews.com/" },
+        "wrapper": { "title": "Fox News", "maximizeAreaName": "app-maximize-area" }
+      },
+      style: "grid-column: span 5;",
+    },
+    {
+      x: 0,
+      y: 2,
       w: 6,
       h: 4,
       content: `<my-hospital-widget covi-api-key="1318b408f01c4aa3b5f79dedc6c90848" google-api-key="googleApiKey" latitude="88.363892" longitude="-74.005974">
@@ -179,10 +195,10 @@
             });`,
     },
     {
-      x: 0,
+      x: 6,
       y: 2,
       w: 6,
-      h: 3,
+      h: 4,
       content: `<learning-sample></learning-sample>`,
       label: "Learning Sample",
       comp: `<learning-sample></learning-sample>`,
@@ -195,22 +211,7 @@
       },
       style: "grid-column: span 5;",
     },
-    {
-      x: 6,
-      y: 2,
-      w: 6,
-      h: 4,
-      content: `<iframe style="width: 100%; height:100%" src="https://www.foxnews.com/"></iframe>`,
-      label: "News",
-      comp: `<iframe style="width: 100%; height:100%" src="https://www.foxnews.com/"></iframe>`,
-      
-      layoutConfig: {
-        "comp": "agentx-wc-iframe",
-        "attributes": { "src": "https://www.foxnews.com/" },
-        "wrapper": { "title": "Fox News", "maximizeAreaName": "app-maximize-area" }
-      },
-      style: "grid-column: span 5;",
-    },
+    
     
   ];
 
