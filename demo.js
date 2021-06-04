@@ -181,7 +181,7 @@
     {
       x: 0,
       y: 2,
-      w: 12,
+      w: 6,
       h: 3,
       content: `<learning-sample></learning-sample>`,
       label: "Learning Sample",
@@ -195,6 +195,23 @@
       },
       style: "grid-column: span 5;",
     },
+    {
+      x: 6,
+      y: 2,
+      w: 6,
+      h: 4,
+      content: `<iframe style="width: 100%; height:100%" src="https://www.foxnews.com/"></iframe>`,
+      label: "News",
+      comp: `<iframe style="width: 100%; height:100%" src="https://www.foxnews.com/"></iframe>`,
+      
+      layoutConfig: {
+        "comp": "agentx-wc-iframe",
+        "attributes": { "src": "https://www.foxnews.com/" },
+        "wrapper": { "title": "Fox News", "maximizeAreaName": "app-maximize-area" }
+      },
+      style: "grid-column: span 5;",
+    },
+    
   ];
 
   widgets.forEach((w) => {
