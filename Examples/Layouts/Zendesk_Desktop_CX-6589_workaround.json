@@ -10,12 +10,12 @@
       "id": "dw-header",
       "widgets": {
         "comp1": {
-          "comp": "agentx-salesforce-desktop",
-           "script":"https://dw4r593nghmue.cloudfront.net/dist/index.js",
-           "properties": {
+          "comp": "agentx-zendesk-desktop",
+           "script":"https://s3.us-east-2.amazonaws.com/kad.zendesk.desktop/dist/index.js",
+           "attributes": {
             "outDialEp": "$STORE.agent.outDialEp", 
-            "agentDN":"<OutDialANIValue >",
-            "hostName":"https://dw4r593nghmue.cloudfront.net"
+            "agentDN":"$STORE.agent.dnNumber",
+            "hostName":"https://s3.us-east-2.amazonaws.com/kad.zendesk.desktop/dist"
             }
         }
       },
@@ -41,7 +41,10 @@
         {
           "comp": "md-tab",
           "attributes": { "slot": "tab", "class": "widget-pane-tab" },
-          "children": [{ "comp": "#IVR_TRANSCRIPT_TAB" }],
+          "children": [
+            { "comp": "md-icon", "attributes": { "name": "transcript_16" } },
+            { "comp": "span", "textContent": "IVR Transcript" }
+          ],
           "visibility": "IVR_TRANSCRIPT"
         },
         {
@@ -52,20 +55,53 @@
         },
         {
           "comp": "md-tab",
-          "attributes": { "slot": "tab", "class": "widget-pane-tab" },
-          "children": [{ "comp": "#CUSTOMER_EXPERIENCE_JOURNEY_TAB" }],
+          "attributes": { "slot": "tab" },
+          "children": [
+            {
+              "comp": "span",
+              "attributes": { "class": "tab-header-content", "style": "align-items: center; display: flex;" },
+              "children": [
+                {
+                  "comp": "img",
+                  "attributes": {
+                    "src": "/app/images/wxm.bcd45cc3.svg",
+                    "width": 16,
+                    "height": 16,
+                    "style": "margin-right: 0.5rem;"
+                  }
+                },
+                { "comp": "span", "textContent": "Experience Journey" }
+              ]
+            }
+          ],
           "visibility": "WXM_JOURNEY"
         },
         {
           "comp": "md-tab-panel",
           "attributes": { "slot": "panel", "class": "widget-pane" },
-          "children": [{ "comp": "#CUSTOMER_EXPERIENCE_JOURNEY" }],
+          "children": [
+            {
+              "comp": "agentx-wc-cloudcherry-widget",
+              "properties": {
+                "userModel": "$STORE.app.userModel",
+                "spaceId": "5f9244550b184e6e44114ed9-ccdemo07pyadmin",
+                "metricsId": "kq43q6ku07hzv764-ccdemo07py",
+                "teamId": "$STORE.agent.teamName",
+                "ani": "$STORE.agentContact.taskSelected.ani",
+                "isDarkMode": "$STORE.app.darkMode"
+              },
+              "wrapper": { "title": "Experience Journey", "maximizeAreaName": "app-maximize-area" }
+            }
+          ],
           "visibility": "WXM_JOURNEY"
         },
         {
           "comp": "md-tab",
           "attributes": { "slot": "tab", "class": "widget-pane-tab" },
-          "children": [{ "comp": "#CONTACT_HISTORY_TAB" }]
+          "children": [
+            { "comp": "md-icon", "attributes": { "name": "icon-recents_16" } },
+            { "comp": "span", "textContent": "Contact History" }
+          ]
         },
         {
           "comp": "md-tab-panel",
@@ -75,7 +111,10 @@
         {
           "comp": "md-tab",
           "attributes": { "slot": "tab", "class": "widget-pane-tab" },
-          "children": [{ "comp": "#SCREEN_POP_TAB" }],
+          "children": [
+            { "comp": "md-icon", "attributes": { "name": "pop-out_16" } },
+            { "comp": "span", "textContent": "Screen Pop" }
+          ],
           "visibility": "SCREEN_POP"
         },
         {
