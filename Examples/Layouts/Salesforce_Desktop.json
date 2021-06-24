@@ -14,7 +14,7 @@
            "script":"https://dw4r593nghmue.cloudfront.net/dist/index.js",
            "properties": {
             "outDialEp": "$STORE.agent.outDialEp", 
-            "agentDN":"<OutDialANIValue>",
+            "agentDN":"<OutDialANIValue >",
             "hostName":"https://dw4r593nghmue.cloudfront.net"
             }
         }
