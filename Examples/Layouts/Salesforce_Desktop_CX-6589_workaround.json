@@ -12,9 +12,9 @@
         "comp1": {
           "comp": "agentx-salesforce-desktop",
            "script":"https://dw4r593nghmue.cloudfront.net/dist/index.js",
-           "properties": {
+           "attributes": {
             "outDialEp": "$STORE.agent.outDialEp", 
-            "agentDN":"<OutDialANIValue >",
+            "agentDN":"<OutDialANIValue>",
             "hostName":"https://dw4r593nghmue.cloudfront.net"
             }
         }
