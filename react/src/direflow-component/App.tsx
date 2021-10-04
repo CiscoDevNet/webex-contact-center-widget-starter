@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { Styled } from "direflow-component";
 import styles from "./App.css";
 import { logger } from "./sdk";
@@ -29,6 +29,8 @@ const App: FC<IProps> = (props) => {
   const [sampleInteractionId, setSampleIntId] = useState(
     "58f76ca3-409f-11eb-8606-f1b296a9b969"
   );
+  const newInteractionId = useRef<any>(null);
+  
   const [buddyAgents, setBuddyAgents] = useState(
     null as Service.Aqm.Contact.BuddyAgentsSuccess | null
   );
@@ -278,6 +280,7 @@ const App: FC<IProps> = (props) => {
       interactionId: interactionId,
     });
     logger.info(acceptInteraction);
+    
   }
 
   async function endInteraction() {
@@ -423,6 +426,10 @@ const App: FC<IProps> = (props) => {
     console.log(assignedContacts[0]);
   }
 
+  function setNewInteraactionId(){
+    setSampleIntId(newInteractionId.current.value);
+  }
+
   return (
     <Styled styles={styles}>
       <div className="app">
@@ -458,6 +465,21 @@ const App: FC<IProps> = (props) => {
           <md-tab-panel slot="panel">
             <div className="action-container">
               <h2>Desktop.agentContact sub-module</h2>
+              <md-input
+                htmlid="newInteractionId"
+                class="input-field"
+                placeholder="Enter interaction id"
+                ariaLabel="Enter interaction id"
+                shape="pill"
+                clear=""
+                value=""
+                tabindex="0"
+                autoFocus
+                ref={newInteractionId}
+              ></md-input>
+              <md-button onClick={() => setNewInteraactionId()}>
+              Set New Interaction Id
+            </md-button>
               <h3>Get Available Agents</h3>
               <p>
                 Make sure to fetch latest agent info first before invoking this
@@ -478,6 +500,7 @@ const App: FC<IProps> = (props) => {
 
               <h3>Accept interactions</h3>
               <span>New incoming interactions will appear here</span>
+             
               {contacts.map((interactionId) => {
                 if (acceptedContacts.indexOf(interactionId) === -1) {
                   return (
