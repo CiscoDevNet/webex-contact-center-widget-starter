@@ -219,9 +219,12 @@ const App: FC<IProps> = (props) => {
   const getAgentInfo = () => {
     const latestData = Desktop.agentStateInfo.latestData;
     logger.info("AgentStateInfo latestData: ", latestData);
-    if (latestData.agentSessionId && latestData.agentProfileID) {
-      setSessionId(latestData.agentSessionId);
+    if (latestData.agentProfileID) {
       setProfileId(latestData.agentProfileID);
+    }
+
+    if (latestData.subStatus) {
+      setSessionId(latestData.subStatus);
     }
   };
 
