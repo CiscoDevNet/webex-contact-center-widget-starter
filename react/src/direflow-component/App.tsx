@@ -478,11 +478,9 @@ const App: FC<IProps> = (props) => {
                 value=""
                 tabindex="0"
                 autoFocus
+                onInput = {setNewInteraactionId}
                 ref={newInteractionId}
               ></md-input>
-              <md-button onClick={() => setNewInteraactionId()}>
-              Set New Interaction Id
-            </md-button>
               <h3>Get Available Agents</h3>
               <p>
                 Make sure to fetch latest agent info first before invoking this
