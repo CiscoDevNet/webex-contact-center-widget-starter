@@ -429,6 +429,22 @@ const App: FC<IProps> = (props) => {
     console.log(assignedContacts[0]);
   }
 
+
+  async function updateCADVariable() {  
+    try {
+      const contactPayload = {
+        attributes:{
+          diallerName: "agent-name",
+          diallerPhoneNumber: "+1 010 010 010"
+        }
+      };
+      await Desktop.dialer.updateCadVariables({interactionId:"123", data: contactPayload});
+    } catch(e) {
+      // Handle Exception.
+      console.error(e);
+    }
+  }
+
   function setNewInteraactionId(){
     setSampleIntId(newInteractionId.current.value);
   }
@@ -635,6 +651,9 @@ const App: FC<IProps> = (props) => {
 
               <md-button onClick={() => getTaskMap()}>
                 Get full ist of assigned tasks including CAD variables
+              </md-button>
+              <md-button onClick={() => updateCADVariable()}>
+                Update CAD Variables
               </md-button>
               <span>
                 {assignedContacts.length > 0
