@@ -30,7 +30,7 @@ const App: FC<IProps> = (props) => {
     "58f76ca3-409f-11eb-8606-f1b296a9b969"
   );
   const newInteractionId = useRef<any>(null);
-  
+
   const [buddyAgents, setBuddyAgents] = useState(
     null as Service.Aqm.Contact.BuddyAgentsSuccess | null
   );
@@ -283,7 +283,7 @@ const App: FC<IProps> = (props) => {
       interactionId: interactionId,
     });
     logger.info(acceptInteraction);
-    
+
   }
 
   async function endInteraction() {
@@ -430,7 +430,7 @@ const App: FC<IProps> = (props) => {
   }
 
 
-  async function updateCADVariable() {  
+  async function updateCADVariable() {
     try {
       const contactPayload = {
         attributes:{
@@ -443,6 +443,10 @@ const App: FC<IProps> = (props) => {
       // Handle Exception.
       console.error(e);
     }
+  }
+
+  async function mockOutdialAniList(){
+    await Desktop.agentStateInfo.mockOutdialAniList({})
   }
 
   function setNewInteraactionId(){
@@ -476,6 +480,9 @@ const App: FC<IProps> = (props) => {
               </md-button>
               <md-button onClick={() => getAgentAddressBooks()}>
                 Fetch Address Books
+              </md-button>
+              <md-button onClick={() => mockOutdialAniList()}>
+                Mock Outdial Ani List
               </md-button>
             </div>
           </md-tab-panel>
@@ -517,7 +524,7 @@ const App: FC<IProps> = (props) => {
 
               <h3>Accept interactions</h3>
               <span>New incoming interactions will appear here</span>
-             
+
               {contacts.map((interactionId) => {
                 if (acceptedContacts.indexOf(interactionId) === -1) {
                   return (
