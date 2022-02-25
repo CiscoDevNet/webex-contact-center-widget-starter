@@ -671,7 +671,7 @@ export default class MyCustomComponent extends LitElement {
             {
               "wrapper": {
                 "title": "React Framework",
-                "titleFor": "unique-lit-id-to-update-title",
+                "id": "unique-lit-id-to-update-title",
                 "maximizeAreaName": "app-maximize-area"
               }
             }
