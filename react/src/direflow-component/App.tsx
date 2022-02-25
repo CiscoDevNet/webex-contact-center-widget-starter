@@ -737,7 +737,7 @@ const App: FC<IProps> = (props) => {
             {JSON.stringify({
               "wrapper": {
                 "title": "React Framework",
-                "titleFor": "unique-react-id-to-update-title",
+                "id": "unique-react-id-to-update-title",
                 "maximizeAreaName": "app-maximize-area"
               }
             }, undefined, 2)}
