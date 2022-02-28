@@ -35,6 +35,8 @@ export default class MyCustomComponent extends LitElement {
   @property({ type: String, attribute: "agent-session-id", reflect: true })
   agentSessionId = "5a84d32c-691b-4500-b163-d6cdba2a3163";
 
+  @property({ type: String }) titleFor = "";
+
   /**
    * Replace this with the logic to obtain interaction ID you need
    * through Desktop.actions sub-module or through external props
@@ -653,6 +655,52 @@ export default class MyCustomComponent extends LitElement {
               urna, at imperdiet augue. Donec congue tempus elit quis rhoncus.
               Etiam orci quam, vestibulum egestas rutrum non, dapibus a justo.
             </p>
+          </md-tab-panel>
+          <md-tab slot="tab">Widget Header title update</md-tab>
+          <md-tab-panel slot="panel">
+            <h2>Update Dynamic widget header title</h2>
+            <p>
+              To test this functionality please add titleFor property in wrapper
+              with unique id Example:<strong
+                >&quot;titleFor&quot;:
+                &quot;unique-lit-id-to-update-title&quot;</strong
+              >
+            </p>
+
+            <pre>
+            {
+              "wrapper": {
+                "title": "React Framework",
+                "id": "unique-lit-id-to-update-title",
+                "maximizeAreaName": "app-maximize-area"
+              }
+            }
+          </pre
+            >
+            <md-input
+              class="input-field"
+              shape="pill"
+              placeholder="Enter New Title"
+              clear=""
+              value=""
+              tabindex="0"
+              autoFocus
+              @input-change=${(e: any) => {
+                this.titleFor = e.target.value;
+              }}
+            ></md-input>
+
+            <md-button
+              @click=${() => {
+                const e = new CustomEvent("unique-lit-id-to-update-title", {
+                  bubbles: true,
+                  detail: { title: this.titleFor }
+                });
+                window.dispatchEvent(e);
+                console.log("lit cosole", e);
+              }}
+              >Update Title</md-button
+            >
           </md-tab-panel>
         </md-tabs>
         <slot></slot>

@@ -29,6 +29,8 @@ const App: FC<IProps> = (props) => {
   const [sampleInteractionId, setSampleIntId] = useState(
     "58f76ca3-409f-11eb-8606-f1b296a9b969"
   );
+
+  const [titleFor, setTitleFor] = useState("");
   const newInteractionId = useRef<any>(null);
 
   const [buddyAgents, setBuddyAgents] = useState(
@@ -446,7 +448,7 @@ const App: FC<IProps> = (props) => {
   }
 
   async function mockOutdialAniList(){
-    await Desktop.agentStateInfo.mockOutdialAniList({})
+    await Desktop.agentStateInfo.mockOutdialAniList()
   }
 
   function setNewInteraactionId(){
@@ -723,6 +725,45 @@ const App: FC<IProps> = (props) => {
               urna, at imperdiet augue. Donec congue tempus elit quis rhoncus.
               Etiam orci quam, vestibulum egestas rutrum non, dapibus a justo.
             </p>
+          </md-tab-panel>
+
+          <md-tab slot="tab">Widget Header title update</md-tab>
+          <md-tab-panel slot="panel">
+
+          <h2>Update Dynamic widget header title</h2>
+          <p>To test this functionality please add titleFor property in wrapper with unique id Example:<strong>&quot;titleFor&quot;: &quot;unique-react-id-to-update-title&quot;</strong></p>
+
+          <pre>
+            {JSON.stringify({
+              "wrapper": {
+                "title": "React Framework",
+                "id": "unique-react-id-to-update-title",
+                "maximizeAreaName": "app-maximize-area"
+              }
+            }, undefined, 2)}
+          </pre>
+
+
+          <md-input
+                class="input-field"
+                shape="pill"
+                placeholder="Enter New Title"
+                clear=""
+                value=""
+                tabindex="0"
+                autoFocus
+                onInput = {(e: any)=>setTitleFor(e.target.value)}
+              ></md-input>
+
+
+            
+            <md-button onClick={() => {
+            const e = new CustomEvent("unique-react-id-to-update-title", {
+              bubbles: true,
+              detail: { title: titleFor }
+            });
+            window.dispatchEvent(e);
+          }}>Update Title</md-button>
           </md-tab-panel>
         </md-tabs>
       </div>
