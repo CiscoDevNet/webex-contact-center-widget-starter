@@ -731,7 +731,7 @@ const App: FC<IProps> = (props) => {
           <md-tab-panel slot="panel">
 
           <h2>Update Dynamic widget header title</h2>
-          <p>To test this functionality please add titleFor property in wrapper with unique id Example:<strong>&quot;titleFor&quot;: &quot;unique-react-id-to-update-title&quot;</strong></p>
+          <p>To test this functionality please add "id" property in wrapper with unique id Example:<strong>&quot;id&quot;: &quot;unique-react-id-to-update-title&quot;</strong></p>
 
           <pre>
             {JSON.stringify({
@@ -763,9 +763,17 @@ const App: FC<IProps> = (props) => {
               detail: { title: titleFor }
             });
             window.dispatchEvent(e);
+            window.parent.dispatchEvent(e);
           }}>Update Title</md-button>
+          
+          <br/>
+
+          <iframe src="https://blog.logrocket.com/the-ultimate-guide-to-iframes/" width="100%" />
           </md-tab-panel>
         </md-tabs>
+
+
+        
       </div>
     </Styled>
   );
