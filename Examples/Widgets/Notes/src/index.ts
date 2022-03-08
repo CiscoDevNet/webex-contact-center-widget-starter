@@ -43,7 +43,6 @@ export namespace NotesWidget {
    */
   @customElement("notes-widget")
   export class MyCustomComponent extends LitElement {
-    // export default class MyCustomComponent extends LitElement {
     @property({ type: String, attribute: "agent-id" }) agentId = "";
 
     @internalProperty() private isFeatureFlagEnabled = false;

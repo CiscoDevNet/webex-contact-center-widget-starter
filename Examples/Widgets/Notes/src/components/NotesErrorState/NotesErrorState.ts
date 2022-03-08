@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { WidgetError } from "@/index";
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 import "@momentum-ui/web-components";
 import { customElement, html, internalProperty, LitElement, property } from "lit-element";
 import app from "../../assets/localisation/app.json";

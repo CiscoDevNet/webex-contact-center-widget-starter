@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 import "@momentum-ui/web-components";
 import { customElement, html, property, LitElement } from "lit-element";
 import app from "../assets/localisation/app.json";

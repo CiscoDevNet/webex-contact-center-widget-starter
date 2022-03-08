@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 import { debounce } from "@/utils/helpers";
 import "@momentum-ui/web-components";
 import "@uuip/unified-ui-platform-common-components";

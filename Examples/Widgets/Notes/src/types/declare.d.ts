@@ -15,16 +15,3 @@ declare module "*.svg" {
   const svg: any;
   export default svg;
 }
-
-type CustomerVisit = {
-  title: string;
-  summary: string;
-  date: string;
-  time: string;
-  facility: string;
-  clinician: string;
-  department: string;
-  condition: string;
-  type: string;
-  O2Stat: number;
-};

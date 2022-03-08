@@ -1,4 +1,3 @@
-// import { logger } from "@/sdk";
 import { Desktop } from "@wxcc-desktop/sdk";
 import saveAs from "file-saver";
 import { nanoid } from "nanoid";

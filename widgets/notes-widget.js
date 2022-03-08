@@ -59022,7 +59022,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var nanoid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! nanoid */ "./node_modules/nanoid/index.browser.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./constants */ "./src/constants.ts");
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./index */ "./src/index.ts");
-// import { logger } from "@/sdk";
 
 
 
@@ -59728,7 +59727,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 
 
 
@@ -59902,7 +59900,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin } from "@/mixins/i18nMixin";
 
 
 
@@ -60070,7 +60067,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 
 
 
@@ -60242,7 +60238,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 
 
 
@@ -60317,8 +60312,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { WidgetError } from "@/index";
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 
 
 
@@ -60393,7 +60386,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 
 
 
@@ -60483,7 +60475,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 
 
 
@@ -60629,7 +60620,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 
 
 
@@ -61011,7 +61001,6 @@ var NotesWidget;
     let MyCustomComponent = class MyCustomComponent extends lit_element__WEBPACK_IMPORTED_MODULE_0__["LitElement"] {
         constructor() {
             super(...arguments);
-            // export default class MyCustomComponent extends LitElement {
             this.agentId = "";
             this.isFeatureFlagEnabled = false;
             this.showErrorState = false;

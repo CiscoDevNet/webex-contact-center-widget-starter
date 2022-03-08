@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin } from "@/mixins/i18nMixin";
 import "@momentum-ui/web-components";
 import { customElement, html, LitElement, property } from "lit-element";
 import { NOTE_COLORS, DEFAULT } from "../../constants";

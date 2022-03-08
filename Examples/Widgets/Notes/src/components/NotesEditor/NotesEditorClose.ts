@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { i18nMixin, t } from "@/mixins/i18nMixin";
 import "@momentum-ui/web-components";
 import { customElement, html, LitElement } from "lit-element";
 import style from "../../assets/styles/NotesWidget.scss";
