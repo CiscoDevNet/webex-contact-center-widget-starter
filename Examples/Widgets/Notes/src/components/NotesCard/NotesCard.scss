@@ -1,0 +1,96 @@
+.notes-card-wrapper {
+  padding: 0.75rem;
+  box-sizing: border-box;
+  margin: 0.5rem 0.125rem;
+  padding-left: 1rem;
+  border-radius: 0.25rem;
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  border-left: var(--notes-card-left-border);
+  max-height: var(--notes-card-height);
+  background-color: var(--md-primary-two-bg-color);
+  box-shadow: var(--notes-card-box-shadow);
+
+  .notes-card-header {
+    display: flex;
+
+    .notes-title {
+      flex: 1;
+      margin-right: 20%;
+      font-weight: bold;
+      font-size: var(--font-size-medium);
+    }
+
+    .notes-edit-btn::part(button) {
+      background-color: var(--md-primary-two-bg-color);
+      padding: 0 0.125rem;
+      color: var(--md-primary-text-color);
+
+      &:hover {
+        color: var(--md-input-background-theme-hover);
+      }
+    }
+
+    .notes-edit-icon {
+      display: none;
+    }
+
+    .notes-timestamp {
+      font-size: var(--font-size-small);
+      color: var(--md-secondary-text-color);
+    }
+
+    md-checkbox {
+      font-size: var(--font-size-small);
+    }
+
+    md-checkbox::part(checkbox-label) {
+      padding-left: 1.35rem;
+      &::before,
+      &::after {
+        left: 0.75rem;
+      }
+    }
+
+    agentx-wc-notes-favorite-btn {
+      margin-left: 0.5rem;
+    }
+  }
+
+  .notes-card-body {
+    width: 100%;
+    font-size: var(--font-size-small);
+    color: var(--md-primary-text-color);
+    overflow: auto;
+
+    p {
+      margin: 0;
+      word-break: break-word;
+    }
+  }
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    background-color: var(--md-input-background-theme-disabled);
+
+    .notes-edit-btn::part(button) {
+      background-color: var(--md-input-background-theme-disabled);
+    }
+
+    .notes-edit-icon {
+      display: block;
+    }
+
+    .notes-timestamp {
+      display: none;
+    }
+  }
+}
+
+.ellipsis-view {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

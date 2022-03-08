@@ -1,0 +1,79 @@
+.widget-header-wrapper {
+  display: flex;
+  margin-bottom: 0.5rem;
+
+  .add-note-btn {
+    flex: 1;
+  }
+}
+
+.menu-overlay {
+  margin-left: 0.75rem;
+  
+  md-button::part(button) {
+    background-color: var(--md-primary-one-bg-color);
+    
+    &:focus {
+      color: var(--md-primary-text-color);
+      background-color: var(--md-button-secondary-pressed-bg-color);
+    }
+    
+    &:hover {
+      background-color: var(--button-white-hover-bg-color);
+    }
+  }
+
+  .overlay-content-wrapper {
+    width: 100%;
+
+    md-list-item:focus {
+      background-color: var(--md-input-background-theme-disabled);
+    }
+
+    md-list-item[filter] {
+      background-color: var(--md-highlight-text-color);
+    }
+
+    .list-item-wrapper {
+      display: flex;
+      align-items: center;
+      padding: 0.25rem 0;
+
+      md-icon {
+        margin-right: 0.75rem;
+      }
+    }
+
+    md-datepicker {
+      width: 100%;
+    }
+
+    .date-filter-wrapper {
+      display: flex;
+      align-items: center;
+      padding: 0.25rem 0;
+      justify-content: space-between;
+
+      md-icon {
+        margin-right: 0;
+      }
+    }
+
+    .color-filter-wrapper {
+      flex-direction: column;
+      align-items: inherit;
+
+      span {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .clear-filter {
+      border-top: var(--border);
+    }
+  }
+}
+
+md-menu-overlay::part(overlay-content) {
+  overflow: visible;
+}
