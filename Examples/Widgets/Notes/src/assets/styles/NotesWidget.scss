@@ -1,4 +1,4 @@
-@import "../../assets/styles/variables";
+@import "./variables";
 
 :host {
   display: block;
@@ -21,7 +21,7 @@
   flex-direction: column;
   border-radius: 0.5rem;
 
-  agentx-wc-notes-editor {
+  wc-notes-editor {
     flex: 1;
   }
 
@@ -30,7 +30,7 @@
     display: flex;
     flex-direction: column;
 
-    agentx-wc-notes-card {
+    wc-notes-card {
       flex: 1;
     }
   }
@@ -131,7 +131,7 @@
   }
 }
 
-agentx-wc-notes-error-state {
+wc-notes-error-state {
   height: 100%;
 }
 

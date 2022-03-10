@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { debounce } from "@/utils/helpers";
 import "@momentum-ui/web-components";
-import "@uuip/unified-ui-platform-common-components";
 import { customElement, html, internalProperty, LitElement, property, PropertyValues, query } from "lit-element";
 import {
   ESC_KEY_CODE,
@@ -10,16 +9,16 @@ import {
   NOTE_COLORS,
   SAVE_NOTES_DELAY
 } from "../../constants";
-import { NotesWidget } from "../../index";
+import { NotesWidget } from "../../notesWidget";
 import app from "../../assets/localisation/app.json";
 import { getBlankNote, removeNotes, updateNotes } from "../../Utils";
 import style from "./NotesEditor.scss";
 import "./NotesEditorClose";
 export namespace NotesEditor {
   /**
-   * @element agentx-wc-notes-editor
+   * @element wc-notes-editor
    */
-  @customElement("agentx-wc-notes-editor")
+  @customElement("wc-notes-editor")
   export class Element extends LitElement {
     @property({ reflect: true }) noteDetails: NotesWidget.Note = getBlankNote();
 
@@ -104,11 +103,11 @@ export namespace NotesEditor {
           @keydown=${(event: KeyboardEvent) => this.handleCloseKeyDown(event)}
         >
           <div class="notes-editor-title-wrapper">
-            <agentx-wc-notes-favorite-btn
+            <wc-notes-favorite-btn
               .isFavorite=${this.noteDetails.favorite}
               @favorite-clicked=${(event: CustomEvent) =>
                 this.handleNotesDetailsUpdate("favorite", event.detail.isFavorite)}
-            ></agentx-wc-notes-favorite-btn>
+            ></wc-notes-favorite-btn>
 
             <md-input
               class="notes-editor-title-input"
@@ -118,7 +117,7 @@ export namespace NotesEditor {
               containerSize="small-12"
               maxLength=${NOTES_TITLE_CHARACTER_LIMIT}
             ></md-input>
-            <agentx-wc-notes-editor-close @close=${this.dispatchCloseEvent}></agentx-wc-notes-editor-close>
+            <wc-notes-editor-close @close=${this.dispatchCloseEvent}></wc-notes-editor-close>
           </div>
           <md-input
             class="notes-editor-content-input"
@@ -131,10 +130,10 @@ export namespace NotesEditor {
             @input-change=${(event: CustomEvent) => this.handleNotesDetailsUpdate("content", event.detail.value.trim())}
           ></md-input>
           <div class="notes-editor-footer">
-            <agentx-wc-notes-colors
+            <wc-notes-colors
               .selectedColor=${this.noteDetails.color}
               @color-selected=${(event: CustomEvent) => this.handleNotesDetailsUpdate("color", event.detail.value)}
-            ></agentx-wc-notes-colors>
+            ></wc-notes-colors>
             <span class="save-status">${this.getSaveStatusText()}</span>
             <span class="notes-char-counter"
               >${`${this.noteDetails.content.length}/${NOTES_CONTENT_CHARACTER_LIMIT}`}</span
