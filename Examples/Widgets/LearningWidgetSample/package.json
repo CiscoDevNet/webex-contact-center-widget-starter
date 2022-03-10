@@ -76,7 +76,7 @@
     "jest-config": "26.4.2",
     "lit-element": "^2.4.0",
     "lit-html": "^1.2.1",
-    "lit-scss-loader": "^1.0.0",
+    "lit-scss-loader": "1.0.1",
     "mobx": "^6.0.1",
     "node-sass": "^4.13.1",
     "prettier": "^1.19.1",

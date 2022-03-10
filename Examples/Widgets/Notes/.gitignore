@@ -1,0 +1,8 @@
+/node_modules
+/dist
+/build
+yarn-error.log
+**/yarn-error.log
+yarn.lock
+package-lock.json
+.npmrc

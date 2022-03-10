@@ -1,0 +1,30 @@
+{
+    "notes": {
+      "notes": "Notes",
+      "selectAll": "Select All",
+      "noNotesToDisplay": "No notes to display",
+      "addNote": "Add a Note",
+      "date": "Date",
+      "colorCodes": "Color Codes",
+      "favorites": "Favorites",
+      "clearFilter": "Clear Filter",
+      "delete": "Delete",
+      "download": "Download",
+      "removeFavorites": "Remove from Favorites",
+      "addToFavorites": "Add to Favorites",
+      "close": "Close",
+      "saved": "Saved",
+      "saving": "Saving...",
+      "addTitle": "Add a Title",
+      "typeNoteHere": "Type your note here",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "moreActions": "More Actions",
+      "filter": "Filter",
+      "newNote": "New Note",
+      "noContentAdded": "No content added yet",
+      "failedToLoadNotes": "Failed to load notes. Please try again.",
+      "notConfigured": "Notes is not configured. Please contact your system administrator."
+    }
+  }
+  
