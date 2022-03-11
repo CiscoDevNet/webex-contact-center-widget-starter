@@ -9,7 +9,7 @@ import {
   NOTE_COLORS,
   SAVE_NOTES_DELAY
 } from "../../constants";
-import { NotesWidget } from "../../notesWidget";
+import { NotesWidget } from "../../NotesWidget";
 import app from "../../assets/localisation/app.json";
 import { getBlankNote, removeNotes, updateNotes } from "../../Utils";
 import style from "./NotesEditor.scss";

@@ -3,7 +3,7 @@ import "@momentum-ui/web-components";
 import app from "./assets/localisation/app.json";
 import { customElement, html, LitElement, property } from "lit-element";
 import style from "./assets/styles/NotesHeaderWidget.scss";
-import "./notesWidget";
+import "./NotesWidget";
 
 export namespace NotesHeaderWidget {
   /**
@@ -13,21 +13,13 @@ export namespace NotesHeaderWidget {
   export class Element extends LitElement {
     @property({ type: String, attribute: "agent-id" }) agentId = "";
 
-    private handleMenuOpened() {
-      //   SERVICE.telemetry.track(SERVICE.telemetry.MIX_EVENT.NOTES_WIDGET_OPENED);
-      console.log("Noted Widget Opened");
-    }
-
     static get styles() {
       return style;
     }
 
     render() {
       return html`
-        <md-menu-overlay
-          size="large"
-          @menu-overlay-open=${this.handleMenuOpened}
-        >
+        <md-menu-overlay size="large">
           <md-tooltip
             slot="menu-trigger"
             placement="bottom"

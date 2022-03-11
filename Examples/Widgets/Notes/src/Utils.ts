@@ -2,7 +2,7 @@ import { Desktop } from "@wxcc-desktop/sdk";
 import saveAs from "file-saver";
 import { nanoid } from "nanoid";
 import { NOTES_WIDGET_LS, DEFAULT, ENTER_KEY_CODE, SPACE_KEY_CODE, DOTTED_SEPARATOR } from "./constants";
-import { agentId, NotesWidget } from "./notesWidget";
+import { agentId, NotesWidget } from "./NotesWidget";
 
 const logger = Desktop.logger.createLogger("learning-sample");
 

@@ -68,7 +68,6 @@ export namespace NotesWidget {
 
     protected firstUpdated(changedProperties: PropertyValues): void {
       super.firstUpdated(changedProperties);
-      // SERVICE.telemetry.track(SERVICE.telemetry.MIX_EVENT.NOTES_WIDGET_OPENED);
       this.updateAgentId();
     }
 
