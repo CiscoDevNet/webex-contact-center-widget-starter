@@ -18,6 +18,7 @@ $widget-info-max-height: 100px;
   background-color: var(--md-primary-bg-color);
   color: var(--md-primary-text-color);
   max-height: $widget-max-height;
+  padding-block-start: 50px;
 
   &-content {
     display: flex;
