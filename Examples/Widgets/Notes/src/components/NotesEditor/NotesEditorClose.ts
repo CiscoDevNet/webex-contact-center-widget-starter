@@ -7,10 +7,10 @@ import app from "../../assets/localisation/app.json";
 
 export namespace NotesEditorClose {
   /**
-   * @element agentx-wc-notes-editor-close
+   * @element wc-notes-editor-close
    * @fires close
    */
-  @customElement("agentx-wc-notes-editor-close")
+  @customElement("wc-notes-editor-close")
   export class Element extends LitElement {
     private handleCloseKeyDown = (event: KeyboardEvent) => {
       if (checkIfSpaceOrEnterKeydown(event.code)) {

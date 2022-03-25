@@ -6,3 +6,4 @@ export { NotesFavoriteBtn } from "./NotesFavoriteBtn/NotesFavoriteBtn";
 export { NotesWidgetHeader } from "./NotesWidgetHeader/NotesWidgetHeader";
 export { NotesErrorState } from "./NotesErrorState/NotesErrorState";
 export { NotesSelectAll } from "./NotesSelectAll";
+export { NotesEmptyState } from "./EmptyState/EmptyState";

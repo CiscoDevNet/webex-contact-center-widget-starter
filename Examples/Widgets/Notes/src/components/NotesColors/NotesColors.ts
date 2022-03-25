@@ -7,10 +7,10 @@ import { checkIfSpaceOrEnterKeydown } from "../../Utils";
 
 export namespace NotesColors {
   /**
-   * @element agentx-wc-notes-colors
+   * @element wc-notes-colors
    * @fires color-selected
    */
-  @customElement("agentx-wc-notes-colors")
+  @customElement("wc-notes-colors")
   export class Element extends LitElement {
     @property({ type: String, reflect: true }) selectedColor = "";
 

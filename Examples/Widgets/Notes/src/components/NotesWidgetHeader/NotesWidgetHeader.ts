@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "@momentum-ui/web-components";
-import "@uuip/unified-ui-platform-common-components";
 import { customElement, html, LitElement, property, query, TemplateResult } from "lit-element";
 import {
   CLEAR_FILTER,
@@ -26,12 +25,12 @@ export const INITIAL_FILTER = {
 
 export namespace NotesWidgetHeader {
   /**
-   * @element agentx-wc-notes-widget-header
+   * @element wc-notes-widget-header
    * @fires filter
    * @fires add-note
    * @fires more-action
    */
-  @customElement("agentx-wc-notes-widget-header")
+  @customElement("wc-notes-widget-header")
   export class Element extends LitElement {
     @property({ type: Object, reflect: true }) filter = { ...INITIAL_FILTER };
     @property({ type: Boolean, reflect: true }) disabled = false;
@@ -129,10 +128,10 @@ export namespace NotesWidgetHeader {
           slot="list-item"
           ><div class="list-item-wrapper color-filter-wrapper">
             <span>${app.notes.colorCodes}</span>
-            <agentx-wc-notes-colors
+            <wc-notes-colors
               .selectedColor=${this.filter.value}
               @color-selected=${(event: CustomEvent) => this.handleFilter({ name: COLORS, value: event.detail.value })}
-            ></agentx-wc-notes-colors></div
+            ></wc-notes-colors></div
         ></md-list-item>
       `;
     }

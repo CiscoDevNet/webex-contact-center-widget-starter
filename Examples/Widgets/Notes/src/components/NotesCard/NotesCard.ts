@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "@momentum-ui/web-components";
-import "@uuip/unified-ui-platform-common-components";
 import { customElement, html, LitElement, property } from "lit-element";
 import { nothing } from "lit-html";
 import { classMap } from "lit-html/directives/class-map";
@@ -11,12 +10,12 @@ import style from "./NotesCard.scss";
 
 export namespace NotesCard {
   /**
-   * @element agentx-wc-notes-card
+   * @element wc-notes-card
    * @fires edit-note
    * @fires note-selected
    * @fires updated
    */
-  @customElement("agentx-wc-notes-card")
+  @customElement("wc-notes-card")
   export class Element extends LitElement {
     @property({ type: Object, attribute: "note-details" }) noteDetails: any = {};
     @property({ type: Boolean, reflect: true }) readView = false;
@@ -32,7 +31,7 @@ export namespace NotesCard {
 
     private checkCardClickElm = (event: MouseEvent | any) => {
       const eventSrcElm = event.target.localName;
-      return !["agentx-wc-notes-favorite-btn", "md-checkbox", "md-icon"].includes(eventSrcElm);
+      return !["wc-notes-favorite-btn", "md-checkbox", "md-icon"].includes(eventSrcElm);
     };
 
     private handleNotesCardSelection = (event: MouseEvent | any) => {
@@ -100,10 +99,10 @@ export namespace NotesCard {
               `
             : nothing}
 
-          <agentx-wc-notes-favorite-btn
+          <wc-notes-favorite-btn
             .isFavorite=${this.noteDetails.favorite}
             @favorite-clicked=${(event: CustomEvent) => this.handleNotesFavoriteUpdate(event)}
-          ></agentx-wc-notes-favorite-btn>
+          ></wc-notes-favorite-btn>
 
           <span class="notes-title ellipsis-view">${this.noteDetails.title}</span>
           ${this.renderEditButton()}

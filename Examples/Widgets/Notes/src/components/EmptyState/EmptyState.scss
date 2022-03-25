@@ -1,0 +1,32 @@
+@import "../../assets/styles/variables.scss";
+
+:host {
+  height: 100%;
+  width: 100%;
+  display: grid;
+}
+
+.empty-state {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  color: var(--md-secondary-text-color);
+  background-color: var(--md-secondary-bg-color);
+
+  &__container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    font-size: var(--font-size-medium);
+  }
+
+  &__illustration {
+    display: flex;
+    width: 100%;
+    height: auto;
+  }
+}
