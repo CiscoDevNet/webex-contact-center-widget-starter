@@ -6,9 +6,9 @@ import style from "../assets/styles/NotesWidget.scss";
 
 export namespace NotesSelectAll {
   /**
-   * @element agentx-wc-notes-select-all
+   * @element wc-notes-select-all
    */
-  @customElement("agentx-wc-notes-select-all")
+  @customElement("wc-notes-select-all")
   export class Element extends LitElement {
     @property({ type: Boolean }) checked = false;
 

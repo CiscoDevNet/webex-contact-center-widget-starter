@@ -8,10 +8,10 @@ import style from "../../assets/styles/NotesWidget.scss";
 
 export namespace NotesActionBar {
   /**
-   * @element agentx-wc-notes-action-bar
+   * @element wc-notes-action-bar
    * @fires close
    */
-  @customElement("agentx-wc-notes-action-bar")
+  @customElement("wc-notes-action-bar")
   export class Element extends LitElement {
     @property({ type: Boolean, reflect: true }) action = DELETE;
     @property({ type: Array, reflect: true }) selectedNotes: Record<string, boolean> = {};

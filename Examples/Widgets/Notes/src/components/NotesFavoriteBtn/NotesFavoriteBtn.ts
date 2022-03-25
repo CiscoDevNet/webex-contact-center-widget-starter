@@ -8,10 +8,10 @@ import { checkIfSpaceOrEnterKeydown } from "../../Utils";
 
 export namespace NotesFavoriteBtn {
   /**
-   * @element agentx-wc-notes-favorite-btn
+   * @element wc-notes-favorite-btn
    * @fires favorite-clicked
    */
-  @customElement("agentx-wc-notes-favorite-btn")
+  @customElement("wc-notes-favorite-btn")
   export class Element extends LitElement {
     @property({ type: Boolean, reflect: true }) isFavorite = false;
 
