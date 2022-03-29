@@ -221,21 +221,24 @@
       comp: `<notes-widget agent-id="46340-65479"></notes-widget>`,
       script:
         "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/notes-widget.js",
-      layoutConfig: [{
-        comp: "notes-widget",
-        script:
-          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/notes-widget.js",
-        attributes: {
-          "agent-id": "46340-65479"
-        },
-      },{
-        comp: "notes-header-widget",
-        script:
-          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/notes-widget.js",
-        attributes: {
-          "agent-id": "46340-65479"
-        },
-      }],
+      layoutConfig: [
+          {
+          comp: "notes-widget",
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/notes-widget.js",
+          attributes: {
+            "agent-id": "46340-65479"
+            },
+          },
+          {
+          comp: "notes-header-widget",
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/notes-widget.js",
+          attributes: {
+            "agent-id": "46340-65479"
+            },
+          }
+      ],
       style: "grid-column: span 5;",
     }
   ];
