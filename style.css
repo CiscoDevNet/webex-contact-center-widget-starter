@@ -36,3 +36,13 @@
   overflow: auto;
   background-color: var(--md-primary-bg-color);
 }
+
+.header-right {
+  display: flex;
+  padding: 12px;
+  align-items: center;
+}
+
+notes-header-widget {
+  padding-right: 10px;
+}
