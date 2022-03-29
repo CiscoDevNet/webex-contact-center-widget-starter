@@ -211,8 +211,33 @@
       },
       style: "grid-column: span 5;",
     },
-    
-    
+    {
+      x: 0,
+      y: 3,
+      w: 6,
+      h: 3,
+      content: `<notes-widget agent-id="46340-65479"></notes-widget>`,
+      label: "Notes Widget",
+      comp: `<notes-widget agent-id="46340-65479"></notes-widget>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/notes-widget.js",
+      layoutConfig: [{
+        comp: "notes-widget",
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/notes-widget.js",
+        attributes: {
+          "agent-id": "46340-65479"
+        },
+      },{
+        comp: "notes-header-widget",
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/notes-widget.js",
+        attributes: {
+          "agent-id": "46340-65479"
+        },
+      }],
+      style: "grid-column: span 5;",
+    }
   ];
 
   widgets.forEach((w) => {
