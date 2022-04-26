@@ -1,3 +1,9 @@
+The location of desktop layouts has been changed. Kindly go to this [link](https://github.com/CiscoDevNet/webex-contact-center-crm-integrations) to get the latest layouts for all CRM connectors.
+
+
+*****************  *****************  *****************  *****************  *****************
+
+
 Please refer the Provisioning --> Desktop Layout section in Cisco Webex Contact Center Setup and Administration Guide for managing the layout [here](https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/CJP/SetupandAdministrationGuide_2/b_mp-release-2/b_cc-release-2_chapter_011.html#topic_BF0EBDF65DCB0A552164D6306657C892)
 
 **Refer this video for additional help** - https://www.youtube.com/watch?v=KZgUvCKh284&feature=youtu.be
