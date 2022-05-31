@@ -85,7 +85,7 @@ export default class HospitalWidget extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.loader.apiKey = this.googleApiKey;
+    //this.loader.apiKey = this.googleApiKey;
   }
 
   async firstUpdated(changeProperties: PropertyValues) {
