@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>activities/share-screen_14</title>
+    <desc>Created with Sketch.</desc>
+    <g id="activities/share-screen_14" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M4.5,1 C3.671,1 3,1.671 3,2.5 L3,4 L1.5,4 C0.671,4 0,4.671 0,5.5 L0,11.5 C0,12.328 0.671,13 1.5,13 L9.5,13 C10.328,13 11,12.328 11,11.5 L11,10 L12.5,10 C13.328,10 14,9.328 14,8.5 L14,2.5 C14,1.671 13.328,1 12.5,1 L4.5,1 Z M10,11.5 C10,11.775 9.775,12 9.5,12 L1.5,12 C1.224,12 1,11.775 1,11.5 L1,5.5 C1,5.224 1.224,5 1.5,5 L3,5 L3,8.5 C3,9.328 3.671,10 4.5,10 L10,10 L10,11.5 Z M13,8.5 C13,8.775 12.775,9 12.5,9 L11,9 L10,9 L4.5,9 C4.224,9 4,8.775 4,8.5 L4,5 L4,4 L4,2.5 C4,2.224 4.224,2 4.5,2 L12.5,2 C12.775,2 13,2.224 13,2.5 L13,8.5 Z" id="fill" fill="#171B1F"></path>
+    </g>
+</svg>

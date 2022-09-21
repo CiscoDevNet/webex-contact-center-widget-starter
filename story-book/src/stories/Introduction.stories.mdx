@@ -1,0 +1,202 @@
+import { Meta } from "@storybook/addon-docs";
+import Code from "./assets/code-brackets.svg";
+import Colors from "./assets/colors.svg";
+import Comments from "./assets/comments.svg";
+import Direction from "./assets/direction.svg";
+import Flow from "./assets/flow.svg";
+import momentum from "./assets/momentum.png";
+import Bag from "./assets/bag.svg";
+import guide from "./assets/guide.svg";
+import wxcc from "./assets/wxcc_logo.svg";
+import wc from "./assets/wc2.png";
+import Plugin from "./assets/plugin.svg";
+import Repo from "./assets/repo.svg";
+import StackAlt from "./assets/stackalt.svg";
+
+<Meta title="Introduction" />
+
+<style>{`
+  .subheading {
+    --mediumdark: '#999999';
+    font-weight: 900;
+    font-size: 13px;
+    color: #999;
+    letter-spacing: 6px;
+    line-height: 24px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    margin-top: 40px;
+  }
+
+  .link-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 10px;
+  }
+
+  @media (min-width: 620px) {
+    .link-list {
+      row-gap: 20px;
+      column-gap: 20px;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media all and (-ms-high-contrast:none) {
+  .link-list {
+      display: -ms-grid;
+      -ms-grid-columns: 1fr 1fr;
+      -ms-grid-rows: 1fr 1fr;
+    }
+  }
+
+  .link-item {
+    display: block;
+    padding: 20px 30px 20px 15px;
+    border: 1px solid #00000010;
+    border-radius: 5px;
+    transition: background 150ms ease-out, border 150ms ease-out, transform 150ms ease-out;
+    color: #333333;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .link-item:hover {
+    border-color: #1EA7FD50;
+    transform: translate3d(0, -3px, 0);
+    box-shadow: rgba(0, 0, 0, 0.08) 0 3px 10px 0;
+  }
+
+  .link-item:active {
+    border-color: #1EA7FD;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .link-item strong {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+  
+  .link-item img {
+    height: 40px;
+    width: 40px;
+    margin-right: 15px;
+    flex: none;
+  }
+
+  .link-item span {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .tip {
+    display: inline-block;
+    border-radius: 1em;
+    font-size: 11px;
+    line-height: 12px;
+    font-weight: 700;
+    background: #E7FDD8;
+    color: #66BF3C;
+    padding: 4px 12px;
+    margin-right: 10px;
+    vertical-align: top;
+  }
+
+  .tip-wrapper {
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .tip-wrapper code {
+    font-size: 12px;
+    display: inline-block;
+  }
+
+  
+`}</style>
+
+# Webex Contact Center Widget Starter
+
+This repository is designed to speed up the initial set up for Agent and or Supervisor Desktop widget development. Feel free to treat this as a boilerplate project, that can be forked as a base for your Webex Contact Center widget or simply as a reference material.
+
+We aim at covering various scenarios, for when your development team is leaning towards
+
+- [**React**](https://github.com/CiscoDevNet/webex-contact-center-widget-starter/tree/master/react) [![Generic badge](https://img.shields.io/badge/Completion-95-green)](https://shields.io/), or
+- [**Web Component**](https://github.com/CiscoDevNet/webex-contact-center-widget-starter/tree/master/lit-element) [![Generic badge](https://img.shields.io/badge/Completion-95-green)](https://shields.io/) approach (with some help from _Lit Element_ and the _Polymer_ project).
+
+<br />
+
+<h1>Important Resources</h1>
+<div className="link-list">
+  <a
+    className="link-item"
+    href="https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/webexcc/developer_20/webexcc_b_20-desktop-developer-guide-/webexcc_m_30-build-a-custom-widget.html"
+    target="_blank"
+  >
+    <img src={guide} alt="plugin" />
+    <span>
+      <strong>Desktop Developer Guide</strong>
+      The Webex Contact Center Desktop brings your business the innovation, flexibility, and agility of cloud with the security and global scalability you have come to expect from Cisco. Productive agents require efficient processes and intuitive desktop tools. The more you can automate routine tasks, the more successful agents are at serving your customers.
+    </span>
+  </a>
+<a
+  className="link-item"
+  href="https://developer.webex-cx.com/documentation/guides/desktop/#javascript-sdk"
+  target="_blank"
+>
+  <img src="data:image/png;base64,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" alt="flow" />
+  <span>
+    <strong>Desktop JS SDK</strong>
+    The Desktop JavaScript SDK is an npm package that allows you to request up-to-date information from the Desktop. Using the SDK, you can request information such as agent details, assigned tasks, details of specific tasks, current browser locale, and the authentication token for Single Sign-On (SSO) integration.
+  </span>
+</a>
+<a
+  className="link-item"
+  href="https://github.com/CiscoDevNet/webex-contact-center-widget-starter"
+  target="_blank"
+>
+  <img src={Bag} alt="flow" />
+  <span>
+    <strong>Desktop Widget Starter Kit</strong>
+   This repository is designed to speed up the initial set up for Agent and or Supervisor Desktop widget development. Feel free to treat this as a boilerplate project, that can be forked as a base for your Webex Contact Center widget or simply as a reference material.
+  </span>
+</a>
+
+<a className="link-item" href="https://momentum.design/" target="_blank">
+  <img src={momentum} alt="flow" />
+  <span>
+    <strong>Cisco Momentum Design</strong>
+    Momentum is how Webex designs the future of work. This design system exists to
+    create a shared design language and set of building blocks for all Webex products.
+  </span>
+</a>
+<a
+  className="link-item"
+  href="https://momentum-design.github.io/momentum-ui/?path=/story/accordion--default"
+  target="_blank"
+>
+  <img src={wc} alt="flow" />
+  <span>
+    <strong>Momentum Web Component Documents</strong>
+    Momentum UI Web Components is a reusable, component based, flexible Web Component
+    library available as npm module. It provides set of UI components and utilities
+    based on Momentum Design.
+  </span>
+</a>
+
+  <a
+    className="link-item"
+    href="https://github.com/momentum-design/momentum-ui/tree/master/web-components"
+    target="_blank"
+  >
+    <img src="data:image/png;base64,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" alt="flow" />
+    <span>
+      <strong>Momentum Web Component Source Code</strong>
+      Momentum UI Web Components is a reusable, component based, flexible Web Component library available as npm module. It provides set of UI components and utilities based on Momentum Design.
+    </span>
+  </a>
+</div>
