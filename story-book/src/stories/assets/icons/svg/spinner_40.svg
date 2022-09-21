@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>animated/spinner_40</title>
+    <desc>Created with Sketch.</desc>
+    <g id="animated/spinner_40" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M20,0 C31.0455172,0 40,8.95448276 40,20 C40,31.0455172 31.0455172,40 20,40 C8.95448276,40 0,31.0455172 0,20 C0,8.95448276 8.95448276,0 20,0 Z M20,1 C9.50676751,1 1,9.50676751 1,20 C1,30.4932325 9.50676751,39 20,39 C30.4932325,39 39,30.4932325 39,20 C39,9.50676751 30.4932325,1 20,1 Z" id="4/4" fill="#E6E8E8"></path>
+        <path d="M20,0 C30.9306357,0 39.813225,8.76872859 39.9970929,19.6555106 L40,20 L39,20 C39,9.61942212 30.6753641,1.18316713 20.3377998,1.0029425 L20,1 L20,0 Z" id="1/4" fill="#171B1F"></path>
+    </g>
+</svg>
