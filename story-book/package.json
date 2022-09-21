@@ -8,7 +8,7 @@
     "analyze": "cem analyze --litelement",
     "start": "web-dev-server",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o docs",
+    "build-storybook": "build-storybook -o ../docs",
     "npm:auth": "uuip-publish-auth [agentx,uuip,momentum-ui-private]"
   },
   "dependencies": {
