@@ -8,7 +8,8 @@
     "analyze": "cem analyze --litelement",
     "start": "web-dev-server",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o ../docs",
+    "build-storybook": "build-storybook -o ../docs && npm run cpwidgets",
+    "cpwidgets": "npx copyfiles -V ../widgets/* ../docs/widgets",
     "npm:auth": "uuip-publish-auth [agentx,uuip,momentum-ui-private]"
   },
   "dependencies": {
@@ -17,6 +18,7 @@
     "@momentum-ui/tokens": "^1.5.0",
     "@momentum-ui/utils": "6.2.13",
     "@momentum-ui/web-components": "2.4.0",
+    "copyfiles": "^2.4.1",
     "lit": "^2.3.1"
   },
   "devDependencies": {
