@@ -1,8 +1,12 @@
 {
-    "build": {
-      "componentPath": "direflow-component",
-      "filename": "react-widget-starter.js",
-      "emitSourceMap": true,
-      "emitAll": true
-    }
+  "build": {
+    "componentPath": "direflow-component",
+    "filename": "react-widget-starter.js",
+    "emitSourceMap": true,
+    "emitAll": true
+  },
+  "modules": {
+    "react": "https://cdn.jsdelivr.net/npm/react@16/umd/react.production.min.js",
+    "reactDOM": "https://cdn.jsdelivr.net/npm/react-dom@16/umd/react-dom.production.min.js"
   }
+}
