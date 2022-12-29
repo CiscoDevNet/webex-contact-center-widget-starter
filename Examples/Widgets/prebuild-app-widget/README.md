@@ -1,8 +1,7 @@
 # 🚀 WCC Widget Starter: Prebuild App Widget Example
 
 [![Generic badge](https://img.shields.io/badge/Completion-95-green)](https://shields.io/)
-Tis widget starter kit demonstrate how to build iframe based wxcc desktop widget. The purpose of this example to allow reuse of your existing web application, along with leveraging the wxcc desktop shared data (i.e. STORE) and JS-SDK API.
-Irrespective of widget type WWeb COmponent of IFrame, Following fundamental principle every widgets should be followed.
+This widget starter kit demonstrates how to build an iframe-based WXCC desktop widget. The purpose of this example is to allow you to reuse your existing web application while also leveraging the WXCC desktop's shared data (i.e., the STORE) and JS-SDK API. Regardless of whether the widget is a Web Component or an IFrame, the following fundamental principles should be followed.
 
 - Widget should should support Light/Dark Mode
 - Widget should support accessibility and compliant with WCAG 2.1
