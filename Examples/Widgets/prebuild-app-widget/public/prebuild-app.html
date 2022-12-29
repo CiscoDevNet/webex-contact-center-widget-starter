@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pre-Build App</title>
+  </head>
+  <body>
+    <h1>Pre-Build App</h1>
+    <h3>
+      Payload :
+      <pre id="agentState"></pre>
+    </h3>
+
+    <script>
+      window.addEventListener(
+        "message",
+        function (e) {
+          if (e.data.payload) {
+            console.log("received message:  " + JSON.stringify(e.data.payload));
+            document.getElementById("agentState").innerText = JSON.stringify(
+              e.data.payload,
+              null,
+              2
+            );
+          }
+        },
+        false
+      );
+    </script>
+  </body>
+</html>
