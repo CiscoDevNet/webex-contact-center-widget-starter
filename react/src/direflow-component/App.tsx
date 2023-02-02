@@ -440,7 +440,7 @@ const App: FC<IProps> = (props) => {
           diallerPhoneNumber: "+1 010 010 010"
         }
       };
-      await Desktop.dialer.updateCadVariables({interactionId:"123", data: contactPayload});
+      await Desktop.dialer.updateCadVariables({interactionId:"123", data: contactPayload, keyId: "abc", keyVersion: 1});
     } catch(e) {
       // Handle Exception.
       console.error(e);
