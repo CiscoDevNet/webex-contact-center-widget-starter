@@ -5,8 +5,6 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:element": "ng build --output-hashing=none && npm run package",
-    "package": "cat ./dist/wxcc-widget-starter-angular/runtime.js ./dist/wxcc-widget-starter-angular/polyfills.js  ./dist/wxcc-widget-starter-angular/main.js > index.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
