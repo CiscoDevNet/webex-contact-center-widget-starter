@@ -11,7 +11,7 @@
     "dist": "npm run check && webpack --config-name=distProd",
     "dist:dev": "npm run check && webpack --config-name=distDev",
     "build": "ng build",
-    "build:element": "ng build --output-hashing=none && npm run package",
+    "build:element": "ng build --output-hashing=none --aot --build-optimizer && npm run package",
     "package": "cat ./dist/wxcc-widget-starter-angular/runtime.js ./dist/wxcc-widget-starter-angular/polyfills.js  ./dist/wxcc-widget-starter-angular/main.js > index.js",
     "watch": "ng build --watch --configuration development",
     "check": "check-peer-dependencies --yarn",
