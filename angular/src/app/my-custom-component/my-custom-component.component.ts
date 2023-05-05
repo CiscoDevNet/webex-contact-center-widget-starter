@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { logger } from './sdk';
 import { Desktop } from '@wxcc-desktop/sdk';
-import '@momentum-ui/web-components/dist/index.js';
+// This serves as example as to how to import a specific webcomponent from the momentum web component library
+import '@momentum-ui/web-components/dist/comp/md-badge.js';
 
 @Component({
   selector: 'my-custom-component',
