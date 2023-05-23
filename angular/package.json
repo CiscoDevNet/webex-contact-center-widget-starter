@@ -7,9 +7,7 @@
   "types": "./dist/types/index.d.ts",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve && webpack-dev-server --config ./webpack.config.dev.server.ts",
-    "dist": "npm run check && webpack --config-name=distProd",
-    "dist:dev": "npm run check && webpack --config-name=distDev",
+    "start": "ng serve",
     "build": "ng build",
     "build:element": "ng build --output-hashing=none --aot --build-optimizer && npm run package",
     "package": "cat ./dist/wxcc-widget-starter-angular/runtime.js ./dist/wxcc-widget-starter-angular/polyfills.js  ./dist/wxcc-widget-starter-angular/main.js > index.js",
@@ -64,11 +62,6 @@
     "base-href-webpack-plugin": "^2.0.0",
     "bundle-stats-webpack-plugin": "^3.0.1",
     "check-peer-dependencies": "2.0.1",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^5.0.2",
-    "dotenv-webpack": "^1.7.0",
-    "html-webpack-plugin": "^3.2.0",
-    "html-webpack-tags-plugin": "^2.0.17",
     "jasmine-core": "~4.3.0",
     "json-loader": "^0.5.7",
     "karma": "~6.4.0",
@@ -78,9 +71,6 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "lit-element": "^2.3.1",
     "lit-html": "^1.2.1",
-    "remove-files-webpack-plugin": "^1.4.0",
-    "replacer-webpack-plugin": "^1.0.0",
-    "terser-webpack-plugin": "~4.0.0",
     "ts-loader": "^6.2.1",
     "ts-node": "~10.6.0",
     "typescript": "~4.6.4",
@@ -89,9 +79,7 @@
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^5.1.1",
     "webpack-node-externals": "^1.7.2",
-    "webpack-subresource-integrity": "^1.5.2",
-    "workbox-sw": "^5.1.4",
-    "workbox-webpack-plugin": "^5.1.4"
+    "webpack-subresource-integrity": "^1.5.2"
   },
   "peerDependencies": {
     "@momentum-ui/core": "19.15.16",
