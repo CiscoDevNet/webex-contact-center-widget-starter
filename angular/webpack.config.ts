@@ -16,6 +16,27 @@ const common: webpack.Configuration = {
   output: {
     publicPath: '/',
   },
+  module: {
+    rules: [
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },
+      {
+        test: /\.json$/,
+        include: pSrc,
+        exclude: /node_modules/,
+        use: 'json-loader',
+      },
+      {
+        test: /\.(js)x?$/,
+        include: pSrc,
+        exclude: /node_modules/,
+        use: 'babel-loader',
+      },
+    ],
+  },
   resolve: {
     extensions: ['*', '.mjs', '.ts', '.js'],
   },
@@ -44,6 +65,7 @@ export const commonDev = merge(common, {
   mode: 'development',
   devtool: 'source-map',
   entry: `${pSrc}/main.ts`,
+  target: 'node',
   output: {
     path: pDist,
   },
@@ -55,28 +77,6 @@ export const commonDev = merge(common, {
       template: './src/index.html',
       favicon: './src/favicon.ico',
     }),
-    new CopyWebpackPlugin([
-      { from: `${pModules}/@momentum-ui/core/fonts`, to: 'fonts' },
-      { from: `${pModules}/@momentum-ui/core/images`, to: 'images' },
-      {
-        from: `${pModules}/@momentum-ui/core/css/momentum-ui.min.css`,
-        to: 'css',
-      },
-      {
-        from: `${pModules}/@momentum-ui/core/css/momentum-ui.min.css.map`,
-        to: 'css',
-      },
-      { from: `${pModules}/@momentum-ui/icons/fonts`, to: 'fonts' },
-      { from: `${pModules}/@momentum-ui/icons/fonts`, to: 'icons/fonts' },
-      {
-        from: `${pModules}/@momentum-ui/icons/css/momentum-ui-icons.min.css`,
-        to: 'css',
-      },
-      {
-        from: `${pModules}/@uuip/unified-ui-platform-common-components/dist/uuip-images-mfe-wc`,
-        to: 'uuip-images-mfe-wc',
-      },
-    ]),
   ],
 });
 
@@ -101,27 +101,6 @@ const commonDist = merge(common, {
     __dirname: false,
   },
   target: 'web',
-  module: {
-    rules: [
-      {
-        test: /\.mjs$/,
-        include: /node_modules/,
-        type: 'javascript/auto',
-      },
-      {
-        test: /\.json$/,
-        include: pSrc,
-        exclude: /node_modules/,
-        use: 'json-loader',
-      },
-      {
-        test: /\.(js)x?$/,
-        include: pSrc,
-        exclude: /node_modules/,
-        use: 'babel-loader',
-      },
-    ],
-  },
   plugins: [],
 });
 
