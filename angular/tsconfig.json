@@ -26,6 +26,5 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  },
-  "files": ["webpack.config.dev.server.ts", "webpack.config.ts"]
+  }
 }
