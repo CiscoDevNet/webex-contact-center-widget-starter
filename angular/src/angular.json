@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "wxcc-widget-starter-angular": {
+    "my-app": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/wxcc-widget-starter-angular",
+            "outputPath": "dist/my-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -32,7 +32,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "3mb"
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "wxcc-widget-starter-angular:build:production"
+              "browserTarget": "my-app:build:production"
             },
             "development": {
-              "browserTarget": "wxcc-widget-starter-angular:build:development"
+              "browserTarget": "my-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "wxcc-widget-starter-angular:build"
+            "browserTarget": "my-app:build"
           }
         },
         "test": {
@@ -91,8 +91,5 @@
         }
       }
     }
-  },
-  "cli": {
-    "analytics": false
   }
 }
