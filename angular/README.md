@@ -1,11 +1,5 @@
 ## Disclaimer
 
----
-
-**This starter is work-in-progress. Once the widget is complete, this disclaimer will be removed. Thank you for your patience.**
-
----
-
 # WxCC Widget Starter - Angular
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.11.
@@ -18,7 +12,7 @@ This widget starter can be run on `localhost` to be reviewed. In case you (the d
 
 ### Prerequisites
 
-Before starting, make sure you have **yarn** and **angular cli** installed to be able to run the scripts in the `package.json`, as well as node version `14.18.2` to keep the widget consistent with Agent/Supervisor Desktop(this can be checked in your terminal with `node -v`). 
+Before starting, make sure you have **yarn** and **angular cli** installed to be able to run the scripts in the `package.json`, as well as node version `14.18.2` to keep the widget consistent with Agent/Supervisor Desktop(this can be checked in your terminal with `node -v`).
 
 ## Getting Started
 
@@ -26,7 +20,7 @@ To run your widget on `localhost`, please navigate to widget's root directory in
 
 1. Clone this repo.
 2. Navigate to the **webex-contact-center-widget-starter/angular** folder.
-    - Make any of your widget changes to `angular/src/app/my-custom-component`   
+   - Make any of your widget changes to `angular/src/app/my-custom-component`
 3. Run `yarn` or `yarn install` from the root of the repo.
 4. Run `ng serve` or `yarn start` for a development server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
