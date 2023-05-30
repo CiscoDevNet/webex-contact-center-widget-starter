@@ -1,18 +1,29 @@
+import { Injector, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MyCustomComponentComponent } from './my-custom-component/my-custom-component.component';
+import { MyCustomComponent } from './my-custom-component/my-custom-component.component';
+import { createCustomElement } from '@angular/elements';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MyCustomComponentComponent
-  ],
-  imports: [
-    BrowserModule
-  ],
+  declarations: [AppComponent, MyCustomComponent],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [],
-  bootstrap: [AppComponent]
+  entryComponents: [MyCustomComponent],
+  // allows custom elements to be used inside angular projects
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {}
 
+  ngDoBootstrap() {
+    const injector = this.injector;
+    // Convert 'MyCustomComponent' to a custom element
+    const customElement = createCustomElement(MyCustomComponent, {
+      injector,
+    });
+    // Register the custom element with the browser
+    customElements.define('wxcc-angular-starter-widget', customElement);
+  }
+}
