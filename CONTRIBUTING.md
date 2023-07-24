@@ -101,7 +101,6 @@ or in case of multiple issues:
 ## Submitting a Code Review
 
 *   Before pushing to a PR, always use `git pull --rebase`
-*   After git pulls, run `yarn bootstrap:clean` at the repo root (`webex-contact-center-widget-starter`) to make sure to pull new dependencies.
 
 Before you submit your pull request consider the following guidelines:
 
