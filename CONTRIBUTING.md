@@ -7,6 +7,10 @@ We'd love for you to contribute to our source code and to make Webex Contact Cen
 
 This repo can be forked as a base for your Webex Contact Center widget or simply used as a reference material . Feel free to treat this as a boilerplate project.
 
+## Keep in touch with the team
+
+Either you are internal to Cisco or not, feel free to reach out to the repository admins to get the contribution access
+
 ## Requirements
 
 To contribute to `@webex-contact-center-widget-starter`, you need to have [>=Node 8.10.0](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed globally on your machine.
