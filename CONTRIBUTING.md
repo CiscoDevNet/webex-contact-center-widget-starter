@@ -7,17 +7,6 @@ We'd love for you to contribute to our source code and to make Webex Contact Cen
 
 This repo can be forked as a base for your Webex Contact Center widget or simply used as a reference material . Feel free to treat this as a boilerplate project.
 
-## To integrate JS SDK 
-
-To integrate contact center desktop sdk in the starter-kit-widget . Follow the below steps. 
-
-  - `npm install @wxcc-desktop/sdk --save` <br>
-   or <br>
-   `yarn add @wxcc-desktop/sdk`
-
-  - Once you have installed the package in your project, include it in the appropriate component file following the ES6 import pattern:<br>
-    `import {Desktop} from "@wxcc-desktop/sdk"`
-
 ## Requirements
 
 To contribute to `@webex-contact-center-widget-starter`, you need to have [>=Node 8.10.0](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed globally on your machine.
@@ -190,12 +179,6 @@ from the main (upstream) repository:
     ```shell
     git pull --ff upstream master
     ```
-
-## Reference links for more details <br>
-   - [Desktop JS SDK Official](https://developer.webex-cx.com/documentation/guides/desktop)
-   - [Desktop JS API samples](https://github.com/CiscoDevNet/webex-contact-center-api-samples)
-   - [Product Overview and Documentation](https://www.cisco.com/c/en/us/support/customer-collaboration/webex-contact-center/series.html)
-   - [Other useful resources](https://ciscodevnet.github.io/webex-contact-center-widget-starter/?path=/story/introduction--page)
 ## License
 
 By contributing your code to the `@webex-contact-center-widget-starter` GitHub repository, you agree to license your contribution under the MIT license.
