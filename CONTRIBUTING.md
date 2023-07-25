@@ -5,7 +5,7 @@ We'd love for you to contribute to our source code and to make Webex Contact Cen
 
 ## What is this repo? 
 
-This repo can be forked as a base for your Webex Contact Center widget or simply used as a reference material . Feel free to treat this as a boilerplate project.
+This repo can be forked as a base for your Webex Contact Center widget or simply used as reference material. Feel free to treat this as a boilerplate project.
 
 ## Keep in touch with the team
 
@@ -19,8 +19,7 @@ To contribute to `@webex-contact-center-widget-starter`, you need to have [>=Nod
 ## <a name="commit"></a> Git Commit Guidelines
 
 We have very precise rules over how our git commit messages can be formatted.  This leads to **more
-readable messages** that are easy to follow when looking through the **project history**.  But also,
-we use the git commit messages to **generate the Angular change log**.
+readable messages** that are easy to follow when looking through the **project history**.
 
 ### Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special
