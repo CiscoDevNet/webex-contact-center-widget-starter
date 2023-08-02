@@ -455,6 +455,20 @@ const App: FC<IProps> = (props) => {
     setSampleIntId(newInteractionId.current.value);
   }
 
+  async function fetchOrganizationIdleCodes() {
+    await Desktop.agentStateInfo.fetchOrganizationIdleCodes("123");
+  }
+  async function fetchAgentIdleCodes() {
+   await Desktop.agentStateInfo.fetchAgentIdleCodes("123", "1234")
+  }
+ async function changeAgentState(){
+   return await Desktop.agentStateInfo.changeAgentState("123", {
+      auxCodeId: "",
+      agentId: "1234",
+      state: "IDLE",
+   })
+  }
+
   return (
     <Styled styles={styles}>
       <div className="app">
@@ -485,6 +499,16 @@ const App: FC<IProps> = (props) => {
               </md-button>
               <md-button onClick={() => mockOutdialAniList()}>
                 Mock Outdial Ani List
+              </md-button>
+               <h3>TPW Agent State</h3>
+              <md-button onClick={() => fetchOrganizationIdleCodes()}>
+                Get Organization Idle Codes
+              </md-button>
+              <md-button onClick={() => fetchAgentIdleCodes()}>
+                Get Agent Idle Codes
+              </md-button>
+              <md-button onClick={() => changeAgentState()}>
+                Change Agent State
               </md-button>
             </div>
           </md-tab-panel>
@@ -756,7 +780,7 @@ const App: FC<IProps> = (props) => {
               ></md-input>
 
 
-            
+
             <md-button onClick={() => {
             const e = new CustomEvent("unique-react-id-to-update-title", {
               bubbles: true,
