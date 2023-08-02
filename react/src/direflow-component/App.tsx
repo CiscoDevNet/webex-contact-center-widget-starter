@@ -502,7 +502,7 @@ const App: FC<IProps> = (props) => {
               </md-button>
                <h3>TPW Agent State</h3>
               <md-button onClick={() => fetchOrganizationIdleCodes()}>
-                Get Organinzation Idle Codes
+                Get Organization Idle Codes
               </md-button>
               <md-button onClick={() => fetchAgentIdleCodes()}>
                 Get Agent Idle Codes
