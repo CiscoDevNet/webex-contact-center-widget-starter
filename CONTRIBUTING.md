@@ -9,11 +9,13 @@ This repo can be forked as a base for your Webex Contact Center widget or simply
 
 ## Keep in touch with the team
 
-Either you are internal to Cisco or not, feel free to reach out to the repository admins to get the contribution access
+Whether you are internal to Cisco or not, feel free to reach out to the repository admins to get the contribution access
 
 ## Requirements
 
-To contribute to `@webex-contact-center-widget-starter`, you need to have [>=Node 8.10.0](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed globally on your machine.
+To contribute to `@webex-contact-center-widget-starter`, you need to have [>=Node 8.10.0](https://nodejs.org/en/)* and [Yarn](https://yarnpkg.com/en/) installed globally on your machine. 
+
+*use Node 14.18.2
 
 
 ## <a name="commit"></a> Git Commit Guidelines
@@ -51,10 +53,8 @@ fix(release): need to depend on latest rxjs and zone.js
 The version in our package.json gets copied to the one we publish, and users need the latest of these.
 ```
 
-### Revert
-If the commit reverts a previous commit, it should begin with `revert: `, followed by the header of the reverted commit. In the body it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.
 
-### Type
+#### Type
 Must be one of the following:
 
 * **feat**: A new feature
@@ -69,21 +69,21 @@ Must be one of the following:
 * **ci**: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
 * **chore**: Other changes that don't modify `src` or `test` files
 
-### Scope
+#### Scope
 The scope could be anything specifying place of the commit change.
 
-### Subject
+#### Subject
 The subject contains succinct description of the change:
 
 * use the imperative, present tense: "change" not "changed" nor "changes"
 * don't capitalize first letter
 * no dot (.) at the end
 
-### Body
+#### Body
 Just as in the **subject**, use the imperative, present tense: "change" not "changed" nor "changes".
 The body should include the motivation for the change and contrast this with previous behavior.
 
-### Footer
+#### Footer
 The footer should contain any information about **Breaking Changes** and is also the place to
 reference GitHub issues that this commit **Closes**.
 
@@ -97,10 +97,16 @@ or in case of multiple issues:
 
 `Closes #123, Closes #245, Closes #992`
 
+### Revert
+If the commit reverts a previous commit, it should begin with `revert: `, followed by the header of the reverted commit. In the body it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.
+
 ## Submitting a Code Review
 
-*   Before pushing to a PR, always use `git pull --rebase`
+<br>
 
+_Before pushing to a PR, always use `git pull --rebase`_
+
+<br>
 Before you submit your pull request consider the following guidelines:
 
 * Search [GitHub](https://github.com/CiscoDevNet/webex-contact-center-widget-starter/pulls) for an open or closed Pull Request
@@ -112,15 +118,14 @@ Before you submit your pull request consider the following guidelines:
      ```
 
 * Create your patch, **including appropriate test cases**.
-* Follow our [Coding Rules](#rules).
 * Commit your changes using a descriptive commit message that follows our
-  [commit message conventions](#commit-message-format). Adherence to the [commit message conventions](#commit-message-format)
+  [commit message conventions](#commit-message-format). Adherence to the commit message conventions
   is required because release notes are automatically generated from these messages.
 
      ```shell
      git commit -a
      ```
-  Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
+  * the optional commit `-a` command line option will automatically "add" and "rm" edited files.
 
 * Build your changes locally to ensure all the tests pass:
 
