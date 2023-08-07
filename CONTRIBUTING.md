@@ -15,7 +15,7 @@ Whether you are internal to Cisco or not, feel free to reach out to the reposito
 
 To contribute to `@webex-contact-center-widget-starter`, you need to have [>=Node 8.10.0](https://nodejs.org/en/)* and [Yarn](https://yarnpkg.com/en/) installed globally on your machine. 
 
-*use Node 14.18.2
+* Node 14.18.2 is the current version the development team is using.
 
 
 ## <a name="commit"></a> Git Commit Guidelines
