@@ -52,7 +52,7 @@ const App: FC<IProps> = (props) => {
     subscribeAgentContactDataEvents();
     subscribeDialerEvents();
     subscribeScreenpopEvent();
-
+    subscribeMonitoringDataEvents();
     setAgentId(props.agentId);
 
     return () => {
@@ -209,6 +209,52 @@ const App: FC<IProps> = (props) => {
         logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
   };
+
+  const subscribeMonitoringDataEvents = () => {
+    Desktop.monitoring.addEventListener("eMonitoringOffered", (msg: any) =>
+      logger.info("Monitoring eMonitoringOffered: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringStarted", (msg: any) =>
+      logger.info("Monitoring eMonitoringStarted: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringRequestCreateFailed", (msg: any) =>
+      logger.info("Monitoring eMonitoringRequestCreateFailed: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringFailed", (msg: any) =>
+     logger.info("Monitoring eMonitoringFailed: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringEnded", (msg: any) =>
+      logger.info("Monitoring eMonitoringEnded: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringEndFailed", (msg: any) =>
+    logger.info("Monitoring eMonitoringEndFailed: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringHeld", (msg: any) =>
+      logger.info("Monitoring eMonitoringHeld: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringHoldFailed", (msg: any) =>
+      logger.info("Monitoring eMonitoringHoldFailed: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringUnHeld", (msg: any) =>
+      logger.info("Monitoring eMonitoringUnHeld: ", msg)
+    );
+
+    Desktop.monitoring.addEventListener("eMonitoringUnHoldFailed", (msg: any) =>
+    logger.info("Monitoring eMonitoringUnHoldFailed: ", msg)
+    );
+    Desktop.monitoring.addEventListener("eBargedIn", (msg: any) => logger.info("Monitoring eBargedIn: ", msg));
+    Desktop.monitoring.addEventListener("eBargeInFailed", (msg: any) =>
+      logger.info("Monitoring eBargeInFailed: ", msg)
+    );
+  }
 
   const getCurrentInteractionId = () => {
     let path = window.location.pathname;
@@ -469,6 +515,38 @@ const App: FC<IProps> = (props) => {
    })
   }
 
+  async function startMonitoring() {
+    const monitoringRequest = {
+      id: "62e5ffa9-7d80-40d7-bfbc-94cab8d5f67b",
+      monitorType: "midcall",
+      trackingId: "62e5ffa9-7d80-40d7-bfbc-94cab8d5f67b",
+      taskId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4"
+    };
+
+    await Desktop.monitoring.startMonitoring({ data: monitoringRequest });
+    logger.info("Monitoring startMonitoring: success");
+  }
+
+  async function endMonitoring() {
+    await Desktop.monitoring.endMonitoring({ interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4" });
+    logger.info("Monitoring endMonitoring: success");
+  }
+
+  async function holdMonitoring() {
+    await Desktop.monitoring.holdMonitoring({ interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4" });
+    logger.info("Monitoring holdMonitoring: success");
+  }
+
+  async function unHoldMonitoring() {
+    await Desktop.monitoring.unHoldMonitoring({ interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4" });
+    logger.info("Monitoring unHoldMonitoring: success");
+  }
+
+  async function bargeIn() {
+    await Desktop.monitoring.bargeIn({ interactionId: "9e2c3568-fd67-4950-89a6-c82f97a393d4" });
+    logger.info("Monitoring bargeIn:success");
+  }
+
   return (
     <Styled styles={styles}>
       <div className="app">
@@ -627,7 +705,27 @@ const App: FC<IProps> = (props) => {
               </md-button>
             </div>
           </md-tab-panel>
-
+          <md-tab slot="tab">Desktop.monitor</md-tab>
+          <md-tab-panel slot="panel">
+            <div className="action-container">
+              <h2>Monitor data output in console log</h2>
+              <md-button onClick={() => startMonitoring()}>
+              Start Monitoring
+              </md-button>
+              <md-button onClick={() => endMonitoring()}>
+              End Monitoring
+              </md-button>
+              <md-button onClick={() => holdMonitoring()}>
+              Hold Monitoring
+              </md-button>
+              <md-button onClick={() => unHoldMonitoring()}>
+              UnHold Monitoring
+              </md-button>
+              <md-button onClick={() => bargeIn()}>
+              BargIn Monitoring
+              </md-button>
+            </div>
+          </md-tab-panel>
           <md-tab slot="tab">Desktop.shortcutKey</md-tab>
           <md-tab-panel slot="panel">
             <div className="“action-container”">
