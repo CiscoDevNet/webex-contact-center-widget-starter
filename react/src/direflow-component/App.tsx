@@ -59,6 +59,7 @@ const App: FC<IProps> = (props) => {
       Desktop.agentContact.removeAllEventListeners();
       Desktop.dialer.removeAllEventListeners();
       Desktop.screenpop.removeAllEventListeners();
+      Desktop.monitoring.removeAllEventListeners();
     };
   }, []);
 
