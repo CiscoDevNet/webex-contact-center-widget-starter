@@ -1,4 +1,5 @@
 const { webpackConfig } = require("direflow-scripts");
+const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 const CopyPlugin = require("copy-webpack-plugin");
 
@@ -13,6 +14,7 @@ module.exports = {
     let conf = webpackConfig(config, env, {
       filename: "react-widget-starter.js",
     });
+    conf.plugins.push(new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1}))
 
     const copyWebpackPlugin = new CopyPlugin([
       { from: `${pModules}/@momentum-ui/core/fonts`, to: `${pPublic}/fonts` },
