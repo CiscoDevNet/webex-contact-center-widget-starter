@@ -288,6 +288,12 @@ export default class MyCustomComponent extends LitElement {
       (msg: Service.Aqm.Contact.AgentContact) =>
         logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
+    Desktop.agentContact.addEventListener("eAgentMonitorStateChanged", (msg: any) =>
+        logger.info("AgentContact eAgentMonitorStateChanged: ", msg)
+    );
+    Desktop.agentContact.addEventListener("eAgentMonitoringEnded", (msg: any) =>
+        logger.info("AgentContact eAgentMonitoringEnded: ", msg)
+    );
 
     Desktop.agentStateInfo.addEventListener("updated", (updatedList: any) => {
       logger.info("eAgentStateChangeSuccess", updatedList);
