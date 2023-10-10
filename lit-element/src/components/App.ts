@@ -187,6 +187,12 @@ export default class MyCustomComponent extends LitElement {
       "eAgentConsultConferenceEndFailed",
       msg => logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
+    Desktop.agentContact.addEventListener("eAgentMonitorStateChanged", msg =>
+      logger.info("AgentContact eAgentMonitorStateChanged: ", msg)
+    );
+    Desktop.agentContact.addEventListener("eAgentMonitoringEnded", msg =>
+      logger.info("AgentContact eAgentMonitoringEnded: ", msg)
+    );
   }
 
   getCurrentInteractionId() {
