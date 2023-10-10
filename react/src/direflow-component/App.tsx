@@ -209,6 +209,12 @@ const App: FC<IProps> = (props) => {
       (msg: Service.Aqm.Contact.AgentContact) =>
         logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
+    Desktop.agentContact.addEventListener("eAgentMonitorStateChanged", (msg: any) =>
+      logger.info("AgentContact eAgentMonitorStateChanged: ", msg)
+    );
+    Desktop.agentContact.addEventListener("eAgentMonitoringEnded", (msg: any) =>
+      logger.info("AgentContact eAgentMonitoringEnded: ", msg)
+    );
   };
 
   const subscribeMonitoringDataEvents = () => {
