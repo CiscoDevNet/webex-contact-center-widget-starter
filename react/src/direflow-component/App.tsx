@@ -215,6 +215,12 @@ const App: FC<IProps> = (props) => {
     Desktop.agentContact.addEventListener("eAgentMonitoringEnded", (msg: any) =>
       logger.info("AgentContact eAgentMonitoringEnded: ", msg)
     );
+    Desktop.agentContact.addEventListener("eAgentOfferCampaignReserved", (msg: any) =>
+      logger.info("AgentContact eAgentOfferCampaignReserved: ", msg)
+    );
+    Desktop.agentContact.addEventListener("eAgentAddCampaignReserved", (msg: any) =>
+        logger.info("AgentContact eAgentAddCampaignReserved: ", msg)
+    );
   };
 
   const subscribeMonitoringDataEvents = () => {
