@@ -11,6 +11,7 @@ import { ifDefined } from "lit-html/directives/if-defined";
 import styles from "./Summary.scss";
 import { data } from "../customer-data/mock-customer-blob";
 import { classMap } from "lit-html/directives/class-map";
+
 @customElement("customer-summary")
 export default class CustomerSummary extends LitElement {
   @property({ type: Boolean }) compact = false;
@@ -29,7 +30,7 @@ export default class CustomerSummary extends LitElement {
 
   getValue(search: string): string {
     let value: any;
-    const result: any = this.customerData?.filter(x => x.label === search);
+    const result: any = this.customerData?.filter((x) => x.label === search);
     value = result[0].value;
     return value;
   }
@@ -43,9 +44,12 @@ export default class CustomerSummary extends LitElement {
       <div class="summary-container" part="summary">
         <section class="cust-info-header">
           <md-avatar
-            src=${ifDefined(this.getValue("Picture"))}
+            src=${ifDefined(
+              "https://cdn.theorg.com/6e224be2-9824-4bef-8b35-a1ea58abd696_thumb.jpg"
+            )}
             size="56"
           ></md-avatar>
+
           <h1>${ifDefined(this.getValue("Name"))}</h1>
           <div class="age-gender">
             ${ifDefined(this.getValue("Age"))} years old,

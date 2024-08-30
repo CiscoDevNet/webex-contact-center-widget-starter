@@ -3,7 +3,10 @@ import { Styled } from "direflow-component";
 import styles from "./App.css";
 import { logger } from "./sdk";
 import { Service } from "@wxcc-desktop/sdk-types";
-import { Notifications } from "@uuip/unified-ui-platform-sdk";
+import {
+  Notifications,
+  NotificationItemsContent
+} from "@uuip/unified-ui-platform-sdk";
 import { Desktop } from "@wxcc-desktop/sdk";
 interface IProps {
   agentId: string;
@@ -132,7 +135,7 @@ const App: FC<IProps> = (props) => {
           setContacts([
             ...contacts.filter(
               (interactionId) => interactionId !== msg.data.interactionId
-            ),
+            )
           ]);
           logger.info("AgentContact eAgentOfferContactRona: ", contacts);
         }
@@ -209,17 +212,21 @@ const App: FC<IProps> = (props) => {
       (msg: Service.Aqm.Contact.AgentContact) =>
         logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentMonitorStateChanged", (msg: any) =>
-      logger.info("AgentContact eAgentMonitorStateChanged: ", msg)
+    Desktop.agentContact.addEventListener(
+      "eAgentMonitorStateChanged",
+      (msg: any) => logger.info("AgentContact eAgentMonitorStateChanged: ", msg)
     );
     Desktop.agentContact.addEventListener("eAgentMonitoringEnded", (msg: any) =>
       logger.info("AgentContact eAgentMonitoringEnded: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentOfferCampaignReserved", (msg: any) =>
-      logger.info("AgentContact eAgentOfferCampaignReserved: ", msg)
+    Desktop.agentContact.addEventListener(
+      "eAgentOfferCampaignReserved",
+      (msg: any) =>
+        logger.info("AgentContact eAgentOfferCampaignReserved: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentAddCampaignReserved", (msg: any) =>
-        logger.info("AgentContact eAgentAddCampaignReserved: ", msg)
+    Desktop.agentContact.addEventListener(
+      "eAgentAddCampaignReserved",
+      (msg: any) => logger.info("AgentContact eAgentAddCampaignReserved: ", msg)
     );
   };
 
@@ -232,12 +239,14 @@ const App: FC<IProps> = (props) => {
       logger.info("Monitoring eMonitoringStarted: ", msg)
     );
 
-    Desktop.monitoring.addEventListener("eMonitoringRequestCreateFailed", (msg: any) =>
-      logger.info("Monitoring eMonitoringRequestCreateFailed: ", msg)
+    Desktop.monitoring.addEventListener(
+      "eMonitoringRequestCreateFailed",
+      (msg: any) =>
+        logger.info("Monitoring eMonitoringRequestCreateFailed: ", msg)
     );
 
     Desktop.monitoring.addEventListener("eMonitoringFailed", (msg: any) =>
-     logger.info("Monitoring eMonitoringFailed: ", msg)
+      logger.info("Monitoring eMonitoringFailed: ", msg)
     );
 
     Desktop.monitoring.addEventListener("eMonitoringEnded", (msg: any) =>
@@ -245,7 +254,7 @@ const App: FC<IProps> = (props) => {
     );
 
     Desktop.monitoring.addEventListener("eMonitoringEndFailed", (msg: any) =>
-    logger.info("Monitoring eMonitoringEndFailed: ", msg)
+      logger.info("Monitoring eMonitoringEndFailed: ", msg)
     );
 
     Desktop.monitoring.addEventListener("eMonitoringHeld", (msg: any) =>
@@ -261,13 +270,15 @@ const App: FC<IProps> = (props) => {
     );
 
     Desktop.monitoring.addEventListener("eMonitoringUnHoldFailed", (msg: any) =>
-    logger.info("Monitoring eMonitoringUnHoldFailed: ", msg)
+      logger.info("Monitoring eMonitoringUnHoldFailed: ", msg)
     );
-    Desktop.monitoring.addEventListener("eBargedIn", (msg: any) => logger.info("Monitoring eBargedIn: ", msg));
+    Desktop.monitoring.addEventListener("eBargedIn", (msg: any) =>
+      logger.info("Monitoring eBargedIn: ", msg)
+    );
     Desktop.monitoring.addEventListener("eBargeInFailed", (msg: any) =>
       logger.info("Monitoring eBargeInFailed: ", msg)
     );
-  }
+  };
 
   const getCurrentInteractionId = () => {
     let path = window.location.pathname;
@@ -296,7 +307,7 @@ const App: FC<IProps> = (props) => {
   async function changeState(s: "Available" | "Idle") {
     const agentState = await Desktop.agentStateInfo.stateChange({
       state: s,
-      auxCodeIdArray: "0",
+      auxCodeIdArray: "0"
     });
     logger.info("State Changed", agentState);
   }
@@ -310,12 +321,12 @@ const App: FC<IProps> = (props) => {
     const buddyAgentPayload = {
       agentProfileId: agentProfileId,
       channelName: "chat",
-      state: "Available",
+      state: "Available"
     };
 
     const myBuddyAgents =
       (await Desktop.agentContact.buddyAgents({
-        data: buddyAgentPayload,
+        data: buddyAgentPayload
       })) || null;
 
     setBuddyAgents(myBuddyAgents);
@@ -327,12 +338,12 @@ const App: FC<IProps> = (props) => {
       agentProfileId: agentProfileId,
       agentSessionId: agentSessionId,
       channelType: "chat",
-      type: "inboundqueue",
+      type: "inboundqueue"
     };
 
     const myvTeam =
       (await Desktop.agentContact.vteamList({
-        data: vTeamPayload,
+        data: vTeamPayload
       })) || null;
 
     setVTeam(myvTeam);
@@ -341,15 +352,14 @@ const App: FC<IProps> = (props) => {
 
   async function acceptInteraction(interactionId: string) {
     const acceptInteraction = await Desktop.agentContact.accept({
-      interactionId: interactionId,
+      interactionId: interactionId
     });
     logger.info(acceptInteraction);
-
   }
 
   async function endInteraction() {
     const endedInteraction = await Desktop.agentContact.end({
-      interactionId: sampleInteractionId,
+      interactionId: sampleInteractionId
     });
     logger.info(endedInteraction);
   }
@@ -360,8 +370,8 @@ const App: FC<IProps> = (props) => {
       data: {
         wrapUpReason: "Example reason here",
         auxCodeId: "0",
-        isAutoWrapup: "false",
-      },
+        isAutoWrapup: "false"
+      }
     });
     logger.info(wrappedUpInteraction);
   }
@@ -372,9 +382,9 @@ const App: FC<IProps> = (props) => {
       data: {
         agentId: agentId,
         destAgentId: buddyAgents?.data.agentList[0].agentId,
-        mediaType: "chat",
+        mediaType: "chat"
       },
-      url: "consult",
+      url: "consult"
     });
     logger.info(consult);
   }
@@ -382,7 +392,7 @@ const App: FC<IProps> = (props) => {
   async function endConferenceWithAgent() {
     const consult = await Desktop.agentContact.consultEnd({
       interactionId: sampleInteractionId,
-      isConsult: false,
+      isConsult: false
     });
     logger.info(consult);
   }
@@ -393,8 +403,8 @@ const App: FC<IProps> = (props) => {
       data: {
         agentId: agentId,
         destAgentId: buddyAgents?.data.agentList[0].agentId,
-        mediaType: "chat",
-      },
+        mediaType: "chat"
+      }
     });
     logger.info(consult);
   }
@@ -402,7 +412,7 @@ const App: FC<IProps> = (props) => {
   async function endConsultConferenceWithAgent() {
     const consult = await Desktop.agentContact.consultEnd({
       interactionId: sampleInteractionId,
-      isConsult: true,
+      isConsult: true
     });
     logger.info(consult);
   }
@@ -415,8 +425,8 @@ const App: FC<IProps> = (props) => {
           agentId: agentId,
           destAgentId: buddyAgents?.data.agentList[0].agentId,
           mediaType: "chat",
-          mediaResourceId: "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8",
-        },
+          mediaResourceId: "b102ed10-fac2-4f8e-bece-1c2da6ba6dd8"
+        }
       });
       logger.info(consult);
     } else {
@@ -433,8 +443,8 @@ const App: FC<IProps> = (props) => {
         interactionId: sampleInteractionId,
         data: {
           vteamId: vTeam?.data.data.vteamList[0].analyzerId,
-          vteamType: vTeam?.data.data.vteamList[0].type,
-        },
+          vteamType: vTeam?.data.data.vteamList[0].type
+        }
       });
       logger.info(consult);
     } else {
@@ -468,17 +478,43 @@ const App: FC<IProps> = (props) => {
         type: Notifications.ItemMeta.Type.Info,
         mode: Notifications.ItemMeta.Mode.AutoDismiss,
         title: "Info - Acknowledge",
-        data: "Lorem Ipsum Dolor",
-      },
-    };
-    const res = await Desktop.actions.fireGeneralAutoDismissNotification(
-      raw as Notifications.ItemMeta.Raw & {
-        data: { mode: Notifications.ItemMeta.Mode.AutoDismiss };
+        data: "Lorem Ipsum Dolor"
       }
-    );
-    if (res) {
-      const [status, reason, mode] = res;
-      logger.info(status, reason, mode);
+    };
+    const notifData: Notifications.ItemMeta.Raw = {
+      data: {
+        type: Notifications.ItemMeta.Type.Info,
+        mode: Notifications.ItemMeta.Mode.AutoDismiss, // Change type here based on the method.
+        title: "Info - Silent",
+        data: new NotificationItemsContent.BaseDataController({
+          text: "Explore New Horizons",
+          link: "https://www.abc.com/file/Tjpn4Z9p8jZy0Da0Ggq6ra/Priority-To-do-list?node-id=1280%3A83124",
+          linkName: "Toaster Notification",
+          linkTooltip:
+            '<div style="text-align: left !important;">Phone - +1 (412)555-3782 <br />Queue - IVR_Queue <br />Activity Label <br /></div>',
+          iconDetail: {
+            iconName: "icon-alert-active_16",
+            color: "blue",
+            iconColor: "#08599C"
+          }
+        })
+      }
+    };
+
+    console.log(">>>>> Firing Notification", notifData);
+    try {
+      const res = await Desktop.actions.fireGeneralAutoDismissNotification(
+        notifData as Notifications.ItemMeta.Raw & {
+          data: { mode: Notifications.ItemMeta.Mode.AutoDismiss, data:  };
+        }
+      );
+      console.log(">>>>> Fired Notification", notifData);
+      if (res) {
+        const [status, reason, mode] = res;
+        logger.info(status, reason, mode);
+      }
+    } catch (e) {
+      console.error(">>>>>> Fire Notification failed", e);
     }
   }
 
@@ -490,27 +526,32 @@ const App: FC<IProps> = (props) => {
     console.log(assignedContacts[0]);
   }
 
-
   async function updateCADVariable() {
     try {
       const contactPayload = {
-        attributes:{
+        attributes: {
           diallerName: "agent-name",
           diallerPhoneNumber: "+1 010 010 010"
         }
       };
-      await Desktop.dialer.updateCadVariables({interactionId:"123", data: contactPayload, keyId: "abc", keyVersion: 1});
-    } catch(e) {
+      await Desktop.dialer.updateCadVariables({
+        interactionId: "123",
+        data: contactPayload,
+        keyId: "abc",
+        keyVersion: 1
+      });
+    } catch (e) {
       // Handle Exception.
       console.error(e);
     }
   }
 
-  async function mockOutdialAniList(){
-    await Desktop.agentStateInfo.mockOutdialAniList()
+  async function mockOutdialAniList() {
+    await Desktop.agentStateInfo.mockOutdialAniList();
   }
 
-  function setNewInteraactionId(){
+  function setNewInteraactionId() {
+    console.log(">>>> onInput working");
     setSampleIntId(newInteractionId.current.value);
   }
 
@@ -518,14 +559,14 @@ const App: FC<IProps> = (props) => {
     await Desktop.agentStateInfo.fetchOrganizationIdleCodes("123");
   }
   async function fetchAgentIdleCodes() {
-   await Desktop.agentStateInfo.fetchAgentIdleCodes("123", "1234")
+    await Desktop.agentStateInfo.fetchAgentIdleCodes("123", "1234");
   }
- async function changeAgentState(){
-   return await Desktop.agentStateInfo.changeAgentState("123", {
+  async function changeAgentState() {
+    return await Desktop.agentStateInfo.changeAgentState("123", {
       auxCodeId: "",
       agentId: "1234",
-      state: "IDLE",
-   })
+      state: "IDLE"
+    });
   }
 
   async function startMonitoring() {
@@ -541,22 +582,30 @@ const App: FC<IProps> = (props) => {
   }
 
   async function endMonitoring() {
-    await Desktop.monitoring.endMonitoring({ interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4" });
+    await Desktop.monitoring.endMonitoring({
+      interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4"
+    });
     logger.info("Monitoring endMonitoring: success");
   }
 
   async function holdMonitoring() {
-    await Desktop.monitoring.holdMonitoring({ interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4" });
+    await Desktop.monitoring.holdMonitoring({
+      interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4"
+    });
     logger.info("Monitoring holdMonitoring: success");
   }
 
   async function unHoldMonitoring() {
-    await Desktop.monitoring.unHoldMonitoring({ interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4" });
+    await Desktop.monitoring.unHoldMonitoring({
+      interactionId: "d6583397-d7ab-4dcb-b761-6cc925ad11d4"
+    });
     logger.info("Monitoring unHoldMonitoring: success");
   }
 
   async function bargeIn() {
-    await Desktop.monitoring.bargeIn({ interactionId: "9e2c3568-fd67-4950-89a6-c82f97a393d4" });
+    await Desktop.monitoring.bargeIn({
+      interactionId: "9e2c3568-fd67-4950-89a6-c82f97a393d4"
+    });
     logger.info("Monitoring bargeIn:success");
   }
 
@@ -564,6 +613,22 @@ const App: FC<IProps> = (props) => {
     <Styled styles={styles}>
       <div className="app">
         <strong>MFE Props: </strong>
+        <md-input
+          htmlid="newInteractionId"
+          class="input-field"
+          placeholder="Enter interaction id"
+          ariaLabel="Enter interaction id"
+          shape="pill"
+          clear=""
+          value=""
+          tabindex="0"
+          autoFocus
+          onInput={setNewInteraactionId}
+          onChange={() => {
+            console.log(">>>> onChange working");
+          }}
+          ref={newInteractionId}
+        ></md-input>
 
         <pre>{JSON.stringify(props)}</pre>
         <hr />
@@ -591,7 +656,7 @@ const App: FC<IProps> = (props) => {
               <md-button onClick={() => mockOutdialAniList()}>
                 Mock Outdial Ani List
               </md-button>
-               <h3>TPW Agent State</h3>
+              <h3>TPW Agent State</h3>
               <md-button onClick={() => fetchOrganizationIdleCodes()}>
                 Get Organization Idle Codes
               </md-button>
@@ -618,7 +683,10 @@ const App: FC<IProps> = (props) => {
                 value=""
                 tabindex="0"
                 autoFocus
-                onInput = {setNewInteraactionId}
+                onInput={setNewInteraactionId}
+                onKeyUp={(e: any) => {
+                  console.log(">>>> onChange working", e);
+                }}
                 ref={newInteractionId}
               ></md-input>
               <h3>Get Available Agents</h3>
@@ -723,20 +791,18 @@ const App: FC<IProps> = (props) => {
             <div className="action-container">
               <h2>Monitor data output in console log</h2>
               <md-button onClick={() => startMonitoring()}>
-              Start Monitoring
+                Start Monitoring
               </md-button>
               <md-button onClick={() => endMonitoring()}>
-              End Monitoring
+                End Monitoring
               </md-button>
               <md-button onClick={() => holdMonitoring()}>
-              Hold Monitoring
+                Hold Monitoring
               </md-button>
               <md-button onClick={() => unHoldMonitoring()}>
-              UnHold Monitoring
+                UnHold Monitoring
               </md-button>
-              <md-button onClick={() => bargeIn()}>
-              BargIn Monitoring
-              </md-button>
+              <md-button onClick={() => bargeIn()}>BargIn Monitoring</md-button>
             </div>
           </md-tab-panel>
           <md-tab slot="tab">Desktop.shortcutKey</md-tab>
@@ -864,41 +930,52 @@ const App: FC<IProps> = (props) => {
 
           <md-tab slot="tab">Widget Header title update</md-tab>
           <md-tab-panel slot="panel">
+            <h2>Update Dynamic widget header title</h2>
+            <p>
+              To test this functionality please add titleFor property in wrapper
+              with unique id Example:
+              <strong>
+                &quot;titleFor&quot;:
+                &quot;unique-react-id-to-update-title&quot;
+              </strong>
+            </p>
 
-          <h2>Update Dynamic widget header title</h2>
-          <p>To test this functionality please add titleFor property in wrapper with unique id Example:<strong>&quot;titleFor&quot;: &quot;unique-react-id-to-update-title&quot;</strong></p>
+            <pre>
+              {JSON.stringify(
+                {
+                  wrapper: {
+                    title: "React Framework",
+                    id: "unique-react-id-to-update-title",
+                    maximizeAreaName: "app-maximize-area"
+                  }
+                },
+                undefined,
+                2
+              )}
+            </pre>
 
-          <pre>
-            {JSON.stringify({
-              "wrapper": {
-                "title": "React Framework",
-                "id": "unique-react-id-to-update-title",
-                "maximizeAreaName": "app-maximize-area"
-              }
-            }, undefined, 2)}
-          </pre>
+            <md-input
+              class="input-field"
+              shape="pill"
+              placeholder="Enter New Title"
+              clear=""
+              value=""
+              tabindex="0"
+              autoFocus
+              onInput={(e: any) => setTitleFor(e.target.value)}
+            ></md-input>
 
-
-          <md-input
-                class="input-field"
-                shape="pill"
-                placeholder="Enter New Title"
-                clear=""
-                value=""
-                tabindex="0"
-                autoFocus
-                onInput = {(e: any)=>setTitleFor(e.target.value)}
-              ></md-input>
-
-
-
-            <md-button onClick={() => {
-            const e = new CustomEvent("unique-react-id-to-update-title", {
-              bubbles: true,
-              detail: { title: titleFor }
-            });
-            window.dispatchEvent(e);
-          }}>Update Title</md-button>
+            <md-button
+              onClick={() => {
+                const e = new CustomEvent("unique-react-id-to-update-title", {
+                  bubbles: true,
+                  detail: { title: titleFor }
+                });
+                window.dispatchEvent(e);
+              }}
+            >
+              Update Title
+            </md-button>
           </md-tab-panel>
         </md-tabs>
       </div>
