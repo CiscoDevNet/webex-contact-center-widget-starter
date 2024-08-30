@@ -43,9 +43,9 @@ export default class MyCustomComponent extends LitElement {
     super.connectedCallback();
     this.customerData = data;
     this.getTaskMap();
-    this.phoneNumber =
+    /*this.phoneNumber =
       this.assignedContacts[0].interaction.callAssociatedData &&
-      this.assignedContacts[0].interaction.callAssociatedData["ani"]["value"];
+      this.assignedContacts[0].interaction.callAssociatedData["ani"]["value"];*/
   }
 
   async getTaskMap() {
@@ -86,7 +86,7 @@ export default class MyCustomComponent extends LitElement {
     } else if (typeof x === "object" && x !== null) {
       const values = Object.values(x);
       const dataString = html`
-        ${values.map(item => {
+        ${values.map((item) => {
           return html`
             <span>${item}</span><br />
           `;
