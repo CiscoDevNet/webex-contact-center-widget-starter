@@ -486,7 +486,7 @@ const App: FC<IProps> = (props) => {
         type: Notifications.ItemMeta.Type.Info,
         mode: Notifications.ItemMeta.Mode.AutoDismiss, // Change type here based on the method.
         title: "Info - Silent",
-        data: new NotificationItemsContent.BaseDataController({
+        data: new NotificationItemsContent.DataController({
           text: "Explore New Horizons",
           link: "https://www.abc.com/file/Tjpn4Z9p8jZy0Da0Ggq6ra/Priority-To-do-list?node-id=1280%3A83124",
           linkName: "Toaster Notification",
@@ -505,7 +505,7 @@ const App: FC<IProps> = (props) => {
     try {
       const res = await Desktop.actions.fireGeneralAutoDismissNotification(
         notifData as Notifications.ItemMeta.Raw & {
-          data: { mode: Notifications.ItemMeta.Mode.AutoDismiss, data:  };
+          data: { mode: Notifications.ItemMeta.Mode.AutoDismiss  };
         }
       );
       console.log(">>>>> Fired Notification", notifData);
