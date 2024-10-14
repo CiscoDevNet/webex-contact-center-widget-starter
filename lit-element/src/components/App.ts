@@ -73,7 +73,7 @@ export default class MyCustomComponent extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
 
-    await Desktop.config.init();
+    await Desktop.config.init({widgetName: "widgetName", widgetProvider: "widgetProvider"});
 
     this.getCurrentInteractionId();
     this.subscribeAgentContactDataEvents();
@@ -731,21 +731,21 @@ export default class MyCustomComponent extends LitElement {
                 >Self Signout</md-button>
 
               <br>
-              <button @click="${() => this.signoutAgent(this.agentIdSignout, this.orgIdSignout)}">
-                Supervisor Signout Agent
-              </button>
-              Enter AgentId :
-              <input
+                Enter AgentId :
+              <md-input
                 type="text"
                 id="agentIdSignout"
                 @change="${(e: any) => (this.agentIdSignout = e?.target?.value)}"
-              >
+              ></md-input>
               Enter OrgId :
-              <input
+              <md-input
                 type="text"
                 id="orgIdSignout"
                 @change="${(e: any) => (this.orgIdSignout = e?.target?.value)}"
-              >
+              ></md-input>
+              <md-button @click="${() => this.signoutAgent(this.agentIdSignout, this.orgIdSignout)}">
+                Supervisor Signout Agent
+              </md-button>
           </md-tab-panel>
         </md-tabs>
         <slot></slot>
