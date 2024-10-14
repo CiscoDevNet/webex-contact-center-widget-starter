@@ -244,6 +244,11 @@ export default class MyCustomComponent extends LitElement {
     logger.info(wrapup);
   }
 
+  async logout()
+  {
+    await Desktop.logout.desktopLogout({ data: { logoutReason: "User requested logout" }  });
+  }
+
   async fireNotification() {
     const raw: Notifications.ItemMeta.Raw = {
       data: {
@@ -707,6 +712,14 @@ export default class MyCustomComponent extends LitElement {
               }}
               >Update Title</md-button
             >
+          </md-tab-panel>
+
+          <md-tab slot="tab">Desktop.logout</md-tab>
+          <md-tab-panel slot="panel">
+            <div class="action-container">
+              <h2>Signout Functionality</h2>
+              <md-button @button-click=${() => this.logout()}
+                >Self Signout</md-button>
           </md-tab-panel>
         </md-tabs>
         <slot></slot>
