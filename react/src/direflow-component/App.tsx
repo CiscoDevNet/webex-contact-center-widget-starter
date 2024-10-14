@@ -71,7 +71,7 @@ const App: FC<IProps> = (props) => {
   useEffect(() => {}, [props.agentId, props.darkTheme]);
 
   async function init() {
-    await Desktop.config.init();
+    await Desktop.config.init({widgetName: "widgetName", widgetProvider: "widgetProvider"});
   }
 
   const subscribeScreenpopEvent = () => {
@@ -274,10 +274,10 @@ const App: FC<IProps> = (props) => {
     Desktop.monitoring.addEventListener("eMonitoringUnHoldFailed", (msg: any) =>
       logger.info("Monitoring eMonitoringUnHoldFailed: ", msg)
     );
-    Desktop.monitoring.addEventListener("eBargedIn", (msg: any) =>
+    Desktop.monitoring.addEventListener("eAgentMonitorStateChanged", (msg: any) =>
       logger.info("Monitoring eBargedIn: ", msg)
     );
-    Desktop.monitoring.addEventListener("eBargeInFailed", (msg: any) =>
+    Desktop.monitoring.addEventListener("eAgentMonitorStateChangeFailed", (msg: any) =>
       logger.info("Monitoring eBargeInFailed: ", msg)
     );
   };
@@ -309,7 +309,7 @@ const App: FC<IProps> = (props) => {
 
   const signoutAgent = async (orgIdSignout: string, agentIdSignout:string) =>
   {
-    await Desktop.logout.signoutAgent({orgIdSignout, data: { agentIdSignout, logoutReason: "SupervisorSignout" }});
+    await Desktop.logout.signoutAgent({orgId: orgIdSignout, data: { agentId: agentIdSignout, logoutReason: "SupervisorSignout" }});
   }
 
   const getClientLocale = () => {
