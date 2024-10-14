@@ -732,17 +732,17 @@ export default class MyCustomComponent extends LitElement {
 
               <br>
                 Enter AgentId :
-              <md-input
+              <input
                 type="text"
                 id="agentIdSignout"
                 @change="${(e: any) => (this.agentIdSignout = e?.target?.value)}"
-              ></md-input>
+              />
               Enter OrgId :
-              <md-input
+              <input
                 type="text"
                 id="orgIdSignout"
                 @change="${(e: any) => (this.orgIdSignout = e?.target?.value)}"
-              ></md-input>
+              />
               <md-button @click="${() => this.signoutAgent(this.agentIdSignout, this.orgIdSignout)}">
                 Supervisor Signout Agent
               </md-button>
