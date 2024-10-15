@@ -34,6 +34,8 @@ const App: FC<IProps> = (props) => {
   );
 
   const [titleFor, setTitleFor] = useState("");
+  const [agentIdSignout, setAgentIdSignout] = useState("");
+  const [orgIdSignout, setOrgIdSignout] = useState("");
   const newInteractionId = useRef<any>(null);
 
   const [buddyAgents, setBuddyAgents] = useState(
@@ -69,7 +71,7 @@ const App: FC<IProps> = (props) => {
   useEffect(() => {}, [props.agentId, props.darkTheme]);
 
   async function init() {
-    await Desktop.config.init();
+    await Desktop.config.init({widgetName: "widgetName", widgetProvider: "widgetProvider"});
   }
 
   const subscribeScreenpopEvent = () => {
@@ -272,10 +274,10 @@ const App: FC<IProps> = (props) => {
     Desktop.monitoring.addEventListener("eMonitoringUnHoldFailed", (msg: any) =>
       logger.info("Monitoring eMonitoringUnHoldFailed: ", msg)
     );
-    Desktop.monitoring.addEventListener("eBargedIn", (msg: any) =>
+    Desktop.monitoring.addEventListener("eAgentMonitorStateChanged", (msg: any) =>
       logger.info("Monitoring eBargedIn: ", msg)
     );
-    Desktop.monitoring.addEventListener("eBargeInFailed", (msg: any) =>
+    Desktop.monitoring.addEventListener("eAgentMonitorStateChangeFailed", (msg: any) =>
       logger.info("Monitoring eBargeInFailed: ", msg)
     );
   };
@@ -299,6 +301,16 @@ const App: FC<IProps> = (props) => {
       setSessionId(latestData.subStatus);
     }
   };
+
+  const logout = async () =>
+  {
+    await Desktop.logout.desktopLogout({ data: { logoutReason: "User requested logout" }  });
+  }
+
+  const signoutAgent = async (orgIdSignout: string, agentIdSignout:string) =>
+  {
+    await Desktop.logout.signoutAgent({orgId: orgIdSignout, data: { agentId: agentIdSignout, logoutReason: "SupervisorSignout" }});
+  }
 
   const getClientLocale = () => {
     logger.info("Client locale: ", Desktop.config.clientLocale);
@@ -977,6 +989,43 @@ const App: FC<IProps> = (props) => {
               Update Title
             </md-button>
           </md-tab-panel>
+
+          <md-tab slot="tab">Desktop.logout</md-tab>
+          <md-tab-panel slot="panel">
+            <div className="action-container">
+              <h2>Signout Functionality</h2>
+              <md-button onClick={() => logout()}>
+                Self Signout
+              </md-button>
+            </div>
+            <br></br>
+              <h2>Supervisor sign out</h2>
+              <md-input
+                class="input-field"
+                shape="pill"
+                placeholder="AgentId"
+                clear=""
+                value=""
+                tabindex="0"
+                autoFocus
+                onInput={(e: any) => setAgentIdSignout(e.target.value)}
+              ></md-input>
+              <md-input
+                class="input-field"
+                shape="pill"
+                placeholder="OrgId"
+                clear=""
+                value=""
+                tabindex="0"
+                autoFocus
+                onInput={(e: any) => setOrgIdSignout(e.target.value)}
+              ></md-input>
+              <md-button onClick={() => signoutAgent(orgIdSignout, agentIdSignout)}>
+                Supervisor Signout
+              </md-button>
+          </md-tab-panel>
+
+
         </md-tabs>
       </div>
     </Styled>

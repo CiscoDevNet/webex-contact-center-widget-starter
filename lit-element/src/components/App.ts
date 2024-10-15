@@ -36,6 +36,8 @@ export default class MyCustomComponent extends LitElement {
   agentSessionId = "5a84d32c-691b-4500-b163-d6cdba2a3163";
 
   @property({ type: String }) titleFor = "";
+  @property({ type: String }) agentIdSignout = "";
+  @property({ type: String }) orgIdSignout = "";
 
   /**
    * Replace this with the logic to obtain interaction ID you need
@@ -71,7 +73,7 @@ export default class MyCustomComponent extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
 
-    await Desktop.config.init();
+    await Desktop.config.init({widgetName: "widgetName", widgetProvider: "widgetProvider"});
 
     this.getCurrentInteractionId();
     this.subscribeAgentContactDataEvents();
@@ -187,10 +189,10 @@ export default class MyCustomComponent extends LitElement {
       "eAgentConsultConferenceEndFailed",
       msg => logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentMonitorStateChanged", msg =>
+    Desktop.agentContact.addEventListener("eAgentMonitorStateChanged", (msg: any) =>
       logger.info("AgentContact eAgentMonitorStateChanged: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentMonitoringEnded", msg =>
+    Desktop.agentContact.addEventListener("eAgentMonitoringEnded", (msg: any) =>
       logger.info("AgentContact eAgentMonitoringEnded: ", msg)
     );
   }
@@ -242,6 +244,18 @@ export default class MyCustomComponent extends LitElement {
   async getwrapupCodes() {
     const wrapup = await Desktop.actions.getWrapUpCodes();
     logger.info(wrapup);
+  }
+
+  async logout()
+  {
+    await Desktop.logout.desktopLogout({ data: { logoutReason: "User requested logout" }  });
+  }
+  async signoutAgent(agentId: string, orgId: any) {
+    try {
+      await Desktop.logout.signoutAgent({orgId, data: { agentId, logoutReason: "SupervisorSignout" }});
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async fireNotification() {
@@ -707,6 +721,31 @@ export default class MyCustomComponent extends LitElement {
               }}
               >Update Title</md-button
             >
+          </md-tab-panel>
+
+          <md-tab slot="tab">Desktop.logout</md-tab>
+          <md-tab-panel slot="panel">
+            <div class="action-container">
+              <h2>Signout Functionality</h2>
+              <md-button @button-click=${() => this.logout()}
+                >Self Signout</md-button>
+
+              <br>
+                Enter AgentId :
+              <input
+                type="text"
+                id="agentIdSignout"
+                @change="${(e: any) => (this.agentIdSignout = e?.target?.value)}"
+              />
+              Enter OrgId :
+              <input
+                type="text"
+                id="orgIdSignout"
+                @change="${(e: any) => (this.orgIdSignout = e?.target?.value)}"
+              />
+              <md-button @click="${() => this.signoutAgent(this.agentIdSignout, this.orgIdSignout)}">
+                Supervisor Signout Agent
+              </md-button>
           </md-tab-panel>
         </md-tabs>
         <slot></slot>
