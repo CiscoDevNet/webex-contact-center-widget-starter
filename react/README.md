@@ -7,9 +7,9 @@
 
 [![Generic badge](https://img.shields.io/badge/Completion-95-geen)](https://shields.io/)
 
-This component was bootstrapped with [Direflow](https://direflow.io).
+This component uses [react-to-webcomponent](https://github.com/bitovi/react-to-webcomponent) to convert React components into Web Components.
 
-This widget starter can be run on `localhost` to be reviewed. In case you (the developer) are using this widget starter as a foundation of your custom widget, running the sandbox environment on `localhost` would be a perfect way to build your widget's logic and interface. It will also allow you to experiment with theme switching (light/dark) as well as test various container sizes that your widget might fit. 
+This widget starter can be run on `localhost` to be reviewed. In case you (the developer) are using this widget starter as a foundation of your custom widget, running the development server on `localhost` would be a perfect way to build your widget's logic and interface. 
 
 **Note**: please keep in mind that we recommend to design every widget as responsive. With the exception of widgets for Agent or Supervisor Desktop **header** zone (where widgets should not exceed 64px height), you can assume that your custom widget might end up getting placed on various canvas sizes. Based on the Agent's screen size and configuration by the Administrator, it could even end up with a different aspect ratio. Please keep that in mind while testing your responsive widget's behavior. 
 ## Development
@@ -23,7 +23,7 @@ To run your widget on `localhost`, please navigate to widget's root directory in
 4. Run `yarn start` to start the playground (sandbox) app.
 
 ### Editing widget
-There is generally no need for you to modify anything outside of the `src/direflow-component` folder. To customize you widget, we suggest for you to work within this directory. You are free to create your components and structure them however you see fit. 
+There is generally no need for you to modify anything outside of the `src/components` folder. To customize your widget, we suggest for you to work within this directory. You are free to create your components and structure them however you see fit. 
 
 ### Building/exporting widget
 
