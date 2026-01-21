@@ -1,55 +1,280 @@
-## Disclaimer
----
-**This started is work-in-progress. Once the widget is complete, this disclaimer will be removed. Thank you for your patience.**
+# WXCC Desktop SDK Explorer
 
----
-# WCC Widget Starter: React
+An interactive API documentation and testing tool for the `@wxcc-desktop/sdk`. This widget provides a comprehensive interface for engineers to explore, test, and understand all SDK APIs in real-time.
 
-[![Generic badge](https://img.shields.io/badge/Completion-95-geen)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/Status-Production-green)](https://shields.io/)
 
-This component uses [react-to-webcomponent](https://github.com/bitovi/react-to-webcomponent) to convert React components into Web Components.
+## Overview
 
-This widget starter can be run on `localhost` to be reviewed. In case you (the developer) are using this widget starter as a foundation of your custom widget, running the development server on `localhost` would be a perfect way to build your widget's logic and interface. 
+The SDK Explorer to test you wxcc-desktop sdk api
 
-**Note**: please keep in mind that we recommend to design every widget as responsive. With the exception of widgets for Agent or Supervisor Desktop **header** zone (where widgets should not exceed 64px height), you can assume that your custom widget might end up getting placed on various canvas sizes. Based on the Agent's screen size and configuration by the Administrator, it could even end up with a different aspect ratio. Please keep that in mind while testing your responsive widget's behavior. 
-## Development
+## Getting Started
 
-### Getting started
-To run your widget on `localhost`, please navigate to widget's root directory in Terminal (Command line tool) and run the following commands (Assuming you have [`yarn`](https://classic.yarnpkg.com/en/docs/install/#mac-stable) installed globally on your machine):
+### Prerequisites
 
-1. Clone this repo.
-2. Navigate to th widget/widget starter folder.
-3. Run `yarn` from the root of the repo.
-4. Run `yarn start` to start the playground (sandbox) app.
+- Node.js (v14 or higher)
+- Yarn package manager
+- Access to WXCC Desktop environment (for deployment)
 
-### Editing widget
-There is generally no need for you to modify anything outside of the `src/components` folder. To customize your widget, we suggest for you to work within this directory. You are free to create your components and structure them however you see fit. 
+### Installation
 
-### Building/exporting widget
+1. Clone this repository
+2. Navigate to the widget directory
+3. Install dependencies:
 
-Once you are ready to export your widget, all you need is to run the following command in Terminal (Command line tool):
-
+```bash
+yarn install
 ```
+
+### Development
+
+Run the SDK Explorer in development mode with hot reload:
+
+```bash
+yarn start
+```
+
+The explorer will be available at `http://localhost:3001`
+
+### Production Build
+
+Build the SDK Explorer for production:
+
+```bash
 yarn build
 ```
 
-This will create a `build` folder in the root directory of your widget with a single `react-widget-starter.js` file that contains your entire widget. This file can be renamed and uploaded to a preferred location on a CDN (e.g. an S3 bucket on AWS. Please keep in mind tht this file has to be publicly available over the internet to be accessible to Agent or Supervisor Desktop).
+Output: `build/wxcc-sdk-explorer.js`
 
-### Sharing widget information with Agent/Supervisor Desktop administrator
+This creates a single JavaScript file containing your entire widget, ready to be uploaded to a CDN.
 
-To be able to place your custom widget within Agent/Supervisor Desktop, Contact Center administrator will need three pieces of information:
+## Usage
 
-1. The URL to the `***.js` file that you had previously generated and placed on a CDN.
-2. Information regarding any properties/attributes that are required to be set for the widget to function (e.g. for Maps widget in th Examples folder, one will require to pass Google Maps API key to an `api-key` attribute). 
-    
-    If you require dynamic data from Agent/Supervisor Desktop, you might want to either request it though [`wxcc-js-api`](https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/webexcc/developer_20/webexcc_b_20-desktop-developer-guide-/webexcc_m_30-javascript-sdk.html) methods within your widget, or through properties - when the list of [Data Providers](https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/webexcc/developer_20/webexcc_b_20-desktop-developer-guide-/webexcc_m_30-build-a-custom-widget.html#Cisco_Reference.dita_f673d97b-a10a-48b7-9ebe-05c188980918) contains the required information.
-3. A quick preview/screenshot or the aspect ratio that is optimal for this widget. This way, an administrator will be able to make the best decision while placing it on the Desktop layout. ### Placing Widget in JSON layout
-**Reference**: [Desktop Layout Reference guide for Administrator](https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/webexcc/SetupandAdministrationGuide_2/b_mp-release-2/b_cc-release-2_chapter_011.html#topic_8230815F4023699032326F948C3F1495).
+### Embedding in WXCC Desktop
 
-In case you are an administrator for Contact Center Agent Desktop or are working with an administrator, you might be trying to place this component in a JSON layout specification file to test in your Contact Center environment. 
+#### HTML
+```html
+<wxcc-sdk-explorer 
+  agent-id="$STORE.agent.agentId"
+  dark-theme="false"
+></wxcc-sdk-explorer>
+```
 
-This specific Widget Starter is designed to be places in a ["panel"](https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/webexcc/SetupandAdministrationGuide_2/b_mp-release-2/b_cc-release-2_chapter_011.html#Cisco_Generic_Topic.dita_1ae68ee3-0948-47ad-a04d-ae182dae573e) area of JSON layout specification. This is due to this widget relying on a task-specific information with the reference derived from the current location/address bar value. 
+#### JSON Layout Configuration
+```json
+{
+  "comp": "wxcc-sdk-explorer",
+  "attributes": {
+    "agent-id": "$STORE.agent.agentId",
+    "dark-theme": "false"
+  }
+}
+```
 
-**NOTE**: If you place this widget in another area in JSON layout specification ("header" or a custom page in "navigation"), some task-specific function might not work. This is to be expected. 
+### Widget Properties
 
-Please feel free to reach out to your partner or Cisco directly with any additional questions. 
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `agent-id` | string | No | Agent ID for context-specific operations |
+| `dark-theme` | boolean | No | Enable dark theme (default: false) |
+
+## API Categories
+
+### 1. Desktop.agentStateInfo (7 methods)
+- Get agent information
+- Change agent state (Available/Idle)
+- Fetch address books
+- Get idle codes
+- Get wrap-up codes
+- Update CAD variables
+- TPW agent state functions
+
+### 2. Desktop.agentContact (9 methods)
+- Accept/end/wrap-up interactions
+- Hold/unhold interactions
+- Get buddy agents
+- Get VTeam lists
+- Consult operations
+- Transfer operations
+- Conference operations
+- Consult end
+
+### 3. Desktop.dialer (3 methods)
+- Update CAD variables
+- Monitoring hold/unhold
+
+### 4. Desktop.monitoring (3 methods)
+- Start monitoring
+- End monitoring
+- Barge-in
+
+### 5. Desktop.actions (3 methods)
+- Get auth token
+- Get task map
+- Fire notifications
+
+### 6. Desktop.logout (2 methods)
+- Desktop logout
+- Supervisor signout agent
+
+## Example Workflows
+
+### Testing Agent State Change
+
+1. Navigate to **Desktop.agentStateInfo** category
+2. Find **"Change Agent State"** method
+3. Select desired state from dropdown (Available/Idle)
+4. Click **"Execute"**
+5. View response in the console and UI
+
+### Accepting an Interaction
+
+1. Go to **Desktop.agentContact** category
+2. Select **"Accept Interaction"**
+3. Enter interaction ID
+4. Click **"Execute"**
+5. Monitor the response and any errors
+
+### Using Code Examples
+
+1. Select any API method
+2. Click **"Show Code Example"**
+3. Review the TypeScript code
+4. Click **"📋 Copy"** to copy to clipboard
+5. Paste into your own widget code
+
+## File Structure
+
+```
+react/
+├── src/
+│   ├── components/
+│   │   ├── ApiExplorer/
+│   │   │   ├── types.ts                    # TypeScript interfaces
+│   │   │   ├── apiDefinitions.ts           # 25+ SDK method definitions
+│   │   │   ├── SidebarApiExplorer.tsx      # Main explorer component
+│   │   │   └── SidebarApiExplorer.css      # Widget styles
+│   │   ├── App.tsx                         # App wrapper with SDK init
+│   │   ├── sdk.ts                          # SDK initialization
+│   │   └── useShadowStyles.ts              # Shadow DOM styles
+│   ├── index.tsx                           # Entry point
+│   └── types/                              # Type definitions
+├── public/
+│   ├── index.html                          # HTML template
+│   └── agentx-mock.js                      # Mock for standalone dev
+├── webpack.config.js                       # Webpack configuration
+├── package.json                            # Dependencies & scripts
+└── README.md                               # This file
+```
+
+## Development Tips
+
+### Testing Without WXCC Desktop
+
+The widget includes a mock `AGENTX_SERVICE` for standalone development. This allows you to:
+- Test the UI and interactions
+- Develop without a full WXCC Desktop environment
+- See how the widget responds to API calls
+
+### Customizing the Widget
+
+To add new SDK methods:
+
+1. Add method definition to `src/components/ApiExplorer/apiDefinitions.ts`
+2. Add execution handler in `src/components/ApiExplorer/SidebarApiExplorer.tsx`
+3. Test in development mode
+4. Rebuild for production
+
+### Styling
+
+The widget uses a responsive CSS design that adapts to:
+- Desktop screens (1200px+)
+- Laptops (1024px+)
+- Tablets (768px+)
+- Mobile devices (480px+)
+
+Modify `src/components/ApiExplorer/SidebarApiExplorer.css` to customize the appearance.
+
+## Deployment
+
+### Uploading to CDN
+
+1. Build the widget: `yarn build`
+2. Upload `build/wxcc-sdk-explorer.js` to your CDN (e.g., AWS S3)
+3. Ensure the file is publicly accessible
+4. Note the public URL
+
+### Configuring in WXCC Desktop
+
+Provide your administrator with:
+
+1. **Widget URL**: The public CDN URL to `wxcc-sdk-explorer.js`
+2. **Component Name**: `wxcc-sdk-explorer`
+3. **Properties**: Optional `agent-id` and `dark-theme` attributes
+4. **Recommended Placement**: Panel area (not header)
+
+
+
+
+
+### Build Warnings
+
+The webpack build may show size warnings for:
+- `wxcc-sdk-explorer.js` (2.07 MiB)
+- Momentum UI assets
+
+These are expected and don't affect functionality. The SDK and UI libraries are externalized in production.
+
+### Widget Not Loading
+
+1. Check browser console for errors
+2. Verify the widget URL is accessible
+3. Ensure `@momentum-ui/web-components` is loaded by WXCC Desktop
+4. Check that the web component is properly registered
+
+## Contributing
+
+When customizing this widget:
+
+1. Follow the existing code structure
+2. Add TypeScript types for new features
+3. Update API definitions with proper documentation
+4. Test in both development and production modes
+5. Ensure responsive design is maintained
+
+## Technical Details
+
+### Technology Stack
+
+- **React 16.10.1** - UI framework
+- **TypeScript 4.9.3** - Type safety
+- **Webpack 5** - Module bundling
+- **@wxcc-desktop/sdk 2.0.1** - WXCC Desktop SDK
+- **@momentum-ui/web-components 2.7.44** - Cisco UI components
+- **react-to-webcomponent** - Web component conversion
+
+### Architecture
+
+The widget uses:
+- **Shadow DOM** for style encapsulation
+- **Web Components** for WXCC Desktop integration
+- **Event-driven** SDK interaction
+- **Responsive flexbox** layout
+- **CSS-in-JS** for shadow DOM styling
+
+## License
+
+This widget starter is provided as-is for use with Webex Contact Center. Please refer to your Cisco licensing agreement for terms of use.
+
+## Support
+
+For questions or issues:
+- Contact your Cisco partner
+- Refer to [WXCC Developer Documentation](https://developer.webex-cx.com/)
+- Check [Desktop Developer Guide](https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/cust_contact/contact_center/webexcc/developer_20/webexcc_b_20-desktop-developer-guide-.html)
+
+---
+
+**Version**: 1.0.0  
+**Last Updated**: January 2026  
+**Widget Name**: wxcc-sdk-explorer

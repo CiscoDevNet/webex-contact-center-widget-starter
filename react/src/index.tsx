@@ -3,10 +3,10 @@ import ReactDOM from "react-dom";
 import r2wc from "react-to-webcomponent";
 import App from "./components/App";
 
-console.log("[DEBUG] react-widget-starter.js loaded");
+console.log("[DEBUG] wxcc-sdk-explorer widget loaded");
 console.log("[DEBUG] App component available:", typeof App);
 
-const WebComponentWrapper = r2wc(App, React, ReactDOM, {
+const WebComponentWrapper = r2wc(App, React, ReactDOM as any, {
   props: {
     agentId: "string",
     darkTheme: "boolean",
@@ -14,10 +14,10 @@ const WebComponentWrapper = r2wc(App, React, ReactDOM, {
   shadow: "open",
 });
 
-console.log("[DEBUG] About to register my-react-widget web component");
+console.log("[DEBUG] About to register wxcc-sdk-explorer web component");
 
-customElements.define("my-react-widget", WebComponentWrapper);
+customElements.define("wxcc-sdk-explorer", WebComponentWrapper);
 
-console.log("[DEBUG] my-react-widget registered:", customElements.get("my-react-widget"));
+console.log("[DEBUG] wxcc-sdk-explorer registered:", customElements.get("wxcc-sdk-explorer"));
 
 export default WebComponentWrapper;
