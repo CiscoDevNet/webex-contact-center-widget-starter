@@ -95,9 +95,9 @@ console.log("Mock outdial ANI list retrieved");`
   },
   {
     id: 'fetchOrganizationIdleCodes',
-    name: 'Fetch Organization Idle Codes (TPW)',
-    description: 'Fetches idle codes for the organization (Third Party Workforce)',
-    category: 'Desktop.agentStateInfo',
+    name: 'Fetch Organization Idle Codes (Supervisor)',
+    description: 'Fetches idle codes for the organization (Supervisor API)',
+    category: 'Desktop.supervisor',
     parameters: [
       {
         name: 'orgId',
@@ -113,9 +113,9 @@ console.log("Organization idle codes fetched");`
   },
   {
     id: 'fetchAgentIdleCodes',
-    name: 'Fetch Agent Idle Codes (TPW)',
-    description: 'Fetches idle codes for a specific agent (Third Party Workforce)',
-    category: 'Desktop.agentStateInfo',
+    name: 'Fetch Agent Idle Codes (Supervisor)',
+    description: 'Fetches idle codes for a specific agent (Supervisor API)',
+    category: 'Desktop.supervisor',
     parameters: [
       {
         name: 'orgId',
@@ -138,9 +138,9 @@ console.log("Agent idle codes fetched");`
   },
   {
     id: 'changeAgentState',
-    name: 'Change Agent State (TPW)',
-    description: 'Changes agent state for Third Party Workforce',
-    category: 'Desktop.agentStateInfo',
+    name: 'Change Agent State (Supervisor)',
+    description: 'Changes agent state for another agent (Supervisor API)',
+    category: 'Desktop.supervisor',
     parameters: [
       {
         name: 'orgId',
@@ -939,6 +939,7 @@ console.log("Agent signed out successfully");`
 export const apiCategories = [
   'Desktop.agentStateInfo',
   'Desktop.agentContact',
+  'Desktop.supervisor',
   'Desktop.monitoring',
   'Desktop.dialer',
   'Desktop.actions',
