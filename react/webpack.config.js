@@ -13,9 +13,9 @@ module.exports = (env, argv) => {
     entry: "./src/index.tsx",
     output: {
       path: path.resolve(__dirname, "build"),
-      filename: "react-widget-starter.js",
+      filename: "wxcc-sdk-explorer.js",
       library: {
-        name: "ReactWidgetStarter",
+        name: "WxccSdkExplorer",
         type: "umd",
       },
       publicPath: isProduction ? "./" : "/",
@@ -120,7 +120,7 @@ module.exports = (env, argv) => {
         directory: path.join(__dirname, "public"),
       },
       compress: true,
-      port: 3000,
+      port: 3001,
       hot: true,
       historyApiFallback: true,
     },

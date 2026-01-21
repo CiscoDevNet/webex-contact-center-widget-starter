@@ -1,0 +1,173 @@
+.code-examples {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.examples-header {
+  margin-bottom: 24px;
+}
+
+.examples-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.examples-header p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.examples-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid #d0d0d0;
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: #049fd9;
+  color: #049fd9;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #049fd9 0%, #0b7cb5 100%);
+  color: white;
+  border-color: #049fd9;
+}
+
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 20px;
+}
+
+.example-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
+}
+
+.example-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.example-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.example-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  flex: 1;
+}
+
+.example-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.example-badge.api {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.example-badge.event {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.example-badge.workflow {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.example-description {
+  margin: 0 0 16px 0;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.example-code-container {
+  position: relative;
+}
+
+.example-code {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.6;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+  margin: 0;
+}
+
+.example-code code {
+  color: #d4d4d4;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 1200px) {
+  .examples-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .code-examples {
+    padding: 16px;
+  }
+  
+  .example-card {
+    padding: 16px;
+  }
+  
+  .example-code {
+    font-size: 11px;
+    padding: 12px;
+  }
+}
