@@ -97,7 +97,7 @@ console.log("Mock outdial ANI list retrieved");`
     id: 'fetchOrganizationIdleCodes',
     name: 'Fetch Organization Idle Codes (Supervisor)',
     description: 'Fetches idle codes for the organization (Supervisor API)',
-    category: 'Desktop.supervisor',
+    category: 'Desktop.agentStateInfo',
     parameters: [
       {
         name: 'orgId',
@@ -115,7 +115,7 @@ console.log("Organization idle codes fetched");`
     id: 'fetchAgentIdleCodes',
     name: 'Fetch Agent Idle Codes (Supervisor)',
     description: 'Fetches idle codes for a specific agent (Supervisor API)',
-    category: 'Desktop.supervisor',
+    category: 'Desktop.agentStateInfo',
     parameters: [
       {
         name: 'orgId',
@@ -140,7 +140,7 @@ console.log("Agent idle codes fetched");`
     id: 'changeAgentState',
     name: 'Change Agent State (Supervisor)',
     description: 'Changes agent state for another agent (Supervisor API)',
-    category: 'Desktop.supervisor',
+    category: 'Desktop.agentStateInfo',
     parameters: [
       {
         name: 'orgId',
@@ -616,6 +616,165 @@ console.log("Transfer completed:", result);`
 });
 console.log("VTeam transfer completed:", result);`
   },
+  {
+    id: 'sendDtmf',
+    name: 'Send DTMF',
+    description: 'Sends DTMF digit during an active call',
+    category: 'Desktop.agentContact',
+    parameters: [
+      {
+        name: 'digit',
+        type: 'string',
+        required: true,
+        description: 'DTMF digit to send (0-9, *, #)',
+        placeholder: 'Enter digit',
+        defaultValue: '1'
+      }
+    ],
+    sdkPath: 'Desktop.agentContact.sendDtmf',
+    exampleCode: `Desktop.agentContact.sendDtmf("1");
+console.log("DTMF digit sent");`
+  },
+  {
+    id: 'consultAccept',
+    name: 'Consult Accept',
+    description: 'Accepts an incoming consult request',
+    category: 'Desktop.agentContact',
+    parameters: [
+      {
+        name: 'interactionId',
+        type: 'string',
+        required: true,
+        description: 'Interaction ID',
+        placeholder: 'Enter interaction ID'
+      }
+    ],
+    sdkPath: 'Desktop.agentContact.consultAccept',
+    exampleCode: `const result = await Desktop.agentContact.consultAccept({
+  interactionId: "your-interaction-id"
+});
+console.log("Consult accepted:", result);`
+  },
+  {
+    id: 'blindTransfer',
+    name: 'Blind Transfer',
+    description: 'Performs a blind transfer to a destination',
+    category: 'Desktop.agentContact',
+    parameters: [
+      {
+        name: 'interactionId',
+        type: 'string',
+        required: true,
+        description: 'Interaction ID',
+        placeholder: 'Enter interaction ID'
+      },
+      {
+        name: 'destination',
+        type: 'string',
+        required: true,
+        description: 'Transfer destination (DN, agent ID, or queue)',
+        placeholder: 'Enter destination'
+      }
+    ],
+    sdkPath: 'Desktop.agentContact.blindTransfer',
+    exampleCode: `const result = await Desktop.agentContact.blindTransfer({
+  interactionId: "your-interaction-id",
+  data: {
+    destination: "destination-dn"
+  }
+});
+console.log("Blind transfer completed:", result);`
+  },
+  {
+    id: 'declineInteraction',
+    name: 'Decline Interaction',
+    description: 'Declines an incoming interaction or consult',
+    category: 'Desktop.agentContact',
+    parameters: [
+      {
+        name: 'interactionId',
+        type: 'string',
+        required: true,
+        description: 'Interaction ID',
+        placeholder: 'Enter interaction ID'
+      },
+      {
+        name: 'mediaResourceId',
+        type: 'string',
+        required: true,
+        description: 'Media resource ID',
+        placeholder: 'Enter media resource ID'
+      },
+      {
+        name: 'isConsult',
+        type: 'string',
+        required: true,
+        description: 'Is this a consult decline',
+        options: ['true', 'false'],
+        defaultValue: 'false'
+      }
+    ],
+    sdkPath: 'Desktop.agentContact.decline',
+    exampleCode: `const result = await Desktop.agentContact.decline({
+  interactionId: "your-interaction-id",
+  data: {
+    mediaResourceId: "media-resource-id"
+  },
+  isConsult: false
+});
+console.log("Interaction declined:", result);`
+  },
+  {
+    id: 'pauseRecording',
+    name: 'Pause Recording',
+    description: 'Pauses call recording for the interaction',
+    category: 'Desktop.agentContact',
+    parameters: [
+      {
+        name: 'interactionId',
+        type: 'string',
+        required: true,
+        description: 'Interaction ID',
+        placeholder: 'Enter interaction ID'
+      }
+    ],
+    sdkPath: 'Desktop.agentContact.pauseRecording',
+    exampleCode: `const result = await Desktop.agentContact.pauseRecording({
+  interactionId: "your-interaction-id"
+});
+console.log("Recording paused:", result);`
+  },
+  {
+    id: 'resumeRecording',
+    name: 'Resume Recording',
+    description: 'Resumes call recording for the interaction',
+    category: 'Desktop.agentContact',
+    parameters: [
+      {
+        name: 'interactionId',
+        type: 'string',
+        required: true,
+        description: 'Interaction ID',
+        placeholder: 'Enter interaction ID'
+      },
+      {
+        name: 'autoResumed',
+        type: 'string',
+        required: false,
+        description: 'Was this auto-resumed',
+        options: ['true', 'false'],
+        defaultValue: 'false'
+      }
+    ],
+    sdkPath: 'Desktop.agentContact.resumeRecording',
+    exampleCode: `const result = await Desktop.agentContact.resumeRecording({
+  interactionId: "your-interaction-id",
+  data: {
+    autoResumed: false
+  }
+});
+console.log("Recording resumed:", result);`
+  },
 
   // Desktop.monitoring APIs
   {
@@ -807,6 +966,104 @@ await Desktop.dialer.updateCadVariables({
 });
 console.log("CAD variables updated");`
   },
+  {
+    id: 'startOutdial',
+    name: 'Start Outdial',
+    description: 'Initiates an outbound call',
+    category: 'Desktop.dialer',
+    parameters: [
+      {
+        name: 'destination',
+        type: 'string',
+        required: true,
+        description: 'Destination phone number or DN',
+        placeholder: 'Enter phone number',
+        defaultValue: '+1234567890'
+      },
+      {
+        name: 'outDialANI',
+        type: 'string',
+        required: false,
+        description: 'Outdial ANI (caller ID)',
+        placeholder: 'Enter ANI',
+        defaultValue: ''
+      }
+    ],
+    sdkPath: 'Desktop.dialer.startOutdial',
+    exampleCode: `const result = await Desktop.dialer.startOutdial({
+  data: {
+    destination: "+1234567890",
+    outDialANI: ""
+  }
+});
+console.log("Outdial started:", result);`
+  },
+  {
+    id: 'previewCampaignAccept',
+    name: 'Preview Campaign Accept',
+    description: 'Accepts a preview campaign contact',
+    category: 'Desktop.dialer',
+    parameters: [
+      {
+        name: 'contactId',
+        type: 'string',
+        required: true,
+        description: 'Campaign contact ID',
+        placeholder: 'Enter contact ID'
+      }
+    ],
+    sdkPath: 'Desktop.dialer.previewCampaignAccept',
+    exampleCode: `const result = await Desktop.dialer.previewCampaignAccept({
+  data: {
+    contactId: "contact-id"
+  }
+});
+console.log("Preview campaign accepted:", result);`
+  },
+  {
+    id: 'previewCampaignSkip',
+    name: 'Preview Campaign Skip',
+    description: 'Skips a preview campaign contact',
+    category: 'Desktop.dialer',
+    parameters: [
+      {
+        name: 'contactId',
+        type: 'string',
+        required: true,
+        description: 'Campaign contact ID',
+        placeholder: 'Enter contact ID'
+      }
+    ],
+    sdkPath: 'Desktop.dialer.previewCampaignSkip',
+    exampleCode: `const result = await Desktop.dialer.previewCampaignSkip({
+  data: {
+    contactId: "contact-id"
+  }
+});
+console.log("Preview campaign skipped:", result);`
+  },
+  {
+    id: 'removePreviewContact',
+    name: 'Remove Preview Contact',
+    description: 'Removes a preview campaign contact from the queue',
+    category: 'Desktop.dialer',
+    parameters: [
+      {
+        name: 'contactId',
+        type: 'string',
+        required: true,
+        description: 'Campaign contact ID',
+        placeholder: 'Enter contact ID'
+      }
+    ],
+    sdkPath: 'Desktop.dialer.removePreviewContact',
+    exampleCode: `const result = await Desktop.dialer.removePreviewContact({
+  data: {
+    contactId: "contact-id"
+  }
+});
+console.log("Preview contact removed:", result);`
+  },
 
   // Desktop.actions APIs
   {
@@ -831,9 +1088,28 @@ const tasks = Array.from(taskMap?.values() || []);
 console.log("Assigned tasks:", tasks);`
   },
   {
+    id: 'getMediaTypeQueue',
+    name: 'Get Media Type Queue',
+    description: 'Retrieves tasks for a specific media type (chat, telephony, email)',
+    category: 'Desktop.actions',
+    parameters: [
+      {
+        name: 'mediaType',
+        type: 'string',
+        required: true,
+        description: 'Media type to query',
+        options: ['chat', 'telephony', 'email'],
+        defaultValue: 'chat'
+      }
+    ],
+    sdkPath: 'Desktop.actions.getMediaTypeQueue',
+    exampleCode: `const queue = await Desktop.actions.getMediaTypeQueue("chat");
+console.log("Media type queue:", queue);`
+  },
+  {
     id: 'fireNotification',
-    name: 'Fire Notification',
-    description: 'Displays a notification to the agent',
+    name: 'Fire Auto-Dismiss Notification',
+    description: 'Displays an auto-dismissing notification to the agent',
     category: 'Desktop.actions',
     parameters: [
       {
@@ -871,6 +1147,129 @@ console.log("Assigned tasks:", tasks);`
   }
 });
 console.log("Notification fired:", result);`
+  },
+  {
+    id: 'fireSilentNotification',
+    name: 'Fire Silent Notification',
+    description: 'Displays a silent notification (no sound or popup)',
+    category: 'Desktop.actions',
+    parameters: [
+      {
+        name: 'type',
+        type: 'string',
+        required: true,
+        description: 'Notification type',
+        options: ['Info', 'Success', 'Warning', 'Error'],
+        defaultValue: 'Info'
+      },
+      {
+        name: 'title',
+        type: 'string',
+        required: true,
+        description: 'Notification title',
+        placeholder: 'Enter notification title',
+        defaultValue: 'Silent Notification'
+      },
+      {
+        name: 'message',
+        type: 'string',
+        required: true,
+        description: 'Notification message',
+        placeholder: 'Enter notification message',
+        defaultValue: 'This is a silent notification'
+      }
+    ],
+    sdkPath: 'Desktop.actions.fireGeneralSilentNotification',
+    exampleCode: `Desktop.actions.fireGeneralSilentNotification({
+  data: {
+    type: Notifications.ItemMeta.Type.Info,
+    mode: Notifications.ItemMeta.Mode.Silent,
+    title: "Silent Notification",
+    data: "Notification message"
+  }
+});
+console.log("Silent notification fired");`
+  },
+  {
+    id: 'fireAcknowledgeNotification',
+    name: 'Fire Acknowledge Notification',
+    description: 'Displays a notification that requires user acknowledgment',
+    category: 'Desktop.actions',
+    parameters: [
+      {
+        name: 'type',
+        type: 'string',
+        required: true,
+        description: 'Notification type',
+        options: ['Info', 'Success', 'Warning', 'Error'],
+        defaultValue: 'Info'
+      },
+      {
+        name: 'title',
+        type: 'string',
+        required: true,
+        description: 'Notification title',
+        placeholder: 'Enter notification title',
+        defaultValue: 'Acknowledge Notification'
+      },
+      {
+        name: 'message',
+        type: 'string',
+        required: true,
+        description: 'Notification message',
+        placeholder: 'Enter notification message',
+        defaultValue: 'Please acknowledge this notification'
+      }
+    ],
+    sdkPath: 'Desktop.actions.fireGeneralAcknowledgeNotification',
+    exampleCode: `const result = await Desktop.actions.fireGeneralAcknowledgeNotification({
+  data: {
+    type: Notifications.ItemMeta.Type.Info,
+    mode: Notifications.ItemMeta.Mode.Acknowledge,
+    title: "Acknowledge Notification",
+    data: "Notification message"
+  }
+});
+console.log("Acknowledge notification fired:", result);`
+  },
+  {
+    id: 'addCustomTask',
+    name: 'Add Custom Task',
+    description: 'Adds a custom task to the agent workspace',
+    category: 'Desktop.actions',
+    parameters: [
+      {
+        name: 'taskId',
+        type: 'string',
+        required: true,
+        description: 'Custom task ID',
+        placeholder: 'Enter task ID',
+        defaultValue: 'custom-task-123'
+      },
+      {
+        name: 'title',
+        type: 'string',
+        required: true,
+        description: 'Task title',
+        placeholder: 'Enter task title',
+        defaultValue: 'Custom Task'
+      },
+      {
+        name: 'mediaType',
+        type: 'string',
+        required: true,
+        description: 'Media type',
+        options: ['chat', 'telephony', 'email'],
+        defaultValue: 'chat'
+      }
+    ],
+    sdkPath: 'Desktop.actions.addCustomTask',
+    exampleCode: `Desktop.actions.addCustomTask({
+  taskId: "custom-task-123",
+  title: "Custom Task",
+  mediaType: "chat"
+});
+console.log("Custom task added");`
   },
 
   // Desktop.logout APIs
@@ -939,7 +1338,6 @@ console.log("Agent signed out successfully");`
 export const apiCategories = [
   'Desktop.agentStateInfo',
   'Desktop.agentContact',
-  'Desktop.supervisor',
   'Desktop.monitoring',
   'Desktop.dialer',
   'Desktop.actions',

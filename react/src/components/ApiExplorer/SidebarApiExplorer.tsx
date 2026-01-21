@@ -277,6 +277,56 @@ export const SidebarApiExplorer: React.FC = () => {
           addLog('success', 'VTeam Transfer Completed', result);
           break;
 
+        case 'sendDtmf':
+          Desktop.agentContact.sendDtmf(parameters.digit);
+          addLog('success', 'DTMF Digit Sent', { digit: parameters.digit });
+          break;
+
+        case 'consultAccept':
+          result = await Desktop.agentContact.consultAccept({
+            interactionId: parameters.interactionId
+          });
+          addLog('success', 'Consult Accepted', result);
+          break;
+
+        case 'blindTransfer':
+          result = await Desktop.agentContact.blindTransfer({
+            interactionId: parameters.interactionId,
+            data: {
+              destination: parameters.destination
+            }
+          });
+          addLog('success', 'Blind Transfer Completed', result);
+          break;
+
+        case 'declineInteraction':
+          result = await Desktop.agentContact.decline({
+            interactionId: parameters.interactionId,
+            data: {
+              mediaResourceId: parameters.mediaResourceId
+            },
+            isConsult: parameters.isConsult === 'true'
+          });
+          addLog('success', 'Interaction Declined', result);
+          break;
+
+        case 'pauseRecording':
+          result = await Desktop.agentContact.pauseRecording({
+            interactionId: parameters.interactionId
+          });
+          addLog('success', 'Recording Paused', result);
+          break;
+
+        case 'resumeRecording':
+          result = await Desktop.agentContact.resumeRecording({
+            interactionId: parameters.interactionId,
+            data: {
+              autoResumed: parameters.autoResumed === 'true'
+            }
+          });
+          addLog('success', 'Recording Resumed', result);
+          break;
+
         case 'startMonitoring':
           result = await Desktop.monitoring.startMonitoring({
             data: {
@@ -333,6 +383,43 @@ export const SidebarApiExplorer: React.FC = () => {
           addLog('success', 'CAD Variables Updated', contactPayload);
           break;
 
+        case 'startOutdial':
+          result = await Desktop.dialer.startOutdial({
+            data: {
+              destination: parameters.destination,
+              outDialANI: parameters.outDialANI
+            }
+          });
+          addLog('success', 'Outdial Started', result);
+          break;
+
+        case 'previewCampaignAccept':
+          result = await Desktop.dialer.previewCampaignAccept({
+            data: {
+              contactId: parameters.contactId
+            }
+          });
+          addLog('success', 'Preview Campaign Accepted', result);
+          break;
+
+        case 'previewCampaignSkip':
+          result = await Desktop.dialer.previewCampaignSkip({
+            data: {
+              contactId: parameters.contactId
+            }
+          });
+          addLog('success', 'Preview Campaign Skipped', result);
+          break;
+
+        case 'removePreviewContact':
+          result = await Desktop.dialer.removePreviewContact({
+            data: {
+              contactId: parameters.contactId
+            }
+          });
+          addLog('success', 'Preview Contact Removed', result);
+          break;
+
         case 'getToken':
           result = await Desktop.actions.getToken();
           addLog('success', 'Token Retrieved', result);
@@ -342,6 +429,12 @@ export const SidebarApiExplorer: React.FC = () => {
           result = await Desktop.actions.getTaskMap();
           const tasks = Array.from(result?.values() || []);
           addLog('success', 'Task Map Retrieved', tasks);
+          break;
+
+        case 'getMediaTypeQueue':
+          result = await Desktop.actions.getMediaTypeQueue(parameters.mediaType);
+          const queueTasks = Array.from(result?.values() || []);
+          addLog('success', 'Media Type Queue Retrieved', queueTasks);
           break;
 
         case 'fireNotification':
@@ -354,7 +447,43 @@ export const SidebarApiExplorer: React.FC = () => {
             }
           };
           result = await Desktop.actions.fireGeneralAutoDismissNotification(notifData as any);
-          addLog('success', 'Notification Fired', result);
+          addLog('success', 'Auto-Dismiss Notification Fired', result);
+          break;
+
+        case 'fireSilentNotification':
+          const silentNotifData = {
+            data: {
+              type: Notifications.ItemMeta.Type[parameters.type as keyof typeof Notifications.ItemMeta.Type],
+              mode: Notifications.ItemMeta.Mode.Silent,
+              title: parameters.title,
+              data: parameters.message
+            }
+          };
+          Desktop.actions.fireGeneralSilentNotification(silentNotifData as any);
+          addLog('success', 'Silent Notification Fired', null);
+          break;
+
+        case 'fireAcknowledgeNotification':
+          const ackNotifData = {
+            data: {
+              type: Notifications.ItemMeta.Type[parameters.type as keyof typeof Notifications.ItemMeta.Type],
+              mode: Notifications.ItemMeta.Mode.Acknowledge,
+              title: parameters.title,
+              data: parameters.message
+            }
+          };
+          result = await Desktop.actions.fireGeneralAcknowledgeNotification(ackNotifData as any);
+          addLog('success', 'Acknowledge Notification Fired', result);
+          break;
+
+        case 'addCustomTask':
+          const customTaskData = {
+            taskId: parameters.taskId,
+            title: parameters.title,
+            mediaType: parameters.mediaType
+          };
+          Desktop.actions.addCustomTask(customTaskData as any);
+          addLog('success', 'Custom Task Added', customTaskData);
           break;
 
         case 'desktopLogout':
