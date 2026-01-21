@@ -1,6 +1,9 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Styled } from "direflow-component";
-import styles from "./App.css";
+import "@momentum-ui/web-components";
+import momentumCss from "@momentum-ui/core/css/momentum-ui.min.css";
+import momentumIconsCss from "@momentum-ui/icons/css/momentum-ui-icons.min.css";
+import appStyles from "./App.css";
+import { useShadowStyles } from "./useShadowStyles";
 import { logger } from "./sdk";
 import { Service } from "@wxcc-desktop/sdk-types";
 import {
@@ -49,6 +52,9 @@ const App: FC<IProps> = (props) => {
       interaction: Service.Aqm.Contact.Interaction;
     }[]
   );
+
+  // Inject styles into shadow DOM
+  const containerRef = useShadowStyles([momentumCss, momentumIconsCss, appStyles]);
 
   useEffect(() => {
     init();
@@ -533,7 +539,7 @@ const App: FC<IProps> = (props) => {
   async function getTaskMap() {
     const taskMap = await Desktop.actions.getTaskMap();
     console.log(taskMap);
-    const myAssignedContacts = Array.from(taskMap?.values() || []);
+    const myAssignedContacts = Array.from(taskMap?.values() || []) as { interaction: Service.Aqm.Contact.Interaction }[];
     setAssignedContacts(myAssignedContacts);
     console.log(assignedContacts[0]);
   }
@@ -622,8 +628,7 @@ const App: FC<IProps> = (props) => {
   }
 
   return (
-    <Styled styles={styles}>
-      <div className="app">
+      <div ref={containerRef} className="app">
         <strong>MFE Props: </strong>
         <md-input
           htmlid="newInteractionId"
@@ -642,7 +647,7 @@ const App: FC<IProps> = (props) => {
           ref={newInteractionId}
         ></md-input>
 
-        <pre>{JSON.stringify(props)}</pre>
+        <pre>{JSON.stringify({ agentId: props.agentId, darkTheme: props.darkTheme })}</pre>
         <hr />
         <md-tabs>
           <md-tab slot="tab">Desktop.agentStateInfo</md-tab>
@@ -1028,7 +1033,6 @@ const App: FC<IProps> = (props) => {
 
         </md-tabs>
       </div>
-    </Styled>
   );
 };
 

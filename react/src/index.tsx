@@ -1,32 +1,23 @@
-import { DireflowComponent } from "direflow-component";
-import App from "./direflow-component/App";
+import React from "react";
+import ReactDOM from "react-dom";
+import r2wc from "react-to-webcomponent";
+import App from "./components/App";
 
-const direflowProperties = {
-  componentTitle: "React Component",
-  agentId: "agent1",
-  darkTheme: false,
-  sampleList: [
-    "Create with React",
-    "Build as Web Component",
-    "Use it anywhere!",
-  ],
-};
+console.log("[DEBUG] react-widget-starter.js loaded");
+console.log("[DEBUG] App component available:", typeof App);
 
-export default DireflowComponent.create({
-  component: App,
-  configuration: {
-    tagname: "my-react-widget",
-    useShadow: true,
+const WebComponentWrapper = r2wc(App, React, ReactDOM, {
+  props: {
+    agentId: "string",
+    darkTheme: "boolean",
   },
-  properties: direflowProperties,
-  plugins: [
-    {
-      name: "font-loader",
-      options: {
-        google: {
-          families: ["Advent Pro", "Noto Sans JP"],
-        },
-      },
-    },
-  ],
+  shadow: "open",
 });
+
+console.log("[DEBUG] About to register my-react-widget web component");
+
+customElements.define("my-react-widget", WebComponentWrapper);
+
+console.log("[DEBUG] my-react-widget registered:", customElements.get("my-react-widget"));
+
+export default WebComponentWrapper;
