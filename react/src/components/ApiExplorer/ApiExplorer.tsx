@@ -234,7 +234,7 @@ export const ApiExplorer: React.FC<ApiExplorerProps> = ({ agentId }) => {
 
       case 'desktopLogout':
         await Desktop.logout.desktopLogout({
-          data: { logoutReason: params.logoutReason }
+          data: { logoutReason: params?.logoutReason ?? 'User requested logout' }
         });
         console.log('[API Response] Logout successful');
         break;

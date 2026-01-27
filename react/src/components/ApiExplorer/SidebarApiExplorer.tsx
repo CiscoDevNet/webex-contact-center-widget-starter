@@ -488,17 +488,17 @@ export const SidebarApiExplorer: React.FC = () => {
 
         case 'desktopLogout':
           await Desktop.logout.desktopLogout({
-            data: { logoutReason: parameters.logoutReason }
+            data: { logoutReason: parameters?.logoutReason ?? 'User requested logout' }
           });
           addLog('success', 'Logout Successful', null);
           break;
 
         case 'signoutAgent':
           await Desktop.logout.signoutAgent({
-            orgId: parameters.orgId,
+            orgId: parameters?.orgId,
             data: {
-              agentId: parameters.agentId,
-              logoutReason: parameters.logoutReason
+              agentId: parameters?.agentId,
+              logoutReason: parameters?.logoutReason ?? 'SupervisorSignout'
             }
           });
           addLog('success', 'Agent Signed Out Successfully', null);

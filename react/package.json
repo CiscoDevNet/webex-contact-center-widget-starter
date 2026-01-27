@@ -13,7 +13,7 @@
     "@wxcc-desktop/sdk": "file:/Users/momeraj/Documents/cisco/sourcecode/wxcc/agentx/wxcc-desktop/packages/@wxcc-desktop/agentx-js-api/publish",
     "react": "16.10.1",
     "react-dom": "16.10.1",
-    "react-to-webcomponent": "^2.1.0"
+    "react-to-webcomponent": "^2.0.1"
   },
   "devDependencies": {
     "@momentum-ui/core": "19.15.30",
