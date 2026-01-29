@@ -533,7 +533,7 @@ export const SidebarApiExplorer: React.FC = () => {
               scheduleDate: parameters.scheduleDate,
               startTime: parameters.startTime,
               endTime: parameters.endTime,
-              assigneeAgent: parameters.assigneeAgent,
+              ...(parameters.assigneeAgent && { assigneeAgent: parameters.assigneeAgent }),
               queueId: parameters.queueId,
               callbackReason: parameters.callbackReason
             }
@@ -550,7 +550,7 @@ export const SidebarApiExplorer: React.FC = () => {
               scheduleDate: parameters.scheduleDate,
               startTime: parameters.startTime,
               endTime: parameters.endTime,
-              assigneeAgent: parameters.assigneeAgent,
+              ...(parameters.assigneeAgent && { assigneeAgent: parameters.assigneeAgent }),
               queueId: parameters.queueId,
               callbackReason: parameters.callbackReason
             }
