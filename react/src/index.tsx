@@ -1,32 +1,23 @@
-import { DireflowComponent } from "direflow-component";
-import App from "./direflow-component/App";
+import React from "react";
+import ReactDOM from "react-dom";
+import r2wc from "react-to-webcomponent";
+import App from "./components/App";
 
-const direflowProperties = {
-  componentTitle: "React Component",
-  agentId: "agent1",
-  darkTheme: false,
-  sampleList: [
-    "Create with React",
-    "Build as Web Component",
-    "Use it anywhere!",
-  ],
-};
+console.log("[DEBUG] wxcc-sdk-explorer widget loaded");
+console.log("[DEBUG] App component available:", typeof App);
 
-export default DireflowComponent.create({
-  component: App,
-  configuration: {
-    tagname: "my-react-widget",
-    useShadow: true,
+const WebComponentWrapper = r2wc(App, React, ReactDOM as any, {
+  props: {
+    agentId: "string",
+    darkTheme: "boolean",
   },
-  properties: direflowProperties,
-  plugins: [
-    {
-      name: "font-loader",
-      options: {
-        google: {
-          families: ["Advent Pro", "Noto Sans JP"],
-        },
-      },
-    },
-  ],
+  shadow: "open",
 });
+
+console.log("[DEBUG] About to register wxcc-sdk-explorer web component");
+
+customElements.define("wxcc-sdk-explorer", WebComponentWrapper);
+
+console.log("[DEBUG] wxcc-sdk-explorer registered:", customElements.get("wxcc-sdk-explorer"));
+
+export default WebComponentWrapper;
