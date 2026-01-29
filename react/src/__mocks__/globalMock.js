@@ -4,12 +4,7 @@
 /** Jest not able to resolve direflow-component 3.4.9, mocking it globally
  * Bug reference: https://github.com/Silind-Software/direflow/issues/41
  * */
-jest.mock('direflow-component', () => ({
-  Styled: props => {
-    return props.children;
-  },
-  EventContext: {}
-}));
+// Direflow removed - no longer needed
 
 jest.mock('@agentx/agentx-services', () => {
   return {
