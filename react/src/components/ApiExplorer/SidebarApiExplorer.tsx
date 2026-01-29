@@ -504,6 +504,67 @@ export const SidebarApiExplorer: React.FC = () => {
           addLog('success', 'Agent Signed Out Successfully', null);
           break;
 
+        case 'fetchByAssigneeAgentId':
+          result = await Desktop.scheduleCallback.fetchByAssigneeAgentId({
+            data: {
+              page: parameters.page,
+              assigneeAgent: parameters.assigneeAgent,
+              sortBy: parameters.sortBy,
+              sortOrder: parameters.sortOrder
+            }
+          });
+          addLog('success', 'Callbacks Fetched', result);
+          break;
+        case 'fetchByCallbackPhoneNumber':
+          result = await Desktop.scheduleCallback.fetchByCallbackPhoneNumber({
+            data: {
+              page: parameters.page,
+              phoneNumber: parameters.phoneNumber
+            }
+          });
+          addLog('success', 'Callbacks Fetched by Phone Number', result);
+          break;
+        case 'createScheduleCallback':
+          result = await Desktop.scheduleCallback.createScheduleCallback({
+            data: {
+              callbackNumber: parameters.callbackNumber,
+              customerName: parameters.customerName,
+              timezone: parameters.timezone,
+              scheduleDate: parameters.scheduleDate,
+              startTime: parameters.startTime,
+              endTime: parameters.endTime,
+              assigneeAgent: parameters.assigneeAgent,
+              queueId: parameters.queueId,
+              callbackReason: parameters.callbackReason
+            }
+          });
+          addLog('success', 'Scheduled Callback Created', result);
+          break;
+        case 'updateCallBackDetails':
+          result = await Desktop.scheduleCallback.updateCallBackDetails({
+            data: {
+              id: parameters.id,
+              callbackNumber: parameters.callbackNumber,
+              customerName: parameters.customerName,
+              timezone: parameters.timezone,
+              scheduleDate: parameters.scheduleDate,
+              startTime: parameters.startTime,
+              endTime: parameters.endTime,
+              assigneeAgent: parameters.assigneeAgent,
+              queueId: parameters.queueId,
+              callbackReason: parameters.callbackReason
+            }
+          });
+          addLog('success', 'Scheduled Callback Updated', result);
+          break;
+        case 'deleteScheduleCallback':
+          result = await Desktop.scheduleCallback.deleteScheduleCallback({
+            data: {
+              id: parameters.id
+            }
+          });
+          addLog('success', 'Scheduled Callback Deleted', result);
+          break;
         default:
           addLog('error', `Unknown method: ${selectedMethod.id}`, null);
       }
