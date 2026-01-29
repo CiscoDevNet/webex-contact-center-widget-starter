@@ -6,7 +6,7 @@ An interactive API documentation and testing tool for the `@wxcc-desktop/sdk`. T
 
 ## Overview
 
-The SDK Explorer to test you wxcc-desktop sdk api
+The SDK Explorer lets you test `@wxcc-desktop/sdk` APIs directly from the desktop UI.
 
 ## Getting Started
 
@@ -76,42 +76,47 @@ This creates a single JavaScript file containing your entire widget, ready to be
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `agent-id` | string | No | Agent ID for context-specific operations |
-| `dark-theme` | boolean | No | Enable dark theme (default: false) |
+| `dark-theme` | boolean | No | Reserved for theme support (currently unused) |
 
 ## API Categories
 
-### 1. Desktop.agentStateInfo (7 methods)
+### 1. Desktop.agentStateInfo (10 methods)
 - Get agent information
 - Change agent state (Available/Idle)
 - Fetch address books
 - Get idle codes
 - Get wrap-up codes
-- Update CAD variables
-- TPW agent state functions
+- Mock outdial ANI list
+- Supervisor idle code lookups
+- Agent state change (supervisor)
 
-### 2. Desktop.agentContact (9 methods)
+### 2. Desktop.agentContact (18 methods)
 - Accept/end/wrap-up interactions
 - Hold/unhold interactions
 - Get buddy agents
 - Get VTeam lists
 - Consult operations
-- Transfer operations
+- Transfer operations (consult/blind)
 - Conference operations
-- Consult end
+- Consult accept/end
+- DTMF, decline, recording pause/resume
 
-### 3. Desktop.dialer (3 methods)
+### 3. Desktop.dialer (5 methods)
 - Update CAD variables
-- Monitoring hold/unhold
+- Start outdial
+- Preview campaign accept/skip/remove
 
-### 4. Desktop.monitoring (3 methods)
-- Start monitoring
-- End monitoring
+### 4. Desktop.monitoring (5 methods)
+- Start/end monitoring
+- Hold/unhold monitoring
 - Barge-in
 
-### 5. Desktop.actions (3 methods)
+### 5. Desktop.actions (7 methods)
 - Get auth token
 - Get task map
-- Fire notifications
+- Get media type queue
+- Fire notifications (auto/silent/acknowledge)
+- Add custom task
 
 ### 6. Desktop.logout (2 methods)
 - Desktop logout
@@ -151,7 +156,7 @@ react/
 │   ├── components/
 │   │   ├── ApiExplorer/
 │   │   │   ├── types.ts                    # TypeScript interfaces
-│   │   │   ├── apiDefinitions.ts           # 25+ SDK method definitions
+│   │   │   ├── apiDefinitions.ts           # 47 SDK method definitions
 │   │   │   ├── SidebarApiExplorer.tsx      # Main explorer component
 │   │   │   └── SidebarApiExplorer.css      # Widget styles
 │   │   ├── App.tsx                         # App wrapper with SDK init
@@ -223,7 +228,7 @@ The webpack build may show size warnings for:
 - `wxcc-sdk-explorer.js` (2.07 MiB)
 - Momentum UI assets
 
-These are expected and don't affect functionality. The SDK and UI libraries are externalized in production.
+These are expected and don't affect functionality. The SDK and Momentum UI libraries are externalized in production (`@momentum-ui/web-components`, `@momentum-ui/core`, `@momentum-ui/icons`, `@momentum-ui/utils`).
 
 ### Widget Not Loading
 
@@ -249,7 +254,7 @@ When customizing this widget:
 - **React 16.10.1** - UI framework
 - **TypeScript 4.9.3** - Type safety
 - **Webpack 5** - Module bundling
-- **@wxcc-desktop/sdk 2.0.1** - WXCC Desktop SDK
+- **@wxcc-desktop/sdk** - Local SDK package (file path in `react/package.json`)
 - **@momentum-ui/web-components 2.7.44** - Cisco UI components
 - **react-to-webcomponent** - Web component conversion
 
