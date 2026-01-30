@@ -1565,7 +1565,7 @@ console.log("Agent signed out successfully");`
     ],
     sdkPath: 'Desktop.scheduleCallback.updateScheduleCallback',
     exampleCode: `const result = await Desktop.scheduleCallback.updateScheduleCallback({data: {
-      callbackId: "callback-id",
+      id: "callback-id",
       callbackNumber: 1234567890,
       customerName: "Updated Customer Name",
       timezone: "Asia/Calcutta",
