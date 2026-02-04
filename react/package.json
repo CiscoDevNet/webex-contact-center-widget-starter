@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@uuip/unified-ui-platform-sdk": "^1.3.6",
-    "@wxcc-desktop/sdk": "2.0.12",
+    "@wxcc-desktop/sdk": "2.0.14",
     "react": "16.10.1",
     "react-dom": "16.10.1",
     "react-to-webcomponent": "^2.0.1"
