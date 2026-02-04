@@ -1332,6 +1332,271 @@ console.log("Logged out successfully");`
   }
 });
 console.log("Agent signed out successfully");`
+  },
+  {
+    id: 'fetchByAssigneeAgentId',
+    name: 'Fetch Scheduled Callbacks(Assignee Agent)',
+    description: 'Fetch scheduled callbacks for a given assignee agent ID',
+    category: 'Desktop.scheduleCallback',
+    parameters: [
+      {
+        name: 'page',
+        type: 'number',
+        required: true,
+        description: 'Page number',
+        defaultValue: 0
+      },
+      {
+        name: 'assigneeAgent',
+        type: 'string',
+        required: true,
+        description: 'Assignee agent ID',
+        placeholder: 'Enter assignee agent ID'
+      },
+      {
+        name: 'sortBy',
+        type: 'string',
+        required: false,
+        description: 'Sort by',
+      },
+      {
+        name: 'sortOrder',
+        type: 'string',
+        required: false,
+        description: 'Sort Order',
+      }
+    ],
+    sdkPath: 'Desktop.scheduleCallback.fetchByAssigneeAgentId',
+    exampleCode: `const result = await Desktop.scheduleCallback.fetchByAssigneeAgentId({data: {
+      page: 0,
+      assigneeAgent: "assignee-agent-id",
+      sortOrder: "desc"
+      sortBy: "scheduledTime",
+      }});
+      console.log("Callbacks fetched:", result);`
+  },
+  {
+    id: 'fetchByCallbackPhoneNumber',
+    name: 'Fetch Scheduled Callbacks(Callback Phone Number)',
+    description: 'Fetch scheduled callbacks for a given callback phone number',
+    category: 'Desktop.scheduleCallback',
+    parameters: [
+      {
+        name: 'page',
+        type: 'number',
+        required: true,
+        description: 'Page number',
+        defaultValue: 0
+      },
+      {
+        name: 'phoneNumber',
+        type: 'string',
+        required: true,
+        description: 'Callback phone number',
+        placeholder: 'Enter callback phone number'
+      }
+    ],
+    sdkPath: 'Desktop.scheduleCallback.fetchByCallbackPhoneNumber',
+    exampleCode: `const result = await Desktop.scheduleCallback.fetchByCallbackPhoneNumber({data: {
+      page: 0,
+      phoneNumber: "callback-phone-number"
+      }});
+      console.log("Callbacks fetched by phone number :", result);`
+  },
+  {
+    id: 'createScheduleCallback',
+    name: 'Create Scheduled Callback',
+    description: 'Creates a new scheduled callback',
+    category: 'Desktop.scheduleCallback',
+    parameters: [
+      {
+        name: 'callbackNumber',
+        type: 'number',
+        required: true,
+        description: 'Callback number'
+      },
+      {
+        name: 'customerName',
+        type: 'string',
+        required: true,
+        description: 'Customer name',
+        placeholder: 'Enter customer name'
+      },
+      {
+        name: 'timezone',
+        type: 'string',
+        required: true,
+        description: 'Timezone',
+        placeholder: 'Enter timezone (e.g. Asia/Calcutta)',
+      },
+      {
+        name: 'scheduleDate',
+        type: 'string',
+        required: true,
+        description: 'Schedule date',
+        placeholder: 'Enter schedule date (YYYY-MM-DD)'
+      },
+      {
+        name: 'startTime',
+        type: 'string',
+        required: true,
+        description: 'Start time',
+        placeholder: 'Enter start time (HH:MM:SS)'
+      },
+      {
+        name: 'endTime',
+        type: 'string',
+        required: true,
+        description: 'End time',
+        placeholder: 'Enter end time (HH:MM:SS)'
+      },
+      {
+        name: 'assigneeAgent',
+        type: 'string',
+        required: false,
+        description: 'Assignee agent',
+        placeholder: 'Enter assignee agent ID or leave empty for any available agent'
+      },
+      {
+        name: 'queueId',
+        type: 'string',
+        required: true,
+        description: 'Queue ID',
+        placeholder: 'Enter queue ID'
+      },
+      {
+        name: 'callbackReason',
+        type: 'string',
+        required: false,
+        description: 'Callback reason',
+        placeholder: 'Enter callback reason'
+      }
+    ],
+    sdkPath: 'Desktop.scheduleCallback.createScheduleCallback',
+    exampleCode: `const result = await Desktop.scheduleCallback.createScheduleCallback({data: {
+      page: 0,
+      callbackNumber: 1234567890,
+      customerName: "Customer Name",
+      timezone: "Asia/Calcutta",
+      scheduleDate: "2026-01-01",
+      startTime: "10:00:00",
+      endTime: "11:00:00",
+      assigneeAgent: "assignee-agent-id",
+      queueId: "queue-id",
+      callbackReason: "Callback Reason"
+      }});
+      console.log("Scheduled callback created:", result);`
+  },
+  {
+    id: 'updateCallBackDetails',
+    name: 'Update Scheduled Callback',
+    description: 'Updates a scheduled callback',
+    category: 'Desktop.scheduleCallback',
+    parameters: [
+      {
+        name: 'id',
+        type: 'string',
+        required: true,
+        description: 'Schedule callback ID',
+        placeholder: 'Enter schedule callback ID'
+      },
+      {
+        name: 'callbackNumber',
+        type: 'number',
+        required: true,
+        description: 'Callback number'
+      },
+      {
+        name: 'customerName',
+        type: 'string',
+        required: true,
+        description: 'Customer name',
+        placeholder: 'Enter customer name'
+      },
+      {
+        name: 'timezone',
+        type: 'string',
+        required: true,
+        description: 'Timezone',
+        placeholder: 'Enter timezone (e.g. Asia/Calcutta)'
+      },
+      {
+        name: 'scheduleDate',
+        type: 'string',
+        required: true, 
+        description: 'Schedule date',
+        placeholder: 'Enter schedule date (YYYY-MM-DD)'
+      },
+      {
+        name: 'startTime',
+        type: 'string',
+        required: true,
+        description: 'Start time',
+        placeholder: 'Enter start time (HH:MM:SS)'
+      },
+      {
+        name: 'endTime',
+        type: 'string',
+        required: true,
+        description: 'End time',
+        placeholder: 'Enter end time (HH:MM:SS)'
+      },
+      {
+        name: 'assigneeAgent',
+        type: 'string',
+        required: false,
+        description: 'Assignee agent',
+        placeholder: 'Enter assignee agent ID or leave empty for any available agent'
+      },
+      {
+        name: 'queueId',
+        type: 'string',
+        required: true,
+        description: 'Queue ID',
+        placeholder: 'Enter queue ID'
+      },
+      {
+        name: 'callbackReason',
+        type: 'string',
+        required: false,
+        description: 'Callback reason',
+        placeholder: 'Enter callback reason'
+      }
+    ],
+    sdkPath: 'Desktop.scheduleCallback.updateScheduleCallback',
+    exampleCode: `const result = await Desktop.scheduleCallback.updateScheduleCallback({data: {
+      id: "callback-id",
+      callbackNumber: 1234567890,
+      customerName: "Updated Customer Name",
+      timezone: "Asia/Calcutta",
+      scheduleDate: "2026-01-01",
+      startTime: "10:00:00",
+      endTime: "11:00:00",
+      assigneeAgent: "assignee-agent-id",
+      queueId: "queue-id",
+      callbackReason: "Callback Reason"
+      }});
+      console.log("Scheduled callback updated:", result);`
+  },
+  {
+    id: 'deleteScheduleCallback',
+    name: 'Delete Scheduled Callback',
+    description: 'Deletes a scheduled callback',
+    category: 'Desktop.scheduleCallback',
+    parameters: [
+      {
+        name: 'id',
+        type: 'string',
+        required: true,
+        description: 'Schedule callback ID',
+        placeholder: 'Enter schedule callback ID'
+      }
+    ],
+    sdkPath: 'Desktop.scheduleCallback.deleteScheduleCallback',
+    exampleCode: `const result = await Desktop.scheduleCallback.deleteScheduleCallback({data: {
+      id: "schedule-callback-id"
+      }});
+      console.log("Scheduled callback deleted:", result);`
   }
 ];
 
@@ -1341,5 +1606,6 @@ export const apiCategories = [
   'Desktop.monitoring',
   'Desktop.dialer',
   'Desktop.actions',
-  'Desktop.logout'
+  'Desktop.logout',
+  'Desktop.scheduleCallback'
 ];
