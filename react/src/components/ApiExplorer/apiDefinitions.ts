@@ -1618,10 +1618,17 @@ console.log("Agent signed out successfully");`
         required: true,
         description: 'Agent ID',
         placeholder: 'Enter agent ID'
+      },
+      {
+        name: 'interactionId',
+        type: 'string',
+        required: true,
+        description: 'Interaction ID',
+        placeholder: 'Enter interaction ID'
       }
     ],
     sdkPath: 'Desktop.scheduleCallback.getValidCampaignTimes',
-    exampleCode: `const result = await Desktop.scheduleCallback.getValidCampaignTimes("campaign-id", "agent-id");
+    exampleCode: `const result = await Desktop.scheduleCallback.getValidCampaignTimes("campaign-id", "agent-id", "interactionId");
 console.log("Valid campaign times:", result);`
   }
 ];

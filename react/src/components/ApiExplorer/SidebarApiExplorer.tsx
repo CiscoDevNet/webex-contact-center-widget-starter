@@ -570,7 +570,8 @@ export const SidebarApiExplorer: React.FC = () => {
            {
             data: { 
             campaignId: parameters.campaignId,
-            agentId: parameters.agentId
+            agentId: parameters.agentId,
+            interactionId: parameters.interactionId
            }}
           );
           addLog('success', 'Valid Campaign Times Fetched', result);
