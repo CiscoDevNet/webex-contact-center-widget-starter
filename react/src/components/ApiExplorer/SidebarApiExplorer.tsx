@@ -565,6 +565,17 @@ export const SidebarApiExplorer: React.FC = () => {
           });
           addLog('success', 'Scheduled Callback Deleted', result);
           break;
+        case 'getValidCampaignTimes':
+          result = await Desktop.scheduleCallback.getValidCampaignTimes(
+           {
+            data: { 
+            campaignId: parameters.campaignId,
+            agentId: parameters.agentId,
+            interactionId: parameters.interactionId
+           }}
+          );
+          addLog('success', 'Valid Campaign Times Fetched', result);
+          break;
         default:
           addLog('error', `Unknown method: ${selectedMethod.id}`, null);
       }

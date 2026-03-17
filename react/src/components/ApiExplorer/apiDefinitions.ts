@@ -1416,11 +1416,11 @@ console.log("Agent signed out successfully");`
         description: 'Callback number'
       },
       {
-        name: 'customerName',
+        name: 'customerName/campaignId',
         type: 'string',
         required: true,
-        description: 'Customer name',
-        placeholder: 'Enter customer name'
+        description: 'Customer name or campaign ID',
+        placeholder: 'Enter customer name or campaign ID'
       },
       {
         name: 'timezone',
@@ -1504,14 +1504,15 @@ console.log("Agent signed out successfully");`
         name: 'callbackNumber',
         type: 'number',
         required: true,
-        description: 'Callback number'
+        description: 'Callback number',
+        placeholder: 'Enter callback number for non campaign callbacks'
       },
       {
-        name: 'customerName',
+        name: 'customerName/campaignId',
         type: 'string',
         required: true,
-        description: 'Customer name',
-        placeholder: 'Enter customer name'
+        description: 'Customer name or campaign ID',
+        placeholder: 'Enter customer name or campaign ID'
       },
       {
         name: 'timezone',
@@ -1553,7 +1554,7 @@ console.log("Agent signed out successfully");`
         type: 'string',
         required: true,
         description: 'Queue ID',
-        placeholder: 'Enter queue ID'
+        placeholder: 'Enter queue ID for non campaign callbacks'
       },
       {
         name: 'callbackReason',
@@ -1563,8 +1564,8 @@ console.log("Agent signed out successfully");`
         placeholder: 'Enter callback reason'
       }
     ],
-    sdkPath: 'Desktop.scheduleCallback.updateScheduleCallback',
-    exampleCode: `const result = await Desktop.scheduleCallback.updateScheduleCallback({data: {
+    sdkPath: 'Desktop.scheduleCallback.updateCallBackDetails',
+    exampleCode: `const result = await Desktop.scheduleCallback.updateCallBackDetails({data: {
       id: "callback-id",
       callbackNumber: 1234567890,
       customerName: "Updated Customer Name",
@@ -1597,6 +1598,38 @@ console.log("Agent signed out successfully");`
       id: "schedule-callback-id"
       }});
       console.log("Scheduled callback deleted:", result);`
+  },
+  {
+    id: 'getValidCampaignTimes',
+    name: 'Get Valid Campaign Times',
+    description: 'Retrieves valid campaign callback time slots for a campaign and agent',
+    category: 'Desktop.scheduleCallback',
+    parameters: [
+      {
+        name: 'campaignId',
+        type: 'string',
+        required: true,
+        description: 'Campaign ID',
+        placeholder: 'Enter campaign ID'
+      },
+      {
+        name: 'agentId',
+        type: 'string',
+        required: true,
+        description: 'Agent ID',
+        placeholder: 'Enter agent ID'
+      },
+      {
+        name: 'interactionId',
+        type: 'string',
+        required: true,
+        description: 'Interaction ID',
+        placeholder: 'Enter interaction ID'
+      }
+    ],
+    sdkPath: 'Desktop.scheduleCallback.getValidCampaignTimes',
+    exampleCode: `const result = await Desktop.scheduleCallback.getValidCampaignTimes("campaign-id", "agent-id", "interactionId");
+console.log("Valid campaign times:", result);`
   }
 ];
 
