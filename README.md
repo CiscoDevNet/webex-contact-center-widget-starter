@@ -24,5 +24,3 @@ To integrate contact center desktop sdk in the starter-kit-widget . Follow the b
    - [Desktop JS API samples](https://github.com/CiscoDevNet/webex-contact-center-api-samples)
    - [Product Overview and Documentation](https://www.cisco.com/c/en/us/support/customer-collaboration/webex-contact-center/series.html)
    - [Other useful resources](https://ciscodevnet.github.io/webex-contact-center-widget-starter/?path=/story/introduction--page)
-
-Test changes
