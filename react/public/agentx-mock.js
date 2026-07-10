@@ -121,6 +121,10 @@ window.AGENTX_SERVICE = {
       console.log('[MOCK] agentContact.vteamTransfer called with:', data);
       return Promise.resolve({ success: true, data: data });
     },
+    dropConferenceParticipant: function(data) {
+      console.log('[MOCK] agentContact.dropConferenceParticipant called with:', data);
+      return Promise.resolve({ success: true, data: data });
+    },
     addEventListener: function(eventName, callback) {
       console.log('[MOCK] agentContact.addEventListener:', eventName);
     },
