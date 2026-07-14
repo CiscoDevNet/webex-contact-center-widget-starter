@@ -775,6 +775,36 @@ console.log("Recording paused:", result);`
 });
 console.log("Recording resumed:", result);`
   },
+  {
+    id: 'dropConferenceParticipant',
+    name: 'Drop Conference Participant',
+    description: 'Removes a participant from an active conference',
+    category: 'Desktop.agentContact',
+    parameters: [
+      {
+        name: 'interactionId',
+        type: 'string',
+        required: true,
+        description: 'Current interaction ID',
+        placeholder: 'Enter interaction ID'
+      },
+      {
+        name: 'participantId',
+        type: 'string',
+        required: true,
+        description: 'ID of the participant to remove from the conference',
+        placeholder: 'Enter participant ID'
+      }
+    ],
+    sdkPath: 'Desktop.agentContact.dropConferenceParticipant',
+    exampleCode: `const result = await Desktop.agentContact.dropConferenceParticipant({
+  interactionId: "your-interaction-id",
+  data: {
+    participantId: "participant-id"
+  }
+});
+console.log("Participant dropped from conference:", result);`
+  },
 
   // Desktop.monitoring APIs
   {
