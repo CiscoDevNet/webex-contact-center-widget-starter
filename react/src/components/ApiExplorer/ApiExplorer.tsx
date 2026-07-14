@@ -180,6 +180,16 @@ export const ApiExplorer: React.FC<ApiExplorerProps> = ({ agentId }) => {
         console.log('[API Response] VTeam Transfer:', vteamTransferResult);
         break;
 
+      case 'dropConferenceParticipant':
+        const dropConferenceParticipantResult = await Desktop.agentContact.dropConferenceParticipant({
+          interactionId: params.interactionId,
+          data: {
+            participantId: params.participantId
+          }
+        });
+        console.log('[API Response] Drop Conference Participant:', dropConferenceParticipantResult);
+        break;
+
       case 'startMonitoring':
         const monitorResult = await Desktop.monitoring.startMonitoring({
           data: {

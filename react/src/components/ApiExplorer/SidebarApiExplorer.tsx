@@ -327,6 +327,16 @@ export const SidebarApiExplorer: React.FC = () => {
           addLog('success', 'Recording Resumed', result);
           break;
 
+        case 'dropConferenceParticipant':
+          result = await Desktop.agentContact.dropConferenceParticipant({
+            interactionId: parameters.interactionId,
+            data: {
+              participantId: parameters.participantId
+            }
+          });
+          addLog('success', 'Participant Dropped From Conference', result);
+          break;
+
         case 'startMonitoring':
           result = await Desktop.monitoring.startMonitoring({
             data: {
