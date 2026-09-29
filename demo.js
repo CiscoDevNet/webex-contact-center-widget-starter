@@ -240,6 +240,115 @@
           }
       ],
       style: "grid-column: span 5;",
+    },
+    {
+      x: 0,
+      y: 3,
+      w: 3,
+      h: 2,
+      content: `<header-overflow-widget></header-overflow-widget>`,
+      label: "Header overflow (too wide)",
+      comp: `<header-overflow-widget></header-overflow-widget>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-overflow-widget.js",
+      layoutConfig: {
+        comp: "header-overflow-widget",
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-overflow-widget.js",
+      },
+      style: "grid-column: span 2;",
+    },
+    {
+      x: 3,
+      y: 3,
+      w: 3,
+      h: 2,
+      content: `<header-fit-widget></header-fit-widget>`,
+      label: "Header fit (compact)",
+      comp: `<header-fit-widget></header-fit-widget>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-fit-widget.js",
+      layoutConfig: {
+        comp: "header-fit-widget",
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-fit-widget.js",
+      },
+      style: "grid-column: span 2;",
+    },
+    {
+      x: 6,
+      y: 3,
+      w: 3,
+      h: 2,
+      content: `<header-clip-widget></header-clip-widget>`,
+      label: "Header clip (md-menu-overlay)",
+      comp: `<header-clip-widget></header-clip-widget>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-clip-widget.js",
+      layoutConfig: {
+        comp: "header-clip-widget",
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-clip-widget.js",
+      },
+      style: "grid-column: span 2;",
+    },
+    {
+      x: 0,
+      y: 5,
+      w: 3,
+      h: 2,
+      content: `<header-popover-widget></header-popover-widget>`,
+      label: "Header popover (iframe shell)",
+      comp: `<header-popover-widget></header-popover-widget>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-popover-widget.js",
+      layoutConfig: {
+        comp: "header-popover-widget",
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-popover-widget.js",
+      },
+      style: "grid-column: span 2;",
+    },
+    {
+      x: 0,
+      y: 6,
+      w: 4,
+      h: 3,
+      content: `<sdk-init-widget></sdk-init-widget>`,
+      label: "SDK init (no host DOM)",
+      comp: `<sdk-init-widget></sdk-init-widget>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sdk-init-widget.js",
+      layoutConfig: {
+        comp: "sdk-init-widget",
+        script:
+          "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sdk-init-widget.js",
+      },
+      style: "grid-column: span 3;",
+    },
+    {
+      x: 4,
+      y: 6,
+      w: 5,
+      h: 3,
+      content: `<div><sibling-bus-publisher></sibling-bus-publisher><sibling-bus-consumer></sibling-bus-consumer></div>`,
+      label: "Sibling postMessage bus",
+      comp: `<div><sibling-bus-publisher></sibling-bus-publisher><sibling-bus-consumer></sibling-bus-consumer></div>`,
+      script:
+        "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sibling-bus-publisher.js",
+      layoutConfig: [
+        {
+          comp: "sibling-bus-publisher",
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sibling-bus-publisher.js",
+        },
+        {
+          comp: "sibling-bus-consumer",
+          script:
+            "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sibling-bus-consumer.js",
+        },
+      ],
+      style: "grid-column: span 4;",
     }
   ];
 

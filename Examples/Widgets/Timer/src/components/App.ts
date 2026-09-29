@@ -27,11 +27,63 @@ export default class TimerComponent extends LitElement {
 
   @query(".container") container!: HTMLElement;
 
+  /**
+   * Storage is origin-isolated in the iframe shell (often in-memory).
+   * Scope keys to this widget. Do not use localStorage as a sibling bus.
+   * Legacy unprefixed keys are read once so existing timers keep running.
+   */
+  private readonly storageStartKey = "timer-widget:start";
+  private readonly storageDurationKey = "timer-widget:duration";
+
   get storedStartTime() {
-    return window.localStorage.getItem("timer-start") || DateTime.local().toString()
+    return (
+      window.localStorage.getItem(this.storageStartKey) ||
+      window.localStorage.getItem("timer-start") ||
+      DateTime.local().toString()
+    );
   }
   get storedDuration() {
-    return window.localStorage.getItem("timer-duration") || this.duration
+    return (
+      window.localStorage.getItem(this.storageDurationKey) ||
+      window.localStorage.getItem("timer-duration") ||
+      this.duration
+    );
+  }
+
+  private writeStorage(startTime: string, duration: string) {
+    window.localStorage.setItem(this.storageStartKey, startTime);
+    window.localStorage.setItem(this.storageDurationKey, duration);
+    window.localStorage.removeItem("timer-start");
+    window.localStorage.removeItem("timer-duration");
+  }
+
+  private clearStorage() {
+    window.localStorage.removeItem(this.storageStartKey);
+    window.localStorage.removeItem(this.storageDurationKey);
+    window.localStorage.removeItem("timer-start");
+    window.localStorage.removeItem("timer-duration");
+  }
+
+  private emitExpired() {
+    const message = `${this.duration} long timer has expired`;
+    // Sibling widgets in other iframe-shell slots will not see CustomEvent.
+    window.postMessage(
+      {
+        type: "WXCC_WIDGET_EVENT",
+        event: "timer-expired",
+        payload: message,
+        timestamp: Date.now()
+      },
+      "*"
+    );
+    // Same-document listeners (in-page / Storybook) still receive this.
+    this.dispatchEvent(
+      new CustomEvent("timer-expired", {
+        bubbles: true,
+        composed: true,
+        detail: { payload: message }
+      })
+    );
   }
 
   connectedCallback() {
@@ -47,23 +99,15 @@ export default class TimerComponent extends LitElement {
         this.remainingSeconds = seconds
         if (hours === "00" && minutes === "00" && seconds === "00") {
           this.paused = true;
-          window.localStorage.removeItem("timer-start");
-          window.localStorage.removeItem("timer-duration")
-          this.dispatchEvent(new CustomEvent("timer-expired", {
-            bubbles: true,
-            composed: true,
-            detail: {
-              payload: `${this.duration} long timer has expired`
-            }
-          }))
+          this.clearStorage();
+          this.emitExpired();
         }
       }
     }, 1000)
   }
 
   setDuration = (startTime: string, duration: string) => {
-    window.localStorage.setItem("timer-start", startTime)
-    window.localStorage.setItem("timer-duration", duration)
+    this.writeStorage(startTime, duration);
     let [hours, minutes, seconds] = duration.split(":")
     const durationObj = { hours: Number(hours), minutes: Number(minutes), seconds: Number(seconds) }
     const start = DateTime.fromISO(startTime)
@@ -76,9 +120,8 @@ export default class TimerComponent extends LitElement {
   }
 
   public resetTimer = async () => {
-    await (async function (durationValue) {
-      window.localStorage.setItem("timer-start", DateTime.local().toString())
-      window.localStorage.setItem("timer-duration", durationValue)
+    await (async (durationValue) => {
+      this.writeStorage(DateTime.local().toString(), durationValue);
     })(this.duration);
     this.paused = false;
     this.setDuration(this.storedStartTime, this.duration)
@@ -90,8 +133,8 @@ export default class TimerComponent extends LitElement {
 
   render() {
     return html`
-      <md-tooltip message="Your shift ends at ${this.endTime}">
-        <div class="container" role="timer"
+      <div class="container" role="timer"
+          title="Your shift ends at ${this.endTime}"
           aria-label="${this.remainingHours} hours, ${this.remainingMinutes} minutes, ${this.remainingSeconds} seconds remaining">
           <time-circle time-limit=8 time-left=${Number(this.remainingHours)} color=${this.hoursColor}>
             <div slot="time-unit" class="hours" aria-label="${this.remainingHours} hours">${this.remainingHours}h</div>
@@ -105,7 +148,6 @@ export default class TimerComponent extends LitElement {
             </div>
           </time-circle>
         </div>
-      </md-tooltip>
     `;
   }
 }

@@ -196,7 +196,10 @@
                   "src": "https://webex.github.io/widgets/",
                   "allowedParams": "clipboard-read; clipboard-write self https://webex.github.io/widgets/"
                 },
-                "wrapper": { "title": "Iframe ", "maximizeAreaName": "app-maximize-area" }
+                "wrapper": {
+                  "title": "Built-in agentx-wc-iframe page embed (not the host iframe shell)",
+                  "maximizeAreaName": "app-maximize-area"
+                }
               }
             ]
           }

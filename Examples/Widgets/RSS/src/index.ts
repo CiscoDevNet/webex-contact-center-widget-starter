@@ -28,8 +28,10 @@ export default class MyCustomComponent extends LitElement {
       :host {
         display: block;
         height: 100%;
+        max-height: 48px;
         position: relative;
-        overflow: auto;
+        overflow: hidden;
+        background: transparent;
       }
     `;
   }

@@ -123,6 +123,15 @@ import StackAlt from "./assets/stackalt.svg";
 
 This repository is designed to speed up the initial set up for Agent and or Supervisor Desktop widget development. Feel free to treat this as a boilerplate project, that can be forked as a base for your Webex Contact Center widget or simply as a reference material.
 
+## Iframe shell (external widgets)
+
+Desktop wraps third-party custom widgets (untrusted absolute `script` URLs) in a sandboxed iframe. Paste `Examples/Layouts/Iframe_Shell_Partner_Fixes.json` into Desktop Layout to see header fit vs overflow, header clip vs `Desktop.popover`, and sibling `postMessage`. Source is in [`Examples/Widgets/iframe-shell/src/`](https://github.com/CiscoDevNet/webex-contact-center-widget-starter/tree/master/Examples/Widgets/iframe-shell).
+
+Do not confuse that host shell with:
+
+1. **`agentx-wc-iframe`** — built-in page embed (`Iframe_Widget_Allowedparams.json`)
+2. **`prebuild-app-widget`** — you wrap your own app iframe
+
 We aim at covering various scenarios, for when your development team is leaning towards
 
 - [**React**](https://github.com/CiscoDevNet/webex-contact-center-widget-starter/tree/master/react) [![Generic badge](https://img.shields.io/badge/Completion-95-green)](https://shields.io/), or

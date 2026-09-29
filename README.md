@@ -8,6 +8,20 @@ We aim at covering various scenarios, for when your development team is leaning 
 
 Dive into the respective folder based on your tech stack preference to get started.
 
+## Iframe shell (external widgets)
+
+When Desktop loads a third-party custom widget from an untrusted absolute `script` URL, it wraps that custom element in a sandboxed iframe. Source for the teaching widgets lives in this repo. **See them on Agent Desktop** by pasting [`Examples/Layouts/Iframe_Shell_Partner_Fixes.json`](Examples/Layouts/Iframe_Shell_Partner_Fixes.json) into Desktop Layout.
+
+| Tag | What to look at on Desktop |
+| --- | --- |
+| `header-overflow-widget` | Wide row — iframe grows with the widget after shrink-wrap |
+| `header-fit-widget` | Intrinsic width (`max-content` / px). Do not use `width: 100%` |
+| `header-clip-widget` | `md-menu-overlay` in the header — the panel clips |
+| `header-popover-widget` | Same idea via `Desktop.popover` — panel is not clipped |
+| `sibling-bus-publisher` / `sibling-bus-consumer` | CustomEvent fails across slots; `postMessage` works |
+
+TypeScript: [`Examples/Widgets/iframe-shell/src/`](Examples/Widgets/iframe-shell/src/). This is not `agentx-wc-iframe` ([`Iframe_Widget_Allowedparams.md`](Iframe_Widget_Allowedparams.md)) and not `prebuild-app-widget`.
+
 ## To integrate JS SDK 
 
 To integrate contact center desktop sdk in the starter-kit-widget . Follow the below steps. 

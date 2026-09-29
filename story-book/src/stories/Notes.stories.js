@@ -53,7 +53,9 @@ HeaderNotes.parameters = {
           attributes: {
             "agent-id": "46340-65479",
           },
-        }`,
+        }
+
+        In the iframe shell this header trigger opens notes-widget via Desktop.popover so the panel is not clipped to 64px. Storybook still uses md-menu-overlay.`,
     },
   },
 };

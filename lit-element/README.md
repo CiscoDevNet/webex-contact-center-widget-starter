@@ -10,9 +10,12 @@ This widget starter can be run on `localhost` to be reviewed. In case you (the d
 To run your widget on `localhost`, please navigate to widget's root directory in Terminal (Command line tool) and run the following commands (Assuming you have [`yarn`](https://classic.yarnpkg.com/en/docs/install/#mac-stable) installed globally on your machine):
 
 1. Clone this repo.
-2. Navigate to th widget/widget starter folder.
-3. Run `yarn` from the root of the repo.
-4. Run `yarn start` to start the playground (sandbox) app.
+2. Navigate to the `lit-element/` folder.
+3. Run `yarn` (this repo pins **Yarn 1.22.22**; you do not need Yarn 3).
+4. Run `yarn start` to start the playground (sandbox) app at http://localhost:8888.
+
+### Iframe shell demos
+`src/components/IframeShell/` sketches the same patterns as the published Desktop tags in [`Examples/Widgets/iframe-shell/`](../Examples/Widgets/iframe-shell/). After `yarn start`, open the **Iframe shell** tab. To see header clipping and sibling relay, paste [`Examples/Layouts/Iframe_Shell_Partner_Fixes.json`](../Examples/Layouts/Iframe_Shell_Partner_Fixes.json) into Desktop Layout.
 
 ### Editing widget
 There is generally no need for you to modify anything outside of the `src/components` folder. To customize you widget, we suggest for you to work within this directory. You are free to create your components and structure them however you see fit. 
