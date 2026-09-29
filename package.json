@@ -9,5 +9,9 @@
     "repository": "git@github.com:CiscoDevNet/webex-contact-center-widget-starter.git",
     "devDependencies": {
         "lerna": "^4.0.0"
-    }
+    },
+    "engines": {
+        "yarn": "^1.22.0"
+    },
+    "packageManager": "yarn@1.22.22"
 }

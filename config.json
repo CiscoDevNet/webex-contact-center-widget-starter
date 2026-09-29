@@ -92,5 +92,71 @@
       "script": "http://localhost:3000/Examples/docs/LearningWidgetSample/main.js"
     },
     "style": "grid-column: span 5;"
+  },
+  {
+    "label": "Header overflow (too wide)",
+    "comp": "<header-overflow-widget></header-overflow-widget>",
+    "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/header-overflow-widget.js",
+    "layoutConfig": {
+      "comp": "header-overflow-widget",
+      "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/header-overflow-widget.js"
+    },
+    "style": "grid-column: span 2;"
+  },
+  {
+    "label": "Header fit (compact)",
+    "comp": "<header-fit-widget></header-fit-widget>",
+    "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/header-fit-widget.js",
+    "layoutConfig": {
+      "comp": "header-fit-widget",
+      "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/header-fit-widget.js"
+    },
+    "style": "grid-column: span 2;"
+  },
+  {
+    "label": "Header clip (md-menu-overlay)",
+    "comp": "<header-clip-widget></header-clip-widget>",
+    "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/header-clip-widget.js",
+    "layoutConfig": {
+      "comp": "header-clip-widget",
+      "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/header-clip-widget.js"
+    },
+    "style": "grid-column: span 2;"
+  },
+  {
+    "label": "Header popover (iframe shell)",
+    "comp": "<header-popover-widget></header-popover-widget>",
+    "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/header-popover-widget.js",
+    "layoutConfig": {
+      "comp": "header-popover-widget",
+      "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/header-popover-widget.js"
+    },
+    "style": "grid-column: span 2;"
+  },
+  {
+    "label": "SDK init (no host DOM)",
+    "comp": "<sdk-init-widget></sdk-init-widget>",
+    "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/sdk-init-widget.js",
+    "layoutConfig": {
+      "comp": "sdk-init-widget",
+      "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/sdk-init-widget.js"
+    },
+    "style": "grid-column: span 3;"
+  },
+  {
+    "label": "Sibling postMessage bus",
+    "comp": "<div><sibling-bus-publisher></sibling-bus-publisher><sibling-bus-consumer></sibling-bus-consumer></div>",
+    "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/sibling-bus-publisher.js",
+    "layoutConfig": [
+      {
+        "comp": "sibling-bus-publisher",
+        "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/sibling-bus-publisher.js"
+      },
+      {
+        "comp": "sibling-bus-consumer",
+        "script": "http://localhost:3000/Examples/Widgets/iframe-shell/build/sibling-bus-consumer.js"
+      }
+    ],
+    "style": "grid-column: span 4;"
   }
 ]
