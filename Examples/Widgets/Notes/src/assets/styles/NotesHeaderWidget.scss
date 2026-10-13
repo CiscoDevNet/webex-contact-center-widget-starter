@@ -2,6 +2,11 @@ md-menu-overlay::part(overlay-content) {
   overflow: visible;
 }
 
+.notes-popover-trigger {
+  display: inline-flex;
+  align-items: center;
+}
+
 .notes-widget-container {
     width: 100%; 
     height: 500px;

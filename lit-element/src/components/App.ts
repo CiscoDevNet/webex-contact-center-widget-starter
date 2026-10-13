@@ -18,6 +18,7 @@ import styles from "./App.scss";
 import { logger } from "./sdk";
 import { Service } from "@wxcc-desktop/sdk-types";
 import { Notifications } from "@uuip/unified-ui-platform-sdk";
+import "./IframeShell/IframeShellDemo";
 
 @customElement("my-custom-component")
 export default class MyCustomComponent extends LitElement {
@@ -426,6 +427,10 @@ export default class MyCustomComponent extends LitElement {
       <div class="container">
         <h1>Custom Component Contents</h1>
         <md-tabs>
+          <md-tab slot="tab">Iframe shell</md-tab>
+          <md-tab-panel slot="panel">
+            <iframe-shell-demo></iframe-shell-demo>
+          </md-tab-panel>
           <md-tab slot="tab">Desktop.agentStateInfo</md-tab>
           <md-tab-panel slot="panel">
             <div class="action-container">

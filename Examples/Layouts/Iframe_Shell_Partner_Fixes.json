@@ -1,0 +1,115 @@
+{
+  "agent": {
+    "version": "0.1.0",
+    "appTitle": "Iframe Shell Partner Fixes",
+    "logo": "",
+    "dragDropEnabled": false,
+    "notificationTimer": 8,
+    "maximumNotificationCount": 3,
+    "browserNotificationTimer": 8,
+    "wxmConfigured": false,
+    "desktopChatApp": {
+      "webexConfigured": false
+    },
+    "area": {
+      "advancedHeader": [
+        {
+          "comp": "header-overflow-widget",
+          "script": "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-overflow-widget.js"
+        },
+        {
+          "comp": "header-fit-widget",
+          "script": "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-fit-widget.js"
+        },
+        {
+          "comp": "header-clip-widget",
+          "script": "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-clip-widget.js"
+        },
+        {
+          "comp": "header-popover-widget",
+          "script": "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/header-popover-widget.js",
+          "properties": {
+            "isDarkTheme": "$STORE.app.darkMode"
+          }
+        },
+        {
+          "comp": "sibling-bus-publisher",
+          "script": "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sibling-bus-publisher.js"
+        },
+        {
+          "comp": "agentx-webex"
+        },
+        {
+          "comp": "agentx-outdial"
+        },
+        {
+          "comp": "agentx-notification"
+        },
+        {
+          "comp": "agentx-state-selector"
+        }
+      ],
+      "headless": {
+        "id": "dw-headless",
+        "widgets": {
+          "publisher": {
+            "comp": "sibling-bus-publisher",
+            "script": "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sibling-bus-publisher.js"
+          }
+        },
+        "layout": {
+          "areas": [["publisher"]],
+          "size": { "cols": [1], "rows": [1] }
+        }
+      },
+      "navigation": [
+        {
+          "nav": {
+            "label": "Iframe shell fixes",
+            "icon": "settings",
+            "iconType": "momentum",
+            "navigateTo": "iframe-shell-fixes",
+            "align": "top"
+          },
+          "page": {
+            "id": "iframe-shell-fixes",
+            "widgets": {
+              "sdk": {
+                "comp": "sdk-init-widget",
+                "script": "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sdk-init-widget.js",
+                "properties": {
+                  "isDarkTheme": "$STORE.app.darkMode"
+                }
+              },
+              "consumer": {
+                "comp": "sibling-bus-consumer",
+                "script": "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/sibling-bus-consumer.js"
+              },
+              "flavor1": {
+                "comp": "md-alert",
+                "attributes": {
+                  "title": "Flavor 1 — size this slot",
+                  "message": "md-combobox and other in-page dropdowns clip when the navigation/panel slot is short. Give this page enough height. No widget code change. This is not a header-popover problem.",
+                  "closable": "false",
+                  "show": "true",
+                  "type": "default"
+                }
+              }
+            },
+            "layout": {
+              "areas": [["sdk"], ["consumer"], ["flavor1"]],
+              "size": { "cols": [1], "rows": [1, 1, 2] }
+            }
+          }
+        }
+      ],
+      "panel": {
+        "comp": "md-tabs",
+        "attributes": {
+          "class": "widget-tabs"
+        },
+        "children": []
+      }
+    }
+  }
+}

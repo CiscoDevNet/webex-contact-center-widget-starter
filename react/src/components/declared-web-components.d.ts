@@ -194,6 +194,7 @@ declare namespace JSX {
       HTMLElement,
       {
         isOpen: boolean;
+        placement: string;
         size: "small" | "large";
         maxHeight: string;
         customWidth: string;

@@ -6,6 +6,7 @@ import sidebarCss from "./ApiExplorer/SidebarApiExplorer.css";
 import { useShadowStyles } from "./useShadowStyles";
 import { Desktop } from "@wxcc-desktop/sdk";
 import { SidebarApiExplorer } from "./ApiExplorer/SidebarApiExplorer";
+import { IframeShellDemo } from "./IframeShell/IframeShellDemo";
 
 interface IProps {
   agentId: string;
@@ -14,6 +15,7 @@ interface IProps {
 
 const EnhancedApp: FC<IProps> = (props) => {
   const [agentId, setAgentId] = useState(props.agentId || "");
+  const [view, setView] = useState<"explorer" | "iframe-shell">("explorer");
   const containerRef = useShadowStyles([momentumCss, momentumIconsCss, sidebarCss]);
 
   useEffect(() => {
@@ -101,7 +103,23 @@ const EnhancedApp: FC<IProps> = (props) => {
 
   return (
     <div ref={containerRef}>
-      <SidebarApiExplorer />
+      <div style={{ display: "flex", gap: 8, padding: "8px 12px", borderBottom: "1px solid #d2d2d2" }}>
+        <button
+          type="button"
+          onClick={() => setView("explorer")}
+          style={{ fontWeight: view === "explorer" ? 700 : 400 }}
+        >
+          SDK Explorer
+        </button>
+        <button
+          type="button"
+          onClick={() => setView("iframe-shell")}
+          style={{ fontWeight: view === "iframe-shell" ? 700 : 400 }}
+        >
+          Iframe shell
+        </button>
+      </div>
+      {view === "iframe-shell" ? <IframeShellDemo /> : <SidebarApiExplorer />}
     </div>
   );
 };
