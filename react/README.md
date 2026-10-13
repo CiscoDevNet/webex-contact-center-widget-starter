@@ -8,6 +8,10 @@ An interactive API documentation and testing tool for the `@wxcc-desktop/sdk`. T
 
 The SDK Explorer lets you test `@wxcc-desktop/sdk` APIs directly from the desktop UI.
 
+## Iframe shell demos
+
+`src/components/IframeShell/` sketches the same patterns as the published Desktop tags in [`Examples/Widgets/iframe-shell/`](../Examples/Widgets/iframe-shell/). After `yarn start`, use the **Iframe shell** view. To see header clipping and sibling relay, paste [`Examples/Layouts/Iframe_Shell_Partner_Fixes.json`](../Examples/Layouts/Iframe_Shell_Partner_Fixes.json) into Desktop Layout.
+
 ## Getting Started
 
 ### Prerequisites

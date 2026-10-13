@@ -1,0 +1,10 @@
+{
+  "name": "iframe-shell-widgets",
+  "version": "1.0.0",
+  "description": "Partner examples for custom widgets that run inside the Agent Desktop iframe shell",
+  "license": "MIT",
+  "repository": "git@github.com:CiscoDevNet/webex-contact-center-widget-starter.git",
+  "scripts": {
+    "dev:build": "node ./scripts/build.js"
+  }
+}

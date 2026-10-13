@@ -1,5 +1,7 @@
 # Demo Widget
 
+Iframe-shell partner examples (header clip vs `Desktop.popover`, sibling `postMessage`) live in [`Widgets/iframe-shell/`](Widgets/iframe-shell/). Paste [`Layouts/Iframe_Shell_Partner_Fixes.json`](Layouts/Iframe_Shell_Partner_Fixes.json) into Desktop Layout to see them. Source is in that folder. That is not `agentx-wc-iframe` and not `prebuild-app-widget`.
+
 ### Build and Publish
 
 #### Update existing widgets

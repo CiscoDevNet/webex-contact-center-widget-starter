@@ -11,10 +11,12 @@ To use the Timer Widget:
 1. Pass a time to the `duration` attribute following the string format: "hh:mm:ss".
 2. Toggle the boolean attribute `paused` to stop and start the timer.
 
-The browser's `localstorage` will keep a store of the active timer's start timestamp and duration setting. To change, update the duration and reset the timer, use the widget's public method `resetTimer():void`.
+The timer stays **compact** so it can sit in `advancedHeader` without opening a panel. Do not add settings menus that overflow the ~48–64px header iframe; use `Desktop.popover` if you need a larger panel (see [`../iframe-shell/`](../iframe-shell/)).
+
+Storage keys are scoped as `timer-widget:start` and `timer-widget:duration`. In the iframe shell, `localStorage` is origin-isolated and often in-memory — it is not shared with sibling widgets. To change duration, call `resetTimer():void`.
 
 Timer is set to a default of "08:00:00"
 
-When the timer runs down to "00:00:00" it will automatically pause, emit a custom event named "timer-expired", and clear the localstorage values until reset. 
+When the timer reaches "00:00:00" it pauses, clears storage, posts `{ type: "WXCC_WIDGET_EVENT", event: "timer-expired" }` on `window` (the host relays this to sibling iframes), and still dispatches a bubbling `timer-expired` CustomEvent for same-document listeners. After changing this source, run `yarn build` from `Examples/` to refresh `widgets/timer.js`. 
 
 ![Widget Example Screenshot](./static/timer_screenshot.png)
