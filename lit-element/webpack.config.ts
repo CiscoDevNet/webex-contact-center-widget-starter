@@ -68,6 +68,22 @@ function ruleTS({ isDev }: { isDev: boolean }) {
   };
 }
 
+// @wxcc-desktop/sdk 3.x ships ES2020 (?? and ?.), which webpack 4 cannot parse.
+function ruleSDK() {
+  return {
+    test: /\.js$/,
+    include: path.resolve(pModules, "@wxcc-desktop/sdk"),
+    use: {
+      loader: "babel-loader",
+      options: {
+        babelrc: false,
+        configFile: false,
+        presets: ["@babel/preset-env"]
+      }
+    }
+  };
+}
+
 function ruleMD () {
   return {
       test: /\.md$/,
@@ -117,7 +133,7 @@ export const commonDev = merge(common, {
     path: pBuild
   },
   module: {
-    rules: [ruleTS({ isDev: true }), ruleCSS({ isDev: true }), ruleMD()]
+    rules: [ruleTS({ isDev: true }), ruleSDK(), ruleCSS({ isDev: true }), ruleMD()]
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -175,7 +191,7 @@ const distDev = merge(commonDist, {
   mode: "development",
   devtool: "source-map",
   module: {
-    rules: [ruleTS({ isDev: true }), ruleCSS({ isDev: true }), ruleMD()]
+    rules: [ruleTS({ isDev: true }), ruleSDK(), ruleCSS({ isDev: true }), ruleMD()]
   }
 });
 
@@ -188,7 +204,7 @@ const distProd = merge(commonDist, {
   name: "distProd",
   mode: "production",
   module: {
-    rules: [ruleTS({ isDev: false }), ruleCSS({ isDev: false }), ruleMD()]
+    rules: [ruleTS({ isDev: false }), ruleSDK(), ruleCSS({ isDev: false }), ruleMD()]
   }
 });
 
