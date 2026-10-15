@@ -90,18 +90,18 @@ export default class MyCustomComponent extends LitElement {
   }
 
   subscribeScreenpopEvent() {
-    Desktop.screenpop.addEventListener("eScreenPop", msg => logger.info(msg));
+    Desktop.screenpop.addEventListener("eScreenPop", (msg: any) => logger.info(msg));
   }
 
   subscribeDialerEvents() {
-    Desktop.dialer.addEventListener("eOutdialFailed", msg => logger.info(msg));
+    Desktop.dialer.addEventListener("eOutdialFailed", (msg: any) => logger.info(msg));
   }
 
   subscribeAgentContactDataEvents() {
-    Desktop.agentContact.addEventListener("eAgentContact", msg =>
+    Desktop.agentContact.addEventListener("eAgentContact", (msg: any) =>
       logger.info("AgentContact eAgentContact: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentContactAssigned", msg => {
+    Desktop.agentContact.addEventListener("eAgentContactAssigned", (msg: any) => {
       logger.info("AgentContact eAgentContactAssigned: ", msg);
 
       this.acceptedContacts = [
@@ -111,7 +111,7 @@ export default class MyCustomComponent extends LitElement {
 
       logger.info(this.acceptedContacts);
     });
-    Desktop.agentContact.addEventListener("eAgentContactEnded", msg => {
+    Desktop.agentContact.addEventListener("eAgentContactEnded", (msg: any) => {
       logger.info("AgentContact eAgentContactEnded: ", msg);
       const idx = this.acceptedContacts.indexOf(msg.data.interactionId);
       if (idx != -1) {
@@ -119,16 +119,16 @@ export default class MyCustomComponent extends LitElement {
         logger.info(this.acceptedContacts);
       }
     });
-    Desktop.agentContact.addEventListener("eAgentContactWrappedUp", msg =>
+    Desktop.agentContact.addEventListener("eAgentContactWrappedUp", (msg: any) =>
       logger.info("AgentContact eAgentContactWrappedUp: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentOfferContact", msg => {
+    Desktop.agentContact.addEventListener("eAgentOfferContact", (msg: any) => {
       logger.info("AgentContact eAgentOfferContact: ", msg.data.interactionId);
       // AUX Sandbox Contact
       this.contacts = [...this.contacts, msg.data.interactionId];
       logger.info("AgentContact eAgentOfferContact: ", this.contacts);
     });
-    Desktop.agentContact.addEventListener("eAgentOfferContactRona", msg => {
+    Desktop.agentContact.addEventListener("eAgentOfferContactRona", (msg: any) => {
       logger.info(
         "AgentContact eAgentOfferContactRona: ",
         msg.data.interactionId
@@ -144,51 +144,51 @@ export default class MyCustomComponent extends LitElement {
         logger.info("AgentContact eAgentOfferContactRona: ", this.contacts);
       }
     });
-    Desktop.agentContact.addEventListener("eAgentOfferConsult", msg =>
+    Desktop.agentContact.addEventListener("eAgentOfferConsult", (msg: any) =>
       logger.info("AgentContact eAgentOfferConsult: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentWrapup", msg =>
+    Desktop.agentContact.addEventListener("eAgentWrapup", (msg: any) =>
       logger.info("AgentContact eAgentWrapup: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentContactHeld", msg =>
+    Desktop.agentContact.addEventListener("eAgentContactHeld", (msg: any) =>
       logger.info("AgentContact eAgentContactHeld: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentContactUnHeld", msg =>
+    Desktop.agentContact.addEventListener("eAgentContactUnHeld", (msg: any) =>
       logger.info("AgentContact eAgentContactUnHeld: ", msg)
     );
-    Desktop.agentContact.addEventListener("eCallRecordingStarted", msg =>
+    Desktop.agentContact.addEventListener("eCallRecordingStarted", (msg: any) =>
       logger.info("AgentContact eCallRecordingStarted: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentConsultCreated", msg =>
+    Desktop.agentContact.addEventListener("eAgentConsultCreated", (msg: any) =>
       logger.info("AgentContact eAgentConsultCreated: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentConsultConferenced", msg =>
+    Desktop.agentContact.addEventListener("eAgentConsultConferenced", (msg: any) =>
       logger.info("AgentContact eAgentConsultConferenced: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentConsultEnded", msg =>
+    Desktop.agentContact.addEventListener("eAgentConsultEnded", (msg: any) =>
       logger.info("AgentContact eAgentConsultEnded: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentCtqCancelled", msg =>
+    Desktop.agentContact.addEventListener("eAgentCtqCancelled", (msg: any) =>
       logger.info("AgentContact eAgentCtqCancelled: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentConsulting", msg =>
+    Desktop.agentContact.addEventListener("eAgentConsulting", (msg: any) =>
       logger.info("AgentContact eAgentConsulting: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentConsultFailed", msg =>
+    Desktop.agentContact.addEventListener("eAgentConsultFailed", (msg: any) =>
       logger.info("AgentContact eAgentConsultFailed: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentConsultEndFailed", msg =>
+    Desktop.agentContact.addEventListener("eAgentConsultEndFailed", (msg: any) =>
       logger.info("AgentContact eAgentConsultEndFailed: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentCtqFailed", msg =>
+    Desktop.agentContact.addEventListener("eAgentCtqFailed", (msg: any) =>
       logger.info("AgentContact eAgentCtqFailed: ", msg)
     );
-    Desktop.agentContact.addEventListener("eAgentCtqCancelFailed", msg =>
+    Desktop.agentContact.addEventListener("eAgentCtqCancelFailed", (msg: any) =>
       logger.info("AgentContact eAgentCtqCancelFailed: ", msg)
     );
     Desktop.agentContact.addEventListener(
       "eAgentConsultConferenceEndFailed",
-      msg => logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
+      (msg: any) => logger.info("AgentContact eAgentConsultConferenceEndFailed: ", msg)
     );
     Desktop.agentContact.addEventListener("eAgentMonitorStateChanged", (msg: any) =>
       logger.info("AgentContact eAgentMonitorStateChanged: ", msg)
