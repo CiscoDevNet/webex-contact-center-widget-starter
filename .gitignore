@@ -4,3 +4,11 @@ yarn.lock
 **/yarn-error.log
 **/dist
 .idea/
+.env
+**/.env
+*.pem
+*.key
+id_rsa
+id_dsa
+credentials.json
+secrets.json

@@ -1,14 +1,14 @@
 [
   {
     "label": "Covid By Location",
-    "comp": "<covid-by-location api-key=\"1318b408f01c4aa3b5f79dedc6c90848\" selectedCountyState=\"SantaClara County, CA\"></covid-by-location>",
+    "comp": "<covid-by-location api-key=\"YOUR_COVID_API_KEY\" selectedCountyState=\"SantaClara County, CA\"></covid-by-location>",
     "script": "http://localhost:3000/Examples/docs/CovidByLocation/main.js",
     "style": "grid-column: span 3;",
     "layoutConfig": {
       "comp": "covid-by-location",
       "script": "http://localhost:3000/Examples/docs/CovidByLocation/main.js",
       "attributes": {
-        "api-key": "1318b408f01c4aa3b5f79dedc6c90848"
+        "api-key": "YOUR_COVID_API_KEY"
       },
       "wrapper": {
         "title": "Covid by location",

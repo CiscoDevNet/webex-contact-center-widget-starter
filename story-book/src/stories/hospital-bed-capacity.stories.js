@@ -33,5 +33,5 @@ HospitalBedCapacity.args = {
   latitude: "88.363892",
   longitude: "-74.005974",
   "google-api-key": "googleApiKey",
-  "covid-api-key": "1318b408f01c4aa3b5f79dedc6c90848",
+  "covid-api-key": "YOUR_COVID_API_KEY",
 };

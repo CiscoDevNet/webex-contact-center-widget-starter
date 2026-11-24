@@ -10,7 +10,7 @@ export default getDefaultConf(
     script:
       "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/covid-by-location.js",
     attributes: {
-      "api-key": "1318b408f01c4aa3b5f79dedc6c90848",
+      "api-key": "YOUR_COVID_API_KEY",
       selectedCountyState: "New York County, NY",
     },
     wrapper: {
@@ -30,6 +30,6 @@ const CovidByLocationTemplate = (p) =>
 export const CovidByLocation = CovidByLocationTemplate.bind({});
 
 CovidByLocation.args = {
-  "api-key": "1318b408f01c4aa3b5f79dedc6c90848",
+  "api-key": "YOUR_COVID_API_KEY",
   selectedCountyState: "New York County, NY",
 };

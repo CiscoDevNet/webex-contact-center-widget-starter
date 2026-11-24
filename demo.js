@@ -115,9 +115,9 @@
       y: 1,
       w: 4,
       h: 4,
-      content: `<covid-by-location api-key="1318b408f01c4aa3b5f79dedc6c90848" selectedCountyState="New York County, NY"></covid-by-location>`,
+      content: `<covid-by-location api-key="YOUR_COVID_API_KEY" selectedCountyState="New York County, NY"></covid-by-location>`,
       label: "Covid By Location",
-      comp: '<covid-by-location api-key="1318b408f01c4aa3b5f79dedc6c90848" selectedCountyState="New York County, NY"></covid-by-location>',
+      comp: '<covid-by-location api-key="YOUR_COVID_API_KEY" selectedCountyState="New York County, NY"></covid-by-location>',
       script:
         "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/covid-by-location.js",
       style: "grid-column: span 3;",
@@ -126,7 +126,7 @@
         script:
           "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/covid-by-location.js",
         attributes: {
-          "api-key": "1318b408f01c4aa3b5f79dedc6c90848",
+          "api-key": "YOUR_COVID_API_KEY",
           selectedCountyState: "New York County, NY",
         },
         wrapper: {
@@ -156,10 +156,10 @@
       y: 2,
       w: 6,
       h: 4,
-      content: `<my-hospital-widget covi-api-key="1318b408f01c4aa3b5f79dedc6c90848" google-api-key="googleApiKey" latitude="88.363892" longitude="-74.005974">
+      content: `<my-hospital-widget covi-api-key="YOUR_COVID_API_KEY" google-api-key="googleApiKey" latitude="88.363892" longitude="-74.005974">
       </my-hospital-widget>`,
       label: "Hospital Bed Capacity",
-      comp: `<hospital-bed-capacity google-api-key="googleApiKey" covid-api-key="1318b408f01c4aa3b5f79dedc6c90848"
+      comp: `<hospital-bed-capacity google-api-key="googleApiKey" covid-api-key="YOUR_COVID_API_KEY"
               latitude="88.363892" longitude="-74.005974"></<hospital-bed-capacity>`,
       script:
         "https://ciscodevnet.github.io/webex-contact-center-widget-starter/widgets/hospital-bed-capacity.js",
@@ -177,7 +177,7 @@
       style: "grid-column: span 5;",
       externalProps: `<div style="display:grid; grid-template-columns: repeat(4, 1fr) auto; gap: 4px">
               <md-input id="google-api-key" placeholder="google-api-key"></md-input>
-              <md-input id="covid-api-key" value="1318b408f01c4aa3b5f79dedc6c90848"  placeholder="covid-api-key"></md-input>
+              <md-input id="covid-api-key" value="YOUR_COVID_API_KEY"  placeholder="covid-api-key"></md-input>
               <md-input value="88.363892" id="latitude" placeholder="latitude"></md-input>
               <md-input value="-74.005974"  id="longitude"  placeholder="longitude"></md-input>
               <md-button id="hospital-bed-capacity-btn">Apply</md-button>
